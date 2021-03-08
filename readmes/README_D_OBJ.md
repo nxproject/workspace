@@ -8,32 +8,32 @@ activated
 From the ***Start*** menu select the dataset that holds the object you wish to see.  A ***Select*** tool window,
 also called a ***pick list*** is shown:
 
-![image](/images/Ob1.png)
+![image](images/Ob1.png)
 
 What is displayed in the list are the ***placeholders*** of the first page of objects found in the dataset.  If you see the
 enytry that you wish to see,. click on the enytry and the pobject ios displayed:
 
-![image](/images/Ob2.png)
+![image](images/Ob2.png)
 
 ### Filtering
 
 If the entry is not displayed in the list, you can filter the list using known text in the placeholder of the object
 using the ***Search*** button the header of the list:
 
-![image](/images/Ob3.png)
+![image](images/Ob3.png)
 
 When activated., a text atea is displayed where you can enter the known text:
 
-![image](/images/Ob4.png)
+![image](images/Ob4.png)
 
 Pressong the ***tab*** or ***enter*** key ill close the text area and display only tyhe objects that have the known
 text in theior placholder:
 
-![image](/images/Ob5.png)
+![image](images/Ob5.png)
 
 Note that the ***DSearch*** button icon has changed to indicate that a filter is being applied:
 
-![image](/images/Ob6.png)
+![image](images/Ob6.png)
 
 ## Creating a new object
 
@@ -47,7 +47,7 @@ You can delete an object by clickimng omn the ***Delete*** button the the object
 
 All objects have a consistent layout:
 
-![image](/images/Od1.png)
+![image](images/Od1.png)
 
 ### Top toolbar
 

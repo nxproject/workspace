@@ -7,7 +7,7 @@ They are found in the ***System*** entry of the ***Start*** menu.
 
 The Site Settings allow you to set the information that is global to the site:
 
-![image](/images/Site1.png)
+![image](images/Site1.png)
 
 |Field|Meaning|
 |-|-|
@@ -23,7 +23,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site2.png)
+![image](images/Site2.png)
 
 |Field|Meaning|
 |-|-|
@@ -33,7 +33,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site3.png)
+![image](images/Site3.png)
 
 |Field|Meaning|
 |-|-|
@@ -43,7 +43,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site4.png)
+![image](images/Site4.png)
 
 |Field|Meaning|
 |-|-|
@@ -52,7 +52,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site5.png)
+![image](images/Site5.png)
 
 |Field|Meaning|
 |-|-|
@@ -62,7 +62,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site6.png)
+![image](images/Site6.png)
 
 |Field|Meaning|
 |-|-|
@@ -72,7 +72,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site7.png)
+![image](images/Site7.png)
 
 |Field|Meaning|
 |-|-|
@@ -82,7 +82,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site8.png)
+![image](images/Site8.png)
 
 |Field|Meaning|
 |-|-|
@@ -90,7 +90,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site9.png)
+![image](images/Site9.png)
 
 |Field|Meaning|
 |-|-|
@@ -99,7 +99,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site10.png)
+![image](images/Site10.png)
 
 |Field|Meaning|
 |-|-|
@@ -107,7 +107,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 ---
 
-![image](/images/Site11.png)
+![image](images/Site11.png)
 
 |Field|Meaning|
 |-|-|
@@ -121,7 +121,7 @@ The Site Settings allow you to set the information that is global to the site:
 
 The Site Management tool displays the running containers of the site:
 
-![image](/images/SiteManager.png)
+![image](images/SiteManager.png)
 
 ---
 
@@ -140,7 +140,7 @@ The Site Management tool displays the running containers of the site:
 
 Clicking on any container shows the log for the container:
 
-![image](/images/ContainerLog.png)
+![image](images/ContainerLog.png)
 
 The log can be copied to the clipbord and then pasted elsewhere for debugging purposes.
 

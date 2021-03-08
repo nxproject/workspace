@@ -2,14 +2,14 @@
 
 Merging is accomplished by creating ***docx*** documents with embedded merge codes.  This is an example:
 
-![image](/images/Merge2.png)
+![image](images/Merge2.png)
 
 Merge codes are field names enclosed in square brackets, as explained un the [Lists and Expressions](/README_LE.md)
 ***Fields*** section.
 
 When merged, the merge fields are converted to their stored equivalents:
 
-![image](/images/Merge3.png)
+![image](images/Merge3.png)
 
 ## Types of merge fields
 
@@ -30,7 +30,7 @@ Is an example of this type of field.
 
 You can get the field definition code by right-mouse clicking on any field and selecting the ***Copy field def*** entry:
 
-![image](/images/Merge1.png)
+![image](images/Merge1.png)
 
 ### Source is a setting
 
@@ -42,7 +42,7 @@ Site information can be merged by using ***[\*sys:settingname]*** as the merge c
 code by right-mouse clicking on any field in the [Site Settings](/README_SITE.md) window and selecting the 
 ***Copy field def*** entry: 
 
-![image](/images/Merge4.png)
+![image](images/Merge4.png)
 
 Since not all users have access to the settings, here are the codes for the common ones:
 
@@ -67,7 +67,7 @@ User information can be merged by using ***[\*user:settingname]*** as the merge 
 code by right-mouse clicking on any field in the ***user*** window and selecting the 
 ***Copy field def*** entry: 
 
-![image](/images/Merge5.png)
+![image](images/Merge5.png)
 
 Since not all users have access to the settings, here are the codes for the common ones:
 
@@ -84,17 +84,17 @@ Since not all users have access to the settings, here are the codes for the comm
 Templates are accessed via the ***Templates*** button in the ***command bar*** in the ***pick*** window for the dataset.
 Clicking on the button displays the window:
 
-![image](/images/Merge6.png)
+![image](images/Merge6.png)
 
 Ypu can upload a template or build from a ***built-in template*** as shown here:
 
-![image](/images/Merge7.png)
+![image](images/Merge7.png)
 
-![image](/images/Merge8.png)
+![image](images/Merge8.png)
 
 The template is displayed and you can modify it to your needs:
 
-![image](/images/Merge2.png)
+![image](images/Merge2.png)
 
 The template is now available for use.
 
@@ -102,30 +102,30 @@ The template is now available for use.
 
 You can merge from the object by clicking on the ***Merge*** button in the ***command bar*** for the object:
 
-![image](/images/Merge9.png)
+![image](images/Merge9.png)
 
 A list of templates is displayed, and by selecting one, it is used to cerate the merged document:
 
-![image](/images/Merge3.png)
+![image](images/Merge3.png)
 
 You can further edit the document to fit your needs.  The document is saved as part of the object documents:
 
-![image](/images/Merge10.png)
+![image](images/Merge10.png)
 
 ## Merge from documents
 
 You can also merge from the ***Documents*** window of the object by using the ***Add Document*** option from the 
 context menu for any ***folder***:
 
-![image](/images/Merge11.png)
+![image](images/Merge11.png)
 
 This will prompt for a document name and which template to use:
 
-![image](/images/Merge12.png)
+![image](images/Merge12.png)
 
 And create the document as before.  The document is left in the ***documents*** area for the object:
 
-![image](/images/Merge13.png)
+![image](images/Merge13.png)
 
 The diffrerences in the two methods above are that while the ***from object*** allows you to create ***document sets***,
 the ***from documents*** allow you to name the merged document and place it in a folder.
@@ -144,14 +144,14 @@ These are the built-in templates:
 Document stes are groups of mergeable documents.  They are created by creating ***folders*** in the ***templates***
 ***Documents*** window:
 
-![image](/images/merge14.png)
+![image](images/merge14.png)
 
 Which prompts for a folder name:
 
-![image](/images/Merge15.png)
+![image](images/Merge15.png)
 
 And documents can be added to the folder:
 
-![image](/images/Merge16.png)
+![image](images/Merge16.png)
 
 [Home](../README.md)

@@ -4,7 +4,7 @@ NX.Workspace is designed to run in any cloud environment using containers to hol
 
 You can see the of each container by using the ``Site Manager`` tool located in the ``System`` Start menu entry.
 
-![image](/images/SiteManager.png)
+![image](images/SiteManager.png)
 
 ## Containers
 

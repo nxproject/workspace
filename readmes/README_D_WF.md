@@ -1,6 +1,6 @@
 # Workflows
 
-![image](/images/Wf1.png)
+![image](images/Wf1.png)
 
 ## What is it?
 

@@ -7,13 +7,13 @@ NX.Workspace does not provide the app itself, which are available in whichever s
 
 The NXCode - Upload tool allows you to use your smartdevice camera to capture and upload images:
 
-![image](/images/Nxc1.png)
+![image](images/Nxc1.png)
 
 ## Contact
 
 The NXCode - Contact tool allows you to download a name and address information block to your smartdevice:
 
-![image](/images/Nxc2.png)
+![image](images/Nxc2.png)
 
 Typically this creates a contact and is accessible from a **name** field.
 
@@ -21,7 +21,7 @@ Typically this creates a contact and is accessible from a **name** field.
 
 The NXCode - Map tool allows you to download geocode information block to your smartdevice:
 
-![image](/images/Nxc3.png)
+![image](images/Nxc3.png)
 
 Typically this displays a map and is accessible from an **address** field.
 
@@ -29,7 +29,7 @@ Typically this displays a map and is accessible from an **address** field.
 
 The NXCode - EMail tool allows you to download an email address to your smartdevice:
 
-![image](/images/Nxc4.png)
+![image](images/Nxc4.png)
 
 Typically this brings up an email client and is accessible from an **email** field.
 
@@ -37,7 +37,7 @@ Typically this brings up an email client and is accessible from an **email** fie
 
 The NXCode - SMS tool allows you to download phone number to your smartdevice:
 
-![image](/images/Nxc5.png)
+![image](images/Nxc5.png)
 
 Typically this brings up an messaging client and is accessible from an **phone** field.
 
@@ -45,7 +45,7 @@ Typically this brings up an messaging client and is accessible from an **phone**
 
 The NXCode - SMS tool allows you to download phone number to your smartdevice:
 
-![image](/images/Nxc6.png)
+![image](images/Nxc6.png)
 
 Typically this brings up a phone dialer and is accessible from an **phone** field.
 
