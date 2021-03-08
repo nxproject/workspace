@@ -364,7 +364,7 @@ namespace Proc.AO
             if (this.Synch != null)
             {
                 // Make message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, false, "$$cron.{0}".FormatString(code),
+                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, MessageClass.Modes.Internal, "$$cron.{0}".FormatString(code),
                                                                                     "id", entry.Name,
                                                                                     "value", value,
                                                                                     "next", entry.NextOn.ToDBDate()))

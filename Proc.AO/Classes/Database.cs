@@ -172,7 +172,7 @@ namespace Proc.AO
                         c_Ans[i - 1] = sDS;
 
                         // 
-                        switch(c_DS.Definition.Selector)
+                        switch (c_DS.Definition.Selector)
                         {
                             case "IOT":
                                 bRemove = !bIOT;
@@ -241,7 +241,7 @@ namespace Proc.AO
                                     if (sDS.HasValue() && sID.HasValue())
                                     {
                                         // Make message
-                                        using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Parent.Synch, false, "$$changed.document",
+                                        using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Parent.Synch, SIO.MessageClass.Modes.Internal, "$$changed.document",
                                                                                                             "ds", sDS,
                                                                                                             "id", sID,
                                                                                                             "deleted", bDeleted.ToDBBoolean()))
@@ -319,7 +319,7 @@ namespace Proc.AO
         {
             get
             {
-                if(this.ISiteInfo == null)
+                if (this.ISiteInfo == null)
                 {
                     this.ISiteInfo = new SiteInfoClass(this);
 
@@ -342,6 +342,7 @@ namespace Proc.AO
                     }
                     this.Parent.Parent.LogInfo("Certificate EMail is set to {0}".FormatString(this.ISiteInfo.CertEMail));
                 }
+
                 return this.ISiteInfo;
             }
         }
@@ -355,7 +356,7 @@ namespace Proc.AO
         /// </summary>
         /// <param name="ds"></param>
         /// <param name="done"></param>
-        private  void AssureDataset(string ds, List<string> done)
+        private void AssureDataset(string ds, List<string> done)
         {
             // Chack
             if (!done.Contains(ds))
@@ -399,9 +400,9 @@ namespace Proc.AO
         /// 
         /// </summary>
         public void Initialize()
-        { 
+        {
             // Only once
-            if(!HasInitialized)
+            if (!HasInitialized)
             {
                 //
                 HasInitialized = true;

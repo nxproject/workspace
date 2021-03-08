@@ -60,7 +60,7 @@ namespace Proc.AO
                             if (asPieces.Length > 3 && asPieces[0].IsSameValue("ao"))
                             {
                                 // Make message
-                                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, false, "$$changed.document",
+                                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, SIO.MessageClass.Modes.Internal, "$$changed.document",
                                                                                                     "path", param.Path,
                                                                                                     "ds", asPieces[1],
                                                                                                     "id", asPieces[2],
@@ -189,16 +189,7 @@ namespace Proc.AO
             if (this.Synch != null)
             {
                 // Make message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, false, "$$changed.dataset", 
-                                                                                    "ds", ds.Name,
-                                                                                    "deleted", deleted.ToDBBoolean()))
-                {
-                    // Send
-                    c_Msg.Send();
-                }
-
-                // Make message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, true, "$$changed.dataset",
+                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, SIO.MessageClass.Modes.Both, "$$changed.dataset", 
                                                                                     "ds", ds.Name,
                                                                                     "deleted", deleted.ToDBBoolean()))
                 {
@@ -214,18 +205,8 @@ namespace Proc.AO
             if (this.Synch != null)
             {
                 // Make message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, false, "$$changed.view", 
+                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, SIO.MessageClass.Modes.Both, "$$changed.view", 
                                                                                     "ds", view.Parent.Name, 
-                                                                                    "view", view.Name.AsViewName(),
-                                                                                    "deleted", deleted.ToDBBoolean()))
-                {
-                    // Send
-                    c_Msg.Send();
-                }
-
-                // Make message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, true, "$$changed.view",
-                                                                                    "ds", view.Parent.Name,
                                                                                     "view", view.Name.AsViewName(),
                                                                                     "deleted", deleted.ToDBBoolean()))
                 {
@@ -241,17 +222,7 @@ namespace Proc.AO
             if (this.Synch != null)
             {
                 // Make message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, false, "$$changed.picklist",
-                                                                                    "ds", pl.Parent.Name,
-                                                                                    "picklist", pl.Name.AsKeyword(),
-                                                                                    "deleted", deleted.ToDBBoolean()))
-                {
-                    // Send
-                    c_Msg.Send();
-                }
-
-                // Make message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, true, "$$changed.picklist",
+                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, SIO.MessageClass.Modes.Both, "$$changed.picklist",
                                                                                     "ds", pl.Parent.Name,
                                                                                     "picklist", pl.Name.AsKeyword(),
                                                                                     "deleted", deleted.ToDBBoolean()))
@@ -268,7 +239,7 @@ namespace Proc.AO
             if (this.Synch != null && pl.Dataset.HasValue())
             {
                 // Make message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, false, "$$changed.{0}".FormatString(pl.Type),
+                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, SIO.MessageClass.Modes.Internal, "$$changed.{0}".FormatString(pl.Type),
                                                                                     "ds", pl.Dataset,
                                                                                     "task", pl.Name.AsKeyword(),
                                                                                     "deleted", deleted.ToDBBoolean()))

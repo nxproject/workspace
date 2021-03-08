@@ -153,8 +153,8 @@ namespace Proc.AO
                     SIO.ManagerClass c_Mgr = this.Parent.Parent.Parent.Parent.Globals.Get<SIO.ManagerClass>();
 
                     // Make a message
-                    using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, 
-                                                                            false,
+                    using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr,
+                                                                            SIO.MessageClass.Modes.Internal,
                                                                             "$$object.data",
                                                                             "winid", "ao_{0}_{1}".FormatString(this.Dataset.Name, this.ID),
                                                                             "aoFld", field,
@@ -319,6 +319,17 @@ namespace Proc.AO
         #endregion
 
         #region Methods
+        /// <summary>
+        /// 
+        /// Makes a displayable representation
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return this.Document.ToString();
+        }
+
         /// <summary>
         /// 
         /// Sets the default values
@@ -707,14 +718,7 @@ namespace Proc.AO
                     foreach (string sFN in c_SIO)
                     {
                         // Make a message
-                        using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, false, sFN, "ds", sDS, "id", sID, "winid", sWindID))
-                        {
-                            // Send
-                            c_Msg.Send();
-                        }
-
-                        // Make a message
-                        using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, true, sFN, "ds", sDS, "id", sID, "winid", sWindID))
+                        using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, SIO.MessageClass.Modes.Both, sFN, "ds", sDS, "id", sID, "winid", sWindID))
                         {
                             // Send
                             c_Msg.Send();
@@ -1000,14 +1004,7 @@ namespace Proc.AO
                 SIO.ManagerClass c_Mgr = this.Parent.Parent.Parent.Parent.Globals.Get<SIO.ManagerClass>();
 
                 // Make a message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, false, "$$object.deleted", "ds", sDS, "id", sID))
-                {
-                    // Send
-                    c_Msg.Send();
-                }
-
-                // Make a message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, true, "$$object.deleted", "ds", sDS, "id", sID))
+                using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, SIO.MessageClass.Modes.Both, "$$object.deleted", "ds", sDS, "id", sID))
                 {
                     // Send
                     c_Msg.Send();

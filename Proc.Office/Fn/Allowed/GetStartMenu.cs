@@ -172,7 +172,7 @@ namespace Proc.Office
                 //
                 JArray c_SIO = new JArray();
                 c_SIO.Add(Proc.SIO.ManagerClass.InternalCode);
-                c_SIO.Add(Proc.SIO.ManagerClass.InternalCode);
+                c_SIO.Add(Proc.SIO.ManagerClass.AccountCode);
                 c_Ans.Set("sio", c_SIO);
 
                 // Admin has all selectors
@@ -300,7 +300,7 @@ namespace Proc.Office
                     if (c_GSelectors.IndexOf("ACCT") == -1)
                     {
                         c_SIO.Add(Proc.SIO.ManagerClass.InternalCode);
-                        c_SIO.Add(Proc.SIO.ManagerClass.InternalCode);
+                        c_SIO.Add(Proc.SIO.ManagerClass.AccountCode);
                     }
                     else
                     {

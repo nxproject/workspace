@@ -65,32 +65,29 @@ namespace Proc.Help
                 // Actual target
                 string sActual = sPath.SetExtensionFromPath("html");
 
-                // Need to process?
-                if (sActual.GetLastWriteFromPath() < sPath.GetLastWriteFromPath())
-                {
-                    // Get the database
-                    AO.ManagerClass c_DBMgr = call.Env.Globals.Get<AO.ManagerClass>();
 
-                    // Read the file
-                    string sContents = sPath.ReadFile();
+                // Get the database
+                AO.ManagerClass c_DBMgr = call.Env.Globals.Get<AO.ManagerClass>();
 
-                    // Get the values
-                    JObject c_Values = new JObject();
-                    c_Values.Merge(call.Env.AsParameters);
-                    c_Values.Merge(c_DBMgr.DefaultDatabase.SiteInfo.AsJObject);
-                    // Apply changes
-                    sContents = sContents.Handlebars(c_Values);
+                // Read the file
+                string sContents = sPath.ReadFile();
 
-                    // Extend
-                    var c_PB = new Markdig.MarkdownPipelineBuilder();
-                    var c_PL = Markdig.MarkdownExtensions.UseAdvancedExtensions(c_PB).Build();
-                    // Convert
-                    string sHTML = Markdig.Markdown.ToHtml(sContents, c_PL);
-                    // Into template
-                    string sFinal = sTemplate.Replace("{0}", sHTML);
-                    // Write
-                    sActual.WriteFile(sFinal);
-                }
+                // Get the values
+                JObject c_Values = new JObject();
+                c_Values.Merge(call.Env.AsParameters);
+                c_Values.Merge(c_DBMgr.DefaultDatabase.SiteInfo.AsJObject);
+                // Apply changes
+                sContents = sContents.Handlebars(c_Values);
+
+                // Extend
+                var c_PB = new Markdig.MarkdownPipelineBuilder();
+                var c_PL = Markdig.MarkdownExtensions.UseAdvancedExtensions(c_PB).Build();
+                // Convert
+                string sHTML = Markdig.Markdown.ToHtml(sContents, c_PL);
+                // Into template
+                string sFinal = sTemplate.Replace("{0}", sHTML);
+                // Write
+                sActual.WriteFile(sFinal);
 
                 // And deliver
                 call.RespondWithFile(sActual, false, "text/html");

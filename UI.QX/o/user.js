@@ -85,8 +85,6 @@ qx.Class.define('o.user', {
 
                 //
                 var sioid = self.getField('name');
-                if (self.getField('sio').length != 2) sioid = md5(sioid);
-                self.setField('sioid', sioid);
 
                 if (!self.SIO) {
 
@@ -109,16 +107,18 @@ qx.Class.define('o.user', {
                         }
                     });
 
-                    self.SIO.on(self.getField('sio')[0], function (data) {
-                        if (typeof data === 'string') {
-                            data = JSON.parse(data);
-                        }
-                        if (data.message && typeof data.message === 'string') {
-                            data.message = JSON.parse(data.message);
-                        }
-                        if (data.uuid !== self.SIO.uuid || data.allow) {
-                            self.SIOProcess(data);
-                        }
+                    self.getField('sio').forEach(function (code) {
+                        self.SIO.on(code, function (data) {
+                            if (typeof data === 'string') {
+                                data = JSON.parse(data);
+                            }
+                            if (data.message && typeof data.message === 'string') {
+                                data.message = JSON.parse(data.message);
+                            }
+                            if (data.uuid !== self.SIO.uuid || data.allow) {
+                                self.SIOProcess(data);
+                            }
+                        });
                     });
                 }
 

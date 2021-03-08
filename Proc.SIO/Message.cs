@@ -33,18 +33,11 @@ namespace Proc.SIO
     public class MessageClass : ChildOfClass<SIO.ManagerClass>
     {
         #region Constructor
-        public MessageClass(SIO.ManagerClass mgr, bool useacct, string fn, params string[] payload)
+        public MessageClass(SIO.ManagerClass mgr, Modes mode, string fn, params string[] payload)
             : base(mgr)
         {
-            // Make the message
-            if (useacct)
-            {
-                this.Message = this.Parent.AccountEvent.New();
-            }
-            else
-            {
-                this.Message = this.Parent.InternalEvent.New();
-            }
+            //
+            this.Mode = mode;
 
             // Fill payload
             for (int i = 0; i < payload.Length; i += 2)
@@ -55,20 +48,28 @@ namespace Proc.SIO
 
             // Make payload
             this.Fn = fn;
-            this.Message["uuid"] = "$$sys";
         }
 
         public MessageClass(SIO.ManagerClass mgr, SocketIO.MessageClass msg)
             : base(mgr)
         {
             // Save the message
-            this.Message = msg;
+            this.Fn = msg["fn"];
             // And gt the payload
-            this.Values = this.Message.GetJObject("message");
-            if(this.Values == null)
+            this.Values = msg.GetJObject("message");
+            if (this.Values == null)
             {
-                this.Values = this.Message["message"].ToJObject();
+                this.Values = msg["message"].ToJObject();
             }
+        }
+        #endregion
+
+        #region Enums
+        public enum Modes
+        {
+            Internal,
+            Account,
+            Both
         }
         #endregion
 
@@ -83,6 +84,20 @@ namespace Proc.SIO
         #region Properties
         /// <summary>
         /// 
+        /// The routing for the message
+        /// 
+        /// </summary>
+        private Modes Mode { get; set; }
+
+        /// <summary>
+        /// 
+        /// The function
+        /// 
+        /// </summary>
+        public string Fn { get; private set; }
+
+        /// <summary>
+        /// 
         /// The mesage object
         /// 
         /// </summary>
@@ -93,18 +108,7 @@ namespace Proc.SIO
         /// The underlying message
         /// 
         /// </summary>
-        public Proc.SocketIO.MessageClass Message { get; private set; }
-
-        /// <summary>
-        /// 
-        /// The function
-        /// 
-        /// </summary>
-        public string Fn
-        {
-            get { return this.Message["fn"]; }
-            set { this.Message["fn"] = value; }
-        }
+        //public Proc.SocketIO.MessageClass Message { get; private set; }
         #endregion
 
         #region Methods
@@ -125,45 +129,41 @@ namespace Proc.SIO
         /// Send the message
         /// 
         /// </summary>
-        public void Send()
+        public void Send(string uuid = null, string winid = null)
         {
             // Make the message
-            this.Message["message"] = this.Values.ToSimpleString();
+            if (this.Mode == Modes.Account || this.Mode == Modes.Both)
+            {
+                this.FillAndSend(this.Parent.AccountEvent.New(), uuid, winid);
+            }
+
+            if (this.Mode == Modes.Internal)
+            {
+                this.FillAndSend(this.Parent.InternalEvent.New(), uuid, winid);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// Handles the processor
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="uuid"></param>
+        /// <param name="winid"></param>
+        private void FillAndSend(SocketIO.MessageClass msg, string uuid, string winid)
+        {
+            // Set the function
+            msg["fn"] = this.Fn;
+            // And who we are
+            msg["uuid"] = "$$sys";
+            // Optional
+            if (uuid.HasValue()) msg["toUUID"] = uuid;
+            if (winid.HasValue()) msg["toWinID"] = winid;
+            // Make the message
+            msg["message"] = this.Values.ToSimpleString();
             // Send
-            this.Message.Send();
-        }
-
-        /// <summary>
-        /// 
-        /// Sends message to specific browser
-        /// 
-        /// </summary>
-        /// <param name="winid"></param>
-        public void SendToUUID(string uuid)
-        {
-            this.Message["toUUID"] = uuid;
-            this.Send();
-        }
-
-        /// <summary>
-        /// 
-        /// Sends message to specific window in a specific browser
-        /// 
-        /// </summary>
-        /// <param name="winid"></param>
-        public void SendToWinID(string uuid, string winid)
-        {
-            this.Message["toWinID"] = winid;
-            this.SendToUUID(uuid);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return this.Message.ToString();
+            msg.Send();
         }
         #endregion
     }

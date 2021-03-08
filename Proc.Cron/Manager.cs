@@ -181,7 +181,7 @@ namespace Proc.Cron
             if (this.Synch != null)
             {
                 // Make message
-                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, false, "$$cron.{0}".FormatString(entry.SIOCode),
+                using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, MessageClass.Modes.Internal, "$$cron.{0}".FormatString(entry.SIOCode),
                                                                                     "id", entry.Name,
                                                                                     "value", entry.SIOValues,
                                                                                     "next", entry.NextOn.ToDBDate()))

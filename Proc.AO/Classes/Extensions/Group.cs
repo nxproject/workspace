@@ -70,7 +70,6 @@ namespace Proc.AO.Extended
 
             // Get
             this.Values = this.Parent[DatabaseClass.DatasetGroup][this.ID];
-            this.Values.Volatile();
 
             //
             switch (this.Type)

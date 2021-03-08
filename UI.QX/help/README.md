@@ -36,4 +36,4 @@ across a varied landscape.
 
 #### Footnote
 
-[The author](./WHO.md)
+[The author](/help/WHO.md)

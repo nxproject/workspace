@@ -40,22 +40,14 @@ namespace Proc.AO
             //
             this.SynchObject.Volatile(delegate (string fld, string value)
             {
-                // 
-                switch (fld)
-                {
-                    case "proccount":
-                        this.ProcessorCount = value.ToInteger(0);
-                        break;
-
-                    case "domain":
-                        this.Domain = value;
-                        break;
-
-                    case "certemail":
-                        this.CertEMail = value;
-                        break;
-                }
+                //
+                this.UpdateEnv(true);
             });
+
+            // Save
+            this.DomainShadow = this.Domain;
+            this.CertEMailShadow = this.CertEMail;
+            this.ProcessorCountShadow = this.ProcessorCount;
         }
         #endregion
 
@@ -168,24 +160,13 @@ namespace Proc.AO
                 // Save
                 if (this.Domain != value)
                 {
+                    //
                     this.SynchObject["domain"] = value;
-
-                    // To environment
-                    this.Parent.Parent.Parent.Domain = value;
-
-                    this.Parent.Parent.Parent.LogInfo("Domain set to {0}".FormatString(value));
-
-                    this.SynchObject.Save();
-
-                    // Recycle NginX
-                    using (Proc.NginX.ManagerClass c_Mgr = new NginX.ManagerClass(this.Parent.Parent.Parent))
-                    {
-                        // Only if we are the queen
-                        c_Mgr.MakeConfig(c_Mgr.IsAvailable && c_Mgr.IsQueen);
-                    }
+                    this.UpdateEnv(true);
                 }
             }
         }
+        private string DomainShadow { get; set; }
 
         /// <summary>
         /// 
@@ -201,23 +182,11 @@ namespace Proc.AO
                 if (this.CertEMail != value)
                 {
                     this.SynchObject["certemail"] = value;
-
-                    // To environment
-                    this.Parent.Parent.Parent.Domain = value;
-
-                    this.Parent.Parent.Parent.LogInfo("Cert EMail set to {0}".FormatString(value));
-
-                    this.SynchObject.Save();
-
-                    // Recycle NginX
-                    using (Proc.NginX.ManagerClass c_Mgr = new NginX.ManagerClass(this.Parent.Parent.Parent))
-                    {
-                        // Only if we are the queen
-                        c_Mgr.MakeConfig(c_Mgr.IsAvailable && c_Mgr.IsQueen);
-                    }
+                    this.UpdateEnv(true);
                 }
             }
         }
+        private string CertEMailShadow { get; set; }
 
         /// <summary>
         /// 
@@ -235,17 +204,13 @@ namespace Proc.AO
                 // Save
                 if (this.ProcessorCount != value)
                 {
+                    //
                     this.SynchObject["proccount"] = value.ToString();
-
-                    // To environment
-                    this.Parent.Parent.Parent["qd_worker"] = value.ToString();
-
-                    this.Parent.Parent.Parent.LogInfo("Processor count set to {0}".FormatString(value));
-
-                    this.SynchObject.Save();
+                    this.UpdateEnv(false);
                 }
             }
         }
+        private int ProcessorCountShadow { get; set; }
 
         /// <summary>
         /// 
@@ -310,6 +275,17 @@ namespace Proc.AO
         {
             get { return this.SynchObject["ttenabled"].FromDBBoolean(); }
             set { this.SynchObject["ttenabled"] = value.ToDBBoolean(); }
+        }
+
+        /// <summary>
+        /// 
+        /// Are accounts enabled?
+        /// 
+        /// </summary>
+        public bool AccountsEnabled
+        {
+            get { return this.SynchObject["acctenabled"].FromDBBoolean(); }
+            set { this.SynchObject["acctenabled"] = value.ToDBBoolean(); }
         }
 
         /// <summary>
@@ -541,6 +517,59 @@ namespace Proc.AO
         {
             // Save
             this.SynchObject.Save();
+        }
+
+        /// <summary>
+        /// 
+        /// handles updating environment
+        /// 
+        /// </summary>
+        /// <param name="recyclenginx"></param>
+        private void UpdateEnv(bool recyclenginx)
+        {
+            //
+            bool bChanged = false;
+            bool bNChanged = false;
+
+            // To environment
+            if (!this.Domain.IsSameValue(this.DomainShadow))
+            {
+                this.DomainShadow = this.Domain;
+                this.Parent.Parent.Parent.Domain = this.Domain;
+                this.Parent.Parent.Parent.LogInfo("Domain set to {0}".FormatString(this.Domain));
+                bChanged = true;
+                bNChanged = true;
+            }
+
+            if (!this.CertEMail.IsSameValue(this.CertEMailShadow))
+            {
+                this.CertEMailShadow = this.CertEMail;
+                this.Parent.Parent.Parent["certbot_email"] = this.CertEMail;
+                this.Parent.Parent.Parent.LogInfo("Cert EMail set to {0}".FormatString(this.CertEMail));
+                bChanged = true;
+                bNChanged = true;
+            }
+
+            if (this.ProcessorCount != this.ProcessorCountShadow)
+            {
+                this.ProcessorCountShadow = this.ProcessorCount;
+                this.Parent.Parent.Parent["qd_worker"] = this.ProcessorCount.ToString();
+                this.Parent.Parent.Parent.LogInfo("Processor count set to {0}".FormatString(this.ProcessorCount));
+                bChanged = true;
+            }
+
+            // Save
+            if (bChanged) this.SynchObject.Save();
+
+            // Recycle NginX
+            if (recyclenginx && bNChanged)
+            {
+                using (Proc.NginX.ManagerClass c_Mgr = new NginX.ManagerClass(this.Parent.Parent.Parent))
+                {
+                    // Only if we are the queen
+                    c_Mgr.MakeConfig(c_Mgr.IsAvailable && c_Mgr.IsQueen);
+                }
+            }
         }
         #endregion
     }

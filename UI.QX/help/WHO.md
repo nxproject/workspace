@@ -59,6 +59,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://mit-l
 * [fast-xml-parser](https://github.com/NaturalIntelligence/fast-xml-parser)
 * [FullCalendar](https://github.com/fullcalendar)
 * [Framework7](https://github.com/framework7io/Framework7)
+* [Handlebars.NET](https://github.com/Handlebars-Net/Handlebars.Net)
 * [HtmlAgilityPack](https://github.com/zzzprojects/html-agility-pack)
 * [ICSharpCode.SharpZipLib](https://github.com/icsharpcode/SharpZipLib)
 * [iTextSharp](https://github.com/itext/itextsharp)

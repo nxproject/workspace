@@ -200,7 +200,7 @@ namespace Proc.Task
             Proc.SIO.ManagerClass c_Mgr = this.Parent.Globals.Get<Proc.SIO.ManagerClass>();
 
             // Make a message
-            using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, false, fn, values))
+            using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, Proc.SIO.MessageClass.Modes.Internal, fn, values))
             {
                 // Send
                 c_Msg.Send();

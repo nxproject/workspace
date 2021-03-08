@@ -86,7 +86,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.05a"))
+            if (ds.Definition.ReleaseChanged("2021.03.08b"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -248,6 +248,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
                 c_Field.Label = "Help Root";
 
+                c_Field = ds.Definition["acctenabled"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "Accounts Enabled";
+
                 c_Field.SaveParent();
             }
 
@@ -278,7 +282,7 @@ namespace Proc.AO.BuiltIn
                 c_CInfo.ClearFields();
 
                 // Map
-                c_CInfo.UseFields("proccount", "ttenabled", "iotenabled", "helproot");
+                c_CInfo.UseFields("proccount", "ttenabled", "iotenabled", "acctenabled", "helproot");
 
                 c_CInfo.Save();
             }
@@ -445,7 +449,7 @@ namespace Proc.AO.BuiltIn
 
                 // Make the tabs
                 Definitions.ViewFieldClass c_Field = c_VSys.AsTabs("sysvt");
-                c_Field.Height = "8";
+                c_Field.Height = "9";
                 c_Field.Views = "sysa sysb sysc sysd";
 
                 c_VSys.Save();
