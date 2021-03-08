@@ -4,11 +4,11 @@
 
 The field definition window is accessed by right-mouse clicking on a field in the view:
 
-![image](/help/info/images/Fd1.png)
+![image](/images/Fd1.png)
 
 This will display the field defition window for the field:
 
-![image](/help/info/images/Fd2.png)
+![image](/images/Fd2.png)
 
 |Field|Meaning|
 |-|-|
@@ -26,7 +26,7 @@ This will display the field defition window for the field:
 
 ---
 
-![image](/help/info/images/Fd3.png)
+![image](/images/Fd3.png)
 
 
 |Field|Meaning|
@@ -35,7 +35,7 @@ This will display the field defition window for the field:
 
 ---
 
-![image](/help/info/images/Fd4.png)
+![image](/images/Fd4.png)
 
 
 |Field|Meaning|
@@ -45,7 +45,7 @@ This will display the field defition window for the field:
 
 ---
 
-![image](/help/info/images/Fd5.png)
+![image](/images/Fd5.png)
 
 
 |Field|Meaning|
@@ -55,7 +55,7 @@ This will display the field defition window for the field:
 
 ---
 
-![image](/help/info/images/Fd6.png)
+![image](/images/Fd6.png)
 
 
 |Field|Meaning|
@@ -123,16 +123,16 @@ These are fields which hold a sinlge line of text:
 Any number of fields can be added by clicking on the ***Add fields*** button in the ***Dataset/View Editor***
 tool.  You will be prompted for a list of field names to be added:
 
-![image](/help/info/images/Fd7.png)
+![image](/images/Fd7.png)
 
 When the input is completed, the ***Field definition*** tool is shown with all of the ***new*** fields as
 tabs, allowing for the completion of each field:
 
-![image](/help/info/images/Fd8.png)
+![image](/images/Fd8.png)
 
 And when completed, the fields will be shown:
 
-![image](/help/info/images/Fd9.png)
+![image](/images/Fd9.png)
 
 ## Repositioning fields
 

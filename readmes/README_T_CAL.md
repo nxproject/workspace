@@ -2,7 +2,7 @@
 
 The calendar tool displays the entries for a given ***dataset***:
 
-![image](/help/info/images/Cal1.png)
+![image](/images/Cal1.png)
 
 ## Navigating dates
 
@@ -25,15 +25,15 @@ You can also chnage views by clicking on the day in the ***month*** or ***week**
 If defined, the ***by*** choices are shown in the top toolbar.  Selecting an entry will highlight the events that
 match the criteria:
 
-![image](/help/info/images/Cal2.png)
+![image](/images/Cal2.png)
 
 Here we selected ***admin*** in the ***For*** field.
 
 ## Pick fields
 
-Pick fields behave the same as the [Pick fields](/help/info/README_D_PICK.md):
+Pick fields behave the same as the [Pick fields](/README_D_PICK.md):
 
-![image](/help/info/images/Cal3.png)
+![image](/images/Cal3.png)
 
 While this example is using a similar filter to the ***by*** selection above, the difference is that the ***pick filed***
 removes all entries that do not match, while the ***by*** does not.

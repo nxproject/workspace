@@ -24,37 +24,37 @@ The Chat tool is invoked via the Chat button in the ***top toolbar*** in the win
 discussed.  If the ***document*** and ***calendar**, the button is visble.  In a ***dataset*** the button is
 part of the ***Options*** button:
 
-![image](/help/info/images/chato1.png)
+![image](/images/chato1.png)
 
 The chat button opens a chat window:
 
-![image](/help/info/images/chato2.png)
+![image](/images/chato2.png)
 
 You can then invite another user to join you in the chat:
 
-![image](/help/info/images/chato3.png)
+![image](/images/chato3.png)
 
 Which will display a ***modal*** invitation window:
 
-![image](/help/info/images/chato4.png)
+![image](/images/chato4.png)
 
 If the invitation is accepted, a response will be shown in the originating user chat window:
 
-![image](/help/info/images/chato5.png)
+![image](/images/chato5.png)
 
 And a chat window will open for the recipient:
 
-![image](/help/info/images/chato6.png)
+![image](/images/chato6.png)
 
 Now messages can flow back and forth:
 
-![image](/help/info/images/chato7.png)
+![image](/images/chato7.png)
 
-![image](/help/info/chato8.png)
+![image](/chato8.png)
 
 The recipient is also able to open the subject matter window:
 
-![image](/help/info/images/chato9.png)
+![image](/images/chato9.png)
 
 And then both chatting and ***active collaboration*** can take place.
 
@@ -65,16 +65,16 @@ Note that changes are saved when any user saves his/her subject matter window.
 You can easily chat and collborate with people that are not users in your site. Use the ***Via link*** option
 in the ***Invite*** button:
 
-![image](/help/info/images/chato10.png)
+![image](/images/chato10.png)
 
 The system will ask for a name to be used as the identifier:
 
-![image](/help/info/images/chato11.png)
+![image](/images/chato11.png)
 
 When completed, the system will create a ***chat account*** and display the ID number as a 
 ***notification***:
 
-![image](/help/info/images/chato12.png)
+![image](/images/chato12.png)
 
 A copy the ***URL*** of the chat link into the ***clipboard***.   The use has the format of:
 
@@ -86,7 +86,7 @@ This ***account*** must be used within ***15 minutes*** of creation and can only
 
 Once the ***account*** uses the ***URL***, a chat session is opened:
 
-![image](/help/info/images/chato13.png)
+![image](/images/chato13.png)
 
 Now the ***account*** can access the subject matter just like any normal user.  The ***account** is
 limited to the chat itself and has no entries in the ***Start*** menu.

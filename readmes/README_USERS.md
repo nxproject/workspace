@@ -13,7 +13,7 @@ the site managers and have access to ***all*** datasets and tools.
 
 Users are added and modified by accessign the ***User*** dataset:
 
-![image](/help/info/images/User1.png)
+![image](/images/User1.png)
 
 |Field|Meaning|
 |-|-|
@@ -24,7 +24,7 @@ Users are added and modified by accessign the ***User*** dataset:
 
 ---
 
-![image](/help/info/images/User2.png)
+![image](/images/User2.png)
 
 |Field|Meaning|
 |-|-|
@@ -35,7 +35,7 @@ Users are added and modified by accessign the ***User*** dataset:
 
 ---
 
-![image](/help/info/images/User3.png)
+![image](/images/User3.png)
 
 |Field|Meaning|
 |-|-|
@@ -44,7 +44,7 @@ Users are added and modified by accessign the ***User*** dataset:
 
 ---
 
-![image](/help/info/images/User4.png)
+![image](/images/User4.png)
 
 |Field|Meaning|
 |-|-|
@@ -55,7 +55,7 @@ Users are added and modified by accessign the ***User*** dataset:
 
 ---
 
-![image](/help/info/images/User5.png)
+![image](/images/User5.png)
 
 |Field|Meaning|
 |-|-|
@@ -171,7 +171,7 @@ And a special ones:
 Any number of ***extensions*** can be created using the ***Allowed Extensions*** dataset found in the
 ***System*** entry in the ***Start*** menu:
 
-![image](/help/info/images/AllowedExt.png)
+![image](/images/AllowedExt.png)
 
 Each entry has the following fields:
 
@@ -192,7 +192,7 @@ user when he/she logs in.
 
 An account is a login that uses an email address as the name of the person:
 
-![image](/help/info/images/Acct1.png)
+![image](/images/Acct1.png)
 
 ## Getting an explanation
 

@@ -2,7 +2,7 @@
 
 The PDF viewer displays a ***pdf*** document, with multiple viewing options:
 
-![image](/help/info/images/Pdf1.png)
+![image](/images/Pdf1.png)
 
 ## Top toolbar
 

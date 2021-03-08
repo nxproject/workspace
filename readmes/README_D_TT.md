@@ -6,7 +6,7 @@ Time tracking is a simple to use way to keep track of open items and how much ti
 
 You add an entry using the **Options** button on the object itself:
 
-![image](/help/info/images/Tt3.png)
+![image](/images/Tt3.png)
 
 You have the follwoing options:
 
@@ -21,11 +21,11 @@ You have the follwoing options:
 
 Once the entry has been added, you access functionality via the **Pinned** button in the **taskbar**:
 
-![image](/help/info/images/Tt2.png)
+![image](/images/Tt2.png)
 
 When clicked, you get a menu of all the tracked items:
 
-![image](/help/info/images/Tt1.png)
+![image](/images/Tt1.png)
 
 Each tracked item displays the accumulated time in the format of : **days**:**hours**:**minutes**:**seconds**.
 

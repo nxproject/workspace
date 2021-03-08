@@ -2,14 +2,14 @@
 
 Each object has a document store that is viewed via the ***Documents*** tool:
 
-![image](/help/info/images/Doc1.png)
+![image](/images/Doc1.png)
 
 ## Uploading documents
 
 You can upload any type of documents to the store by clicking on the ***Upload*** button at the bottom of the tool.
 You will be asked to select a file from your computer, which gets uploaded to the store:
 
-![image](/help/info/images/Doc2.png)
+![image](/images/Doc2.png)
 
 Note that uploaded documents are brought in in the **Upload** folder.
 
@@ -24,7 +24,7 @@ Note that uploaded documents are brought in in the **Upload** folder.
 The documents tool displays a context menu when the cursor is positioned over any entry and the user performs a
 right-mouse click:
 
-![image](/help/info/images/Doc3.png)
+![image](/images/Doc3.png)
 
 |Option|Meaning|
 |-|-|
@@ -43,11 +43,11 @@ right-mouse click:
 
 When you click on this option, you will be asked for a folder name:
 
-![image](/help/info/images/Doc4.png)
+![image](/images/Doc4.png)
 
 And when confirmed, the folder will be created as a child of the selected folder:
 
-![image](/help/info/images/Doc5.png)
+![image](/images/Doc5.png)
 
 This option is available only for folder entries.
 
@@ -55,15 +55,15 @@ This option is available only for folder entries.
 
 When you click on this option, you will be asked for a file an template names:
 
-![image](/help/info/images/Doc8.png)
+![image](/images/Doc8.png)
 
 The document will use the template and the data for the object and create a merged document:
 
-![image](/help/info/images/Doc9.png)
+![image](/images/Doc9.png)
 
 Which is also added to the doocument list:
 
-![image](/help/info/images/Doc10.png)
+![image](/images/Doc10.png)
 
 ### View
 
@@ -73,11 +73,11 @@ Displays the document or folder as a ***pdf***.
 
 When you click on this option, you will be asked for a file name:
 
-![image](/help/info/images/Doc6.png)
+![image](/images/Doc6.png)
 
 And when confirmed, the document and/or folder will be converted to a ***pdf*** document and stored under the name given.
 
-![image](/help/info/images/Doc7.png)
+![image](/images/Doc7.png)
 
 ## Moving files
 
@@ -92,7 +92,7 @@ The ***Upload*** button will dipslay the upload progress and display when the ac
 The ***Via web*** button creates a link to the ***Documents*** window.  When clicked, a notification is displayed
 with the link ID:
 
-![image](/help/info/images/Doc11.png)
+![image](/images/Doc11.png)
 
 The link is copies to the clipboard and can be used in an email or SMS text.  The link has a format of:
 
@@ -106,35 +106,35 @@ Where ***linkid*** is the ID shown in the notification.
 
 The link displays the following page:
 
-![image](/help/info/images/Doc12.png)
+![image](/images/Doc12.png)
 
 Clicking on the ***file icon*** dsplays a ***file explorer*** allowing for the selection of a file.  Once a file is
 selected, the display is updated:
 
-![image](/help/info/images/Doc13.png)
+![image](/images/Doc13.png)
 
 Clicking on the ***check icon*** uploads the file to the ***Via web*** document folder.  
 
-![image](/help/info/images/Doc18.png)
+![image](/images/Doc18.png)
 
 When compleyed, the display is updated:
 
-![image](/help/info/images/Doc14.png)
+![image](/images/Doc14.png)
 
 ### When used in a mobile device
 
 The page displayed is similar to a desktop browser, except that the user is allowed to select a file or use the camera
 to obtain a picture or video:
 
-![image](/help/info/images/Doc15.png)
+![image](/images/Doc15.png)
 
 ---
 
-![image](/help/info/images/Doc16.png)
+![image](/images/Doc16.png)
 
 ---
 
-![image](/help/info/images/Doc17.png)
+![image](/images/Doc17.png)
 
 ### Restrictions
 

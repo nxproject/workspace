@@ -3,11 +3,11 @@
 Datasets are defined using the ***Dataset/Views*** tool found in the ***System*** entry in the ***Start***
 menu:
 
-![image](/help/info/images/Ds1.png)
+![image](/images/Ds1.png)
 
 Click on any dataset entry to display the ***Dataset Properties*** window for the dataset:
 
-![image](/help/info/images/Ds2.png)
+![image](/images/Ds2.png)
 
 |Field|Meaning|
 |-|-|
@@ -21,7 +21,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds3.png)
+![image](/images/Ds3.png)
 
 |Field|Meaning|
 |-|-|
@@ -30,7 +30,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds4.png)
+![image](/images/Ds4.png)
 
 |Field|Meaning|
 |-|-|
@@ -40,7 +40,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds5.png)
+![image](/images/Ds5.png)
 
 |Field|Meaning|
 |-|-|
@@ -48,7 +48,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds6.png)
+![image](/images/Ds6.png)
 
 |Field|Meaning|
 |-|-|
@@ -57,7 +57,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds7.png)
+![image](/images/Ds7.png)
 
 |Field|Meaning|
 |-|-|
@@ -66,7 +66,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds8.png)
+![image](/images/Ds8.png)
 
 |Field|Meaning|
 |-|-|
@@ -76,7 +76,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds9.png)
+![image](/images/Ds9.png)
 
 |Field|Meaning|
 |-|-|
@@ -88,7 +88,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds10.png)
+![image](/images/Ds10.png)
 
 |Field|Meaning|
 |-|-|
@@ -98,7 +98,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds11.png)
+![image](/images/Ds11.png)
 
 |Field|Meaning|
 |-|-|
@@ -106,7 +106,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
-![image](/help/info/images/Ds12.png)
+![image](/images/Ds12.png)
 
 |Field|Meaning|
 |-|-|
@@ -127,15 +127,15 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 You can add a dataset by right-mouse clicking on the ***Dataset/Views*** tool and selecting ***Add dataset(s)***:
 
-![image](/help/info/images/Da1.png)
+![image](/images/Da1.png)
 
 You will be prompted to enter a list of dataset names to be added:
 
-![image](/help/info/images/Da2.png)
+![image](/images/Da2.png)
 
 Each dataset will be created, along with a default view:
 
-![image](/help/info/images/Da3.png)
+![image](/images/Da3.png)
 
 The dataset and view will have teo fields ***name*** and ***value***, which can be modified and/oor deleted.
 

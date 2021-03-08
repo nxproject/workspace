@@ -2,7 +2,7 @@
 
 The editor allows you to edit ***docx*** documents.  It is invoked when you ***View*** a ***docx*** document:
 
-![image](/help/info/images/edit1.png)
+![image](/images/edit1.png)
 
 ## Top toolbar
 
@@ -80,34 +80,34 @@ The editor allows you to edit ***docx*** documents.  It is invoked when you ***V
 
 |Icon|Meaning|
 |-|-|
-|![image](/help/info/images/tm_save.svg)|Save|
-|![image](/help/info/images/tm_print.svg)|Print|
-|![image](/help/info/images/tm_undo.svg)|Undo|
-|![image](/help/info/images/tm_redo.svg)|Redo|
-|![image](/help/info/images/tm_search.svg)|Find/Replace|
-|![image](/help/info/images/tm_bold.svg)|Bold|
-|![image](/help/info/images/tm_italic.svg)|Italic|
-|![image](/help/info/images/tm_under.svg)|Underscore|
-|![image](/help/info/images/tm_strike.svg)|Strikethrough|
-|![image](/help/info/images/tm_aleft.svg)|Align left|
-|![image](/help/info/images/tm_acenter.svg)|Align center|
-|![image](/help/info/images/tm_ajust.svg)|Justify|
-|![image](/help/info/images/tm_aright.svg)|Align right|
-|![image](/help/info/images/tm_horz.svg)|Horizontal line|
-|![image](/help/info/images/tm_indent.svg)|Indent|
-|![image](/help/info/images/tm_outdent.svg)|Outdent|
-|![image](/help/info/images/tm_listorder.svg)|Ordered list|
-|![image](/help/info/images/tm_lunorder.svg)|Unordered list|
-|![image](/help/info/images/tm_ctext.svg)|Text color|
-|![image](/help/info/images/tm_cback.svg)|Background color|
-|![image](/help/info/images/tm_remfmt.svg)|Clear formatting|
-|![image](/help/info/images/tm_pagebreak.svg)|Page break|
-|![image](/help/info/images/tm_emoji.svg)|Emoticons|
-|![image](/help/info/images/tm_image.svg)|Insert/edit image|
-|![image](/help/info/images/tm_link.svg)|Insert/edit link|
-|![image](/help/info/images/tm_bm.svg)|Bookmark|
-|![image](/help/info/images/tm_ltr.svg)|Left to right|
-|![image](/help/info/images/tm_rtl.svg)|Right to left|
+|![image](/images/tm_save.svg)|Save|
+|![image](/images/tm_print.svg)|Print|
+|![image](/images/tm_undo.svg)|Undo|
+|![image](/images/tm_redo.svg)|Redo|
+|![image](/images/tm_search.svg)|Find/Replace|
+|![image](/images/tm_bold.svg)|Bold|
+|![image](/images/tm_italic.svg)|Italic|
+|![image](/images/tm_under.svg)|Underscore|
+|![image](/images/tm_strike.svg)|Strikethrough|
+|![image](/images/tm_aleft.svg)|Align left|
+|![image](/images/tm_acenter.svg)|Align center|
+|![image](/images/tm_ajust.svg)|Justify|
+|![image](/images/tm_aright.svg)|Align right|
+|![image](/images/tm_horz.svg)|Horizontal line|
+|![image](/images/tm_indent.svg)|Indent|
+|![image](/images/tm_outdent.svg)|Outdent|
+|![image](/images/tm_listorder.svg)|Ordered list|
+|![image](/images/tm_lunorder.svg)|Unordered list|
+|![image](/images/tm_ctext.svg)|Text color|
+|![image](/images/tm_cback.svg)|Background color|
+|![image](/images/tm_remfmt.svg)|Clear formatting|
+|![image](/images/tm_pagebreak.svg)|Page break|
+|![image](/images/tm_emoji.svg)|Emoticons|
+|![image](/images/tm_image.svg)|Insert/edit image|
+|![image](/images/tm_link.svg)|Insert/edit link|
+|![image](/images/tm_bm.svg)|Bookmark|
+|![image](/images/tm_ltr.svg)|Left to right|
+|![image](/images/tm_rtl.svg)|Right to left|
 
 ## Command bar
 

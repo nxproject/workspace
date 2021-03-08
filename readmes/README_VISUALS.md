@@ -2,7 +2,7 @@
 
 ## Desktop
 
-![image](/help/info/images/Desktop.png)
+![image](/images/Desktop.png)
 
 The desktop is the working surface of each user in the site.  It is composed of a ***taskbar*** at the bottom 
 of the desktop and can display any number of windows.
@@ -15,7 +15,7 @@ The taskbar has three sections:
 
 Access to all the datastes and tools is done via the ***Start*** button:
 
-![image](/help/info/images/Start.png)
+![image](/images/Start.png)
 
 With the exception of ceratin ***accounts*** which may have an empty Start menu, all Start menus will
 have a ***user name*** entry at the top and a ***Logout*** entry at the bottom.
@@ -24,13 +24,13 @@ have a ***user name*** entry at the top and a ***Logout*** entry at the bottom.
 
 The Pinned button is also used to access ***pinned** items.
 
-![image](/help/info/images/Datetime.png)
+![image](/images/Datetime.png)
 
 #### Window taskbar button
 
 Each active window in the desktop is assigned a button in the taskbar:
 
-![image](/help/info/images/OWin.png)
+![image](/images/OWin.png)
 
 Note that the button displays the window title and icon.  The active window is shown with a ***gold asterisk***.
 
@@ -46,13 +46,13 @@ All windows have the same format, with each item being optional, except for the 
 
 This is an example of a ***data window***:
 
-![image](/help/info/images/SampleData.png)
+![image](/images/SampleData.png)
 
 It has a ***top toolbar***, ***workarea*** and ***command bar***.
 
 And this is an example of a ***pick list***:
 
-![image](/help/info/images/SamplePick.png)
+![image](/images/SamplePick.png)
 
 Note that all it has is the ***workarea*** and the ***command bar***.
 
@@ -78,7 +78,7 @@ You can tell which fields have context menus by the color of their labels, which
 
 This is an example of a context menu:
 
-![image](/help/info/images/Context1.png)
+![image](/images/Context1.png)
 
 ### Bottom toolbar
 
@@ -97,7 +97,7 @@ command bar:
 
 The system command bar is very uncommon.  Here is an example of the system command bar:
 
-![image](/help/info/images/SysCmd.png)
+![image](/images/SysCmd.png)
 
 In this case, the ***command bar*** is ***non-operational*** and shown so you can see the ***data***
 window as it would be generated.
@@ -107,7 +107,7 @@ window as it would be generated.
 Modal windows display on top of all other windows and force the user to make a decision before continuing
 the process.  This is an example:
 
-![image](/help/info/images/Modal.png)
+![image](/images/Modal.png)
 
 This particular window displays if you try to logout while other windows are open.
 
@@ -115,10 +115,10 @@ This particular window displays if you try to logout while other windows are ope
 
 When the site is accessed and no user information is detected, the login window is shown:
 
-![image](/help/info/images/Login.png)
+![image](/images/Login.png)
 
 Once you have given the proper credentials, a ***notification*** is displayed:
 
-![image](/help/info/images/Welcome.png)
+![image](/images/Welcome.png)
 
 [Home](../README.md)
