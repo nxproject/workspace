@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.23.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Proc.AO\Proc.AO.csproj" />
+    <ProjectReference Include="..\Proc.Office\Proc.Office.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NX.Engine">
+      <HintPath>..\..\Node\NX.Engine\bin\Debug\netcoreapp3.1\NX.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="NX.Shared">
+      <HintPath>..\..\Node\NX.Shared\bin\Debug\netcoreapp3.1\NX.Shared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

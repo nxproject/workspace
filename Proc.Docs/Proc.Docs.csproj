@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle" Version="1.8.9" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.30" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="5.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Proc.AO\Proc.AO.csproj" />
+    <ProjectReference Include="..\Proc.SIO\Proc.SIO.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\..\Others\Open-XML-SDK-master\src\OpenXmlPowerTools\bin\Debug\netcoreapp3.1\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\..\Others\iTextSharp\src\extras\itextsharp.xmlworker\bin\Debug\netcoreapp3.1\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker">
+      <HintPath>..\..\Others\iTextSharp\src\extras\itextsharp.xmlworker\bin\Debug\netcoreapp3.1\itextsharp.xmlworker.dll</HintPath>
+    </Reference>
+    <Reference Include="NX.Engine">
+      <HintPath>..\..\Node\NX.Engine\bin\Debug\netcoreapp3.1\NX.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="NX.Shared">
+      <HintPath>..\..\Node\NX.Shared\bin\Debug\netcoreapp3.1\NX.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenXmlPowerTools">
+      <HintPath>..\..\Others\Open-XML-SDK-master\src\OpenXmlPowerTools\bin\Debug\netcoreapp3.1\OpenXmlPowerTools.dll</HintPath>
+    </Reference>
+   <Reference Include="Proc.SocketIO">
+      <HintPath>..\..\Node\Proc.SocketIO\bin\Debug\netcoreapp3.1\Proc.SocketIO.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

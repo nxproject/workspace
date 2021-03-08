@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NX.Office Time Tracking</title>
+    <link rel="stylesheet" href="/x/tt/fontawesome/css/all.min.css"> <!-- https://fontawesome.com/ -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet"> <!-- https://fonts.google.com/ -->
+    <link href="/x/tt/css/magnific-popup.min.css" rel="stylesheet">
+    <link href="/x/tt/css/tooplate-style.css" rel="stylesheet">
+    <!--
+
+    Tooplate 2122 Nano Folio
+
+    https://www.tooplate.com/view/2122-nano-folio
+
+    -->
+</head>
+<body onload="whenLoaded()">
+    <form action="/iot">
+        <div class="tm-container-fluid">
+
+            <section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-2 tm-border-rounded">
+                <div class="tm-about-header tm-flex-center">
+                    <i id="iconp" class="fas fa-camera fa-2x" onclick="resetUpload()"></i>
+                    <h2 id="msgp">Get picture, video or file</h2>
+                </div>
+            </section>
+            <section id="sctu" class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-1 tm-border-rounded" style="display:none">
+                <div class="tm-about-header tm-flex-center">
+                    <i class="fas fa-check fa-2x" onclick="upload()"></i>
+                    <h2 id="msgx">Upload</h2>
+                </div>
+            </section>
+            <footer class="tm-footer">
+                <input id="btnc" type="file" accept="application/pdf, audio/*, video/*, image/*">
+                Copyright 2020 Candid Concepts - Design: <a rel="sponsored" href="https://www.tooplate.com" class="tm-link-gray">Tooplate</a>
+            </footer>
+        </div>
+    </form>
+
+    <script src="/x/tt/js/jquery.min.js"></script>
+    <script src="/x/tt/js/imagesloaded.pkgd.min.js"></script>
+    <script src="/x/tt/js/isotope.pkgd.min.js"></script>
+    <!--<script src="/x/tt/js/jquery.magnific-popup.min.js"></script>-->
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get('id');
+        
+        function whenLoaded() {
+            if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                $("#msgp").text("Get file");
+                $("#btnc").attr("accept", "application/pdf, image/*");
+                $("#iconp").addClass("fa-file");
+            }
+            $("#sctu").hide();
+            $("#btnc").change(function () {
+                $("#sctu").show();
+            });
+        };
+
+        function resetUpload() {
+            $("#sctu").hide();
+            $("#msgx").text("Upload");
+            $("#btnc").click();
+        };
+        function upload() {
+
+            $("#msgx").text("Uploading");
+
+            var fd = new FormData();
+            var files = $('#btnc')[0].files[0];
+            fd.append('file', files);
+
+            $.ajax({
+                url: '/x/tt?id=' + id,
+                type: 'post',
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != 0) {
+                        $("#msgx").text("Done");
+                    }
+                    else {
+                        $("#msgx").text("Upload failed");
+                    }
+                },
+            });
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,989 @@
+﻿//--------------------------------------------------------------------------------
+/// 
+/// Copyright (C) 2020-2021 Jose E. Gonzalez (nxoffice2021@gmail.com) - All Rights Reserved
+/// 
+/// This work is covered by GPL v3 as defined in https://www.gnu.org/licenses/gpl-3.0.en.html
+/// 
+/// The above copyright notice and this permission notice shall be included in all
+/// copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+/// SOFTWARE.
+/// 
+///--------------------------------------------------------------------------------
+
+using NX.Shared;
+using NX.Engine;
+
+namespace Proc.AO.BuiltIn
+{
+    public static class DefaultClass
+    {
+        #region Constants
+        private const string Release = "0001";
+        #endregion
+
+        #region Methods
+        public static void Define(this DatasetClass ds)
+        {
+            // Accordng to type
+            switch (ds.Name)
+            {
+                case DatabaseClass.DatasetSys:
+                    ds.Define_Sys();
+                    break;
+
+                case DatabaseClass.DatasetHelp:
+                    ds.Define_Help();
+                    break;
+
+                case DatabaseClass.DatasetAllowed:
+                    ds.Define_Allowed();
+                    break;
+
+                case DatabaseClass.DatasetAccount:
+                    ds.Define_Account();
+                    break;
+
+                case DatabaseClass.DatasetUser:
+                    ds.Define_User();
+                    break;
+
+                case DatabaseClass.DatasetCron:
+                    ds.Define_Cron();
+                    break;
+
+                case DatabaseClass.DatasetIOTAgent:
+                    ds.Define_IOT("Agent", "user");
+                    break;
+                case DatabaseClass.DatasetIOTClient:
+                    ds.Define_IOT("Client", "group");
+                    break;
+                case DatabaseClass.DatasetIOTUnit:
+                    ds.Define_IOT("Unit", "plugin");
+                    break;
+                case DatabaseClass.DatasetIOTKeyboard:
+                    ds.Define_IOT("Keyboard", "keyboard");
+                    break;
+                case DatabaseClass.DatasetIOTVerb:
+                    ds.Define_IOT("Verb", "star");
+                    break; ;
+                case DatabaseClass.DatasetIOTMacro:
+                    ds.Define_IOT("Macro", "script");
+                    break;
+
+                default:
+                    ds.Define_Generic();
+                    break;
+            }
+        }
+
+        private static void Define_Sys(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.03.05a"))
+            {
+                //
+                ds.Definition.Caption = "Site Settings";
+                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Privileges = "*";
+                ds.Definition.IDAlias = "id";
+                ds.Definition.Icon = "computer";
+                ds.Definition.SIOEventsAtSave = "$$changed.systemprofile";
+
+                //
+                ds.Definition.ClearFields();
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["id"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Hidden;
+                c_Field.DefaultValue = "_info";
+
+                c_Field = ds.Definition["name"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Name;
+
+                c_Field = ds.Definition["addr1"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Address;
+
+                c_Field = ds.Definition["addr2"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Address;
+
+                c_Field = ds.Definition["city"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.City;
+
+                c_Field = ds.Definition["state"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.State;
+
+                c_Field = ds.Definition["zip"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.ZIP;
+
+                c_Field = ds.Definition["phone"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Phone;
+
+                c_Field = ds.Definition["fax"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Phone;
+
+                c_Field = ds.Definition["taxid"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Tax ID";
+
+                c_Field = ds.Definition["timezone"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Timezone;
+
+                c_Field = ds.Definition["twilioacct"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Acct";
+
+                c_Field = ds.Definition["twiliotoken"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Protected;
+                c_Field.Label = "Token";
+
+                c_Field = ds.Definition["twiliophone"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Phone;
+                c_Field.Label = "Phone";
+
+                c_Field = ds.Definition["udf1"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+
+                c_Field = ds.Definition["udf2"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+
+                c_Field = ds.Definition["udf3"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+
+                c_Field = ds.Definition["defaultfieldWidth"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
+                c_Field.Label = "Field Width";
+
+                c_Field = ds.Definition["defaultpickWidth"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
+                c_Field.Label = "Pick Width";
+
+                c_Field = ds.Definition["defaultpickHeight"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
+                c_Field.Label = "Pick Height";
+
+                c_Field = ds.Definition["domain"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Domain";
+
+                c_Field = ds.Definition["certemail"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.EMail;
+                c_Field.Label = "Cert. EMail";
+
+                c_Field = ds.Definition["proccount"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
+                c_Field.Label = "Proc. Count";
+
+                c_Field = ds.Definition["officeopen"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Time;
+                c_Field.Label = "Office Opens";
+
+                c_Field = ds.Definition["officeclose"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Time;
+                c_Field.Label = "Office Closes";
+
+                c_Field = ds.Definition["twitterck"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Consumer Key";
+
+                c_Field = ds.Definition["twittersk"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Protected;
+                c_Field.Label = "Secret Key";
+
+                c_Field = ds.Definition["twitterat"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Access Token";
+
+                c_Field = ds.Definition["twitterats"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Protected;
+                c_Field.Label = "Access Token Secret";
+
+                c_Field = ds.Definition["vc8by8api"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "API Key";
+
+                c_Field = ds.Definition["iotenabled"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "IOT Enabled";
+
+                c_Field = ds.Definition["stripepub"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Public Key";
+
+                c_Field = ds.Definition["stripesec"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Protected;
+                c_Field.Label = "Secret Key";
+
+                c_Field = ds.Definition["ttenabled"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "Time Track Enabled";
+
+                c_Field = ds.Definition["psapi"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "API Key";
+
+                c_Field = ds.Definition["sendgridapi"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Protected;
+                c_Field.Label = "API Key";
+
+                c_Field = ds.Definition["sendgridemail"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.EMail;
+                c_Field.Label = "EMail";
+
+                c_Field = ds.Definition["sendgridfriendly"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Name;
+                c_Field.Label = "Friendly Name";
+
+                c_Field = ds.Definition["twilioaccess"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Via DS";
+
+                c_Field = ds.Definition["helproot"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+                c_Field.Label = "Help Root";
+
+                c_Field.SaveParent();
+            }
+
+            // The pages
+            Definitions.ViewClass c_VInfo = ds.View("info");
+            if (c_VInfo.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VInfo.Caption = "Info";
+
+                // Clear
+                c_VInfo.ClearFields();
+
+                // Map
+                c_VInfo.UseFields("name", "addr1", "addr2", "city", "state", "zip",
+                    "phone", "fax", "taxid");
+
+                c_VInfo.Save();
+            }
+
+            Definitions.ViewClass c_CInfo = ds.View("sysa");
+            if (c_CInfo.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_CInfo.Caption = "Options";
+
+                // Clear
+                c_CInfo.ClearFields();
+
+                // Map
+                c_CInfo.UseFields("proccount", "ttenabled", "iotenabled", "helproot");
+
+                c_CInfo.Save();
+            }
+
+            c_CInfo = ds.View("sysb");
+            if (c_CInfo.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_CInfo.Caption = "Office";
+
+                // Clear
+                c_CInfo.ClearFields();
+
+                // Map
+                c_CInfo.UseFields("timezone", "officeopen", "officeclose");
+
+                c_CInfo.Save();
+            }
+
+            c_CInfo = ds.View("sysc");
+            if (c_CInfo.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_CInfo.Caption = "SSL";
+
+                // Clear
+                c_CInfo.ClearFields();
+
+                // Map
+                c_CInfo.UseFields("domain", "certemail");
+
+                c_CInfo.Save();
+            }
+
+            c_CInfo = ds.View("sysd");
+            if (c_CInfo.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_CInfo.Caption = "Sizes";
+
+                // Clear
+                c_CInfo.ClearFields();
+
+                // Map
+                c_CInfo.UseFields("defaultfieldWidth", "defaultpickWidth", "defaultpickHeight");
+
+                c_CInfo.Save();
+            }
+
+            Definitions.ViewClass c_VTwitter = ds.View("twitter");
+            if (c_VTwitter.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VTwitter.Caption = "Twitter";
+
+                // Clear
+                c_VTwitter.ClearFields();
+
+                // Map
+                c_VTwitter.UseFields("twitterck", "twittersk", "twitterat", "twitterats");
+
+                c_VTwitter.Save();
+            }
+
+            Definitions.ViewClass c_VPS = ds.View("ps");
+            if (c_VPS.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VPS.Caption = "PositionStack";
+
+                // Clear
+                c_VPS.ClearFields();
+
+                // Map
+                c_VPS.UseFields("psapi");
+
+                c_VPS.Save();
+            }
+
+            Definitions.ViewClass c_VStripe = ds.View("stripe");
+            if (c_VStripe.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VStripe.Caption = "Stripe";
+
+                // Clear
+                c_VStripe.ClearFields();
+
+                // Map
+                c_VStripe.UseFields("stripepub", "stripesec");
+
+                c_VStripe.Save();
+            }
+
+            Definitions.ViewClass c_VTwilio = ds.View("twilio");
+            if (c_VTwilio.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VTwilio.Caption = "Twilio";
+
+                // Clear
+                c_VTwilio.ClearFields();
+
+                // Map
+                c_VTwilio.UseFields("twilioacct", "twiliotoken", "twiliophone", "twilioaccess");
+
+                c_VTwilio.Save();
+            }
+
+            Definitions.ViewClass c_VSendGrid = ds.View("sendgrid");
+            if (c_VSendGrid.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VSendGrid.Caption = "SendGrid";
+
+                // Clear
+                c_VSendGrid.ClearFields();
+
+                // Map
+                c_VSendGrid.UseFields("sendgridapi", "sendgridemail", "sendgridfriendly");
+
+                c_VSendGrid.Save();
+            }
+
+            Definitions.ViewClass c_V8x8 = ds.View("vebye");
+            if (c_V8x8.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_V8x8.Caption = "8x8";
+
+                // Clear
+                c_V8x8.ClearFields();
+
+                // Map
+                c_V8x8.UseFields("vc8by8api");
+
+                c_V8x8.Save();
+            }
+
+            Definitions.ViewClass c_VUDF = ds.View("user");
+            if (c_VUDF.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VUDF.Caption = "User Defined";
+
+                // Clear
+                c_VUDF.ClearFields();
+
+                // Map
+                c_VUDF.UseFields("udf1", "udf2", "udf3");
+
+                c_VUDF.Save();
+            }
+
+            // Sub tabs
+            Definitions.ViewClass c_VSys = ds.View("sysv");
+            if (c_VSys.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VSys.Caption = "System";
+
+                // Clear
+                c_VSys.ClearFields();
+
+                // Make the tabs
+                Definitions.ViewFieldClass c_Field = c_VSys.AsTabs("sysvt");
+                c_Field.Height = "8";
+                c_Field.Views = "sysa sysb sysc sysd";
+
+                c_VSys.Save();
+            }
+
+            Definitions.ViewClass c_VTP = ds.View("tpv");
+            if (c_VTP.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VTP.Caption = "Services";
+
+                // Clear
+                c_VTP.ClearFields();
+
+                // Make the tabs
+                Definitions.ViewFieldClass c_Field = c_VTP.AsTabs("sysve");
+                c_Field.Height = "8";
+                c_Field.Views = "twilio sendgrid ps stripe vebye twitter";
+
+                c_VTP.Save();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("_info");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // Make the tabs
+                Definitions.ViewFieldClass c_Field = c_VDefault.AsTabs("tabs");
+                c_Field.Width = "default.parenttabWidth";
+                c_Field.Height = "13";
+                c_Field.Views = "info user sysv tpv";
+
+                c_VDefault.Save();
+            }
+
+        }
+
+        private static void Define_Help(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.03.07a"))
+            {
+                //
+                ds.Definition.Caption = "Help";
+                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "code";
+                ds.Definition.Icon = "key";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "110";
+
+                ds.Definition.ClearFields();
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+
+                c_Field = ds.Definition["desc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Description";
+
+                c_Field = ds.Definition["text"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+                c_Field.Label = "Text";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                // Give some room
+                c_VDefault["text"].Height = "15";
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_Allowed(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2020.12.25i"))
+            {
+                //
+                ds.Definition.Caption = "Allowed Extensions";
+                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "code";
+                ds.Definition.Icon = "key";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "100";
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+
+                c_Field = ds.Definition["value"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Allowed;
+                c_Field.Label = "Allowed";
+
+                c_Field = ds.Definition["desc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+                c_Field.Label = "Description";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_Account(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.02.11a"))
+            {
+                //
+                ds.Definition.Caption = "Accounts";
+                ds.Definition.Placeholder = "[_id] '-' [allowed]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "name";
+                ds.Definition.Icon = "group";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "101";
+
+                ds.Definition.ClearFields();
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["name"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.EMail;
+
+                c_Field = ds.Definition["pwd"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Password;
+                c_Field.Label = "Password";
+
+                c_Field = ds.Definition["allowed"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Allowed;
+                c_Field.Label = "Allowed";
+
+                c_Field = ds.Definition["childof"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Users;
+                c_Field.Label = "Child of";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_User(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.02.15b"))
+            {
+                //
+                ds.Definition.Caption = ds.Definition.Caption.IfEmpty("User");
+                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "name";
+                ds.Definition.Icon = ds.Definition.Icon.IfEmpty("user");
+                ds.Definition.SIOEventsAtSave = "$$changed.userprofile";
+
+                // Restart
+                ds.Definition.ClearFields();
+
+                // 
+                Definitions.DatasetFieldClass c_Field = ds.Definition["name"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+
+                c_Field = ds.Definition["pwd"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Password;
+                c_Field.Label = "Password";
+
+                c_Field = ds.Definition["allowed"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Allowed;
+
+                c_Field = ds.Definition["openmode"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.XOpenMode;
+                c_Field.Label = "Open Mode";
+                c_Field.DefaultValue = "stack";
+
+                c_Field = ds.Definition["openmodechild"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.XOpenMode;
+                c_Field.Label = "O.M. (child)";
+                c_Field.DefaultValue = "right";
+
+                c_Field = ds.Definition["emailname"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Name";
+
+                c_Field = ds.Definition["emailpwd"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Password;
+                c_Field.Label = "Password";
+
+                c_Field = ds.Definition["emailprov"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.ComboBox;
+                c_Field.DefaultValue = "GMail";
+                c_Field.Choices = "GMail Live Office365 Hotmail Yahoo GoDaddy HushMail";
+                c_Field.Label = "Provider";
+
+                c_Field = ds.Definition["phone"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Phone;
+                c_Field.Label = "Phone";
+
+                c_Field = ds.Definition["twiliophone"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Phone;
+                c_Field.Label = "Phone";
+
+                c_Field = ds.Definition["dispname"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Name;
+                c_Field.Label = "Full name";
+
+                c_Field = ds.Definition["title"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.AutoCaps;
+
+                c_Field = ds.Definition["signature"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Signature;
+
+                c_Field = ds.Definition["footer"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+
+                c_Field = ds.Definition["vc8by8jwt"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+                c_Field.Label = "JWT";
+
+                c_Field = ds.Definition["childof"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Users;
+                c_Field.Label = "Child of";
+
+                c_Field.SaveParent();
+            }
+
+            // Pages
+            Definitions.ViewClass c_VInfo = ds.View("info");
+            if (c_VInfo.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VInfo.Caption = "Info";
+
+                //
+                c_VInfo.UseFields("name", "pwd", "allowed", "childof");
+
+                c_VInfo.Save();
+            }
+
+            Definitions.ViewClass c_VInfoU = ds.View("infou");
+            if (c_VInfoU.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VInfoU.Caption = "Info";
+
+                //
+                c_VInfoU.UseFields("pwd");
+
+                c_VInfoU.Save();
+            }
+
+            Definitions.ViewClass c_OMode = ds.View("modes");
+            if (c_OMode.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_OMode.Caption = "Modes";
+
+                //
+                c_OMode.UseFields("openmode", "openmodechild");
+
+                c_OMode.Save();
+            }
+
+            Definitions.ViewClass c_EMail = ds.View("email");
+            if (c_EMail.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_EMail.Caption = "EMail";
+                c_EMail.Selector = "EMAIL";
+
+                //
+                c_EMail.UseFields("emailname", "emailpwd", "emailprov", "footer");
+                c_EMail["footer"].Height = "10";
+
+                c_EMail.Save();
+            }
+
+            Definitions.ViewClass c_Twilio = ds.View("twilio");
+            if (c_Twilio.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_Twilio.Caption = "Twilio";
+                c_Twilio.Selector = "TWILIO";
+
+                //
+                c_Twilio.UseFields("twiliophone");
+
+                c_Twilio.Save();
+            }
+
+            Definitions.ViewClass c_V8x8 = ds.View("vebye");
+            if (c_V8x8.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_V8x8.Caption = "8x8";
+                c_V8x8.Selector = "8X8";
+
+                // Clear
+                c_V8x8.ClearFields();
+
+                // Map
+                c_V8x8.UseFields("vc8by8jwt");
+
+                c_V8x8.Save();
+            }
+
+            Definitions.ViewClass c_Pers = ds.View("personal");
+            if (c_Pers.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_Pers.Caption = "Personal";
+
+                //
+                c_Pers.UseFields("dispname", "title", "phone", "signature");
+
+                // Adjust height
+                c_Pers["signature"].Height = "default.signatureHeight";
+
+                c_Pers.Save();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // Make the tabs
+                Definitions.ViewFieldClass c_Field = c_VDefault.AsTabs("tabs");
+                c_Field.Height = "17";
+                c_Field.Views = "info personal modes email twilio vebye";
+
+                c_VDefault.Save();
+            }
+
+            // Add the UserSettings view
+            Definitions.ViewClass c_VUSett = ds.View("_usersettings");
+            if (c_VUSett.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VUSett.ClearFields();
+
+                // Make the tabs
+                Definitions.ViewFieldClass c_Field = c_VUSett.AsTabs("tabsu");
+                c_Field.Height = "17";
+                c_Field.Views = "infou personal modes email twilio";
+
+                c_VUSett.Save();
+            }
+        }
+
+        private static void Define_Cron(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.01.25a"))
+            {
+                //
+                ds.Definition.Caption = ds.Definition.Caption.IfEmpty("CRON");
+                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "name";
+                ds.Definition.Icon = ds.Definition.Icon.IfEmpty("user");
+
+                // Restart
+                ds.Definition.ClearFields();
+
+                // 
+                Definitions.DatasetFieldClass c_Field = ds.Definition["name"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+
+                c_Field = ds.Definition["patt"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Pattern";
+
+                c_Field = ds.Definition["start"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Start On";
+
+                c_Field = ds.Definition["next"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Next On";
+
+                c_Field = ds.Definition["nextl"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Next";
+
+                c_Field = ds.Definition["enabled"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "Enabled";
+
+                c_Field = ds.Definition["fn"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Function";
+
+                c_Field = ds.Definition["siovalue"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+                c_Field.Label = "Values";
+
+                c_Field = ds.Definition["siocode"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "SIO Code";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_IOT(this DatasetClass ds, string caption, string icon)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.02.08b"))
+            {
+                //
+                ds.Definition.Caption = ds.Definition.Caption.IfEmpty(caption);
+                ds.Definition.Placeholder = "[name] [desc]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.Icon = ds.Definition.Icon.IfEmpty(icon);
+
+                ds.Definition.StartGroup = "IOT";
+                ds.Definition.StartIndex = "100";
+                ds.Definition.Selector = "IOT";
+
+                // 
+                Definitions.DatasetFieldClass c_Field = ds.Definition["name"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+
+                c_Field = ds.Definition["desc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+
+                c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+
+                c_Field.SaveParent();
+
+                ds.Definition.Save();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_Generic(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged(Release.Version()))
+            {
+                //
+                ds.Definition.Caption = ds.Definition.Caption.IfEmpty(WesternNameClass.CapEachWord(ds.Name));
+                //ds.Definition.Placeholder = "[name]";
+                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.Icon = ds.Definition.Icon.IfEmpty("application_view_list");
+
+                // 
+                //Definitions.DatasetFieldClass c_Field = ds.Definition["name"];
+                //c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+
+                //c_Field = ds.Definition["value"];
+                //c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+
+                //c_Field.SaveParent();
+
+                ds.Definition.Save();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(Release.Version()))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+        #endregion
+    }
+}

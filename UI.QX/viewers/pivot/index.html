@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NX.Workspace Reporter</title>
+    <!-- external libs from cdnjs -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css crossorigin="anonymous"">
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.18/c3.min.js" crossorigin="anonymous"></script>
+    <!--<script src="https://cdn.plot.ly/plotly-basic-latest.min.js"></script>-->
+    <script src="https://cdn.plot.ly/plotly-latest.js" charset="utf-8"></script>
+
+    <!-- PivotTable.js libs from dist -->
+    <link rel="stylesheet" type="text/css" href="dist/pivot.css">
+    <script type="text/javascript" src="dist/pivot.js"></script>
+    <!--<script type="text/javascript" src="dist/c3_renderers.js"></script>-->
+    <script type="text/javascript" src="dist/plotly_renderers.js"></script>
+    <script type="text/javascript" src="dist/subtotal.js"></script>
+
+    <style>
+        body {
+            font-family: Verdana;
+        }
+
+        .node {
+            border: solid 1px white;
+            font: 10px sans-serif;
+            line-height: 12px;
+            overflow: hidden;
+            position: absolute;
+            text-indent: 2px;
+        }
+
+        .c3-line, .c3-focused {
+            stroke-width: 3px !important;
+        }
+
+        .c3-bar {
+            stroke: white !important;
+            stroke-width: 1;
+        }
+
+        .c3 text {
+            font-size: 12px;
+            color: grey;
+        }
+
+        .tick line {
+            stroke: white;
+        }
+
+        .c3-axis path {
+            stroke: grey;
+        }
+
+        .c3-circle {
+            opacity: 1 !important;
+        }
+
+        .c3-xgrid-focus {
+            visibility: hidden !important;
+        }
+
+        .icon-bar {
+            width: 100%;
+            overflow: auto;
+        }
+
+            .icon-bar i {
+                float: left;
+                width: 48px;
+                text-align: center;
+                padding: 12px 0;
+                transition: all 0.3s ease;
+                color: white;
+                font-size: 24px;
+                background-color: #555;
+            }
+
+                .icon-bar i:hover {
+                    background-color: #000;
+                }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const ds = urlParams.get('ds');
+        const winid = urlParams.get('winid');
+        var query = urlParams.get('pick');
+
+        //
+        if (query) {
+            query = JSON.parse(query) || [];
+        } else {
+            query = [];
+        }
+
+        //
+        var current;
+        var save = function () {
+            if (current) {
+                var data = JSON.parse(current);
+                data._desc = winid.substr(9) || '';
+                data._search = data._desc.toUpperCase();
+
+                parent.nx.util.serviceCall('AO.ObjectSet', {
+                    ds: ds,
+                    id: winid.substr(4),
+                    data: data
+                }, function () {
+                    var win = parent.nx.desktop.findWindow(winid);
+                    if (win) {
+                        win.safeClose();;
+                    }
+                });
+            }
+        };
+
+        $(function () {
+
+            $("#output").empty().text("Loading...")
+
+            setTimeout(function () {
+                parent.nx.util.serviceCall('AO.ObjectGet', {
+                    ds: ds,
+                    id: winid.substr(4)
+                }, function (options) {
+
+                    // Assure
+                    options = options || {};
+
+                    // Get the view
+                    parent.nx.util.serviceCall('AO.DatasetGet', {
+                        ds: ds
+                    }, function (dsdef) {
+
+                        // Any?
+                        if (dsdef) {
+                            parent.nx.util.serviceCall('AO.QueryGet', {
+                                ds: ds,
+                                cols: dsdef.anaby,
+                                query: query,
+                                transform: 'y'
+                            }, function (result) {
+
+                                // Assure
+                                result = result || {};
+                                result.data = result.data || [];
+                                result.derived = result.derived || {};
+
+                                // Derivers
+                                var derived = {};
+                                result.derived.forEach(function (def) {
+                                    var fn;
+                                    switch (def.fn) {
+                                        case 'substr':
+                                            fn = function (record) {
+                                                var value = record[def.field];
+                                                if (value) {
+                                                    value = value.substr(0, parseInt(def.option));
+                                                }
+                                                return value;
+                                            };
+                                            break;
+
+                                        default:
+                                            fn = $.pivotUtilities.derivers[def.fn](def.field, def.option);
+                                            break;
+                                    }
+                                    if (fn) {
+                                        derived[def.name] = fn;
+                                    }
+                                });
+
+                                // Renderers
+                                var renderers = $.extend(
+                                    $.pivotUtilities.renderers,
+                                    $.pivotUtilities.plotly_renderers,
+                                    $.pivotUtilities.subtotal_renderers
+                                );
+
+                                // Merge with the layout
+                                options = parent.nx.util.merge(options, {
+                                    renderers: renderers,
+                                    derivedAttributes: derived,
+                                    dataClass: $.pivotUtilities.SubtotalPivotData,
+                                    onRefresh: function (config) {
+                                        var config_copy = JSON.parse(JSON.stringify(config));
+                                        //delete some values which are functions
+                                        delete config_copy["aggregators"];
+                                        delete config_copy["renderers"];
+                                        //delete some bulky default values
+                                        delete config_copy["rendererOptions"];
+                                        delete config_copy["localeStrings"];
+                                        current = JSON.stringify(config_copy);
+                                    }
+                                });
+
+                                    if (typeof options.rows === 'string') options.rows = JSON.parse(options.rows);
+                                    if (typeof options.cols === 'string') options.cols = JSON.parse(options.cols);
+
+                                $("#output").pivotUI(result.data, options, true);
+                            });
+                        }
+                    });
+                });
+            }, 500);
+        });
+    </script>
+    <div class="icon-bar"><i class="fa fa-save" onclick="save()"></i></div>
+    <div id="output" style="margin: 10px;"></div>
+
+</body>
+</html>

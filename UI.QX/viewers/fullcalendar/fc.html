@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+    <link href='lib/main.min.css' rel='stylesheet' />
+    <script src='lib/main.min.js'></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const winid = urlParams.get('winid');
+            const passedds = urlParams.get('ds');
+            const startDate = urlParams.get('startdate');
+            const startField = urlParams.get('startfld');
+            const endField = urlParams.get('endfld');
+            const mgr = urlParams.get('mgr');
+
+            const cbc = 'white';
+
+            const byFields = [];
+            const byLabels = [];
+            const byBtns = [];
+            var byMap = {};
+            var bySel = [];
+
+            // Linkage
+            var plink = parent.nx.desktop || parent.nx.user;
+            var siolink = (parent.nx.desktop ? parent.nx.desktop.user.SIOSend : parent.nx.user.SIOSend);
+
+            if (parent.nx.desktop) {
+                var pwin = plink.findWindow(winid);
+                if (pwin) {
+                    var byTB = pwin.topToolbar;
+                    if (byTB) {
+                        byTB.getChildren().forEach(function (btn) {
+                            var passed = parent.nx.bucket.getItem(btn, 'passed');
+                            if (passed) {
+                                byBtns.push(btn);
+                                byFields.push(passed);
+                                byLabels.push(btn.getLabel());
+                                bySel.push(null);
+                            }
+                        });
+                    }
+                }
+            }
+
+            var query = [];
+
+            var calendarEl = document.getElementById('calendar');
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                height: '100%',
+                expandRows: true,
+                slotMinTime: urlParams.get('officeopen'),
+                slotMaxTime: urlParams.get('officeclose'),
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                initialView: 'dayGridMonth',
+                initialDate: startDate,
+                navLinks: true, // can click day/week names to navigate views
+                editable: !!startField,
+                eventDurationEditable: !!endField,
+                selectable: true,
+                nowIndicator: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                events: function (info, successCallback, failureCallback) {
+                    // And call first load
+                    parent.nx.util.serviceCall('Office.CalendarGet', {
+                        ds: passedds,
+                        from: new Date(info.startStr).toISOString(),
+                        to: new Date(info.endStr).toISOString(),
+                        mgr: mgr,
+                        query: query
+                    }, function (result) {
+                        // Make list
+                        var events = [];
+                        // Valid?
+                        if (result && result.data) {
+                            // Loop thru
+                            result.data.forEach(function (data) {
+                                // Make
+                                var raw = calendar._nxevent(data);
+                                if (raw) {
+                                    // Add
+                                    events.push(raw);
+                                }
+                            });
+                        }
+                        // Callback
+                        successCallback(events);
+
+                        calendar._nxfilters();
+                    });
+                },
+                eventDidMount: function (e) {
+                    var event = e.event;
+                    var el = e.el;
+                    el.id = event.id;
+                    calendar._nxColor(event);
+                },
+                eventDrop: function (info) {
+                    var event = info.event;
+                    siolink('$$object.data', {
+                        aofld: startField,
+                        winid: 'ao_' + passedds + '_' + event.id,
+                        value: event.startStr
+                    }, {
+                        allow: true
+                    });
+                    if (endField) {
+                        siolink('$$object.data', {
+                            aofld: endField,
+                            winid: 'ao_' + passedds + '_' + event.id,
+                            value: event.endStr
+                        }, {
+                            allow: true
+                        });
+                    }
+                    var pb = {
+                        ds: passedds,
+                        id: event.id,
+                        data: {}
+                    };
+                    pb.data[startField] = event.startStr;
+                    if (endField) pb.data[endField] = event.endStr;
+                    parent.nx.util.serviceCall('AO.ObjectSet', pb);
+                    calendar._nxColor(event);
+                },
+                dateClick: function (info) {
+                    if (info.view.type !== 'timeGridDay') {
+                        calendar.changeView('timeGridDay', info.dateStr);
+                    } else {
+                        var event = info.event;
+                        var pb = {
+                            ds: passedds,
+                            data: {}
+                        };
+                        pb.data[startField] = info.date.toISOString();
+                        if (parent.nx.desktop) {
+                            parent.nx.desktop.addWindowDS(pb);
+                        }
+                    }
+                },
+                eventClick: function (info) {
+                    var event = info.event;
+                    var pb = {
+                        ds: passedds,
+                        id: event.id
+                    };
+                    if (parent.nx.desktop) {
+                        parent.nx.desktop.addWindowDS(pb);
+                    } else {
+                        parent.nx.util.popupClose();
+                        parent.nx.calls.view('::' + passedds + ':' + event.id + '::');
+                    }
+                }
+            });
+
+            // Resetter
+            calendar._nxreset = function (qry) {
+                // Save query
+                query = qry;
+                // Build filters
+                calendar._nxclearfilters();
+                // Load
+                calendar.refetchEvents();
+            };
+
+            // Event formatter
+            calendar._nxevent = function (data) {
+                // Valid?
+                if (data._calstart) {
+                    var start = new Date(data._calstart.substr(1)).toISOString();
+                    var end;
+                    if (data._calend) end = new Date(data._calend.substr(1)).toISOString();
+                    // Build filters
+                    var id = data._id;
+                    delete byMap[id];
+                    var items = [];
+                    byFields.forEach(function (fld) {
+                        items.push(data[fld]);
+                    });
+                    byMap[id] = items;
+                    // Return what is used by calendar
+                    return {
+                        id: data._id,
+                        title: data._calsubj,
+                        start: start,
+                        end: end,
+                        format: 'json',
+                        orig: items
+                    }
+                }
+            };
+
+            // Filters
+            calendar._nxfilters = function () {
+                byBtns.forEach(function (btn, index) {
+                    // The new list
+                    var items = [];
+                    // Loop thru
+                    Object.keys(byMap).forEach(function (id) {
+                        var entry = byMap[id][index];
+                        if (items.indexOf(entry) === -1) items.push(entry);
+                    });
+                    // Sort
+                    items.sort();
+                    // Make menu
+                    items.forEach(function (entry, i) {
+                        items[i] = {
+                            label: entry,
+                            passed: index,
+                            click: function (e) {
+                                var btn = e.getTarget();
+                                var value = btn.getLabel();
+                                var params = parent.nx.bucket.getParams(btn);
+                                var i = params.passed;
+                                bySel[i] = value;
+                                var widget = parent.nx.util.eventGetWidget(e);
+                                widget.setLabel(byLabels[i] + ': ' + value);
+                                calendar._nxhighlight();
+                            }
+                        };
+                    });
+                    // Clear
+                    items.unshift({
+                        label: 'All',
+                        passed: index,
+                        click: function (e) {
+                            var btn = e.getTarget();
+                            var params = parent.nx.bucket.getParams(btn);
+                            var i = params.passed;
+                            bySel[i] = null;
+                            var widget = parent.nx.util.eventGetWidget(e);
+                            widget.setLabel(byLabels[i]);
+                            calendar._nxhighlight();
+                        }
+                    });
+                    //
+                    parent.nx.util.makeMenu(items, btn);
+                });
+            };
+
+            calendar._nxclearfilters = function () {
+                byBtns.forEach(function (btn, i) {
+                    bySel[i] = null;
+                    btn.setLabel(byLabels[i]);
+                });
+            };
+
+            //
+            calendar._nxColor = function (event) {
+                if (event.extendedProps) {
+                    var tc = event.extendedProps['color'];
+                    var bc = event.extendedProps['background-color'];
+                    if (tc && bc) {
+                        $('#' + event.id).css('background-color', bc).css('color', tc);
+                    }
+                }
+            };
+
+            // Highlighter
+            calendar._nxhighlight = function () {
+                var events = calendar.getEvents();
+                var has = false;
+                bySel.forEach(function (entry) {
+                    if (entry) has = true;
+                });
+                events.forEach(function (event) {
+                    var bc = cbc;
+                    var tc = 'black';
+                    if (has) {
+                        var orig = event.extendedProps.orig;
+                        var match = true;
+                        bySel.forEach(function (entry, i) {
+                            if (entry && entry !== orig[i]) {
+                                match = false;
+                            }
+                        });
+                        if (match) {
+                            bc = 'red';
+                            tc = cbc;
+                        }
+                    }
+                    event.setExtendedProp('background-color', bc);
+                    event.setExtendedProp('color', tc);
+                    calendar._nxColor(event);
+                });
+            };
+
+            // Event processor
+            calendar._nxprocess = function (ds, id, data, del) {
+                // Ours?
+                if (ds === passedds) {
+                    // Get event
+                    var event = calendar.getEventById(id);
+                    // Delete?
+                    if (del) {
+                        // Do we have it?
+                        if (event) {
+                            // From calendar
+                            event.remove();
+                        }
+                    } else if (data) {
+                        // Make event
+                        var raw = calendar._nxevent(data);
+                        if (raw) {
+                            // One already?
+                            if (event) event.remove();
+                            // Add
+                            calendar.addEventSource([raw]);
+                        }
+                    } else {
+                        // Get data
+                        parent.nx.util.serviceCall('Office.CalendarCheck', {
+                            ds: ds,
+                            id: id
+                        }, function (result) {
+                            // Any?
+                            if (result && result.data && result.data.length) {
+                                var rec = result.data[0];
+                                calendar._nxprocess(ds, rec._id, rec, false);
+                            }
+                        });
+                    }
+                }
+            }; plink
+
+            // External
+            plink.addTP(winid, calendar);
+
+            // Draw ourselves
+            calendar.render();
+            // Set to while
+            $('#calendar').css('background-color', cbc);
+
+            // Link
+            plink.addSIO(winid, function (name, event) {
+                // According to call
+                switch (event.fn) {
+                    case '$$object.saved':
+                        // Get the message
+                        var msg = event.message;
+                        // Must have one
+                        if (msg) {
+                            // Process
+                            calendar._nxprocess(msg.ds, msg.id, null, false);
+                            // Build filters
+                            calendar._nxfilters();
+                        }
+                        break;
+                    case '$$object.deleted':
+                        // Get the message
+                        var msg = event.message;
+                        // Must have one
+                        if (msg) {
+                            // Process
+                            calendar._nxprocess(msg.ds, msg.id, null, true);
+                            // Build filters
+                            calendar._nxfilters();
+                        }
+                        break;
+                }
+            });
+
+        });
+
+    </script>
+    <style>
+
+        html, body {
+            overflow: hidden; /* don't do scrollbars */
+            font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+            font-size: 14px;
+        }
+
+        #calendar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .fc-header-toolbar {
+            /*
+        the calendar will be butting up against the edges,
+        but let's scoot in the header's buttons
+        */
+            padding-top: 1em;
+            padding-left: 1em;
+            padding-right: 1em;
+        }
+    </style>
+</head>
+<body>
+
+    <div id='calendar-container'>
+        <div id='calendar'></div>
+    </div>
+
+</body>
+</html>

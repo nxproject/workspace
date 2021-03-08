@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Steps Raw\**" />
+    <Compile Remove="Support\Organizer\**" />
+    <EmbeddedResource Remove="Steps Raw\**" />
+    <EmbeddedResource Remove="Support\Organizer\**" />
+    <None Remove="Steps Raw\**" />
+    <None Remove="Support\Organizer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Support\TP\iText\Support.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentFTP" Version="33.0.3" />
+    <PackageReference Include="IronPython" Version="2.7.11" />
+    <PackageReference Include="OpenPop" Version="2.0.6.2" />
+    <PackageReference Include="Renci.SshNet.Async" Version="1.4.0" />
+    <PackageReference Include="TweetSharp" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.TaskWF\Common.TaskWF.csproj" />
+    <ProjectReference Include="..\Proc.AO\Proc.AO.csproj" />
+    <ProjectReference Include="..\Proc.Comm\Proc.Comm.csproj" />
+    <ProjectReference Include="..\Proc.Docs\Proc.Docs.csproj" />
+    <ProjectReference Include="..\Proc.SIO\Proc.SIO.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>..\..\Others\iTextSharp\src\core\bin\Debug\netcoreapp3.1\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker">
+      <HintPath>..\..\Others\iTextSharp\src\extras\itextsharp.xmlworker\bin\Debug\netcoreapp3.1\itextsharp.xmlworker.dll</HintPath>
+    </Reference>
+    <Reference Include="NX.Engine">
+      <HintPath>..\..\Node\NX.Engine\bin\Debug\netcoreapp3.1\NX.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="NX.Shared">
+      <HintPath>..\..\Node\NX.Shared\bin\Debug\netcoreapp3.1\NX.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Proc.SocketIO">
+      <HintPath>..\..\Node\Proc.SocketIO\bin\Debug\netcoreapp3.1\Proc.SocketIO.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>
