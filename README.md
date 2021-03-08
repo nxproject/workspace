@@ -34,6 +34,6 @@ across a varied landscape.
 * [Services](readmes/README_SVCS.md)
 * [Infrastructure](readmes/README_INFRA.md)
 
-#### Footnote
+### Footnote
 
 [The author](WHO.md)
