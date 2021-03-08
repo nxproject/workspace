@@ -49,7 +49,7 @@ That is what my goal is, and has been since 1983.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](https://mit-license.org/) file for details
 
 ## Packages used
 
