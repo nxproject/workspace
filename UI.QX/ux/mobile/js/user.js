@@ -510,7 +510,7 @@ nx.user = {
                         nx.util.notifyInfo('View ' + ds + '/' + view + ' has been deleted');
                     } else {
                         // Reload
-                        nx.env._loadView(ds, view, function () {
+                        nx.db._loadView(ds, view, function () {
                             // Load start menu
                             self._reloadUser();
 

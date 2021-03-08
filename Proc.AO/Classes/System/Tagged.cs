@@ -101,6 +101,29 @@ namespace Proc.AO
 
             return c_Ans;
         }
+
+        /// <summary>
+        /// 
+        /// Deletes all tags
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="ds"></param>
+        public void DeleteAll(string user = null, string ds=null)
+        {
+            // Get the dataset
+            DatasetClass c_DS = this.Parent[DatabaseClass.DatasetTagged];
+            // Make the query
+            QueryClass c_Qry = new QueryClass(c_DS.DataCollection);
+            if (user.HasValue()) c_Qry.Add(TagClass.FldUser, QueryElementClass.QueryOps.Eq, user);
+            if (ds.HasValue()) c_Qry.Add(TagClass.FldObj, QueryElementClass.QueryOps.Like, "::" + ds + ":*");
+            // Get
+            foreach (ObjectClass c_Doc in c_Qry.FindObjects())
+            {
+                TagClass c_Tag = new TagClass(this, c_Doc);
+                c_Tag.Delete();
+            }
+        }
         #endregion
 
         #region Details

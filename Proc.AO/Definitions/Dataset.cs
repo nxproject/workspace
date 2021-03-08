@@ -776,6 +776,11 @@ namespace Proc.AO.Definitions
                     c_DS.View(sView).Save();
                 }
             }
+            else
+            {
+                // Delete tags
+                this.Parent.Parent.Tagged.DeleteAll(null, this.Name);
+            }
         }
 
         /// <summary>

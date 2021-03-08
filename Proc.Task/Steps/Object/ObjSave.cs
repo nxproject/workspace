@@ -81,7 +81,7 @@ namespace Proc.Task
             string sName = args.Get(ArgName);
             bool bChores = args.GetAsBool(ArgChores, false);
 
-            ctx.Objects[sName].Save(bChores);
+            ctx.Objects[sName].Save(runtask: bChores, signal: true);
 
             return eAns;
         }

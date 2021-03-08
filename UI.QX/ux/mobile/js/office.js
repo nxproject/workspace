@@ -291,11 +291,11 @@ nx.office = {
             // Loop thru
             for (var i = pos + 1; i < history.length; i++) {
                 //
-                var url = history[i];
+                var xurl = history[i];
                 // Clear
-                nx.env.clearBucket(url);
-                nx.user.removeTP(url);
-                nx.user.removeSIO(url);
+                nx.env.clearBucket(xurl);
+                nx.user.removeTP(xurl);
+                nx.user.removeSIO(xurl);
             }
         } else {
             //

@@ -154,7 +154,7 @@ namespace Proc.AO
 
                     // Make a message
                     using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr,
-                                                                            SIO.MessageClass.Modes.Internal,
+                                                                            SIO.MessageClass.Modes.Both,
                                                                             "$$object.data",
                                                                             "winid", "ao_{0}_{1}".FormatString(this.Dataset.Name, this.ID),
                                                                             "aoFld", field,
@@ -176,7 +176,7 @@ namespace Proc.AO
         /// </summary>
         public string ID { get; private set; }
 
-        public bool IsData {  get { return !this.ID.StartsWith("#"); } }
+        public bool IsData { get { return !this.ID.StartsWith("#"); } }
 
         /// <summary>
         /// 
@@ -194,13 +194,13 @@ namespace Proc.AO
         /// The collection where the object resides
         /// 
         /// </summary>
-        public CollectionClass Collection 
-        { 
-            get 
+        public CollectionClass Collection
+        {
+            get
             {
                 CollectionClass c_Ans = null;
 
-                if(this.IsData)
+                if (this.IsData)
                 {
                     c_Ans = this.Dataset.DataCollection;
                 }
@@ -209,8 +209,8 @@ namespace Proc.AO
                     c_Ans = this.Dataset.SettingsCollection;
                 }
 
-                return c_Ans; 
-            } 
+                return c_Ans;
+            }
         }
 
         /// <summary>
@@ -382,7 +382,7 @@ namespace Proc.AO
         /// Loads the object from database
         /// 
         /// </summary>
-        public void Load(ExtendedContextClass ctx =null)
+        public void Load(ExtendedContextClass ctx = null)
         {
             // Make the filter
             using (QueryClass c_Filter = new QueryClass(this.Collection))
@@ -436,7 +436,7 @@ namespace Proc.AO
                 // Move
                 this.Document.FromJObject(to);
                 // Flag fields
-                foreach(string sField in to.Keys())
+                foreach (string sField in to.Keys())
                 {
                     this.MarkChanged(sField);
                 }
@@ -459,7 +459,7 @@ namespace Proc.AO
         /// Saves the changes
         /// 
         /// </summary>
-        public void Save(bool force = false, string user = "", bool runtask=false, JObject orig=null)
+        public void Save(bool force = false, string user = "", bool runtask = false, bool signal = false, JObject orig = null)
         {
             // Get the changes
             List<string> c_Changes = this[FieldChanges].ToJArrayOptional().ToList();
@@ -503,7 +503,6 @@ namespace Proc.AO
             c_Changes.Remove(FieldToken);
             c_Changes.Remove(FieldSIO);
 
-
             // Call task
             string sTask = this.Dataset.Definition.TaskAtSave;
             if (sTask.HasValue() && runtask)
@@ -513,7 +512,7 @@ namespace Proc.AO
                 // Make changes object
                 JObject c_CData = new JObject();
                 // Loop thru
-                foreach(string sField in c_Changes)
+                foreach (string sField in c_Changes)
                 {
                     // Save
                     c_CData.Set(sField, this[sField]);
@@ -536,171 +535,194 @@ namespace Proc.AO
                 // Only if changes
                 if (c_Changes.Count > 0)
                 {
-                    // Make the filter
-                    FilterDefinition<BsonDocument> c_Filter = Builders<BsonDocument>.Filter.Eq(FieldID, this.Document.GetValue(FieldID));
-
-                    // Set a new version
-                    UpdateDefinition<BsonDocument> c_Updates = Builders<BsonDocument>.Update.Set(FieldVersion, ObjectId.GenerateNewId().ToString());
-                    // Loop thru
-                    foreach (string sField in c_Changes)
+                    // Make SIO
+                    using (SIO.ManagerClass c_SIOM = this.Parent.Parent.Parent.Parent.Globals.Get<SIO.ManagerClass>())
                     {
-                        // Cannot change the id
-                        if (sField.HasValue() && !sField.IsSameValue(FieldID))
-                        {
-                            //
-                            bool bDo = true;
+                        // Make the window ID
+                        string sWinID = "ao_{0}_{1}".FormatString(this.Dataset.Name, this.ID);
 
-                            // Only if data
-                            if (this.IsData)
+                        // Make the filter
+                        FilterDefinition<BsonDocument> c_Filter = Builders<BsonDocument>.Filter.Eq(FieldID, this.Document.GetValue(FieldID));
+
+                        // Set a new version
+                        UpdateDefinition<BsonDocument> c_Updates = Builders<BsonDocument>.Update.Set(FieldVersion, ObjectId.GenerateNewId().ToString());
+                        // Loop thru
+                        foreach (string sField in c_Changes)
+                        {
+                            // Cannot change the id
+                            if (sField.HasValue() && !sField.IsSameValue(FieldID))
                             {
-                                // Get the type
-                                if (this.Dataset != null && this.Dataset.Definition != null)
+                                //
+                                bool bDo = true;
+
+                                // Only if data
+                                if (this.IsData)
                                 {
-                                    // Get the field
-                                    Definitions.DatasetFieldClass c_FDef = this.Dataset.Definition[sField];
-                                    if (c_FDef != null)
+                                    // Get the type
+                                    if (this.Dataset != null && this.Dataset.Definition != null)
                                     {
-                                        // According to type
-                                        switch (c_FDef.Type)
+                                        // Do we signal
+                                        if (signal)
                                         {
-                                            case Definitions.DatasetFieldClass.FieldTypes.Password:
-                                                // Must have value
-                                                if (this[sField].HasValue())
-                                                {
-                                                    // Create
-                                                    c_Updates = c_Updates.Set(sField, this[sField].MD5HashString());
-                                                }
-                                                bDo = false;
-                                                break;
-                                            case Definitions.DatasetFieldClass.FieldTypes.Boolean:// Must have value
-                                                if (this[sField].HasValue())
-                                                {
-                                                    // Assure
-                                                    c_Updates = c_Updates.Set(sField, this[sField].FromDBBoolean().ToDBBoolean());
-                                                }
-                                                else
-                                                {
-                                                    c_Updates = c_Updates.Set(sField, this[sField]);
-                                                }
-                                                bDo = false;
-                                                break;
+                                            // Make a message
+                                            using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_SIOM,
+                                                                                                    SIO.MessageClass.Modes.Both,
+                                                                                                    "$$object.data",
+                                                                                                    "winid", sWinID,
+                                                                                                    "aoFld", sField,
+                                                                                                    "value", this[sField]))
+                                            {
+                                                // Send
+                                                c_Msg.Send();
+                                            }
                                         }
+
+                                        // Get the field
+                                        Definitions.DatasetFieldClass c_FDef = this.Dataset.Definition[sField];
+                                        if (c_FDef != null)
+                                        {
+                                            // According to type
+                                            switch (c_FDef.Type)
+                                            {
+                                                case Definitions.DatasetFieldClass.FieldTypes.Password:
+                                                    // Must have value
+                                                    if (this[sField].HasValue())
+                                                    {
+                                                        // Create
+                                                        c_Updates = c_Updates.Set(sField, this[sField].MD5HashString());
+                                                    }
+                                                    bDo = false;
+                                                    break;
+                                                case Definitions.DatasetFieldClass.FieldTypes.Boolean:// Must have value
+                                                    if (this[sField].HasValue())
+                                                    {
+                                                        // Assure
+                                                        c_Updates = c_Updates.Set(sField, this[sField].FromDBBoolean().ToDBBoolean());
+                                                    }
+                                                    else
+                                                    {
+                                                        c_Updates = c_Updates.Set(sField, this[sField]);
+                                                    }
+                                                    bDo = false;
+                                                    break;
+                                            }
+                                        }
+
                                     }
-
                                 }
-                            }
 
-                            // Normal
-                            if (bDo)
-                            {
-                                // Add
-                                c_Updates = c_Updates.Set(sField, this.Document.GetValue(sField));
-                            }
-                        }
-                    }
-
-                    // Data collection?
-                    if (this.IsData)
-                    {
-                        // Create context
-                        using (ExtendedContextClass c_Ctx = new ExtendedContextClass(this.Parent.Parent.Parent.Parent,
-                                                                                        null,
-                                                                                        this,
-                                                                                        user.IfEmpty()))
-                        {
-                            // Process placeholder
-                            string sPH = this.ProcessExtended(c_Ctx, this.Parent.Definition.Placeholder);
-                            c_Updates = c_Updates.Set(FieldDescription, sPH);
-                            c_Updates = c_Updates.Set(FieldSearch, sPH.ToUpper());
-
-                            // Process calendar
-                            c_Updates = c_Updates.Set(FieldCalendarStart,
-                                this.ProcessExtended(c_Ctx, this.Parent.Definition.CalendarStart, delegate (string value)
-                                {
-                                    return "d" + value.FromDBDate().ToDBDate();
-                                }));
-                            c_Updates = c_Updates.Set(FieldCalendarEnd,
-                                 this.ProcessExtended(c_Ctx, this.Parent.Definition.CalendarEnd, delegate (string value)
-                                {
-                                    return "d" + value.FromDBDate().ToDBDate();
-                                }));
-                            c_Updates = c_Updates.Set(FieldCalendarSubject,
-                                 this.ProcessExtended(c_Ctx, this.Parent.Definition.CalendarSubject));
-
-                            // Get SIO from dataset
-                            if (this.Dataset != null)
-                            {
-                                // Get the SIO
-                                string sSIO = this.Dataset.Definition.SIOEventsAtSave;
-                                // Any?
-                                if (sSIO.HasValue())
+                                // Normal
+                                if (bDo)
                                 {
                                     // Add
-                                    c_SIO.AddRange(sSIO.SplitSpaces());
+                                    c_Updates = c_Updates.Set(sField, this.Document.GetValue(sField));
                                 }
                             }
-
-                            // Add fixed
                         }
-                    }
 
-                    // Always
-                    c_SIO.Add(SIOSaved);
-
-                    // Options
-                    UpdateOptions c_Opts = new UpdateOptions();
-                    c_Opts.IsUpsert = true;
-
-                    // Update
-                    this.Collection.Documents.UpdateOne(c_Filter, c_Updates, c_Opts);
-
-                    // Is it an activity?
-                    if (this[AO.Extended.WorkflowClass.FieldWFActivity].FromDBBoolean())
-                    {
-                        // Get the outcome
-                        string sOutcome = this[AO.Extended.WorkflowClass.FieldWFOutcome];
-                        if (sOutcome.HasValue())
+                        // Data collection?
+                        if (this.IsData)
                         {
-                            // Get the cron manager
-                            using (CronManagerClass c_Cron = new CronManagerClass(this.Parent.Parent))
+                            // Create context
+                            using (ExtendedContextClass c_Ctx = new ExtendedContextClass(this.Parent.Parent.Parent.Parent,
+                                                                                            null,
+                                                                                            this,
+                                                                                            user.IfEmpty()))
                             {
-                                // Get params
-                                string sFlow = this[AO.Extended.WorkflowClass.FieldWFFlowName];
-                                string sInstance = this[AO.Extended.WorkflowClass.FieldWFInstance];
-                                AO.UUIDClass c_UUID = new UUIDClass(this.Parent.Parent, this[AO.Extended.WorkflowClass.FieldWFShadow]);
-                                // Open the group
-                                using (AO.Extended.GroupClass c_Group = new AO.Extended.GroupClass(this.Dataset.Parent, Extended.GroupClass.Types.Workflow, this.UUID, sFlow, sInstance))
-                                {
-                                    // Does the shadow exist?
-                                    if (c_Cron.Contains(c_UUID.ID))
-                                    {
-                                        // Get
-                                        AO.Extended.WorkflowClass c_Shadow = c_Cron.Get(c_UUID.ID) as AO.Extended.WorkflowClass;
-                                        // Get the next step
-                                        string sNext = (sOutcome.IsSameValue("Fail") ? c_Shadow[AO.Extended.WorkflowClass.FieldWFIfFail] : c_Shadow[AO.Extended.WorkflowClass.FieldWFIfDone]);
-                                        // And delete
-                                        c_Shadow.Delete();
+                                // Process placeholder
+                                string sPH = this.ProcessExtended(c_Ctx, this.Parent.Definition.Placeholder);
+                                c_Updates = c_Updates.Set(FieldDescription, sPH);
+                                c_Updates = c_Updates.Set(FieldSearch, sPH.ToUpper());
 
-                                        // Any?
-                                        if (sNext.HasValue())
+                                // Process calendar
+                                c_Updates = c_Updates.Set(FieldCalendarStart,
+                                    this.ProcessExtended(c_Ctx, this.Parent.Definition.CalendarStart, delegate (string value)
+                                    {
+                                        return "d" + value.FromDBDate().ToDBDate();
+                                    }));
+                                c_Updates = c_Updates.Set(FieldCalendarEnd,
+                                     this.ProcessExtended(c_Ctx, this.Parent.Definition.CalendarEnd, delegate (string value)
+                                    {
+                                        return "d" + value.FromDBDate().ToDBDate();
+                                    }));
+                                c_Updates = c_Updates.Set(FieldCalendarSubject,
+                                     this.ProcessExtended(c_Ctx, this.Parent.Definition.CalendarSubject));
+
+                                // Get SIO from dataset
+                                if (this.Dataset != null)
+                                {
+                                    // Get the SIO
+                                    string sSIO = this.Dataset.Definition.SIOEventsAtSave;
+                                    // Any?
+                                    if (sSIO.HasValue())
+                                    {
+                                        // Add
+                                        c_SIO.AddRange(sSIO.SplitSpaces());
+                                    }
+                                }
+
+                                // Add fixed
+                            }
+                        }
+
+                        // Always
+                        c_SIO.Add(SIOSaved);
+
+                        // Options
+                        UpdateOptions c_Opts = new UpdateOptions();
+                        c_Opts.IsUpsert = true;
+
+                        // Update
+                        this.Collection.Documents.UpdateOne(c_Filter, c_Updates, c_Opts);
+
+                        // Is it an activity?
+                        if (this[AO.Extended.WorkflowClass.FieldWFActivity].FromDBBoolean())
+                        {
+                            // Get the outcome
+                            string sOutcome = this[AO.Extended.WorkflowClass.FieldWFOutcome];
+                            if (sOutcome.HasValue())
+                            {
+                                // Get the cron manager
+                                using (CronManagerClass c_Cron = new CronManagerClass(this.Parent.Parent))
+                                {
+                                    // Get params
+                                    string sFlow = this[AO.Extended.WorkflowClass.FieldWFFlowName];
+                                    string sInstance = this[AO.Extended.WorkflowClass.FieldWFInstance];
+                                    AO.UUIDClass c_UUID = new UUIDClass(this.Parent.Parent, this[AO.Extended.WorkflowClass.FieldWFShadow]);
+                                    // Open the group
+                                    using (AO.Extended.GroupClass c_Group = new AO.Extended.GroupClass(this.Dataset.Parent, Extended.GroupClass.Types.Workflow, this.UUID, sFlow, sInstance))
+                                    {
+                                        // Does the shadow exist?
+                                        if (c_Cron.Contains(c_UUID.ID))
                                         {
-                                            // Make args
-                                            StoreClass c_Args = new StoreClass();
-                                            c_Args["ds"] = this.Dataset.Name;
-                                            c_Args["id"] = this.UUID.ID;
-                                            c_Args["wf"] = sFlow;
-                                            c_Args["instance"] = sInstance;
-                                            c_Args["at"] = sNext;
-                                            this.Parent.Parent.Parent.Parent.FN("Workflow.Continue", c_Args);
+                                            // Get
+                                            AO.Extended.WorkflowClass c_Shadow = c_Cron.Get(c_UUID.ID) as AO.Extended.WorkflowClass;
+                                            // Get the next step
+                                            string sNext = (sOutcome.IsSameValue("Fail") ? c_Shadow[AO.Extended.WorkflowClass.FieldWFIfFail] : c_Shadow[AO.Extended.WorkflowClass.FieldWFIfDone]);
+                                            // And delete
+                                            c_Shadow.Delete();
+
+                                            // Any?
+                                            if (sNext.HasValue())
+                                            {
+                                                // Make args
+                                                StoreClass c_Args = new StoreClass();
+                                                c_Args["ds"] = this.Dataset.Name;
+                                                c_Args["id"] = this.UUID.ID;
+                                                c_Args["wf"] = sFlow;
+                                                c_Args["instance"] = sInstance;
+                                                c_Args["at"] = sNext;
+                                                this.Parent.Parent.Parent.Parent.FN("Workflow.Continue", c_Args);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // Reset changes
-                    this[FieldChanges] = "";
+                        // Reset changes
+                        this[FieldChanges] = "";
+                    }
                 }
 
                 // Any SIO?
@@ -749,7 +771,7 @@ namespace Proc.AO
                     // Remake description
                     sAns = Expression.Evaluate(ctx, expr).Value;
                     // Post process
-                    if(sAns.HasValue() &&  post != null)
+                    if (sAns.HasValue() && post != null)
                     {
                         sAns = post(sAns);
                     }
@@ -1012,7 +1034,7 @@ namespace Proc.AO
 
                 // Get the children dss
                 var cds = this.Dataset.Definition.ChildDSs;
-                if(cds.HasValue())
+                if (cds.HasValue())
                 {
                     //
                     string sOID = this.UUID.ToString();
@@ -1020,25 +1042,32 @@ namespace Proc.AO
                     // Make list
                     List<string> c_DSS = cds.SplitSpaces();
                     // Loop thru
-                    foreach(string sCDS in c_DSS)
+                    foreach (string sCDS in c_DSS)
                     {
                         // Get te dataset
                         DatasetClass c_CDSD = this.Parent.Parent[sCDS];
 
                         // Make the query
-                        using(QueryClass c_Qry = new QueryClass(c_CDSD.DataCollection))
+                        using (QueryClass c_Qry = new QueryClass(c_CDSD.DataCollection))
                         {
                             //
                             c_Qry.Add("_parent", QueryElementClass.QueryOps.Eq, sOID);
 
                             // Loop thru
-                            foreach(ObjectClass c_Child in c_Qry.FindObjects())
+                            foreach (ObjectClass c_Child in c_Qry.FindObjects())
                             {
                                 // Delete
                                 c_Child.Delete();
                             }
                         }
                     }
+                }
+
+                // User?
+                if (this.UUID.Dataset.Name.IsSameValue(DatabaseClass.DatasetUser))
+                {
+                    // Delete tags
+                    this.UUID.Dataset.Parent.Tagged.DeleteAll(this.UUID.ID);
                 }
             }
         }
@@ -1091,7 +1120,7 @@ namespace Proc.AO
             c_Mgr.MessageReceived += delegate (SIO.MessageClass msg)
             {
                 //this.Parent.Parent.Parent.Parent.Parent.LogInfo("Object: Received message: {0}".FormatString(msg.ToString()));
-                
+
                 //this.Parent.Parent.Parent.Parent.Parent.LogInfo("Object: Fn {0}".FormatString(msg.Fn));
                 //this.Parent.Parent.Parent.Parent.Parent.LogInfo("Object: Message {0}".FormatString(msg.Values.ToSimpleString()));
 
@@ -1249,7 +1278,7 @@ namespace Proc.AO
                     StoreClass c_Data = group.ToGroupData(
                         AO.Extended.WorkflowClass.FieldWFActivityUUIID, c_Ans.UUID.ToString(),
                         AO.Extended.WorkflowClass.FieldWFIfOverdue, def.Outcomes["OnOverdue"].IfEmpty(group.OnOverdue)
-                    ); 
+                    );
 
                     // Make entry
                     AO.Extended.WorkflowClass c_Shadow = group.New("Workflow.Overdue", c_Data, c_Ans[c_Def.WorkflowExpectedOn].FromDBDate()) as AO.Extended.WorkflowClass;
