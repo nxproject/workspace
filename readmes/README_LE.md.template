@@ -1,0 +1,87 @@
+# Lists and Expressions
+
+## Lists
+
+A list is a sequence of ***words*** separated by one or more spaces.  For example:
+
+```
+john paul george ringo
+```
+
+Each word can be surrounded by the following delimiters:
+
+|Delimiters|Meaning|
+|-|-|
+|'xxx'|Text|
+|"xxx"|Text|
+|[xxx]|Field|
+|#xxx#|Statement|
+
+## Fields
+
+The following formats are available:
+
+|Format|Meanung|
+|-|-|
+|[objectname:field]|A reference to an object.  If the object name is ommitted the current active object is used|
+|[*storename:field]|A reference to a store.  If the store name is ommitted the current active store is used|
+
+## Expressions
+
+An expression is a list that when evaluated, each ***word*** will be acted upon depending on its meaning and each result
+will be joined into a resultant list.  For example:
+
+```
+'My name is' [*name] 'and  today is' #today()#
+```
+
+May be evaluated to:
+
+```
+My name is John and today is December 7, 1941
+```
+Expressions are used through the system.
+
+## Statements
+
+Statements are evaluated using a set of operations and functions:
+
+### Operators
+
+|Syntax|Meaning|
+|-|-|
+|( ... )|The sub-expression is evaluated|
+|Unary||
+|!|Not operator, operand will be converted to boolean|
+|~|Not operator, operand will be converted to boolean|
+|-|Unary minus operator, operand will be converted to number|
+|+|Unary plus operator, operand will be converted to number|
+|Dyadic (high precedence)||
+|^|Power operator, operands will be converted to numbers (a^b^c -> (a^b)^c)|
+|\*|Multiplication operator, operands will be converted to numbers|
+|/|Division operator, operands will be converted to numbers|
+|%|Modulus operator, operands will be converted to numbers|
+|Dyadic (medium precedence)||
+|+|Addition operator, operands will be converted to numbers|
+|-|Subtraction operator, operands will be converted to numbers|
+|Dyadic (low precedence)||
+|&|String concantenation operator, operands will be converted to string|
+|Comparison (high precedence)||
+|\<|Less than operator|
+|\<=|Less than or equal to operator|
+|\>|Greater than operator|
+|\>=|Greater than or equal to operator|
+|Comparison (low precedence)||
+|=|Equal to operator|
+|!=|Not equal to operator|
+|\<\>|Not equal to operator|
+|Conditional||
+|?:|Conditional if operator|
+|&&|Logical AND, operands will be converted to boolean|
+|\|\||Logical OR, operands will be converted to boolean|
+
+### Functions
+
+{{fns}}
+
+[Home](../README.md)

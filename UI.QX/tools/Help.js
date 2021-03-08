@@ -38,7 +38,7 @@ qx.Class.define('tools.Help', {
             var helproot = nx.desktop.user.getSIField('helproot');
             if (nx.util.hasValue(helproot)) url += '/' + helproot + '.md';
 
-            window.open(nx.util.loopbackURL() + url, '_blank');
+            window.open('https://github.com/nxproject/workspace/blob/master/help/README.md', '_blank');
 
         }
 
