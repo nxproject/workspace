@@ -80,4 +80,4 @@ Time, a difference of either 7 or 8 hours would ocurr.
 
 
 
-[Home)(../README.md)
+[Home](../README.md)
