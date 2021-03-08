@@ -407,19 +407,6 @@ namespace Proc.AO
                 //
                 HasInitialized = true;
 
-                // Open the help dataset
-                DatasetClass c_DS = this[DatasetHelp];
-
-                // Make the query
-                using (QueryClass c_Qry = new QueryClass(c_DS.DataCollection))
-                {
-                    // Loop thru objects
-                    foreach (ObjectClass c_Doc in c_Qry.FindObjects())
-                    {
-                        // Save
-                        c_Doc.WriteAsHelp();
-                    }
-                }
             }
         }
         #endregion

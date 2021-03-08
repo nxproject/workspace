@@ -1270,30 +1270,5 @@ namespace Proc.AO
             return c_Ans;
         }
         #endregion
-
-        #region Help
-        /// <summary>
-        /// 
-        /// Writes the object as a help file
-        /// 
-        /// </summary>
-        public void WriteAsHelp()
-        {
-            //
-            if (this.Dataset.Name.IsSameValue(DatabaseClass.DatasetHelp))
-            {
-                // Get the name
-                string sName = this["code"] + ".md";
-                // Make the path
-                string sPath = "".WorkingDirectory().CombinePath("ui.qx").CombinePath("help").CombinePath(sName);
-                // Get the text
-                string sText = this["text"];
-                // Write it out
-                sPath.WriteFile(sText);
-
-                //this.Parent.Parent.Parent.Parent.LogInfo("Wrote {1} bytes to {0}".FormatString(sPath, sText.Length));
-            }
-        }
-        #endregion
     }
 }

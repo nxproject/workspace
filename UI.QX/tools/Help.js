@@ -32,13 +32,18 @@ qx.Class.define('tools.Help', {
         // This is what you override
         do: function (req) {
 
-            // Start with basic
-            var url = '/help';
-            // Do we have an override
-            var helproot = nx.desktop.user.getSIField('helproot');
-            if (nx.util.hasValue(helproot)) url += '/' + helproot + '.md';
+            // 
+            var url;
+            var home = nx.desktop.user.getSIField('helproot');
+            // Any?
+            if (home) {
+                // Start with basic
+                var url = nx.util.loopbackURL() + '/help/' + home + '.md';
+            } else {
+                url = 'https://github.com/nxproject/workspace';
+            }
 
-            window.open(nx.util.loopbackURL() + url, '_blank');
+            window.open(url, '_blank');
 
         }
 

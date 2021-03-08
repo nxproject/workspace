@@ -44,7 +44,7 @@ namespace Proc.Help
     /// </summary>
     public class Help : RouteClass
     {
-        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "help", "?path?" };
+        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "help", ":file" };
         public override void Call(HTTPCallClass call, StoreClass store)
         {
             // Make the folder path
@@ -52,25 +52,19 @@ namespace Proc.Help
 
             // Get the template
             string sTemplate = sPath.CombinePath("template.html").ReadFile();
+            
+            // Get the database
+            AO.ManagerClass c_DBMgr = call.Env.Globals.Get<AO.ManagerClass>();
 
-            // Get the full path
-            sPath = store.PathFromEntry(sPath, "path");
+            // Get the file name
+            string sFile = store["file"].IfEmpty(c_DBMgr.DefaultDatabase.SiteInfo.HelpRoot).IfEmpty("home").GetFileNameOnlyFromPath();
 
-            // If not a file, then try using index.md
-            if (!sPath.FileExists()) sPath = sPath.CombinePath("README.md");
-
-            // Map?
-            if (sPath.GetExtensionFromPath().IsSameValue("md"))
+            // Get the contents
+            AO.ObjectClass c_Obj = c_DBMgr.DefaultDatabase[AO.DatabaseClass.DatasetHelp][sFile];
+            if(c_Obj != null)
             {
-                // Actual target
-                string sActual = sPath.SetExtensionFromPath("html");
-
-
-                // Get the database
-                AO.ManagerClass c_DBMgr = call.Env.Globals.Get<AO.ManagerClass>();
-
                 // Read the file
-                string sContents = sPath.ReadFile();
+                string sContents = c_Obj["text"];
 
                 // Get the values
                 JObject c_Values = new JObject();
@@ -86,15 +80,12 @@ namespace Proc.Help
                 string sHTML = Markdig.Markdown.ToHtml(sContents, c_PL);
                 // Into template
                 string sFinal = sTemplate.Replace("{0}", sHTML);
-                // Write
-                sActual.WriteFile(sFinal);
 
                 // And deliver
-                call.RespondWithFile(sActual, false, "text/html");
-            }
-            else
-            {
-                call.RespondWithUIFile(sPath);
+                using (MemoryStream c_Stream = new MemoryStream(sFinal.ToBytes()))
+                {
+                    call.RespondWithStream("", "text/html", false, c_Stream);
+                }
             }
 
         }

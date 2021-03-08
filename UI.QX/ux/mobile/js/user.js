@@ -1071,7 +1071,7 @@ nx.user = {
 
             // Do we have a help?
             if (nx.util.hasValue(self.getSIField('helproot'))) {
-            // Add the call
+                // Add the call
                 nx.calls.help = function (req) {
                     // Make the url
                     var url = '/help/' + self.getSIField('helproot') + '.md';

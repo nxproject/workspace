@@ -30,7 +30,7 @@ The nginx container handles routing of calls between browsers and processors.
 
 ## NX.Project
 
-NX.Workspace is based in ``NX.Node``.  Documentation for thiis aspect of the system can be found [here](/help/docs/README.md).
+NX.Workspace is based in ``NX.Node``.  Documentation for thiis aspect of the system can be found [here](https://github.com/nxproject/node).
 
 
 [Home](../README.md)

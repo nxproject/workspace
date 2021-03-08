@@ -80,7 +80,7 @@ namespace Proc.Task
             // Get the parameters
             //string sSource = args.Get(ArgSource);
             string sName = args.Get(ArgName);
-            string sSource = args.Get(ArgSource).IfEmpty("_changes");
+            string sSource = args.Get(ArgSource).IfEmpty("changes");
 
             // Get the object
             AO.ObjectClass c_Obj = ctx.Objects[sName];

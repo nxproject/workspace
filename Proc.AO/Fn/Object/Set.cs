@@ -71,15 +71,6 @@ namespace Proc.AO
 
                         // Save
                         c_Obj.Save(force: !c_Obj.Collection.IsData, user: store["_user"], runtask: true, orig: c_Orig);
-
-                        // Special handling
-                        switch (c_Obj.Dataset.Name)
-                        {
-                            case DatabaseClass.DatasetHelp:
-                                // Write out
-                                c_Obj.WriteAsHelp();
-                                break;
-                        }
                     }
                 }
             }
