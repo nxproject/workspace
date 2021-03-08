@@ -40,4 +40,4 @@ Each tracked item has a set of options:
 ||End|End the tracking|
 
 
-[Home)(../README.md)
+[Home](../README.md)

@@ -140,4 +140,4 @@ to obtain a picture or video:
 
 Each link generated is alllowed to be used for a period of ***three hours*** and a ***maximum of 25 files***.
 
-[Home)(../README.md)
+[Home](../README.md)

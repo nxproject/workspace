@@ -40,4 +40,4 @@ The PDF viewer displays a ***pdf*** document, with multiple viewing options:
 |![image](/viewers/pdf/web/images/secondaryToolbarButton-documentProperties.png)|"Document Properties|
 
 
-[Home)(../README.md)
+[Home](../README.md)

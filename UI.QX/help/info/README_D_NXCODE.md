@@ -50,4 +50,4 @@ The NXCode - SMS tool allows you to download phone number to your smartdevice:
 Typically this brings up a phone dialer and is accessible from an **phone** field.
 
 
-[Home)(../README.md)
+[Home](../README.md)

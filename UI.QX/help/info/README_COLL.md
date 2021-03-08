@@ -91,4 +91,4 @@ Once the ***account*** uses the ***URL***, a chat session is opened:
 Now the ***account*** can access the subject matter just like any normal user.  The ***account** is
 limited to the chat itself and has no entries in the ***Start*** menu.
 
-[Home)(../README.md)
+[Home](../README.md)

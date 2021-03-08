@@ -27,4 +27,4 @@ systemctl start docker
 iptables-save | sed '/^#/d' | sed 's/\[[^][]*:[^][]*\]/\[0:0\]/g' > /etc/backups/iptable.bkp
 ```
 
-[Home)(../README.md)
+[Home](../README.md)

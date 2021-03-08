@@ -217,4 +217,4 @@ read the G Suite section below or contact your G Suite administrator for help.
 the [Display Unlock Captcha](https://accounts.google.com/DisplayUnlockCaptcha) page and click ```Continue``` to remove the security block.
 
 
-[Home)(../README.md)
+[Home](../README.md)

@@ -124,4 +124,4 @@ We use a fairly sophisticated ***docx*** sample file to test the conversion proc
 all potential variations.  We have found that the best external editors to use are the MS Windows built-in program 
 ***Wordpad*** and the freely available [LibreOffice](https://www.libreoffice.org/).
 
-[Home)(../README.md)
+[Home](../README.md)

@@ -164,4 +164,4 @@ If you only wish to display the date portion, you can use:
 Thes functions plus the ***Sort Order*** dataset definition value provide a method to properly handle date fields in
 a placeholder.  If the timezone parameter if onitted, the UTC datetime will be shown.
 
-[Home)(../README.md)
+[Home](../README.md)

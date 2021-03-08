@@ -36,4 +36,4 @@ right-mouse click on an open area of the tab and select ***Edit***.
 
 The view is displayed.
 
-[Home)(../README.md)
+[Home](../README.md)

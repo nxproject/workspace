@@ -36,4 +36,4 @@ Simply darg/drop firlds from the source area to either columns or rows and vice-
 analysis.  You can also change what the contents are by selecting from the drop downs in the top left
 corner.
 
-[Home)(../README.md)
+[Home](../README.md)

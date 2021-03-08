@@ -121,4 +121,4 @@ Once you have given the proper credentials, a ***notification*** is displayed:
 
 ![image](/help/info/images/Welcome.png)
 
-[Home)(../README.md)
+[Home](../README.md)

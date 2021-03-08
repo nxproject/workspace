@@ -47,4 +47,4 @@ You can reschedule an event by dragging the event to a new date and/or time.
 You can display an event by clicking on it.  The underlying object view is shown allowing for changes.  When the object
 is saved, the calendar is updated.
 
-[Home)(../README.md)
+[Home](../README.md)

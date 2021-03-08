@@ -50,4 +50,4 @@ of pick fields may be selected.  The objects displayed are onoly those where all
 You can delete a pick field by clicking on the ***Delete*** button in the ***command bar*** of the 
 ***Pick Properties*** window.
 
-[Home)(../README.md)
+[Home](../README.md)

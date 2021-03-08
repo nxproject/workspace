@@ -154,4 +154,4 @@ And documents can be added to the folder:
 
 ![image](/help/info/images/Merge16.png)
 
-[Home)(../README.md)
+[Home](../README.md)

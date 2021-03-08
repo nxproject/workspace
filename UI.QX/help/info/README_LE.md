@@ -226,4 +226,4 @@ Statements are evaluated using a set of operations and functions:
 |yesno|yesno(a)|The strings 'Yes' or 'No' depending on a value being true|The value (Required)|
 
 
-[Home)(../README.md)
+[Home](../README.md)

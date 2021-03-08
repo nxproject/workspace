@@ -80,4 +80,4 @@ The command bar displays the commands allowed for the user for the object datase
 |Ok|Saves the changes to the object|
 
 
-[Home)(../README.md)
+[Home](../README.md)

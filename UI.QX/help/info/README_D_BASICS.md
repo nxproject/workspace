@@ -23,4 +23,4 @@ Each card can refer you to another rolodex, this is called a link.
 
 Think of being able to create cut-out masks, where only certain fields can be seen.  This is called a view.
 
-[Home)(../README.md)
+[Home](../README.md)
