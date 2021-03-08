@@ -34,6 +34,16 @@ across a varied landscape.
 * [Services](readmes/README_SVCS.md)
 * [Infrastructure](readmes/README_INFRA.md)
 
+## Docker
+
+A ready to run Docker image is kept at:
+
+```
+docker pull nxproject/processor:dev
+```
+
+The code will automatically build and launch all other needed containers.
+
 ### Footnote
 
 [The author](WHO.md)
