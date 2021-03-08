@@ -97,4 +97,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 * To [Gary Larson](https://www.thefarside.com/2020/08/05/2), always kept me smiling
 * To [Tom Toles](https://en.wikipedia.org/wiki/Tom_Toles), will miss your witty work!
 
-[Home](../README.md)
+[Home](README.md)
