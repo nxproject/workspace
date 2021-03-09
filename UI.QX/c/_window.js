@@ -218,7 +218,7 @@ qx.Class.define('c._window', {
                     if (caller.isMinimized()) {
                         caller.restore();
                     }
-                    caller.showRestore();
+                    //caller.showRestore();
                 }
 
                 // Delete taskbar button
@@ -263,36 +263,39 @@ qx.Class.define('c._window', {
                 var bounds = self.getStoredBounds();
                 var mode = 'r';
 
-                // Do we have a caller?
-                var caller = nx.bucket.getCaller(self);
-                if (caller) {
-                    // Loop
-                    while (caller) {
+                // Only if we do not stack
+                if (nx.desktop.user.getOpenModeChild() != 'stack') {
+                    // Do we have a caller?
+                    var caller = nx.bucket.getCaller(self);
+                    if (caller) {
+                        // Loop
+                        while (caller) {
 
-                        // Is caller visible?
-                        if (!caller.isMinimized()) {
+                            // Is caller visible?
+                            if (!caller.isMinimized()) {
 
-                            // Get its bound
-                            var cbounds = nx.util.getAbsoluteBounds(caller);
-                            // Recalc
-                            bounds = {
-                                top: cbounds.top,
-                                left: cbounds.left + cbounds.width,
-                                width: bounds.width,
-                                height: bounds.height
-                            };
-                            mode = 'a';
-                            // And no more
-                            caller = null;
+                                // Get its bound
+                                var cbounds = nx.util.getAbsoluteBounds(caller);
+                                // Recalc
+                                bounds = {
+                                    top: cbounds.top,
+                                    left: cbounds.left + cbounds.width,
+                                    width: bounds.width,
+                                    height: bounds.height
+                                };
+                                mode = 'a';
+                                // And no more
+                                caller = null;
 
-                        } else {
+                            } else {
 
-                            // Get its caller
-                            caller = nx.bucket.getCaller(caller);
+                                // Get its caller
+                                caller = nx.bucket.getCaller(caller);
 
+                            }
                         }
-                    }
 
+                    }
                 }
 
                 // 
@@ -510,16 +513,23 @@ qx.Class.define('c._window', {
                                 case 'right':
                                     top = cbounds.top;
                                     left = cbounds.left + cbounds.width;
+                                    offset = false;
                                     break;
                                 case 'bottom':
                                     top = cbounds.top + cbounds.height;
                                     left = cbounds.left;
+                                    offset = false;
                                     break;
                             }
-                            offset = false;
                         } else {
                             // All
                             windows = nx.desktop.getChildWindows();
+                        }
+
+                        // Assure
+                        windows = windows || [];
+                        if (!windows.length && caller) {
+                            windows = [caller];
                         }
 
                         // Any?
@@ -534,12 +544,12 @@ qx.Class.define('c._window', {
                                 // Get the bounds
                                 var bounds = nx.util.getAbsoluteBounds(win);
                                 // Get offset
-                                var offset = nx.util.getDistance(bounds.top, bounds.left, 0, 0);
+                                var coffset = nx.util.getDistance(bounds.top, bounds.left, 0, 0);
 
                                 // If none, use it
-                                if (!rootwin || offset < rootoffset) {
+                                if (!rootwin || coffset < rootoffset) {
                                     rootwin = win;
-                                    rootoffset = offset;
+                                    rootoffset = coffset;
                                     rootbounds = bounds;
                                 }
 
