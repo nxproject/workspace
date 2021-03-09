@@ -153,6 +153,9 @@ qx.Class.define('o.user', {
                         }
                     });
                 }
+
+            } else {
+                $('title').text('NX.Project');
             }
 
         },
@@ -992,6 +995,9 @@ qx.Class.define('o.user', {
 
                 // Save
                 self.siteInfo = result;
+
+                // Change the tab
+                $('title').text(self.getSIField('name') || 'NX.Project');
 
                 // Call
                 if (cb) cb(result);

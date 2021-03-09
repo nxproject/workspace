@@ -117,7 +117,17 @@ nx.aomanager = {
 				// Make the object
 				ans = nx.aoobject.prep(data);
 
-				if (cb) cb(ans);
+				// Save the location
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function (loc) {
+					nx.db.obj.setField(ans, loc.latitude + ',' + loc.longitude);
+
+						if (cb) cb(ans);
+					});
+				}
+				else {
+					if (cb) cb(ans);
+				}
 			} else {
 				if (cb) cb(ans);
 			}

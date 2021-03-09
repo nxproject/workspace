@@ -42,7 +42,6 @@ nxproject/processor                     dev                 194b7c6dd3f0        
 nxproject/perconanosql                  dev                 ac2e2d1f872e        20 hours ago        507MB
 nxproject/socketio                      dev                 39ddfe9bc867        20 hours ago        126MB
 nxproject/nginx                         dev                 4dc6bc8f425e        20 hours ago        133MB
-nxproject/redis                         dev                 0d7276a4d336        20 hours ago        78.5MB
 nxproject/base                          dev                 755d0565be75        20 hours ago        72.9MB
 nxproject/dotnet                        dev                 d25045c82f0d        20 hours ago        504MB
 mhart/alpine-node                       10                  7d3849b7af27        2 weeks ago         73.7MB
@@ -58,7 +57,6 @@ CONTAINER ID        IMAGE                        COMMAND                  CREATE
 085b92245c9a        nxproject/perconanosql:dev   "tini -- bash /entry…"   19 hours ago        Up 19 hours         0.0.0.0:32901->27017/tcp                   site_perconanosql_94673753C91BECCCA94270AAF5F7239F
 80f84fb61884        nxproject/nginx:dev          "tini -- nginx -g 'd…"   19 hours ago        Up 19 hours         0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp   site_nginx_EE434023CF89D7DFB21F63D64FF9D74
 f7fd8103e37a        nxproject/processor:dev      "dotnet NXNode.dll -…"   19 hours ago        Up 19 hours         0.0.0.0:32900->8086/tcp                    site_processor__2A5B9450495D4CB38DD7A7C155AF2F1D
-d7b368602077        nxproject/redis:dev          "tini -- redis-server"   19 hours ago        Up 19 hours         0.0.0.0:32899->6379/tcp                    site_redis_86A1B97D54BF71394BF316E183E67
 5a9c18866870        nxproject/socketio:dev       "node /etc/wd/server…"   19 hours ago        Up 19 hours         0.0.0.0:32898->3000/tcp                    site_socketio_4393A1A5B976BFDD99B321D2187FBE3E
 ```
 

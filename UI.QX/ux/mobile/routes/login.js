@@ -67,10 +67,17 @@ nx.calls.login = function (req) {
     req = req || {};
     // Reset?
     if (req.force) nx.env.reset();
+
     // Are we logged in?
     if (!nx.user.getName()) {
+
+        $('title').text('NX.Project');
+
         nx.office.goTo('login', req);
     } else {
+
+        $('title').text(nx.user.getSIField('name') || 'NX.Project');
+
         nx.calls.menu(req);
     }
 };

@@ -51,6 +51,7 @@ namespace Proc.AO
         public const string FieldCalendarEnd = "_calend";
         public const string FieldCalendarSubject = "_calsubj";
         public const string FieldParent = "_parent";
+        public const string FieldGeo = "_geo";
 
         public const string FieldToken = "_token";
         public const string FieldSIO = "_sio";
