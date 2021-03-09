@@ -124,9 +124,9 @@ namespace Proc.AO
         private void Initialize()
         {
             //
-            if (this.Field.IsSameValue("_desc"))
+            if (this.Field.IsSameValue(ObjectClass.FieldDescription))
             {
-                this.Field = "_search";
+                this.Field =ObjectClass.FieldSearch;
                 this.Value = this.Value.IfEmpty().ToUpper();
             }
         }

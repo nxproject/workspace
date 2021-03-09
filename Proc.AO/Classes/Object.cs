@@ -1051,7 +1051,7 @@ namespace Proc.AO
                         using (QueryClass c_Qry = new QueryClass(c_CDSD.DataCollection))
                         {
                             //
-                            c_Qry.Add("_parent", QueryElementClass.QueryOps.Eq, sOID);
+                            c_Qry.Add(ObjectClass.FieldParent, QueryElementClass.QueryOps.Eq, sOID);
 
                             // Loop thru
                             foreach (ObjectClass c_Child in c_Qry.FindObjects())

@@ -691,7 +691,7 @@ namespace Proc.AO
             c_Obj[FldBy] = seg.By;
             c_Obj[FldSize] = seg.Size.ToString();
 
-            string sParent = c_Tag.Object["_parent"];
+            string sParent = c_Tag.Object[ObjectClass.FieldParent];
             if (sParent.HasValue())
             {
                 UUIDClass c_PUUID = new UUIDClass(c_DB, sParent);

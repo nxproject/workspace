@@ -69,7 +69,7 @@ namespace Proc.AO.Definitions
         /// </summary>
         public BsonDocument Fields { get; private set; }
 
-        public List<string> FieldNames {  get { return new List<string>( this.Fields.Names); } }
+        public List<string> FieldNames { get { return new List<string>(this.Fields.Names); } }
 
         /// <summary>
         /// 
@@ -681,11 +681,23 @@ namespace Proc.AO.Definitions
             //
             this.Object.SetAsBObject("fields", this.Fields);
 
+            // Create known indexes
+            this.Parent.DataCollection.CreateIndex(ObjectClass.FieldSearch);
+            this.Parent.DataCollection.CreateIndex(ObjectClass.FieldParent);
+
             // Loop thru
             foreach (string sField in this.Fields.ToJObject().Keys())
             {
                 // Get
                 Definitions.DatasetFieldClass c_Field = this[sField];
+
+                // Indexing
+                switch (c_Field.Type)
+                {
+                    case DatasetFieldClass.FieldTypes.Link:
+                        this.Parent.DataCollection.CreateIndex(sField);
+                        break;
+                }
 
                 // Assure grid views
                 string sGV = c_Field.GridView;
@@ -713,7 +725,7 @@ namespace Proc.AO.Definitions
             }
 
             // Save
-            this.Object.Save(force:true);
+            this.Object.Save(force: true);
 
             this.Parent.Parent.RemoveFromCache(this.Parent.Name);
 

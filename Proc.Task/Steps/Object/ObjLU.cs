@@ -105,7 +105,7 @@ namespace Proc.Task
                                 using (AO.QueryClass c_Qry = new QueryClass(c_LUDS.DataCollection))
                                 {
                                     // Add
-                                    c_Qry.Add("_desc", QueryElementClass.QueryOps.Any, sValue);
+                                    c_Qry.Add(AO.ObjectClass.FieldDescription, QueryElementClass.QueryOps.Any, sValue);
 
                                     // Get
                                     List<AO.ObjectClass> c_Source = c_Qry.FindObjects(1);
@@ -116,7 +116,7 @@ namespace Proc.Task
 
                                         if (c_Map == null || c_Map.Count < 2)
                                         {
-                                            string sMap = "_desc";
+                                            string sMap = AO.ObjectClass.FieldDescription;
                                             if (c_Map != null) sMap = c_Map[0];
 
                                             c_Map = new List<string>();

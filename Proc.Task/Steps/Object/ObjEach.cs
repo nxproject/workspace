@@ -100,7 +100,7 @@ namespace Proc.Task
                 string sDS = args.Get(ArgDS);
                 string sList = args.Get(ArgList);
                 string sQuery = args.Get(ArgQuery);
-                string sSort = args.Get(ArgSort).IfEmpty("_desc");
+                string sSort = args.Get(ArgSort).IfEmpty(AO.ObjectClass.FieldDescription);
                 int iLimit = args.Get(ArgLimit).ToInteger(-1);
                 int iSkip = args.Get(ArgSkip).ToInteger(0);
                 bool bDesc = !args.Get(ArgDir).IsSameValue("desc");

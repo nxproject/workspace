@@ -131,15 +131,19 @@ namespace Proc.SIO
         /// </summary>
         public void Send(string uuid = null, string winid = null)
         {
-            // Make the message
-            if (this.Mode == Modes.Account || this.Mode == Modes.Both)
+            // Are we enabled?
+            if (this.Parent.Enabled)
             {
-                this.FillAndSend(this.Parent.AccountEvent.New(), uuid, winid);
-            }
+                // Make the message
+                if (this.Mode == Modes.Account || this.Mode == Modes.Both)
+                {
+                    this.FillAndSend(this.Parent.AccountEvent.New(), uuid, winid);
+                }
 
-            if (this.Mode == Modes.Internal)
-            {
-                this.FillAndSend(this.Parent.InternalEvent.New(), uuid, winid);
+                if (this.Mode == Modes.Internal)
+                {
+                    this.FillAndSend(this.Parent.InternalEvent.New(), uuid, winid);
+                }
             }
         }
 

@@ -177,10 +177,18 @@ namespace Proc.AO
         {
             using (ZipArchive c_Pkg = ZipFile.OpenRead(this.Document.Location))
             {
+                // Disable messaging
+                SIO.ManagerClass c_SIO = this.Parent.Parent.Parent.Globals.Get<SIO.ManagerClass>();
+                // Turn off messaging
+                c_SIO.Enabled = false;
+
                 // Starting dataset
                 string sCDS = null;
                 // No changes to settings
                 bool bSettChanged = false;
+
+                // List of changed datasets
+                List<string> c_Changed = new List<string>();
 
                 foreach (ZipArchiveEntry c_Entry in c_Pkg.Entries)
                 {
@@ -206,7 +214,7 @@ namespace Proc.AO
                                 if (!sCDS.IsSameValue(c_UUID.Dataset.Name))
                                 {
                                     // Clear cache
-                                    if (sCDS.HasValue()) this.DatasetChange(sCDS);
+                                    if (sCDS.HasValue()) this.DatasetChange(sCDS, c_Changed);
                                     // Save
                                     sCDS = c_UUID.Dataset.Name;
                                 }
@@ -238,7 +246,29 @@ namespace Proc.AO
                 }
 
                 // Clear cache
-                if (sCDS.HasValue()) this.DatasetChange(sCDS);
+                if (sCDS.HasValue()) this.DatasetChange(sCDS, c_Changed);
+
+                // Turn on messaging
+                c_SIO.Enabled = true;
+
+                // Loop thru
+                foreach(string sDS in c_Changed)
+                {
+                    // Remove
+                    this.Parent.RemoveFromCache(sDS);
+                    // Reload 
+                    AO.DatasetClass c_DS = this.Parent[sDS];
+                    // Tell world
+                    this.Parent.Parent.SignalChange(c_DS);
+                    //// And now views
+                    //List<string> c_Views = c_DS.Views;
+                    //// Loop thru
+                    //foreach (string sView in c_Views)
+                    //{
+                    //    // Tell world
+                    //    this.Parent.Parent.SignalChange(c_DS.View(sView));
+                    //}
+                }
 
                 // Save settings
                 if(bSettChanged)
@@ -276,46 +306,13 @@ namespace Proc.AO
         /// 
         /// </summary>
         /// <param name="ds"></param>
-        private void DatasetChange(string ds)
+        private void DatasetChange(string ds, List<string> changed)
         {
             if (ds.HasValue())
             {
-                // Remove
-                this.Parent.RemoveFromCache(ds);
-                // Reload 
-                AO.DatasetClass c_DS = this.Parent[ds];
-                // Tell world
-                this.Parent.Parent.SignalChange(c_DS);
-                // And now views
-                List<string> c_Views = c_DS.Views;
-                // Loop thru
-                foreach (string sView in c_Views)
-                {
-                    // Tell world
-                    this.Parent.Parent.SignalChange(c_DS.View(sView));
-                }
+                if (!changed.Contains(ds)) changed.Add(ds);
             }
         }
-
-        /// <summary>
-        /// 
-        /// Stream copy
-        /// 
-        /// </summary>
-        /// <param name="inputStream"></param>
-        /// <param name="outputStream"></param>
-        //private void CopyStream(Stream inputStream, System.IO.Stream outputStream)
-        //{
-        //    long bufferSize = inputStream.Length < BUFFER_SIZE ? inputStream.Length : BUFFER_SIZE;
-        //    byte[] buffer = new byte[bufferSize];
-        //    int bytesRead = 0;
-        //    long bytesWritten = 0;
-        //    while ((bytesRead = inputStream.Read(buffer, 0, buffer.Length)) != 0)
-        //    {
-        //        outputStream.Write(buffer, 0, bytesRead);
-        //        bytesWritten += bytesRead;
-        //    }
-        //}
         #endregion
     }
 }

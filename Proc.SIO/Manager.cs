@@ -33,18 +33,24 @@ namespace Proc.SIO
             this.InternalEvent = new EventClass(this, InternalCode);
             this.InternalEvent.MessageReceived += delegate (SocketIO.MessageClass msg)
             {
-                SIO.MessageClass c_Msg = new SIO.MessageClass(this, msg);
+                if (this.Enabled)
+                {
+                    SIO.MessageClass c_Msg = new SIO.MessageClass(this, msg);
 
-                this.MessageReceived?.Invoke(c_Msg);
+                    this.MessageReceived?.Invoke(c_Msg);
+                }
             };
 
             //
             this.AccountEvent = new EventClass(this, AccountCode);
             this.AccountEvent.MessageReceived += delegate (SocketIO.MessageClass msg)
             {
-                SIO.MessageClass c_Msg = new SIO.MessageClass(this, msg);
+                if (this.Enabled)
+                {
+                    SIO.MessageClass c_Msg = new SIO.MessageClass(this, msg);
 
-                this.MessageReceived?.Invoke(c_Msg);
+                    this.MessageReceived?.Invoke(c_Msg);
+                }
             };
         }
         #endregion
@@ -63,6 +69,13 @@ namespace Proc.SIO
         /// 
         /// </summary>
         public EventClass AccountEvent { get; private set; }
+
+        /// <summary>
+        /// 
+        /// Can we send/receive messages?
+        /// 
+        /// </summary>
+        public bool Enabled { get; set; } = true;
         #endregion
 
         #region Events
@@ -97,5 +110,4 @@ namespace Proc.SIO
         public static string AccountCode { get; set; }
         #endregion
     }
-
 }
