@@ -42,6 +42,9 @@ namespace Proc.AO.Definitions
             // Assure field name
             if (!this.Name.HasValue())
             {
+                // Make one
+                name = name.IfEmpty("f".GUID());
+
                 this.Name = name;
                 this.Label = WesternNameClass.CapEachWord(name);
                 this.Type = FieldTypes.String;
@@ -422,11 +425,15 @@ namespace Proc.AO.Definitions
         /// </summary>
         public void Save()
         {
-            // Set
-            this.Parent.Fields.Set(this.Name, this.Document);
+            // Must have a name
+            if (this.Name.HasValue())
+            {
+                // Set
+                this.Parent.Fields.Set(this.Name, this.Document);
 
-            // Call parent
-            this.Parent.Save();
+                // Call parent
+                this.Parent.Save();
+            }
         }
 
         /// <summary>

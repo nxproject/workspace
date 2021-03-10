@@ -54,6 +54,7 @@ namespace Proc.AO
             string sDS = store["ds"];
             string sID = store["id"];
             string sAction = store["action"];
+            string sLoc = store["geo"];
 
             // Get the manager
             ManagerClass c_Mgr = call.Env.Globals.Get<ManagerClass>();
@@ -67,7 +68,7 @@ namespace Proc.AO
                     // Loop thru
                     foreach(TagClass c_TagX in c_Active)
                     {
-                        c_TagX.Freeze("Freeze all");
+                        c_TagX.Freeze("Freeze all", sLoc);
                     }
                     break;
 
@@ -84,15 +85,15 @@ namespace Proc.AO
                     switch (sAction)
                     {
                         case "new":
-                            c_Ans["value"] = c_Tag.Start(true);
+                            c_Ans["value"] = c_Tag.Start(sLoc, true);
                             break;
 
                         case "start":
-                            c_Ans["value"] = c_Tag.Start();
+                            c_Ans["value"] = c_Tag.Start(sLoc);
                             break;
 
                         case "startf":
-                            c_Ans["value"] = c_Tag.Start(false, true);
+                            c_Ans["value"] = c_Tag.Start(sLoc, false, true);
                             break;
 
                         case "show":
@@ -100,7 +101,7 @@ namespace Proc.AO
                             break;
 
                         case "stop":
-                            c_Ans["value"] = c_Tag.End();
+                            c_Ans["value"] = c_Tag.End(sLoc);
                             break;
 
                         case "freeze":
@@ -114,7 +115,7 @@ namespace Proc.AO
                             }
                             else
                             {
-                                c_Ans["value"] = c_Tag.Freeze(store["reason"]);
+                                c_Ans["value"] = c_Tag.Freeze(store["reason"], sLoc);
                             }
                             break;
 
@@ -127,12 +128,12 @@ namespace Proc.AO
                                 }
                                 else
                                 {
-                                    c_Ans["value"] = c_Tag.Start();
+                                    c_Ans["value"] = c_Tag.Start(sLoc);
                                 }
                             }
                             else
                             {
-                                c_Ans["value"] = c_Tag.Unfreeze();
+                                c_Ans["value"] = c_Tag.Unfreeze(sLoc);
                             }
                             break;
                     }

@@ -97,7 +97,7 @@ namespace Proc.Task
                 { }
                 else
                 {
-                    c_Tag.Freeze(args.Get(ArgReason).IfEmpty("No reason"));
+                    c_Tag.Freeze(args.Get(ArgReason).IfEmpty("No reason"), "");
 
                     // Tell user
                     ctx.SIO("$$changed.userprofile", "id", ctx.User.Name);

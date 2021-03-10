@@ -260,14 +260,6 @@ namespace Proc.AO
                     AO.DatasetClass c_DS = this.Parent[sDS];
                     // Tell world
                     this.Parent.Parent.SignalChange(c_DS);
-                    //// And now views
-                    //List<string> c_Views = c_DS.Views;
-                    //// Loop thru
-                    //foreach (string sView in c_Views)
-                    //{
-                    //    // Tell world
-                    //    this.Parent.Parent.SignalChange(c_DS.View(sView));
-                    //}
                 }
 
                 // Save settings

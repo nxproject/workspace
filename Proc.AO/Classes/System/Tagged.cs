@@ -152,6 +152,7 @@ namespace Proc.AO
         internal const string FldTS = "ts";
         internal const string FldStatus = "status";
         internal const string FldSegments = "segs";
+        internal const string FldLocation = "loc";
 
         internal const string FldFrom = "from";
         internal const string FldTo = "to";
@@ -328,6 +329,17 @@ namespace Proc.AO
 
         /// <summary>
         /// 
+        /// Location
+        /// 
+        /// </summary>
+        public string Location
+        {
+            get { return this.Object[FldLocation]; }
+            set { this.Object[FldLocation] = value.IfEmpty(); }
+        }
+
+        /// <summary>
+        /// 
         /// Are we stopped?
         /// 
         /// </summary>
@@ -403,7 +415,7 @@ namespace Proc.AO
         /// </summary>
         /// <param name="reset"></param>
         /// <returns></returns>
-        public string Start(bool reset = false, bool frozen = false)
+        public string Start(string loc, bool reset = false, bool frozen = false)
         {
             string sAns = "";
 
@@ -413,7 +425,7 @@ namespace Proc.AO
                 // 
                 if (!frozen)
                 {
-                    sAns = this.Unfreeze();
+                    sAns = this.Unfreeze(loc);
                 }
                 else
                 {
@@ -438,11 +450,11 @@ namespace Proc.AO
         /// Ends the tracking
         /// 
         /// </summary>
-        public string End()
+        public string End(string loc)
         {
             if (this.Status == Statuses.Active)
             {
-                this.Freeze("Ended");
+                this.Freeze("Ended", loc);
             }
 
             this.Status = Statuses.Ended;
@@ -468,7 +480,7 @@ namespace Proc.AO
         /// 
         /// </summary>
         /// <param name="reason"></param>
-        public string Freeze(string reason)
+        public string Freeze(string reason, string loc)
         {
             string sAns = "Already frozen";
 
@@ -485,6 +497,7 @@ namespace Proc.AO
                 c_Seg.Reason = reason;
                 c_Seg.By = this.User;
                 c_Seg.Size = c_Now.Subtract(this.TS).TotalSeconds;
+                c_Seg.Location = loc;
 
                 JArray c_Segs = this.SegmentsAsJArray;
                 c_Segs.Add(c_Seg.Values);
@@ -507,7 +520,7 @@ namespace Proc.AO
         /// Continues the timetracking
         /// 
         /// </summary>
-        public string Unfreeze()
+        public string Unfreeze(string loc)
         {
             string sAns = "not frozen";
 
@@ -516,6 +529,7 @@ namespace Proc.AO
             {
                 this.Object[FldTS] = DateTime.Now.ToDBDate();
                 this.Status = Statuses.Active;
+                this.Location = loc;
                 this.Save();
 
                 sAns = "continued";
@@ -569,6 +583,7 @@ namespace Proc.AO
         private const string FldSize = "size";
         private const string FldReason = "reason";
         private const string FldBy = "by";
+        private const string FldLocation = "loc";
         #endregion
 
         #region Constructor
@@ -641,6 +656,17 @@ namespace Proc.AO
         {
             get { return this.Values.Get(FldBy); }
             set { this.Values.Set(FldBy, value); }
+        }
+
+        /// <summary>
+        /// 
+        /// The location at start
+        /// 
+        /// </summary>
+        public string Location
+        {
+            get { return this.Values.Get(FldLocation); }
+            set { this.Values.Set(FldLocation, value); }
         }
         #endregion
     }

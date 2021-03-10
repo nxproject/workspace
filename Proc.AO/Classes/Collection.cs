@@ -149,6 +149,7 @@ namespace Proc.AO
             {
                 // Make
                 BsonDocument c_Doc = BsonDocument.Parse(value);
+
                 // Filter
                 using (QueryClass c_Qry = new QueryClass(this))
                 {
@@ -162,7 +163,7 @@ namespace Proc.AO
             }
             catch(Exception e)
             {
-                this.Parent.Parent.Parent.Parent.LogException(e);
+                this.Parent.Parent.Parent.Parent.LogException("While AddDirect",  e);
             }
         }
 

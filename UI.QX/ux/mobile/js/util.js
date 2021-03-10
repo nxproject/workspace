@@ -95,7 +95,7 @@ nx.util = {
 
         var self = this;
 
-        return self.startsWith(self.loopbackURL(), 'https:');
+        return window.location.protocol === 'https:'
     },
 
     isMobile: function () {
@@ -172,7 +172,7 @@ nx.util = {
                 // Nope
                 self._ua._camera = false;
             } else {
-                if (navigator.getUserMedia) {
+                if (navigator.getUserMedia && self.isSecure()) {
                     navigator.getUserMedia({ video: true, audio: false }, function () {
                         self._ua._camera = true;
                     }, function () {
@@ -804,18 +804,37 @@ nx.util = {
         return value;
     },
 
-    xml2json: function (xml) {
+    // ---------------------------------------------------------
+    //
+    // HTML5
+    // 
+    // ---------------------------------------------------------
+
+    getLocation: function (cb) {
 
         var self = this;
 
-        var ans;
+        // Are we secure?
+        if (self.isSecure()) {
 
-        try {
-            ans = parser.parse(xmlData, options, true);
-        } catch (error) {
+            // Save the location
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (loc) {
+                    // Pass back
+                    if (cb) cb(loc.latitude + ',' + loc.longitude);
+                });
+            } else {
+
+                // Nothing
+                if (cb) cb('');
+
+            }
+
+        } else {
+
+            // Nothing
+            if (cb) cb('');
         }
-
-        return ans;
     }
-
 };

@@ -133,17 +133,11 @@ qx.Class.define('o.aomanager', {
                     // Save the values
                     ans.prep(result);
 
-                    // Save the location
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function (loc) {
-                            ans.setField('_geo', loc.latitude + ',' + loc.longitude);
+                    nx.util.getLocation(function (loc) {
+                        ans.setField('_geo', loc);
 
-                            if (cb) cb(ans);
-                        });
-                    }
-                    else {
                         if (cb) cb(ans);
-                    }
+                    });
                 } else {
                     if (cb) cb(ans);
                 }

@@ -95,7 +95,7 @@ namespace Proc.Task
                 { }
                 else
                 {
-                    c_Tag.Unfreeze();
+                    c_Tag.Unfreeze("");
 
                     // Tell user
                     ctx.SIO("$$changed.userprofile", "id", ctx.User.Name);

@@ -447,16 +447,11 @@ nx.db = {
                 if (typeof result._changes === 'string') result._changes = JSON.parse(result._changes);
 
                 // Save the location
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (loc) {
-                        self.objsetField(result, '_geo', loc.latitude + ',' + loc.longitude);
+                nx.util.getLocation(function (loc) {
+                    self.objSetField(result, '_geo', loc.latitude + ',' + loc.longitude);
 
-                        if (cb) cb(result);
-                    });
-                }
-                else {
                     if (cb) cb(result);
-                }
+                });
             } else {
                 cb(null);
             }

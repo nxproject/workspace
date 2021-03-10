@@ -768,43 +768,49 @@ nx.tt = {
         var id = params.id;
 
         //
-        nx.util.serviceCall('AO.Tag', {
-            user: nx.desktop.user.getName(),
-            type: 'pin',
-            ds: ds,
-            id: id,
-            action: fn
-        }, function (result) {
-            // Reload
-            nx.desktop.user._loadStartMenu();
-            //
-            if (cb) {
-                cb(result);
-            } else {
-                // Tell user
-                nx.util.notifyInfo('Tracking ' + result.value);
-            }
+        nx.util.getLocation(function (loc) {
+            nx.util.serviceCall('AO.Tag', {
+                user: nx.desktop.user.getName(),
+                type: 'pin',
+                ds: ds,
+                id: id,
+                action: fn,
+                geo: loc
+            }, function (result) {
+                // Reload
+                nx.desktop.user._loadStartMenu();
+                //
+                if (cb) {
+                    cb(result);
+                } else {
+                    // Tell user
+                    nx.util.notifyInfo('Tracking ' + result.value);
+                }
+            });
         });
     },
 
     tagEntry: function (entry, fn, cb) {
         //
-        nx.util.serviceCall('AO.Tag', {
-            user: nx.desktop.user.getName(),
-            type: 'pin',
-            ds: entry.ds,
-            id: entry.id,
-            action: 'continue'
-        }, function (result) {
-            // Reload
-            nx.desktop.user._loadStartMenu();
-            //
-            if (cb) {
-                cb(result);
-            } else {
-                // Tell user
-                nx.util.notifyInfo('Tracking ' + result.value);
-            }
+        nx.util.getLocation(function (loc) {
+            nx.util.serviceCall('AO.Tag', {
+                user: nx.desktop.user.getName(),
+                type: 'pin',
+                ds: entry.ds,
+                id: entry.id,
+                action: 'continue',
+                geo: loc
+            }, function (result) {
+                // Reload
+                nx.desktop.user._loadStartMenu();
+                //
+                if (cb) {
+                    cb(result);
+                } else {
+                    // Tell user
+                    nx.util.notifyInfo('Tracking ' + result.value);
+                }
+            });
         });
     }
 

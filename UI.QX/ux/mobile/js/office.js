@@ -51,7 +51,6 @@ nx.office = {
             'tp/socket-io',
             'tp/moment',
             'tp/md5-min',
-            'tp/parser-min',
 
             'js/env',
             'js/util',

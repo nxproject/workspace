@@ -89,7 +89,7 @@ namespace Proc.Task
                 // Get the tag
                 TagClass c_Tag = ctx.DBManager.DefaultDatabase.Tagged[sUser, sType, c_Obj.UUID];
 
-                c_Tag.End();
+                c_Tag.End("");
 
                 // Tell user
                 ctx.SIO("$$changed.userprofile", "id", ctx.User.Name);
