@@ -12,17 +12,13 @@ You can see the of each container by using the ``Site Manager`` tool located in 
 
 The processor containers handle all the calls from the browsers.  They also run all chores.
 
-### MongoDb
+### PerconaNoSql
 
-The mongodb container holds the database.
+The perconanosql container holds the database.
 
 ### SocketIO
 
 The socketio container handles all realtime communications among browser and processors.
-
-### Redis
-
-The redis container handles shared storage among processors.
 
 ### Nginx
 
