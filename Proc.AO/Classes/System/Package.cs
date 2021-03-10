@@ -267,6 +267,9 @@ namespace Proc.AO
                 {
                     this.Parent.SiteInfo.Save();
                 }
+
+                // Housekeeping
+                this.Parent.SiteInfo.Reload();
             }
         }
 

@@ -571,6 +571,17 @@ namespace Proc.AO
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// Reload from database
+        /// 
+        /// </summary>
+        public void Reload()
+        {
+            //
+            this.SynchObject.Load();
+        }
         #endregion
     }
 }
