@@ -58,7 +58,7 @@ f7fd8103e37a        nxproject/processor:dev      "dotnet NXNode.dll -…"   19 hou
 
 ## NX.Project
 
-NX.Workspace is based in ``NX.Node``.  Documentation for thiis aspect of the system can be found [here](https://github.com/nxproject/node).
+NX.Workspace is based in ``NX.Node``.  Documentation for this aspect of the system can be found [here](https://github.com/nxproject/node).
 
 
 [Home](../README.md)
