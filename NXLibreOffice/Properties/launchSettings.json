@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NXLibreOffice": {
+      "commandName": "Project",
+      "commandLineArgs": "--config config.json "
+    }
+  }
+}

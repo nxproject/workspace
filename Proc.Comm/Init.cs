@@ -22,7 +22,7 @@ using System.Text;
 using NX.Engine;
 using NX.Shared;
 
-namespace Proc.Comm
+namespace Proc.Communication
 {
     /// <summary>
     /// 

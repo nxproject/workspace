@@ -254,10 +254,10 @@ namespace Proc.AO
                 // Loop thru
                 foreach(string sDS in c_Changed)
                 {
-                    // Remove
-                    this.Parent.RemoveFromCache(sDS);
-                    // Reload 
-                    AO.DatasetClass c_DS = this.Parent[sDS];
+                    // Map
+                    DatasetClass c_DS = this.Parent[sDS];
+                    // Reload
+                    c_DS.Definition.Reload();
                     // Tell world
                     this.Parent.Parent.SignalChange(c_DS);
                 }

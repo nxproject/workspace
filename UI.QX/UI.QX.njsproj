@@ -36,8 +36,10 @@
     <Content Include="c\signature.js" />
     <Content Include="c\tabs.js" />
     <Content Include="c\timezone.js" />
+    <Content Include="c\twiliophone.js" />
     <Content Include="c\users.js" />
     <Content Include="c\vin.js" />
+    <Content Include="c\_date.js" />
     <Content Include="c\_gridcellrenderer.js" />
     <Content Include="c\_gridrowrenderer.js" />
     <Content Include="c\_image.js" />

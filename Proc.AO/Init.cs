@@ -36,6 +36,9 @@ namespace Proc.AO
             // Load manager
             ManagerClass c_Mgr = env.Globals.Get<ManagerClass>();
 
+            //
+            env.Use("Proc.Communication");
+
             // Extend eval
             FunctionsDefinitions c_Defs = Context.FunctionsTable;
 
@@ -172,6 +175,7 @@ namespace Proc.AO
             }, 0, 0,
             "Returns the current user name"));
         }
+
 
         #region Statics
         /// <summary>

@@ -9,7 +9,6 @@
     <PackageReference Include="BouncyCastle" Version="1.8.9" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.30" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="5.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
   </ItemGroup>
@@ -37,9 +36,6 @@
     </Reference>
     <Reference Include="OpenXmlPowerTools">
       <HintPath>..\..\Others\Open-XML-SDK-master\src\OpenXmlPowerTools\bin\Debug\netcoreapp3.1\OpenXmlPowerTools.dll</HintPath>
-    </Reference>
-   <Reference Include="Proc.SocketIO">
-      <HintPath>..\..\Node\Proc.SocketIO\bin\Debug\netcoreapp3.1\Proc.SocketIO.dll</HintPath>
     </Reference>
   </ItemGroup>
 

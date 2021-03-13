@@ -234,6 +234,13 @@ namespace Proc.AO.Definitions
             set { this.Object["selector"] = value; }
         }
 
+        /// <summary>
+        /// 
+        /// List of access phone fields
+        /// 
+        /// </summary>
+        public List<string> AccessPhoneFields {  get { return this.Object.GetAsJArray("_accessphone").ToList(); } }
+
         #region Private
         /// <summary>
         /// 
@@ -325,6 +332,17 @@ namespace Proc.AO.Definitions
         {
             get { return this.Object["calAllow"].FromDBBoolean(); }
             set { this.Object["calAllow"] = value.ToDBBoolean(); }
+        }
+
+        /// <summary>
+        /// 
+        /// Is the calendar read only?
+        /// 
+        /// </summary>
+        public bool CalendarRO
+        {
+            get { return this.Object["calRO"].FromDBBoolean(); }
+            set { this.Object["calRO"] = value.ToDBBoolean(); }
         }
 
         /// <summary>
@@ -685,6 +703,9 @@ namespace Proc.AO.Definitions
             this.Parent.DataCollection.CreateIndex(ObjectClass.FieldSearch);
             this.Parent.DataCollection.CreateIndex(ObjectClass.FieldParent);
 
+            // List of access items
+            List<string> c_AccessPhone = new List<string>();
+
             // Loop thru
             foreach (string sField in this.Fields.ToJObject().Keys())
             {
@@ -694,6 +715,12 @@ namespace Proc.AO.Definitions
                 // Indexing
                 switch (c_Field.Type)
                 {
+                    case DatasetFieldClass.FieldTypes.AccessPhone:
+                        c_AccessPhone.Add(sField);
+                        this.Parent.DataCollection.CreateIndex(sField);
+                        break;
+
+                    case DatasetFieldClass.FieldTypes.TwilioPhone:
                     case DatasetFieldClass.FieldTypes.Link:
                         this.Parent.DataCollection.CreateIndex(sField);
                         break;
@@ -721,8 +748,10 @@ namespace Proc.AO.Definitions
                         }
                     }
                 }
-
             }
+
+            // Save list of access phones feilds
+            this.Object.SetAsJArray("_accessphone", c_AccessPhone.ToJArray());
 
             // Save
             this.Object.Save(force: true);
@@ -827,6 +856,18 @@ namespace Proc.AO.Definitions
         {
             //
             this.Object.LoadFrom(data);
+            this.Fields = this.Object.GetAsBObject("fields");
+        }
+
+        /// <summary>
+        ///  Reeloads teh definitions
+        ///  
+        /// </summary>
+        public void Reload()
+        {
+            // Load the object
+            this.Object.Load();
+            // Assure
             this.Fields = this.Object.GetAsBObject("fields");
         }
         #endregion

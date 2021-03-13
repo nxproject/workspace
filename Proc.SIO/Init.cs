@@ -34,13 +34,13 @@ namespace Proc.SIO
             base.Initialize(env);
 
             // Set the codes
-            Proc.SIO.ManagerClass.InternalCode = env.Hive.Name.MD5HashString();
+            Proc.SIO.ManagerClass.InternalCode = env.SIOChannels[1];
             env.LogVerbose("SIO Internal channel is {0}".FormatString(Proc.SIO.ManagerClass.InternalCode));
-            Proc.SIO.ManagerClass.AccountCode = Proc.SIO.ManagerClass.InternalCode.MD5HashString();
+            Proc.SIO.ManagerClass.AccountCode = env.SIOChannels[2];
             env.LogVerbose("SIO Account channel is {0}".FormatString(Proc.SIO.ManagerClass.AccountCode));
 
             // Load manager
-            ManagerClass c_Mgr = env.Globals.Get<ManagerClass>();
+            NX.Engine.SocketIO.ManagerClass c_Mgr = env.Globals.Get<NX.Engine.SocketIO.ManagerClass>();
         }
     }
 }

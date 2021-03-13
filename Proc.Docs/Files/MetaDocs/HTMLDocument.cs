@@ -32,104 +32,17 @@ using Proc.AO;
 
 namespace Proc.Docs.Files
 {
-    public class HTMLDocumentClass : ChildOfClass<DocumentClass>
+    public class HTMLDocumentClass : ShadowDocumentClass
     {
         #region Constructor
         public HTMLDocumentClass(DocumentClass odoc, bool uniqueid)
-            : base(odoc)
+            : base(odoc, "html")
         {
-            // Assume other than DOCX
-            DocumentClass c_Ans = null;
-
-            // Handle easy case
-            if (this.Parent.Extension.IsSameValue("docx"))
-            {
-                // Get from metadata folder
-                DocumentClass c_Poss = this.Parent.MetadataDocument("html");
-                // Is it later?
-                bool bNeedProc = this.Parent.Exists && (!c_Poss.Exists || c_Poss.WrittenOn < this.Parent.WrittenOn);
-                // Do we need to do?
-                if (!bNeedProc)
-                {
-                    c_Ans = c_Poss;
-                }
-                else
-                {
-                    // Convert
-                    switch (this.Parent.Extension.ToLower())
-                    {
-                        case "docx":
-                            // 
-                            c_Poss.ValueAsBytes = this.GetValueAsHTML(this.Parent, uniqueid);
-                            c_Ans = c_Poss;
-                            break;
-                    }
-                }
-            }
-
-            this.Document = c_Ans;
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// 
-        /// The underlying document
-        /// 
-        /// </summary>
-        public DocumentClass Document { get; private set; }
-
-        /// <summary>
-        /// 
-        /// Make it look like a document
-        /// 
-        /// </summary>
-        public string Path { get { return this.Document.Path; } }
-
-        public string Location { get { return this.Document.Location; } }
-
-        public string Value { get { return this.Document.Value; } }
-
-        public byte[] ValueAsBytes 
-        { 
-            get { return this.Document.ValueAsBytes; } 
-            set { this.Document.ValueAsBytes = value; }
+        // TBD hadle uniqueid
         }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// 
-        /// Gets/sets the value of the file as an HTML string
-        /// 
-        /// </summary>
-        private byte[] GetValueAsHTML(DocumentClass doc, bool uniqueid = false)
-        {
-            // Assume noting
-            byte[] abAns = null;
-
-            // According to type
-            switch (doc.Extension.ToLower())
-            {
-                case "docx":
-                    abAns = ConversionClass.DOCX2HTML(doc.ValueAsBytes, doc.Name, uniqueid);
-                    break;
-            }
-
-            return abAns;
-        }
-
-        private void SetValueAsHTML(DocumentClass doc, byte[] value)
-        {
-            // According to type
-            switch (doc.Extension.ToLower())
-            {
-                case "docx":
-                    doc.ValueAsBytes = ConversionClass.HTML2DOCX(value.FromBytes());
-                    break;
-            }
-        }
-
         /// <summary>
         /// 
         /// Writes back the DOCX file
@@ -138,7 +51,7 @@ namespace Proc.Docs.Files
         public void Synchronize()
         {
             // And now back
-            this.SetValueAsHTML(this.Parent, this.ValueAsBytes);
+            ConversionClass.Convert(this.Document, this.Parent);
             // And flag so it does not have to recompute
             this.Location.TouchLastWriteFromPath();
         }

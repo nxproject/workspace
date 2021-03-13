@@ -34,7 +34,7 @@ using NX.Shared;
 using NX.Engine;
 using NX.Engine.Files;
 
-namespace Proc.Comm.EMailIF.Inbound
+namespace Proc.Communication.EMailIF.Inbound
 {
     public class MessageClass : BasedObjectClass
     {

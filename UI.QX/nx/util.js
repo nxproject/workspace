@@ -2767,39 +2767,5 @@ nx.util = {
             }
         });
 
-    },
-
-    // ---------------------------------------------------------
-    //
-    // HTML5
-    // 
-    // ---------------------------------------------------------
-
-    getLocation: function (cb) {
-
-        var self = this;
-
-        // Are we secure?
-        if (window.location.protocol === 'https:') {
-
-            // Save the location
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (loc) {
-                    // Pass back
-                    if(cb) cb(loc.latitude + ',' + loc.longitude);
-                });
-            } else {
-
-                // Nothing
-                if (cb) cb('');
-
-            }
-
-        } else {
-
-            // Nothing
-            if (cb) cb('');
-        }
     }
 };

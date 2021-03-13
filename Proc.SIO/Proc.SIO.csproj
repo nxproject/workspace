@@ -15,9 +15,6 @@
     <Reference Include="NX.Shared">
       <HintPath>..\..\Node\NX.Shared\bin\Debug\netcoreapp3.1\NX.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="Proc.SocketIO">
-      <HintPath>..\..\Node\Proc.SocketIO\bin\Debug\netcoreapp3.1\Proc.SocketIO.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

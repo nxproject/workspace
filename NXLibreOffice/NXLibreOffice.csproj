@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\Node\NX.Node\config.json" Link="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle" Version="1.8.9" />
+    <PackageReference Include="Docker.DotNet" Version="3.125.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="SocketIOClient" Version="2.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NX.Engine">
+      <HintPath>..\..\Node\NX.Engine\bin\Debug\netcoreapp3.1\NX.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="NX.Shared">
+      <HintPath>..\..\Node\NX.Shared\bin\Debug\netcoreapp3.1\NX.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Proc.NginX">
+      <HintPath>..\..\Node\Proc.NginX\bin\Debug\netcoreapp3.1\Proc.NginX.dll</HintPath>
+    </Reference>
+    <Reference Include="Route.File">
+      <HintPath>..\..\Node\Route.File\bin\Debug\netcoreapp3.1\Route.File.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Hive\DNA\libreoffice">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Hive\Genomes\libreofficebase\Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Hive\Genomes\libreoffice\Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

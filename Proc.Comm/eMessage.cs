@@ -34,7 +34,7 @@ using NX.Shared;
 using NX.Engine;
 using NX.Engine.Files;
 
-namespace Proc.Comm
+namespace Proc.Communication
 {
     public class eMessageClass : ChildOfClass<AO.ExtendedContextClass>
     {
@@ -236,7 +236,7 @@ namespace Proc.Comm
         private void SendSMS(eAddressClass to, eReturnClass result)
         {
             //
-            using (TwilioIF.ClientClass c_Client = new TwilioIF.ClientClass(this.Parent))
+            using (Communication.TwilioClientClass c_Client = new Communication.TwilioClientClass(this.Parent))
             {
                 string sFriendly = this.Parent.User.Displayable;
                 string sUserPhone = this.Parent.User.TwilioPhone;
@@ -263,7 +263,7 @@ namespace Proc.Comm
         private void MakeCall(eAddressClass to, eReturnClass result)
         {
             //
-            using (TwilioIF.ClientClass c_Client = new TwilioIF.ClientClass(this.Parent))
+            using (Communication.TwilioClientClass c_Client = new Communication.TwilioClientClass(this.Parent))
             {
                 //
                 string sResp = c_Client.MakeCall(

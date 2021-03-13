@@ -39,20 +39,25 @@ using NX.Shared;
 using NX.Engine;
 using NX.Engine.Files;
 
-namespace Proc.Comm.TwilioIF
+namespace Proc.Communication
 {
-    public class ClientClass : ChildOfClass<AO.ExtendedContextClass>
+    public class TwilioClientClass : ChildOfClass<AO.ExtendedContextClass>
     {
         #region Constructor
-        public ClientClass(AO.ExtendedContextClass ctx)
+        public TwilioClientClass(AO.ExtendedContextClass ctx)
             : base(ctx)
         {
             //
             string sAcctSID = this.Parent.SiteInfo.TwilioAccount;
-            string sAuthToken = this.Parent.SiteInfo.TwilioAccount;
+            this.Parent.Parent.LogInfo("Twilio Account SID is {0}".FormatString(sAcctSID));
+            string sToken = this.Parent.SiteInfo.TwilioToken;
+            this.Parent.Parent.LogInfo("Twilio Auth Token is {0}".FormatString(sToken));
 
             //
-            TwilioClient.Init(sAcctSID, sAuthToken);
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
+            //
+            TwilioClient.Init(sAcctSID, sToken);
         }
         #endregion
 
@@ -95,6 +100,7 @@ namespace Proc.Comm.TwilioIF
             catch (Exception e)
             {
                 sAns = e.GetAllExceptions();
+                this.Parent.Parent.LogException("SendSMS", e);
             }
 
             return sAns;
@@ -115,13 +121,12 @@ namespace Proc.Comm.TwilioIF
             try
             {
                 // Create a TwiML voice response
-
                 VoiceResponse c_TwiML = new VoiceResponse();
                 c_TwiML.Say("Connecting, please wait");
                 c_TwiML.Dial(to.PhoneNumberAse164());
 
                 CallResource c_Resp = CallResource.Create(
-                    twiml: new Twiml(c_TwiML.ToString()),
+                    //twiml: c_TwiML.ToString(),
                     to: new PhoneNumber(from.PhoneNumberAse164()),
                     from: new PhoneNumber(via.PhoneNumberAse164())
                     );
@@ -129,9 +134,83 @@ namespace Proc.Comm.TwilioIF
             catch (Exception e)
             {
                 sAns = e.GetAllExceptions();
+                this.Parent.Parent.LogException("MakeCall", e);
             }
 
             return sAns;
+        }
+
+        /// <summary>
+        /// 
+        /// Registers a phone number webhooks
+        /// 
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <param name="user"></param>
+        public string RegisterPhone(string phone, string refuuid)
+        {
+            string sAns = null;
+
+            try
+            {
+                // Map the phone number
+                this.MapPhone(phone, delegate(IncomingPhoneNumberResource phone)
+                {
+                    // Any?
+                    if (phone != null)
+                    {
+                        // Get the loopback URL
+                        string sURL = this.Parent.Parent.ReachableURL;
+
+                        //
+                        string sRef = refuuid.ToBase64URL();
+
+                        // Update
+                        var c_Resp = IncomingPhoneNumberResource.Update(
+                            pathSid: phone.Sid,
+                            voiceMethod: "POST",
+                            voiceUrl: new Uri(sURL.CombineURL("twilio", "voice", sRef)),
+                            smsMethod: "POST",
+                            smsUrl: new Uri(sURL.CombineURL("twilio", "sms", sRef)),
+                            statusCallbackMethod: "POST",
+                            statusCallback: new Uri(sURL.CombineURL("twilio", "sms", sRef))
+                            );
+                    }
+                });
+
+            }
+            catch (Exception e)
+            {
+                sAns = e.GetAllExceptions();
+                this.Parent.Parent.LogException("RegisterPhone", e);
+            }
+
+            return sAns;
+        }
+
+        /// <summary>
+        /// 
+        /// Calls code for each phone number
+        /// 
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        private void MapPhone(string phone, Action<IncomingPhoneNumberResource> cb)
+        {
+            // format
+            string sPhone = phone.PhoneNumberAse164();
+
+            // Get all the phones
+            var c_Phones = IncomingPhoneNumberResource.Read(
+                phoneNumber: new PhoneNumber(phone.PhoneNumberAse164())
+            );
+
+            // Loop thru
+            foreach (var c_Phone in c_Phones)
+            {
+                // Call
+                cb(c_Phone);
+            }
         }
         #endregion
     }

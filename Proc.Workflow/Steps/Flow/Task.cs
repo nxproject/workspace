@@ -92,23 +92,27 @@ namespace Proc.Workflow
             // If none, make one
             if (c_Store == null) c_Store = new StoreClass();
 
-            // Make argument
-            StoreClass c_Args = ctx.Group.ToGroupData(
-                "task", sTask,
-                "return", sRet
-            );
-            c_Args.Set("passed", c_Store);
-
-            // Call
-            StoreClass c_Ret = ctx.Parent.FN("Task.CallTaskFromWorkflow", c_Args);
-            // Do we have a return?
-            if (sRet.HasValue())
+            //
+            using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Parent))
             {
-                // Save
-                ctx.Stores[sRet] = c_Ret;
-            }
+                c_Params.Task = sTask;
+                c_Params.AddStore(Names.Passed, c_Store);
+                c_Params["return"] = sRet;
 
-            return eAns;
+                if (ctx.Objects.Has("changes")) c_Params.AddObject("changes", ctx.Objects["changes"]);
+                if (ctx.Objects.Has("current")) c_Params.AddObject("current", ctx.Objects["current"]);
+
+                StoreClass c_Ret = c_Params.Call();
+
+                // Do we have a return?
+                if (sRet.HasValue())
+                {
+                    // Save
+                    ctx.Stores[sRet] = c_Ret;
+                }
+
+                return eAns;
+            }
         }
         #endregion
     }

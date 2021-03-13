@@ -30,7 +30,7 @@ using Newtonsoft.Json.Linq;
 using NX.Shared;
 using NX.Engine;
 
-namespace Proc.Comm
+namespace Proc.Communication
 {
     public class eAddressListClass : IDisposable
     {

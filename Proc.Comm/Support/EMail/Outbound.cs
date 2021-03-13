@@ -35,7 +35,7 @@ using NX.Shared;
 using NX.Engine;
 using NX.Engine.Files;
 
-namespace Proc.Comm.EMailIF.Outbound
+namespace Proc.Communication.EMailIF.Outbound
 {
     public class AttachmentClass
     {
@@ -57,57 +57,11 @@ namespace Proc.Comm.EMailIF.Outbound
             this.ContentType = ct.IfEmpty("text/plain");
             this.ContentEncoding = "8BIT";
         }
-
-        public AttachmentClass(string name, Image value)
-        {
-            this.Name = name;
-            try
-            {
-                System.IO.MemoryStream c_Stream = new System.IO.MemoryStream();
-                value.Save(c_Stream, ImageFormat.Tiff);
-                this.Value = this.GetBytes(Convert.ToBase64String(c_Stream.ToArray()));
-            }
-            catch
-            {
-            }
-
-            this.ContentType = "image/tiff";
-            this.ContentEncoding = "base64";
-        }
         #endregion
 
         #region Proprties
         public string Name { get; set; }
         public byte[] Value { get; set; }
-        public bool IsImage
-        {
-            get { return this.ContentType.StartsWith("image/"); }
-        }
-
-        public Image AsImage
-        {
-            get
-            {
-                Image c_Ans = null;
-
-                if (this.ContentType.StartsWith("image/"))
-                {
-                    string sWkg = this.AsString;
-
-                    if (sWkg.HasValue())
-                    {
-                        try
-                        {
-                            System.IO.MemoryStream c_Stream = new System.IO.MemoryStream(Encoding.UTF8.GetBytes(sWkg));
-                            c_Ans = Image.FromStream(c_Stream);
-                        }
-                        catch { }
-                    }
-                }
-
-                return c_Ans;
-            }
-        }
 
         public string AsString
         {

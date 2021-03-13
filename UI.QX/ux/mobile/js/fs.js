@@ -180,6 +180,7 @@ nx.fs = {
             urlParams = nx.web.urlAdd('mgr', (nx.user.getIsSelector('MGR') ? 'y' : 'n'), urlParams);
             if (startfld) urlParams = nx.web.urlAdd('startfld', startfld, urlParams);
             if (endfld) urlParams = nx.web.urlAdd('endfld', endfld, urlParams);
+            urlParams = nx.web.urlAdd('ro', (dsdef.calRO || 'n'), urlParams);
 
             //
             nx.util.urlPopup(nx.util.loopbackURL() + '/viewers/fullcalendar/fc.html' + urlParams);

@@ -57,57 +57,13 @@ using HtmlAgilityPack;
 
 using NX.Engine;
 using NX.Shared;
+using NX.Engine.Files;
 
 namespace Proc.Docs.Files
 {
     public static class ConversionClass
     {
-        #region PDF
-        public static byte[] HTML2PDF(string value)
-        {
-            byte[] abAns = null;
-
-            value = StandarizeHTML(value);
-
-            //
-            using (ITSParser c_Cvx = new ITSParser())
-            {
-                abAns = c_Cvx.Parse(value);
-            }
-
-            //// Get the source
-            //using (MemoryStream c_Source = new System.IO.MemoryStream(value.ToBytes()))
-            //{
-            //    // And a reader
-            //    using (StreamReader c_Reader = new StreamReader(c_Source))
-            //    {
-            //        //
-            //        using (Document c_PDF = new Document(PageSize.LETTER, 10f, 10f, 10f, 10f))
-            //        {
-            //            using (MemoryStream c_Stream = new System.IO.MemoryStream())
-            //            {
-            //                // And the writer
-            //                PdfWriter c_Writer = PdfWriter.GetInstance(c_PDF, c_Stream);
-            //                // Open                        
-            //                c_PDF.Open();
-            //                // Open worker
-            //                XMLWorkerHelper c_Worker = XMLWorkerHelper.GetInstance();
-            //                // Convert
-            //                c_Worker.ParseXHtml(c_Writer, c_PDF, c_Reader);
-            //                // Close
-            //                c_PDF.Close();
-            //                // Get
-            //                abAns = c_Stream.ToArray();
-            //            }
-            //        }
-            //    }
-            //}
-
-            return abAns;
-        }
-        #endregion
-
-        #region HTML
+       #region HTML
         /// <summary>
         /// 
         /// Fixes tags in HTML
@@ -153,30 +109,6 @@ namespace Proc.Docs.Files
             //}
 
             return value;
-        }
-
-        /// <summary>
-        /// 
-        /// From: https://github.com/OfficeDev/Open-Xml-PowerTools/issues/52
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static byte[] HTML2DOCX(string value)
-        {
-            byte[] abAns = null;
-
-            value = StandarizeHTML(value);
-
-            XElement html = HtmlToWmlReadAsXElement.ReadAsXElement(value.ToBytes());
-
-            HtmlToWmlConverterSettings settings = HtmlToWmlConverter.GetDefaultSettings();
-
-            WmlDocument doc = HtmlToWmlConverter.ConvertHtmlToWml(defaultCss, "", "", html, settings, null, null);
-            abAns = doc.DocumentByteArray;
-
-            return abAns;
         }
         #endregion
 
@@ -394,81 +326,43 @@ namespace Proc.Docs.Files
             }
             return new Uri(newURI);
         }
+        #endregion
 
-        private const string defaultCss =
-   @"html, address,
-blockquote,
-body, dd, div,
-dl, dt, fieldset, form,
-frame, frameset,
-h1, h2, h3, h4,
-h5, h6, noframes,
-ol, p, ul, center,
-dir, hr, menu, pre { display: block; unicode-bidi: embed }
-li { display: list-item }
-head { display: none }
-table { display: table }
-tr { display: table-row }
-thead { display: table-header-group }
-tbody { display: table-row-group }
-tfoot { display: table-footer-group }
-col { display: table-column }
-colgroup { display: table-column-group }
-td, th { display: table-cell }
-caption { display: table-caption }
-th { font-weight: bolder; text-align: center }
-caption { text-align: center }
-body { margin: auto; }
-h1 { font-size: 2em; margin: auto; }
-h2 { font-size: 1.5em; margin: auto; }
-h3 { font-size: 1.17em; margin: auto; }
-h4, p,
-blockquote, ul,
-fieldset, form,
-ol, dl, dir,
-menu { margin: auto }
-a { color: blue; }
-h5 { font-size: .83em; margin: auto }
-h6 { font-size: .75em; margin: auto }
-h1, h2, h3, h4,
-h5, h6, b,
-strong { font-weight: bolder }
-blockquote { margin-left: 40px; margin-right: 40px }
-i, cite, em,
-var, address { font-style: italic }
-pre, tt, code,
-kbd, samp { font-family: monospace }
-pre { white-space: pre }
-button, textarea,
-input, select { display: inline-block }
-big { font-size: 1.17em }
-small, sub, sup { font-size: .83em }
-sub { vertical-align: sub }
-sup { vertical-align: super }
-table { border-spacing: 2px; }
-thead, tbody,
-tfoot { vertical-align: middle }
-td, th, tr { vertical-align: inherit }
-s, strike, del { text-decoration: line-through }
-hr { border: 1px inset }
-ol, ul, dir,
-menu, dd { margin-left: 40px }
-ol { list-style-type: decimal }
-ol ul, ul ol,
-ul ul, ol ol { margin-top: 0; margin-bottom: 0 }
-u, ins { text-decoration: underline }
-br:before { content: ""\A""; white-space: pre-line }
-center { text-align: center }
-:link, :visited { text-decoration: underline }
-:focus { outline: thin dotted invert }
-/* Begin bidirectionality settings (do not change) */
-BDO[DIR=""ltr""] { direction: ltr; unicode-bidi: bidi-override }
-BDO[DIR=""rtl""] { direction: rtl; unicode-bidi: bidi-override }
-*[DIR=""ltr""] { direction: ltr; unicode-bidi: embed }
-*[DIR=""rtl""] { direction: rtl; unicode-bidi: embed }
-";
+        #region Conversion
 
-        private const string dummyCss = "";
+        /// <summary>
+        /// 
+        /// LibreOffice interface
+        /// 
+        /// </summary>
+        /// <param name="env"></param>
+        /// <param name="doc"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public static DocumentClass Convert(DocumentClass doc, DocumentClass to)
+        {
+            // Assue failure
+            DocumentClass c_Ans = null;
+
+            // Make the URL
+            string sURL = doc.Parent.Parent.LoopbackURL.URLMake("libreoffice", "convert",  doc.Path.ToBase64URL(), to.Path.ToBase64URL());
+            // Call
+            JObject c_Resp = sURL.URLGet().FromBytes().ToJObject();
+            // Any?
+            if (c_Resp != null)
+            {
+                // Get the file
+                string sPath = c_Resp.Get("path");
+                // Any?
+                if(sPath.HasValue())
+                {
+                    // Map
+                    c_Ans = new DocumentClass(doc.Parent, sPath);
+                }
+            }
+
+            return c_Ans;
+        }
         #endregion
     }
 

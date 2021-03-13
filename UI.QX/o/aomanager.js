@@ -133,11 +133,7 @@ qx.Class.define('o.aomanager', {
                     // Save the values
                     ans.prep(result);
 
-                    nx.util.getLocation(function (loc) {
-                        ans.setField('_geo', loc);
-
-                        if (cb) cb(ans);
-                    });
+                    if (cb) cb(ans);
                 } else {
                     if (cb) cb(ans);
                 }
@@ -187,8 +183,8 @@ qx.Class.define('o.aomanager', {
                             id: values._id,
                             data: changed
                         }, function () {
-                        // Reset
-                                values._changes = [];
+                            // Reset
+                            values._changes = [];
                         });
                     }
                 }

@@ -51,11 +51,14 @@ namespace Proc.Office
 
             // Common
             env.Use("Common.TaskWF");
-            env.Use("Proc.Comm");
+            env.Use("Proc.Communication");
             // And tasks
             env.Use("Proc.Task");
             // And workflows
             env.Use("Proc.Workflow");
+
+            // Conversion
+            env.Use("Proc.LibreOffice");
 
             // Call bootstrap
             env.FN("Office.LoadExtensions");

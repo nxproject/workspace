@@ -32,104 +32,15 @@ using Proc.AO;
 
 namespace Proc.Docs.Files
 {
-    public class PDFDocumentClass : ChildOfClass<DocumentClass>
+    public class PDFDocumentClass : ShadowDocumentClass
     {
         #region Constructor
         public PDFDocumentClass(DocumentClass odoc)
-            : base(odoc)
-        {
-            // Assume PDF
-            DocumentClass c_Ans = null;
-
-            // Handle easy case
-            if (this.Parent.Extension.IsSameValue("pdf"))
-            {
-                c_Ans = this.Parent;
-            }
-            else
-            {
-                // Get from metadata folder
-                DocumentClass c_Poss = this.Parent.MetadataDocument("pdf");
-                // Is it later?
-                bool bNeedProc = this.Parent.Exists && (!c_Poss.Exists || c_Poss.WrittenOn < this.Parent.WrittenOn);
-
-                // Do we need to do?
-                if (!bNeedProc)
-                {
-                    c_Ans = c_Poss;
-                }
-                else
-                {
-                    // Convert
-                    switch (this.Parent.Extension.ToLower())
-                    {
-                        case "docx":
-                            // 
-                            c_Poss.ValueAsBytes = this.ValueAsPDF();
-                            c_Ans = c_Poss;
-                            break;
-
-                        case "jpeg":
-                        case "jpg":
-                        case "png":
-                            break;
-                    }
-                }
-            }
-
-            this.Document =  c_Ans;
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// 
-        /// The underlying document
-        /// 
-        /// </summary>
-        public DocumentClass Document { get; private set; }
-
-        /// <summary>
-        /// 
-        /// Make it look like a document
-        /// 
-        /// </summary>
-        public string Path {  get { return this.Document.Path; } }
-
-        public string Location {  get { return this.Document.Location; } }
-
-        public byte[] ValueAsBytes {  get { return this.Document.ValueAsBytes; } }
+            : base(odoc, "pdf")
+        { }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// 
-        /// Gets/sets the value of the file as a PDF string
-        /// 
-        /// </summary>
-        private byte[] ValueAsPDF()
-        {
-            // Assume noting
-            byte[] abAns = null;
-
-            // According to type
-            switch (this.Parent.Extension.ToLower())
-            {
-                case "pdf":
-                    abAns = this.Parent.ValueAsBytes;
-                    break;
-
-                case "docx":
-                    using (HTMLDocumentClass c_HTML = this.Parent.HTML())
-                    {
-                        abAns = ConversionClass.HTML2PDF(c_HTML.Value);
-                    }
-                    break;
-            }
-
-            return abAns;
-        }
-
         /// <summary>
         /// 
         /// Merges the document with a given store of data

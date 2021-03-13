@@ -93,7 +93,7 @@ nx.office = {
             nx._sys = new Framework7(
                 {
                     root: '#app',                      // From index.html
-                    name: 'NX.Workspace',                  // App name
+                    name: 'NX.Project',                  // App name
                     theme: 'auto',                      // Automatic theme detection
 
                     // Routing

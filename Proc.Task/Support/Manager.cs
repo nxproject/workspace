@@ -68,58 +68,59 @@ namespace Proc.Task
         /// <param name="task"></param>
         /// <param name="passed"></param>
         /// <param name="store"></param>
-        public TaskContextClass Exec(string user, AO.DatasetClass ds, string task, string passed, StoreClass store, AO.ObjectClass obj)
+        public TaskContextClass Exec(string task, TaskContextClass ctx)
         {
             //
             AO.Definitions.ElsaClass c_Task = null;
 
-            // Is it a built-in?
-            if (this.Exists(task))
+            // Get the passed object!
+            AO.ObjectClass c_Passed = ctx.Objects["passed"];
+            // Must have one
+            if (c_Passed != null)
             {
-                // Make a dynamic task
-                c_Task = new AO.Definitions.ElsaClass();
-
-                //
-                string sID = "".GUID();
-
-                //
-                JObject c_Def = new JObject();
-                c_Def.Set("id", sID);
-                c_Def.Set("type", task);
-
-                JArray c_Conn = new JArray();
-
-                // Make a step
-                AO.Definitions.ElsaActivityClass c_Step = new AO.Definitions.ElsaActivityClass(c_Task, c_Def, c_Conn);
-
-                // Add the step
-                c_Task.Steps.Add(sID, c_Step);
-            }
-            else
-            {
-                // Get the task
-                c_Task = ds.Task(task);
-            }
-
-            // Make the instance
-            using (InstanceClass c_Instance = new InstanceClass(this, ds, c_Task))
-            {
-                // Make the context
-                TaskContextClass c_Ctx = new TaskContextClass(this, c_Instance, user, store, obj);
-
-                // Make the arguments
-                using (ArgsClass c_Args = new ArgsClass(c_Ctx, passed, 0))
+                // Is it a built-in?
+                if (this.Exists(task))
                 {
-                    // Run
-                    c_Instance.Exec(c_Ctx, c_Args);
+                    // Make a dynamic task
+                    c_Task = new AO.Definitions.ElsaClass();
 
-                    // Clean up
-                    c_Task.Dispose();
+                    //
+                    string sID = "".GUID();
 
-                    // Exit
-                    return c_Ctx;
+                    //
+                    JObject c_Def = new JObject();
+                    c_Def.Set("id", sID);
+                    c_Def.Set("type", task);
+
+                    JArray c_Conn = new JArray();
+
+                    // Make a step
+                    AO.Definitions.ElsaActivityClass c_Step = new AO.Definitions.ElsaActivityClass(c_Task, c_Def, c_Conn);
+
+                    // Add the step
+                    c_Task.Steps.Add(sID, c_Step);
+                }
+                else
+                {
+                    // Get the task
+                    c_Task = c_Passed.UUID.Dataset.Task(task);
+                }
+
+                // Make the instance
+                using (InstanceClass c_Instance = new InstanceClass(this, c_Passed.UUID.Dataset, c_Task))
+                {
+                    // Make the arguments
+                    using (ArgsClass c_Args = new ArgsClass(ctx, null, 0))
+                    {
+                        // Run
+                        c_Instance.Exec(ctx, c_Args);
+
+                        // Clean up
+                        c_Task.Dispose();
+                    }
                 }
             }
+            return ctx;
         }
 
         /// <summary>

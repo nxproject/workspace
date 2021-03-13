@@ -18,6 +18,7 @@
             const startField = urlParams.get('startfld');
             const endField = urlParams.get('endfld');
             const mgr = urlParams.get('mgr');
+            const editable = urlParams.get('ro') !== 'y';
 
             const cbc = 'white';
 
@@ -68,6 +69,7 @@
                 navLinks: true, // can click day/week names to navigate views
                 editable: !!startField,
                 eventDurationEditable: !!endField,
+                timeZone: 'local',
                 selectable: true,
                 nowIndicator: true,
                 dayMaxEvents: true, // allow "more" link when too many events
@@ -196,7 +198,8 @@
                         start: start,
                         end: end,
                         format: 'json',
-                        orig: items
+                        orig: items,
+                        editable: editable
                     }
                 }
             };

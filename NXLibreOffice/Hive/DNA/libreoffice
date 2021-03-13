@@ -1,0 +1,17 @@
+﻿{
+  "@Ports": [
+    "{http_port}"
+  ],
+  "@Map": [
+    "{shared_folder}:/etc/shared",
+    "{shared_folder}/files:/etc/files"
+  ],
+  "Cmd": [
+    "dotnet",
+    "NXLibreOffice.dll",
+    "--config",
+    "config.json"
+  ],
+  "Image": "{repo_project}/libreoffice:{tier}",
+  "WorkingDir": "/etc/wd"
+}

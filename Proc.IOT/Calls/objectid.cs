@@ -55,20 +55,21 @@ namespace Proc.IOTIF
             if (ctx.Option.HasValue())
             {
                 // 
-                using(AO.UUIDClass c_UUID = new UUIDClass(ctx.DBManager.DefaultDatabase, ctx.Option))
+                using (AO.UUIDClass c_UUID = new UUIDClass(ctx.DBManager.DefaultDatabase, ctx.Option))
                 {
                     //
-                    StoreClass c_Args = new StoreClass();
-                    c_Args["task"] = ctx.Verb;
-                    c_Args["ds"] = c_UUID.Dataset.Name;
-                    c_Args["id"] = c_UUID.ID;
-                    c_Args.Set("passed", ctx.Params);
-                    c_Args["return"] = AO.Names.Passed;
+                    using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Parent))
+                    {
+                        c_Params.Task = ctx.Verb;
+                        c_Params.AddObject("passed", c_UUID);
+                        c_Params.AddStore("passed", ctx.Params);
+                        c_Params["return"] = AO.Names.Passed;
 
-                    if(ctx.Stores.Has("changes")) c_Args.Set("changes", ctx.Stores["changes"].SynchObject);
-                    if (ctx.Stores.Has("current")) c_Args.Set("current", ctx.Stores["current"].SynchObject);
+                        if (ctx.Stores.Has("changes")) c_Params.AddStore("changes", ctx.Stores["changes"]);
+                        if (ctx.Stores.Has("current")) c_Params.AddStore("current", ctx.Stores["current"]);
 
-                    c_Ans = ctx.Parent.FN("Task.Start", c_Args);
+                        c_Params.Call();
+                    }
                 }
             }
 

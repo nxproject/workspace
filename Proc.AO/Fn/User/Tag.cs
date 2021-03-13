@@ -54,7 +54,7 @@ namespace Proc.AO
             string sDS = store["ds"];
             string sID = store["id"];
             string sAction = store["action"];
-            string sLoc = store["geo"];
+            string sLoc = store["geo"].IfEmpty();
 
             // Get the manager
             ManagerClass c_Mgr = call.Env.Globals.Get<ManagerClass>();

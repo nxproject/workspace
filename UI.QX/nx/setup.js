@@ -33,7 +33,7 @@ nx.setup = {
     tagOK: '#7FFFD4', // Aquamarine
     tagWarning: '#FFFACD', // LemonChiffon
     tagError: '#FFA07A', // LightSalmon
-    tagTools: '#FFEFD5', 
+    tagTools: '#FFEFD5',
 
     iconDefault: 'asterisk_yellow',
     iconActiveTask: 'asterisk_orange',
@@ -768,49 +768,43 @@ nx.tt = {
         var id = params.id;
 
         //
-        nx.util.getLocation(function (loc) {
-            nx.util.serviceCall('AO.Tag', {
-                user: nx.desktop.user.getName(),
-                type: 'pin',
-                ds: ds,
-                id: id,
-                action: fn,
-                geo: loc
-            }, function (result) {
-                // Reload
-                nx.desktop.user._loadStartMenu();
-                //
-                if (cb) {
-                    cb(result);
-                } else {
-                    // Tell user
-                    nx.util.notifyInfo('Tracking ' + result.value);
-                }
-            });
+        nx.util.serviceCall('AO.Tag', {
+            user: nx.desktop.user.getName(),
+            type: 'pin',
+            ds: ds,
+            id: id,
+            action: fn
+        }, function (result) {
+            // Reload
+            nx.desktop.user._loadStartMenu();
+            //
+            if (cb) {
+                cb(result);
+            } else {
+                // Tell user
+                nx.util.notifyInfo('Tracking ' + result.value);
+            }
         });
     },
 
     tagEntry: function (entry, fn, cb) {
         //
-        nx.util.getLocation(function (loc) {
-            nx.util.serviceCall('AO.Tag', {
-                user: nx.desktop.user.getName(),
-                type: 'pin',
-                ds: entry.ds,
-                id: entry.id,
-                action: 'continue',
-                geo: loc
-            }, function (result) {
-                // Reload
-                nx.desktop.user._loadStartMenu();
-                //
-                if (cb) {
-                    cb(result);
-                } else {
-                    // Tell user
-                    nx.util.notifyInfo('Tracking ' + result.value);
-                }
-            });
+        nx.util.serviceCall('AO.Tag', {
+            user: nx.desktop.user.getName(),
+            type: 'pin',
+            ds: entry.ds,
+            id: entry.id,
+            action: 'continue'
+        }, function (result) {
+            // Reload
+            nx.desktop.user._loadStartMenu();
+            //
+            if (cb) {
+                cb(result);
+            } else {
+                // Tell user
+                nx.util.notifyInfo('Tracking ' + result.value);
+            }
         });
     }
 

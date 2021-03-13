@@ -33,7 +33,7 @@ using NX.Shared;
 using NX.Engine;
 using NX.Engine.Files;
 
-namespace Proc.Comm.EMailIF
+namespace Proc.Communication.EMailIF
 {
     public class ProviderClass : IDisposable
     {

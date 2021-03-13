@@ -19,39 +19,52 @@
 
 using NX.Shared;
 using NX.Engine;
-using Proc.SocketIO;
+using NX.Engine.SocketIO;
 
 namespace Proc.SIO
 {
-    public class ManagerClass : Proc.SocketIO.ManagerClass
+    public class ManagerClass : NX.Engine.SocketIO.ManagerClass
     {
         #region Constructor
         public ManagerClass(EnvironmentClass env)
             : base(env)
         {
             //
-            this.InternalEvent = new EventClass(this, InternalCode);
-            this.InternalEvent.MessageReceived += delegate (SocketIO.MessageClass msg)
+            this.AvailabilityChanged += delegate (bool isavailable)
             {
-                if (this.Enabled)
+                if (isavailable)
                 {
-                    SIO.MessageClass c_Msg = new SIO.MessageClass(this, msg);
+                    this.InternalEvent = new EventClass(this, InternalCode);
+                    this.InternalEvent.MessageReceived += delegate (NX.Engine.SocketIO.MessageClass msg)
+                    {
+                        if (this.Enabled)
+                        {
+                            SIO.MessageClass c_Msg = new SIO.MessageClass(this, msg);
 
-                    this.MessageReceived?.Invoke(c_Msg);
+                            this.MessageReceived?.Invoke(c_Msg);
+                        }
+                    };
+
+                    //
+                    this.AccountEvent = new EventClass(this, AccountCode);
+                    this.AccountEvent.MessageReceived += delegate (NX.Engine.SocketIO.MessageClass msg)
+                    {
+                        if (this.Enabled)
+                        {
+                            SIO.MessageClass c_Msg = new SIO.MessageClass(this, msg);
+
+                            this.MessageReceived?.Invoke(c_Msg);
+                        }
+                    };
                 }
             };
 
-            //
-            this.AccountEvent = new EventClass(this, AccountCode);
-            this.AccountEvent.MessageReceived += delegate (SocketIO.MessageClass msg)
-            {
-                if (this.Enabled)
-                {
-                    SIO.MessageClass c_Msg = new SIO.MessageClass(this, msg);
+            this.CheckForAvailability();
+        }
 
-                    this.MessageReceived?.Invoke(c_Msg);
-                }
-            };
+        private void ManagerClass_AvailabilityChanged(bool isavailable)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
 

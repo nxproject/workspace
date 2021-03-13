@@ -1,6 +1,6 @@
 # Data basics
 
-To better understand how data is organized in NX.Workspace, tink of ***rolodexes***, the old fashion way to keep
+To better understand how data is organized in NX.Workspace, think of ***rolodexes***, the old fashion way to keep
 information in a simple but yet flexible way.
 
 ## Dataset

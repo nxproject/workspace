@@ -475,6 +475,7 @@ nx.fmts = {
         textarea: { as: 'text', tag: 'textarea' },
         time: { as: 'text' },
         timezone: { as: 'text' },
+        twiliophone: { as: 'text', fmt: 'phone' },
         upload: { handler: 'upload' },
         user: { handler: 'user' },
         users: { handler: 'users' },

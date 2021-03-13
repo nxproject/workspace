@@ -34,14 +34,16 @@ When running the state of the images aand cotainer should look like these.
 root@site:~# docker images ls
 
 REPOSITORY                              TAG                 IMAGE ID            CREATED             SIZE
-nxproject/processor                     dev                 194b7c6dd3f0        19 hours ago        661MB
-nxproject/perconanosql                  dev                 ac2e2d1f872e        20 hours ago        507MB
-nxproject/socketio                      dev                 39ddfe9bc867        20 hours ago        126MB
-nxproject/nginx                         dev                 4dc6bc8f425e        20 hours ago        133MB
-nxproject/base                          dev                 755d0565be75        20 hours ago        72.9MB
-nxproject/dotnet                        dev                 d25045c82f0d        20 hours ago        504MB
-mhart/alpine-node                       10                  7d3849b7af27        2 weeks ago         73.7MB
-mcr.microsoft.com/dotnet/core/runtime   3.1                 aeda02cc2c98        4 weeks ago         190MB
+nxproject/processor                     dev                 3ac39fb36fc7        About a minute ago   497MB
+nxproject/libreoffice                   dev                 61d976878a5c        3 hours ago          1.72GB
+nxproject/socketio                      dev                 1718e6f0d3d1        13 hours ago         126MB
+nxproject/dotnet                        dev                 ac840b7d8c3d        39 hours ago         340MB
+nxproject/perconanosql                  dev                 337025c95bb2        4 days ago           507MB
+nxproject/nginx                         dev                 54b0f01cc316        4 days ago           133MB
+nxproject/redis                         dev                 5482192953b5        4 days ago           78.5MB
+nxproject/base                          dev                 9343dd886fbb        4 days ago           72.9MB
+mhart/alpine-node                       10                  7d3849b7af27        2 weeks ago          73.7MB
+mcr.microsoft.com/dotnet/core/runtime   3.1                 aeda02cc2c98        4 weeks ago          190MB
 ```
 
 ### Containers
@@ -49,16 +51,17 @@ mcr.microsoft.com/dotnet/core/runtime   3.1                 aeda02cc2c98        
 ```
 root@site:~# docker ps -a
 
-CONTAINER ID        IMAGE                        COMMAND                  CREATED             STATUS              PORTS                                      NAMES
-085b92245c9a        nxproject/perconanosql:dev   "tini -- bash /entry…"   19 hours ago        Up 19 hours         0.0.0.0:32901->27017/tcp                   site_perconanosql_94673753C91BECCCA94270AAF5F7239F
-80f84fb61884        nxproject/nginx:dev          "tini -- nginx -g 'd…"   19 hours ago        Up 19 hours         0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp   site_nginx_EE434023CF89D7DFB21F63D64FF9D74
-f7fd8103e37a        nxproject/processor:dev      "dotnet NXNode.dll -…"   19 hours ago        Up 19 hours         0.0.0.0:32900->8086/tcp                    site_processor__2A5B9450495D4CB38DD7A7C155AF2F1D
-5a9c18866870        nxproject/socketio:dev       "node /etc/wd/server…"   19 hours ago        Up 19 hours         0.0.0.0:32898->3000/tcp                    site_socketio_4393A1A5B976BFDD99B321D2187FBE3E
+CONTAINER ID        IMAGE                        COMMAND                  CREATED             STATUS              PORTS 
+768a77a7462a        nxproject/libreoffice:dev    "dotnet NXLibreOffic…"   30 seconds ago      Up 26 seconds       0.0.0.0:33846->8088/tcp                    site_libreoffice_65D7804691954FC2AD37912B1B74F3A9
+6bcc46e8b04a        nxproject/nginx:dev          "tini -- nginx -g 'd…"   35 seconds ago      Up 29 seconds       0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp   site_nginx_EE434023CF89D7DFB21F63D64FF9D74
+83508fa001dd        nxproject/processor:dev      "dotnet NXNode.dll -…"   59 seconds ago      Up 56 seconds       0.0.0.0:33845->8086/tcp                    site_processor__B32411F4E1174D00B992891ED633B108
+0e0f134a55c7        nxproject/socketio:dev       "node /etc/wd/server…"   13 hours ago        Up 13 hours         0.0.0.0:33841->3000/tcp                    site_socketio_4393A1A5B976BFDD99B321D2187FBE3E
+b314938aaf28        nxproject/perconanosql:dev   "tini -- bash /entry…"   3 days ago          Up 3 days           0.0.0.0:33707->27017/tcp                   site_perconanosql_94673753C91BECCCA94270AAF5F7239FNAMES
 ```
 
 ## NX.Project
 
-NX.Workspace is based in ``NX.Node``.  Documentation for this aspect of the system can be found [here](https://github.com/nxproject/node).
+NX.Workspace uses ``NX.Node``.  Documentation for this aspect of the system can be found [here](https://github.com/nxproject/node).
 
 
 [Home](../README.md)

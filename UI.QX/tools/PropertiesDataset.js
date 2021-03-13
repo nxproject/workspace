@@ -313,8 +313,16 @@ qx.Class.define('tools.PropertiesDataset', {
                                             aoFld: 'calAllow',
                                             value: dsdef.calAllow
                                         }, {
-                                            nxtype: 'string',
+                                            nxtype: 'boolean',
                                             top: 2,
+                                            left: 1,
+                                            width: 'default.fieldWidth',
+                                            label: 'Read Only?',
+                                            aoFld: 'calRO',
+                                            value: dsdef.calRO
+                                        }, {
+                                            nxtype: 'string',
+                                            top: 3,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Subject',
@@ -322,7 +330,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.calsubj
                                         }, {
                                             nxtype: 'string',
-                                            top: 3,
+                                            top: 4,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Start On',
@@ -330,7 +338,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.calstart
                                         }, {
                                             nxtype: 'string',
-                                            top: 4,
+                                            top: 5,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'End on',
@@ -338,7 +346,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.calend
                                         }, {
                                             nxtype: 'calendarable',
-                                            top: 5,
+                                            top: 6,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'By fields',
@@ -407,12 +415,20 @@ qx.Class.define('tools.PropertiesDataset', {
                                             top: 2,
                                             left: 1,
                                             width: 'default.fieldWidth',
+                                            label: 'Def. WF',
+                                            aoFld: 'wfDefault',
+                                            value: dsdef.wfDefault
+                                        }, {
+                                            nxtype: 'keyword',
+                                            top: 3,
+                                            left: 1,
+                                            width: 'default.fieldWidth',
                                             label: 'Dataset',
                                             aoFld: 'wfDS',
                                             value: dsdef.wfDS
                                         }, {
                                             nxtype: 'keyword',
-                                            top: 3,
+                                            top: 4,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Description',
@@ -420,7 +436,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.wfDescription
                                         }, {
                                             nxtype: 'keyword',
-                                            top: 4,
+                                            top: 5,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Assigned To',
@@ -428,7 +444,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.wfAssignedTo
                                         }, {
                                             nxtype: 'keyword',
-                                            top: 5,
+                                            top: 6,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Done By',
@@ -436,7 +452,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.wfDoneBy
                                         }, {
                                             nxtype: 'keyword',
-                                            top: 6,
+                                            top: 7,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Started On',
@@ -444,7 +460,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.wfStartedOn
                                         }, {
                                             nxtype: 'keyword',
-                                            top: 7,
+                                            top: 8,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Expected On',
@@ -452,7 +468,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.wfExpectedOn
                                         }, {
                                             nxtype: 'keyword',
-                                            top: 8,
+                                            top: 9,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Ended On',
@@ -460,7 +476,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.wfEndedOn
                                         }, {
                                             nxtype: 'keyword',
-                                            top: 9,
+                                            top: 10,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Outcome',
@@ -468,7 +484,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.wfOutcome
                                         }, {
                                             nxtype: 'keyword',
-                                            top: 10,
+                                            top: 11,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Message',

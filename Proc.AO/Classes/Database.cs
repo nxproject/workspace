@@ -341,6 +341,10 @@ namespace Proc.AO
                         this.ISiteInfo.CertEMail = this.Parent.Parent["certbot_email"].IfEmpty();
                     }
                     this.Parent.Parent.LogInfo("Certificate EMail is set to {0}".FormatString(this.ISiteInfo.CertEMail));
+
+                    this.Parent.Parent.LogInfo("Reachable URL is set to {0}".FormatString(this.Parent.Parent.ReachableURL));
+
+                    this.ISiteInfo.UpdateEnv(false);
                 }
 
                 return this.ISiteInfo;
@@ -406,6 +410,9 @@ namespace Proc.AO
             {
                 //
                 HasInitialized = true;
+
+                //
+                var x = this.SiteInfo;
 
             }
         }

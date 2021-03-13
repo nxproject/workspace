@@ -446,12 +446,7 @@ nx.db = {
                 result._changes = result._changes || [];
                 if (typeof result._changes === 'string') result._changes = JSON.parse(result._changes);
 
-                // Save the location
-                nx.util.getLocation(function (loc) {
-                    self.objSetField(result, '_geo', loc.latitude + ',' + loc.longitude);
-
-                    if (cb) cb(result);
-                });
+                if (cb) cb(result);
             } else {
                 cb(null);
             }

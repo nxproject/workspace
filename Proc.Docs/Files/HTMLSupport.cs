@@ -115,7 +115,7 @@ namespace Proc.Docs.Files
             try
             {
                 // Get the text
-                string sWkg = this.Parent.Value;
+                string sWkg = this.Parent.Parent.Value;
                 // Find all the fields
                 MatchCollection c_Matches = Regex.Matches(sWkg, @"\x5B[^\x5D]*\x5D");
                 // Loop thru
@@ -155,7 +155,7 @@ namespace Proc.Docs.Files
             try
             {
                 // Get the text
-                string sWkg = this.Parent.Value;
+                string sWkg = this.Parent.Parent.Value;
                 // Find all the fields
                 MatchCollection c_Matches = Regex.Matches(sWkg, @"\x5B[^\x5D]*\x5D");
                 //

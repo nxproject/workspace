@@ -83,8 +83,6 @@ namespace Proc.AO
         /// The collection
         /// 
         /// </summary>
-        //private NamedListClass<CollectionClass> Collections { get; set; } = new NamedListClass<CollectionClass>();
-
         public CollectionClass DataCollection
         {
             get

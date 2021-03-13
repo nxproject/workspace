@@ -802,39 +802,5 @@ nx.util = {
         }
 
         return value;
-    },
-
-    // ---------------------------------------------------------
-    //
-    // HTML5
-    // 
-    // ---------------------------------------------------------
-
-    getLocation: function (cb) {
-
-        var self = this;
-
-        // Are we secure?
-        if (self.isSecure()) {
-
-            // Save the location
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (loc) {
-                    // Pass back
-                    if (cb) cb(loc.latitude + ',' + loc.longitude);
-                });
-            } else {
-
-                // Nothing
-                if (cb) cb('');
-
-            }
-
-        } else {
-
-            // Nothing
-            if (cb) cb('');
-        }
     }
 };

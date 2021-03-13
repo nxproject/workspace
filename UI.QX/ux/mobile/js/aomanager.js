@@ -117,12 +117,7 @@ nx.aomanager = {
                 // Make the object
                 ans = nx.aoobject.prep(data);
 
-                // Save the location
-                nx.util.getLocation(function (loc) {
-                    nx.db.obj.setField(ans, loc.latitude + ',' + loc.longitude);
-
-                    if (cb) cb(ans);
-                });
+                if (cb) cb(ans);
             } else {
                 if (cb) cb(ans);
             }

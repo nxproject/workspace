@@ -41,9 +41,6 @@
     <Reference Include="Proc.NginX">
       <HintPath>..\..\Node\Proc.NginX\bin\Debug\netcoreapp3.1\Proc.NginX.dll</HintPath>
     </Reference>
-    <Reference Include="Proc.SocketIO">
-      <HintPath>..\..\Node\Proc.SocketIO\bin\Debug\netcoreapp3.1\Proc.SocketIO.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

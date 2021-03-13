@@ -32,17 +32,11 @@ namespace Proc.Task
     public class TaskContextClass : ExtendedContextClass
     {
         #region Constructor
-        public TaskContextClass(ManagerClass mgr,
-                                InstanceClass inst,
+        public TaskContextClass(EnvironmentClass env,
                                 string user,
-                                StoreClass store,
-                                AO.ObjectClass obj)
-            : base(mgr.Parent, store, obj, user)
+                                Action<TaskContextClass> cb)
+            : base(env, null, null, user)
         {
-            //
-            this.Manager = mgr;
-            this.Instance = inst;
-
             //
             this.Arrays = new ContextStoreClass<ArrayClass>();
             this.Charges = new ContextStoreClass<ChargesClass>();
@@ -55,6 +49,8 @@ namespace Proc.Task
 
             this.HTTP = new ContextStoreClass<HTTPClientClass>();
             this.FTP = new ContextStoreClass<FTPClientClass>();
+
+            if (cb != null) cb(this);
         }
         #endregion
 
@@ -113,9 +109,48 @@ namespace Proc.Task
         #endregion
 
         #region Methods
+        public void Initialize(ManagerClass mgr, InstanceClass inst)
+        { 
+            //
+            this.Manager = mgr;
+            this.Instance = inst;
+
+        }
+
+        /// <summary>
+        /// 
+        /// Calls a function
+        /// 
+        /// </summary>
+        /// <param name="fn"></param>
+        /// <param name="store"></param>
+        /// <returns></returns>
         public StoreClass CallFN(string fn, StoreClass store)
         {
             return base.Parent.FN(fn, store);
+        }
+
+        /// <summary>
+        ///  
+        /// Copies context to serve as params
+        /// 
+        /// </summary>
+        /// <param name="tp"></param>
+        public void AsParams(AO.TaskParamsClass tp)
+        {
+            // Stores
+            foreach(string sKey in this.Stores.Keys)
+            {
+                // Copy
+                tp.AddStore(sKey, this.Stores[sKey]);
+            }
+
+            // Objects
+            foreach(string sKey in this.Objects.Keys)
+            {
+                // Copy
+                tp.AddObject(sKey, this.Objects[sKey]);
+            }
         }
         #endregion
 

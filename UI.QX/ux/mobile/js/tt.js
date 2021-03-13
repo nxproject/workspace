@@ -27,25 +27,22 @@ nx.tt = {
             var id = obj._id;
 
             //
-            nx.util..getLocation(function (loc) {
-                nx.util.serviceCall('AO.Tag', {
-                    user: nx.user.getName(),
-                    type: 'pin',
-                    ds: ds,
-                    id: id,
-                    action: fn,
-                    geo: loc
-                }, function (result) {
-                    // Reload
-                    nx.user._reloadUser();
-                    //
-                    if (cb) {
-                        cb(result);
-                    } else {
-                        // Tell user
-                        nx.util.notifyInfo('Tracking ' + result.value);
-                    }
-                });
+            nx.util.serviceCall('AO.Tag', {
+                user: nx.user.getName(),
+                type: 'pin',
+                ds: ds,
+                id: id,
+                action: fn
+            }, function (result) {
+                // Reload
+                nx.user._reloadUser();
+                //
+                if (cb) {
+                    cb(result);
+                } else {
+                    // Tell user
+                    nx.util.notifyInfo('Tracking ' + result.value);
+                }
             });
         }
     }

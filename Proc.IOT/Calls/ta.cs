@@ -54,16 +54,18 @@ namespace Proc.IOTIF
             // Do we have an object id?
             if (ctx.Option.HasValue())
             {
-                ///
-                StoreClass c_Args = new StoreClass();
-                c_Args["task"] = ctx.Verb;
-                c_Args.Set("passed", ctx.Params);
-                c_Args["return"] = AO.Names.Passed;
+                //
+                using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Parent))
+                {
+                    c_Params.Task = ctx.Verb;
+                    c_Params.AddStore("passed", ctx.Params);
+                    c_Params["return"] = AO.Names.Passed;
 
-                if (ctx.Stores.Has("changes")) c_Args.Set("changes", ctx.Stores["changes"].SynchObject);
-                if (ctx.Stores.Has("current")) c_Args.Set("current", ctx.Stores["current"].SynchObject);
+                    if (ctx.Stores.Has("changes")) c_Params.AddStore("changes", ctx.Stores["changes"]);
+                    if (ctx.Stores.Has("current")) c_Params.AddStore("current", ctx.Stores["current"]);
 
-                c_Ans = ctx.Parent.FN("Task.Start", c_Args);
+                    c_Params.Call();
+                }
             }
 
             if (c_Ans == null) c_Ans = new StoreClass();

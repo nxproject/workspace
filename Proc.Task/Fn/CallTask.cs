@@ -49,33 +49,44 @@ namespace Proc.Task
             ManagerClass c_Mgr = call.Env.Globals.Get<ManagerClass>();
 
             //
-            string sTask = store["task"].AsKeyword();
-            string sDS = store["ds"].AsDatasetName();
-            string sID = store["id"];
-            StoreClass c_Passed = store.GetAsStore("passed");
-            if (c_Passed == null) c_Passed = new StoreClass();
-            string sRet = store["return"];
-
-            // Validate
-            if (sTask.HasValue() && sDS.HasValue() && sID.HasValue())
+            using (TaskParamsClass c_Params = new TaskParamsClass(call.Env, store))
             {
-                // Get the database manager
-                AO.ManagerClass c_DBMgr = call.Env.Globals.Get<AO.ManagerClass>();
-                // Get the dataset
-                AO.DatasetClass c_DS = c_DBMgr.DefaultDatabase[sDS];
+                string sRet = c_Params["return"];
 
-                // Make the object volatile
-                using (AO.ObjectClass c_Obj = c_DS[sID])
+                // Validate
+                if (c_Params.Task.HasValue())
                 {
-                    //
-                    c_Obj.Volatile();
+                    // Get the database manager
+                    AO.ManagerClass c_DBMgr = call.Env.Globals.Get<AO.ManagerClass>();
 
-                    // Run
-                    TaskContextClass c_Ctx = c_Mgr.Exec(call.UserInfo.Name, c_DS, sTask, null, c_Passed, c_Obj);
+                    TaskContextClass c_Ctx = new TaskContextClass(call.Env, call.UserInfo.Name, delegate (TaskContextClass ctx)
+                    {
+                        // Load from params
+                        foreach (string sKey in c_Params.Keys)
+                        {
+                            ctx.Stores["values"][sKey] = c_Params[sKey];
+                        }
 
-                    // Special stores
-                    c_Ctx.Stores["changes"].LoadFrom(store.GetAsJObject("changes"));
-                    c_Ctx.Stores["current"].LoadFrom(store.GetAsJObject("current"));
+                        // Objects
+                        foreach (string sKey in c_Params.Objects)
+                        {
+                            using (AO.UUIDClass c_UUID = new UUIDClass(ctx.Database, c_Params.GetObject(sKey)))
+                            {
+                                ctx.Objects[sKey] = c_UUID.AsObject;
+                                // Flag volatile so changes flow
+                                ctx.Objects[sKey].Volatile();
+                            }
+                        }
+
+                        // Stores
+                        foreach (string sKey in c_Params.Stores)
+                        {
+                            ctx.Stores[sKey] = c_Params.GetStore(sKey);
+                        }
+
+                        c_Mgr.Exec(c_Params.Task, ctx);
+                    });
+
 
                     //
                     if (sRet.HasValue())

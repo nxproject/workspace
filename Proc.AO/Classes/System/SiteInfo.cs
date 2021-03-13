@@ -320,6 +320,17 @@ namespace Proc.AO
             get { return this.SynchObject["taxid"]; }
             set { this.SynchObject["taxid"] = value; }
         }
+
+        /// <summary>
+        /// 
+        /// Dataset that holds access phone numbers
+        /// 
+        /// </summary>
+        public string PhoneAccessDS
+        {
+            get { return this.SynchObject["phoneaccessds"].IfEmpty(); }
+            set { this.SynchObject["phoneaccessds"] = value; }
+        }
         #endregion
 
         #region Internal
@@ -378,6 +389,17 @@ namespace Proc.AO
         {
             get { return this.SynchObject["twilioaccess"]; }
             set { this.SynchObject["twilioaccess"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The task to run on incoming
+        /// 
+        /// </summary>
+        public string TwilioTask
+        {
+            get { return this.SynchObject["twiliotask"]; }
+            set { this.SynchObject["twiliotask"] = value; }
         }
 
         /// <summary>
@@ -525,7 +547,7 @@ namespace Proc.AO
         /// 
         /// </summary>
         /// <param name="recyclenginx"></param>
-        private void UpdateEnv(bool recyclenginx)
+        public void UpdateEnv(bool recyclenginx)
         {
             //
             bool bChanged = false;
@@ -569,6 +591,16 @@ namespace Proc.AO
                     // Only if we are the queen
                     c_Mgr.MakeConfig(c_Mgr.IsAvailable && c_Mgr.IsQueen);
                 }
+            }
+
+            // Relink twilio
+            if(this.TwilioPhone.HasValue())
+            {
+                StoreClass c_Params = new StoreClass();
+                c_Params["phone"] = this.TwilioPhone;
+                c_Params["ref"] = this.SynchObject.UUID.ToString();
+
+                this.Parent.Parent.Parent.FN("Communication.TwilioRegister", c_Params);
             }
         }
 

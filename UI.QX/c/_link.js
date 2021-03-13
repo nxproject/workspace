@@ -49,7 +49,7 @@ qx.Class.define('c._link', {
             var self = this;
 
             var ans = self._uuid;
-            if (usebase) ans = this.base(arguments);
+            if (usebase) ans = self.base(arguments);
 
             // 
             return ans; 

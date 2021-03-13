@@ -80,22 +80,29 @@ namespace Proc.Task
             // Get the parameters
             string sProc = args.Get(ArgCode);
 
-            // Setup
-            string sThreadID = "".GUID();
+            // Save
             StoreClass c_Pushed = null;
 
-            // Do we have a atore?
-            string sStore = args.Get(ArgStore);
-            if (sStore.HasValue())
+            //
+            using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Parent))
             {
-                // Save
-                c_Pushed = ctx.Stores[Names.Passed];
-                // Make new
-                ctx.Stores[Names.Passed] = ctx.Stores[sStore];
-            }
+                c_Params.Task = sProc;
 
-            // 
-            ctx.Manager.Exec(ctx.User.Name, ctx.Instance.Dataset, sProc, null, ctx.Stores[Names.Passed], ctx.Objects[Names.Passed]);
+                // Load from current context
+                ctx.AsParams(c_Params);
+
+                // he store
+                string sStore = args.Get(ArgStore);
+                if (sStore.HasValue())
+                {
+                    // Save
+                    c_Pushed = ctx.Stores[Names.Passed];
+                    // Make new
+                    ctx.Stores[Names.Passed] = ctx.Stores[sStore];
+                }
+
+                c_Params.Call();
+            }
 
             // Do we have a passed store?
             if (c_Pushed != null)

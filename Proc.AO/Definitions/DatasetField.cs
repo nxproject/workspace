@@ -100,6 +100,7 @@ namespace Proc.AO.Definitions
             TextArea,
             Time,
             Timezone,
+            TwilioPhone,
             Upload,
             User,
             Users,

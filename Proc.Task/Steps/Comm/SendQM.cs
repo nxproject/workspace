@@ -25,7 +25,7 @@ using Newtonsoft.Json.Linq;
 using NX.Shared;
 using NX.Engine;
 using Common.TaskWF;
-using Proc.Comm;
+using Proc.Communication;
 
 namespace Proc.Task
 {

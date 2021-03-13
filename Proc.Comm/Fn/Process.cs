@@ -35,7 +35,7 @@ using NX.Engine;
 using NX.Shared;
 using Proc.AO;
 
-namespace Proc.Comm
+namespace Proc.Communication
 {
     /// <summary>
     /// 
@@ -107,8 +107,6 @@ namespace Proc.Comm
                     c_Ctx.SendQM(c_Ctx.User.Name, sQM, null);
                 }
             }
-
-            // TBD
 
             return c_Ans;
         }

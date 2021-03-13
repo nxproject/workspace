@@ -886,7 +886,7 @@ qx.Class.define('o.user', {
                                         id: entry.id
                                     });
                                 }
-                                }];
+                            }];
 
                             if (tt.length) {
                                 items.push({
@@ -919,18 +919,15 @@ qx.Class.define('o.user', {
                             icon: 'stop',
                             click: function (e) {
                                 //
-                                nx.util.getLocation(function (loc) {
-                                    nx.util.serviceCall('AO.Tag', {
-                                        user: nx.desktop.user.getName(),
-                                        type: 'pin',
-                                        action: 'eod',
-                                        geo: loc
-                                    }, function (result) {
-                                        // Reload
-                                        nx.desktop.user._loadStartMenu();
-                                        // Tell user
-                                        nx.util.notifyInfo('Tag ' + result.value);
-                                    });
+                                nx.util.serviceCall('AO.Tag', {
+                                    user: nx.desktop.user.getName(),
+                                    type: 'pin',
+                                    action: 'eod'
+                                }, function (result) {
+                                    // Reload
+                                    nx.desktop.user._loadStartMenu();
+                                    // Tell user
+                                    nx.util.notifyInfo('Tag ' + result.value);
                                 });
                             }
                         });

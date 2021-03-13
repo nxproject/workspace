@@ -520,16 +520,16 @@ namespace Proc.AO
                 }
 
                 // Call
-                StoreClass c_Args = new StoreClass();
-                c_Args["ds"] = this.Dataset.Name;
-                c_Args["id"] = this.UUID.ID;
-                c_Args["task"] = sTask;
+                using (TaskParamsClass c_Params = new TaskParamsClass(this.Parent.Parent.Parent.Parent))
+                {
+                    c_Params.Task = sTask;
 
-                c_Args.Set("changes", c_CData);
-                c_Args.Set("current", orig);
+                    c_Params.AddObject("passed", this);
+                    c_Params.AddStore("changes", new StoreClass(c_CData));
+                    c_Params.AddStore("current", new StoreClass(orig));
 
-
-                this.Parent.Parent.Parent.Parent.FN("Task.Start", c_Args);
+                    c_Params.Call();
+                }
             }
             else
             {
@@ -582,29 +582,47 @@ namespace Proc.AO
                                         Definitions.DatasetFieldClass c_FDef = this.Dataset.Definition[sField];
                                         if (c_FDef != null)
                                         {
+                                            // Save the value
+                                            string sValue = this[sField];
+
                                             // According to type
                                             switch (c_FDef.Type)
                                             {
                                                 case Definitions.DatasetFieldClass.FieldTypes.Password:
                                                     // Must have value
-                                                    if (this[sField].HasValue())
+                                                    if (sValue.HasValue())
                                                     {
                                                         // Create
-                                                        c_Updates = c_Updates.Set(sField, this[sField].MD5HashString());
+                                                        c_Updates = c_Updates.Set(sField, sValue.MD5HashString());
                                                     }
                                                     bDo = false;
                                                     break;
-                                                case Definitions.DatasetFieldClass.FieldTypes.Boolean:// Must have value
-                                                    if (this[sField].HasValue())
+                                                case Definitions.DatasetFieldClass.FieldTypes.Boolean:
+                                                    // Must have value
+                                                    if (sValue.HasValue())
                                                     {
                                                         // Assure
-                                                        c_Updates = c_Updates.Set(sField, this[sField].FromDBBoolean().ToDBBoolean());
+                                                        c_Updates = c_Updates.Set(sField, sValue.FromDBBoolean().ToDBBoolean());
                                                     }
                                                     else
                                                     {
-                                                        c_Updates = c_Updates.Set(sField, this[sField]);
+                                                        c_Updates = c_Updates.Set(sField, sValue);
                                                     }
                                                     bDo = false;
+                                                    break;
+
+                                                case Definitions.DatasetFieldClass.FieldTypes.AccessPhone:
+                                                    // TBD
+                                                    break;
+
+                                                case Definitions.DatasetFieldClass.FieldTypes.TwilioPhone:
+                                                    using (StoreClass c_Info = new StoreClass())
+                                                    {
+                                                        c_Info["phone"] = sValue;
+                                                        c_Info["ref"] = this.UUID.ToString();
+                                                        this.Parent.Parent.Parent.Parent.FN("Communication.TwilioRegister", c_Info);
+                                                    }
+                                                    // TBD
                                                     break;
                                             }
                                         }
@@ -639,12 +657,12 @@ namespace Proc.AO
                                 c_Updates = c_Updates.Set(FieldCalendarStart,
                                     this.ProcessExtended(c_Ctx, this.Parent.Definition.CalendarStart, delegate (string value)
                                     {
-                                        return "d" + value.FromDBDate().ToDBDate();
+                                        return "d" + value.FromDBDate().AdjustTimezone().ToDBDate();
                                     }));
                                 c_Updates = c_Updates.Set(FieldCalendarEnd,
                                      this.ProcessExtended(c_Ctx, this.Parent.Definition.CalendarEnd, delegate (string value)
                                     {
-                                        return "d" + value.FromDBDate().ToDBDate();
+                                        return "d" + value.FromDBDate().AdjustTimezone().ToDBDate();
                                     }));
                                 c_Updates = c_Updates.Set(FieldCalendarSubject,
                                      this.ProcessExtended(c_Ctx, this.Parent.Definition.CalendarSubject));

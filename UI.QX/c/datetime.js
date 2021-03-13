@@ -25,7 +25,7 @@ qx.Class.define('c.datetime', {
     construct: function () {
 
         // Call base
-        this.base(arguments, new f.datetime('M/D/Y h:mm A'), new c._textfield());
+        this.base(arguments, new f.datetime('M/D/Y h:mm A'), new c._date());
 
     },
 

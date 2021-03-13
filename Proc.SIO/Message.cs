@@ -26,7 +26,7 @@ using Newtonsoft.Json.Linq;
 
 using NX.Shared;
 using NX.Engine;
-using Proc.SocketIO;
+using NX.Engine.SocketIO;
 
 namespace Proc.SIO
 {
@@ -50,7 +50,7 @@ namespace Proc.SIO
             this.Fn = fn;
         }
 
-        public MessageClass(SIO.ManagerClass mgr, SocketIO.MessageClass msg)
+        public MessageClass(SIO.ManagerClass mgr, NX.Engine.SocketIO.MessageClass msg)
             : base(mgr)
         {
             // Save the message
@@ -155,7 +155,7 @@ namespace Proc.SIO
         /// <param name="msg"></param>
         /// <param name="uuid"></param>
         /// <param name="winid"></param>
-        private void FillAndSend(SocketIO.MessageClass msg, string uuid, string winid)
+        private void FillAndSend(NX.Engine.SocketIO.MessageClass msg, string uuid, string winid)
         {
             // Set the function
             msg["fn"] = this.Fn;

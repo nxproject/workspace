@@ -59,7 +59,7 @@ namespace Proc.Cron
             };
 
             // Setup queen logic
-            this.Parent.Hive.Roster.QueenChanged += delegate()
+            this.Parent.Hive.QueenChanged += delegate()
             {
                 // Are we the queen?
                 if(this.Parent.Hive.Roster.IsQueen)
