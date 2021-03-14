@@ -3,6 +3,6 @@
 FROM {repo_project}/libreofficebase:{tier}
 LABEL {proj_label}
 
-COPY / /etc/wd/
+COPY --from={repo_project}/processor:{tier} /etc/wd /etc/wdjj
 
 WORKDIR /etc/wd

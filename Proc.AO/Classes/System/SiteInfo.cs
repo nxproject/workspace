@@ -518,6 +518,19 @@ namespace Proc.AO
         }
         #endregion
 
+        #region Billing
+        /// <summary>
+        /// 
+        /// Is billing enabled?
+        /// 
+        /// </summary>
+        public bool QuorumEnabled
+        {
+            get { return this.SynchObject["quorumenabled"].FromDBBoolean(); }
+            set { this.SynchObject["quorumenabled"] = value.ToDBBoolean(); }
+        }
+        #endregion
+
         #region Methods
         /// <summary>
         /// 
@@ -615,6 +628,9 @@ namespace Proc.AO
 
                 this.Parent.Parent.Parent.FN("Communication.TwilioRegister", c_Params);
             }
+
+            // Create enabled datsets 
+            this.Parent.Initialize(true);
         }
 
         /// <summary>

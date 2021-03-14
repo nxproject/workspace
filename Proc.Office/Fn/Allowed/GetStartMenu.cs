@@ -61,7 +61,7 @@ namespace Proc.Office
             }
 
             // Get a list of datasets
-            List<string> c_DSS = c_Mgr.DefaultDatabase.Datasets;
+            List<string> c_DSS = c_Mgr.DefaultDatabase.UserDatasets;
             // If super user
             bool bAdmin = sAllowed.IsSameValue("*");
 
@@ -100,6 +100,9 @@ namespace Proc.Office
             // Get the allowed
             if (!sAllowed.HasValue() || bAdmin)
             {
+                //
+                if (bAdmin) c_DSS.Add(DatabaseClass.DatasetUser);
+
                 // Loop
                 foreach (string sDS in c_DSS)
                 {

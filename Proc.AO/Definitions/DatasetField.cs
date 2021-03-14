@@ -94,6 +94,7 @@ namespace Proc.AO.Definitions
             Phone,
             PnoneEMail,
             Signature,
+            Slider,
             SSN,
             State,
             String,
@@ -348,6 +349,28 @@ namespace Proc.AO.Definitions
         {
             get { return this.Document.GetField("compute"); }
             set { this.Document.SetField("compute", value); }
+        }
+
+        /// <summary>
+        /// 
+        /// The min value for a slider
+        /// 
+        /// </summary>
+        public string SliderMin
+        {
+            get { return this.Document.GetField("slidermin"); }
+            set { this.Document.SetField("slidermin", value); }
+        }
+
+        /// <summary>
+        /// 
+        /// The max value for a slider
+        /// 
+        /// </summary>
+        public string SliderMax
+        {
+            get { return this.Document.GetField("slidermax"); }
+            set { this.Document.SetField("slidermax", value); }
         }
         #endregion
 

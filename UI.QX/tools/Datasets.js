@@ -192,7 +192,23 @@ qx.Class.define('tools.Datasets', {
                                 // Get list
                                 var dss = Object.keys(raw);
                                 // Sort
-                                dss.sort();
+                                dss.sort(function (a, b) {
+                                    var cmp = 0;
+                                    if (nx.util.startsWith(a, '_')) {
+                                        if (nx.util.startsWith(b, '_')) {
+                                            if (a > b) cmp = 1;
+                                            if (a < b) cmp = -1;
+                                        } else {
+                                            cmp = 1;
+                                        }
+                                    } else if (nx.util.startsWith(b, '_')) {
+                                        cmp = -1;
+                                    } else {
+                                        if (a > b) cmp = 1;
+                                        if (a < b) cmp = -1;
+                                    }
+                                    return cmp;
+                                });
                                 // Make menu
                                 var menu = [];
                                 // Loop thru

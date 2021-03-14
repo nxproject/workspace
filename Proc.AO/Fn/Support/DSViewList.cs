@@ -17,6 +17,8 @@
 /// 
 ///--------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 using Newtonsoft.Json.Linq;
 
 using NX.Engine;
@@ -42,8 +44,12 @@ namespace Proc.AO
             // Make array
             JObject c_Menu = new JObject();
 
+            //
+            List<string> c_DSS = c_Mgr.DefaultDatabase.UserDatasets;
+            c_DSS.Add(DatabaseClass.DatasetUser);
+
             // Loop thru
-            foreach(string sDS in c_Mgr.DefaultDatabase.Datasets)
+            foreach (string sDS in c_DSS)
             {
                 // Get dataset
                 Definitions.DatasetClass c_DS = c_Mgr.DefaultDatabase[sDS].Definition;

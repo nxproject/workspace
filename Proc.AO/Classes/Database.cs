@@ -47,10 +47,17 @@ namespace Proc.AO
         public const string DatasetGroup = "_group";
         public const string DatasetTagged = "_tagged";
         public const string DatasetTaggedDetail = "_taggeddet";
+
         public const string DatasetBiilCharge = "_billcharge";
         public const string DatasetBiilInvoice = "_billinvoice";
         public const string DatasetBiilRate = "_billrate";
         public const string DatasetBiilSubscription = "_billsubs";
+
+        public const string DatasetQuorum = "_quorum";
+        public const string DatasetQuorumTopic = "_quorumtopic";
+        public const string DatasetQuorumRating = "_quorumrating";
+        public const string DatasetQuorumComment = "_quorumcomment";
+        public const string DatasetQuorumOption = "_quorumoption";
 
         public const string DatasetDingDong = "_dingdong";
 
@@ -153,6 +160,8 @@ namespace Proc.AO
 
                 // Flags
                 bool bIOT = this.SiteInfo.IOTEnabled;
+                bool bBilling = this.SiteInfo.BillingEnabled;
+                bool bQuorumEnabled = this.SiteInfo.QuorumEnabled;
 
                 // Loop thru
                 for (int i = c_Ans.Count; i > 0; i--)
@@ -164,7 +173,7 @@ namespace Proc.AO
                     string sName = c_Ans[i - 1];
 
                     // Remove if system
-                    if (sName.StartsWith("#") && !sName.Contains("_"))
+                    if (sName.StartsWith("#"))
                     {
                         // Get name
                         string sDS = sName.Substring(1);
@@ -178,8 +187,20 @@ namespace Proc.AO
                         // 
                         switch (c_DS.Definition.Selector)
                         {
+                            case "SYS":
+                                bRemove = true;
+                                break;
+
                             case "IOT":
                                 bRemove = !bIOT;
+                                break;
+
+                            case "BILLING":
+                                bRemove = !bBilling;
+                                break;
+
+                            case "QUORUM":
+                                bRemove = !bQuorumEnabled;
                                 break;
                         }
                     }
@@ -191,24 +212,30 @@ namespace Proc.AO
                     }
                 }
 
-                // Assure _allowed
-                this.AssureDataset(DatabaseClass.DatasetAllowed, c_Ans);
-                // Assure users
-                this.AssureDataset(DatabaseClass.DatasetUser, c_Ans);
-                // Assure users
-                this.AssureDataset(DatabaseClass.DatasetAccount, c_Ans);
-                // Assure _help
-                this.AssureDataset(DatabaseClass.DatasetHelp, c_Ans);
-
-                // Assure billing
-                this.AssureDataset(DatabaseClass.DatasetBiilRate, c_Ans);
-                this.AssureDataset(DatabaseClass.DatasetBiilCharge, c_Ans);
-                this.AssureDataset(DatabaseClass.DatasetBiilInvoice, c_Ans);
-                this.AssureDataset(DatabaseClass.DatasetBiilSubscription, c_Ans);
-
                 //
                 this.Initialize();
 
+                return c_Ans;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// All the user defined datasets
+        /// 
+        /// </summary>
+        public List<string>UserDatasets
+        {
+            get
+            {
+                // Satrt with all available
+                List<string> c_Ans = this.Datasets;
+                // Loop thru
+                for(int i= c_Ans.Count -1;i>=0;i--)
+                {
+                    // remove system
+                    if (c_Ans[i].StartsWith("_")) c_Ans.RemoveAt(i);
+                }
                 return c_Ans;
             }
         }
@@ -369,18 +396,10 @@ namespace Proc.AO
         /// 
         /// </summary>
         /// <param name="ds"></param>
-        /// <param name="done"></param>
-        private void AssureDataset(string ds, List<string> done)
+        private void AssureDataset(string ds)
         {
-            // Chack
-            if (!done.Contains(ds))
-            {
-                // Add to list
-                done.Add(ds);
-
-                // Assure
-                var c_DS = this[ds];
-            }
+            // Assure
+            var c_DS = this[ds];
         }
 
         /// <summary>
@@ -413,16 +432,40 @@ namespace Proc.AO
         /// Initilaize logic
         /// 
         /// </summary>
-        public void Initialize()
+        public void Initialize(bool force = false)
         {
             // Only once
-            if (!HasInitialized)
+            if (!HasInitialized || force)
             {
                 //
                 HasInitialized = true;
 
                 //
                 var x = this.SiteInfo;
+
+                List<string> c_Ans = new List<string>();
+
+                // Assure _allowed
+                this.AssureDataset(DatabaseClass.DatasetAllowed);
+                // Assure users
+                this.AssureDataset(DatabaseClass.DatasetUser);
+                // Assure users
+                this.AssureDataset(DatabaseClass.DatasetAccount);
+                // Assure _help
+                this.AssureDataset(DatabaseClass.DatasetHelp);
+
+                // Assure billing
+                this.AssureDataset(DatabaseClass.DatasetBiilRate);
+                this.AssureDataset(DatabaseClass.DatasetBiilCharge);
+                this.AssureDataset(DatabaseClass.DatasetBiilInvoice);
+                this.AssureDataset(DatabaseClass.DatasetBiilSubscription);
+
+                // Meetings
+                this.AssureDataset(DatabaseClass.DatasetQuorum);
+                this.AssureDataset(DatabaseClass.DatasetQuorumTopic);
+                this.AssureDataset(DatabaseClass.DatasetQuorumComment);
+                this.AssureDataset(DatabaseClass.DatasetQuorumOption);
+                this.AssureDataset(DatabaseClass.DatasetQuorumRating);
 
             }
         }
