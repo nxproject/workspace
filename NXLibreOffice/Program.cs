@@ -52,9 +52,7 @@ namespace NXLibreOffice
                 
                 "Docker.DotNet",
                 "SocketIOClient",
-                "Route.File",
-                
-                "Proc.LibreOffice");
+                "Route.File");
         }
         #endregion
     }

@@ -17,7 +17,9 @@
 /// 
 ///--------------------------------------------------------------------------------
 
-using NX.Shared;
+using System.Collections.Generic;
+    
+    using NX.Shared;
 using NX.Engine;
 
 namespace Proc.AO.BuiltIn
@@ -75,6 +77,22 @@ namespace Proc.AO.BuiltIn
                     break; ;
                 case DatabaseClass.DatasetIOTMacro:
                     ds.Define_IOT("Macro", "script");
+                    break;
+
+                case DatabaseClass.DatasetBiilCharge:
+                    ds.Define_BillCharge();
+                    break;
+
+                case DatabaseClass.DatasetBiilInvoice:
+                    ds.Define_BillInvoice();
+                    break;
+
+                case DatabaseClass.DatasetBiilRate:
+                    ds.Define_BillRate();
+                    break;
+
+                case DatabaseClass.DatasetBiilSubscription:
+                    ds.Define_BillSubscription();
                     break;
 
                 default:
@@ -256,6 +274,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
                 c_Field.Label = "Phn.Acc. DS";
 
+                c_Field = ds.Definition["billenabled"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "Billing Enabled";
+
                 c_Field.SaveParent();
             }
 
@@ -288,7 +310,7 @@ namespace Proc.AO.BuiltIn
                 // Map
                 c_CInfo.UseFields("proccount", 
                     "phoneaccessds",
-                    "ttenabled", "iotenabled", "acctenabled", 
+                    "ttenabled", "iotenabled", "acctenabled", "billenabled",
                     "helproot");
 
                 c_CInfo.Save();
@@ -591,7 +613,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Account(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.02.11a"))
+            if (ds.Definition.ReleaseChanged("2021.03.13b"))
             {
                 //
                 ds.Definition.Caption = "Accounts";
@@ -601,6 +623,8 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.Icon = "group";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "101";
+
+                ds.Definition.ChildDSs = new List<string>() { DatabaseClass.DatasetBiilSubscription, DatabaseClass.DatasetBiilCharge, DatabaseClass.DatasetBiilInvoice }.JoinSpaces();
 
                 ds.Definition.ClearFields();
 
@@ -619,6 +643,262 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["childof"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Users;
                 c_Field.Label = "Child of";
+
+                c_Field = ds.Definition["billon"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
+                c_Field.Label = "Bill On";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_BillRate(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.03.13b"))
+            {
+                //
+                ds.Definition.Caption = "Bill. Rate";
+                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "code";
+                ds.Definition.Icon = "money_rate";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "102";
+
+                ds.Definition.ClearFields();
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+
+                c_Field = ds.Definition["desc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Description";
+
+                c_Field = ds.Definition["rate"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Rate";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_BillCharge(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.03.13b"))
+            {
+                //
+                ds.Definition.Caption = "Bill. Charge";
+                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "code";
+                ds.Definition.Icon = "money_charge";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "hidden";
+
+                ds.Definition.ClearFields();
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+
+                c_Field = ds.Definition["desc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Description";
+
+                c_Field = ds.Definition["acct"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
+                c_Field.Label = "Account";
+                c_Field.LinkDS = DatabaseClass.DatasetAccount;
+
+                c_Field = ds.Definition["units"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
+                c_Field.Label = "Units";
+
+                c_Field = ds.Definition["rate"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Rate";
+
+                c_Field = ds.Definition["price"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Price";
+
+                c_Field = ds.Definition["disc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Disc.";
+
+                c_Field = ds.Definition["total"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Total";
+
+                c_Field = ds.Definition["inv"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
+                c_Field.Label = "Invoice";
+                c_Field.LinkDS = DatabaseClass.DatasetBiilInvoice;
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_BillSubscription(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.03.13b"))
+            {
+                //
+                ds.Definition.Caption = "Bill. Subs";
+                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "code";
+                ds.Definition.Icon = "money";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "hidden";
+
+                ds.Definition.ClearFields();
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.LU;
+                c_Field.LinkDS = DatabaseClass.DatasetBiilRate;
+                c_Field.LUMap = "???";
+
+                c_Field = ds.Definition["desc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Description";
+
+                c_Field = ds.Definition["acct"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
+                c_Field.Label = "Account";
+                c_Field.LinkDS = DatabaseClass.DatasetAccount;
+
+                c_Field = ds.Definition["units"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
+                c_Field.Label = "Units";
+
+                c_Field = ds.Definition["rate"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Rate";
+
+                c_Field = ds.Definition["price"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Price";
+
+                c_Field = ds.Definition["disc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Disc.";
+
+                c_Field = ds.Definition["total"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Total";
+
+                c_Field = ds.Definition["nexton"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Date;
+                c_Field.Label = "Next On";
+                c_Field.UseIndex = true;
+
+                c_Field = ds.Definition["interval"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.ComboBox;
+                c_Field.Label = "Interval";
+                c_Field.Choices = "daily weekly monthly twomonths queartly yearly";
+                c_Field.UseIndex = true;
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_BillInvoice(this DatasetClass ds)
+        { // dataset into
+            if (ds.Definition.ReleaseChanged("2021.03.13b"))
+            {
+                //
+                ds.Definition.Caption = "Bill. Invoice";
+                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "code";
+                ds.Definition.Icon = "money_invoice";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "hidden";
+
+                ds.Definition.ClearFields();
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+
+                c_Field = ds.Definition["desc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Description";
+
+                c_Field = ds.Definition["acct"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
+                c_Field.Label = "Account";
+                c_Field.LinkDS = DatabaseClass.DatasetAccount;
+
+                c_Field = ds.Definition["billed"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Billed";
+
+                c_Field = ds.Definition["payment"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Payment";
+
+                c_Field = ds.Definition["paidon"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Paid On";
 
                 c_Field.SaveParent();
             }

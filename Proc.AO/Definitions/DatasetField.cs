@@ -68,6 +68,7 @@ namespace Proc.AO.Definitions
             Caps,
             City,
             ComboBox,
+            Computed,
             CreditCard,
             CreditCardExp,
             Currency,
@@ -336,6 +337,17 @@ namespace Proc.AO.Definitions
         {
             get { return this.Document.GetField("isindex").FromDBBoolean(); }
             set { this.Document.SetField("linkds", value.ToDBBoolean()); }
+        }
+
+        /// <summary>
+        /// 
+        /// The compute statement
+        /// 
+        /// </summary>
+        public string Compute
+        {
+            get { return this.Document.GetField("compute"); }
+            set { this.Document.SetField("compute", value); }
         }
         #endregion
 

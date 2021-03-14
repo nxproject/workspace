@@ -47,6 +47,10 @@ namespace Proc.AO
         public const string DatasetGroup = "_group";
         public const string DatasetTagged = "_tagged";
         public const string DatasetTaggedDetail = "_taggeddet";
+        public const string DatasetBiilCharge = "_billcharge";
+        public const string DatasetBiilInvoice = "_billinvoice";
+        public const string DatasetBiilRate = "_billrate";
+        public const string DatasetBiilSubscription = "_billsubs";
 
         public const string DatasetDingDong = "_dingdong";
 
@@ -195,6 +199,12 @@ namespace Proc.AO
                 this.AssureDataset(DatabaseClass.DatasetAccount, c_Ans);
                 // Assure _help
                 this.AssureDataset(DatabaseClass.DatasetHelp, c_Ans);
+
+                // Assure billing
+                this.AssureDataset(DatabaseClass.DatasetBiilRate, c_Ans);
+                this.AssureDataset(DatabaseClass.DatasetBiilCharge, c_Ans);
+                this.AssureDataset(DatabaseClass.DatasetBiilInvoice, c_Ans);
+                this.AssureDataset(DatabaseClass.DatasetBiilSubscription, c_Ans);
 
                 //
                 this.Initialize();

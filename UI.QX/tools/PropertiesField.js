@@ -209,6 +209,20 @@ qx.Class.define('tools.PropertiesField', {
                                     }
                                 ]
                             }, {
+                                caption: 'If computed',
+                                items: [
+                                    {
+                                        nxtype: 'string',
+                                        top: 1,
+                                        left: 1,
+                                        width: 'default.fieldWidth',
+                                        height: 1,
+                                        label: 'JS Statement',
+                                        aoFld: fldname + '_compute',
+                                        value: sett.compute
+                                    }
+                                ]
+                            }, {
                                 caption: 'If Link/LU',
                                 items: [
                                     {

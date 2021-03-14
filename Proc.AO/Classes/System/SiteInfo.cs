@@ -290,28 +290,6 @@ namespace Proc.AO
 
         /// <summary>
         /// 
-        /// The Stripe public key
-        /// 
-        /// </summary>
-        public string StripePublic
-        {
-            get { return this.SynchObject["stripepub"]; }
-            set { this.SynchObject["stripepub"] = value; }
-        }
-
-        /// <summary>
-        /// 
-        /// The Stripe private key
-        /// 
-        /// </summary>
-        public string StripeSecurity
-        {
-            get { return this.SynchObject["stripesec"]; }
-            set { this.SynchObject["stripesec"] = value; }
-        }
-
-        /// <summary>
-        /// 
         /// The tax ID
         /// 
         /// </summary>
@@ -502,6 +480,41 @@ namespace Proc.AO
         {
             get { return this.SynchObject["psapi"]; }
             set { this.SynchObject["psapi"] = value; }
+        }
+        #endregion
+
+        #region Billing
+        /// <summary>
+        /// 
+        /// Is billing enabled?
+        /// 
+        /// </summary>
+        public bool BillingEnabled
+        {
+            get { return this.SynchObject["billenabled"].FromDBBoolean(); }
+            set { this.SynchObject["billenabled"] = value.ToDBBoolean(); }
+        }
+
+        /// <summary>
+        /// 
+        /// The Stripe public key
+        /// 
+        /// </summary>
+        public string StripePublic
+        {
+            get { return this.SynchObject["stripepub"]; }
+            set { this.SynchObject["stripepub"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The Stripe private key
+        /// 
+        /// </summary>
+        public string StripeSecurity
+        {
+            get { return this.SynchObject["stripesec"]; }
+            set { this.SynchObject["stripesec"] = value; }
         }
         #endregion
 

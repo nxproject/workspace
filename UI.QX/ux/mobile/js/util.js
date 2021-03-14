@@ -413,6 +413,94 @@ nx.util = {
 
     // ---------------------------------------------------------
     //
+    // Expression evaluator
+    // 
+    // ---------------------------------------------------------
+
+    eval: function (expr, data, cb, at, result) {
+
+        var self = this;
+
+        // 
+        result = result || '';
+        at = at || 0;
+
+        var docb = true;
+
+        // Split
+        if (!Array.isArray(expr)) {
+            expr = nx.util.splitSpace(expr);
+        }
+        // Loop
+        for (var i = at; at < expr.length; i++) {
+            var ifld = expr[at];
+            // Remove extra spaces
+            if (nx.util.hasValue(ifld)) {
+                if (nx.util.startsWith(ifld, "'")) {
+                    result += ifld.substr(1, ifld.length - 2) + ' ';
+                } else if (nx.util.startsWith(ifld, '[')) {
+                    ifld = ifld.substr(1, ifld.length - 2);
+                    // Get
+                    var value = data[ifld] || '';
+                    // Split
+                    var poss = value.split(':');
+                    // ID?
+                    if (poss.length === 6) {
+                        // Taking a turn
+                        docb = false;
+                        // Get object
+                        nx.util.serviceCall('AO.ObjectGet', {
+                            ds: poss[2],
+                            id: poss[3]
+                        }, function (obj) {
+                            data[ifld] = obj._desc;
+                            self.eval(expr, data, cb, result, at);
+                        });
+                    } else {
+                        // And save in result
+                        result += value + ' ';
+                    }
+                } else {
+                    result += ifld + ' ';
+                }
+            }
+
+            if (docb && cb) cb(result);
+        }
+
+    },
+
+    evalJS: function (expr, data) {
+
+        var self = this;
+
+        // Assure
+        expr = self.ifEmpty(expr, '');
+        data = data || {};
+        // RegEx for fields
+        var re = /\x5B[^\x5D]+\x5D/g;
+        // Get all the fields
+        var fields = expr.matchAll(e);
+        // Only do each field once
+        var done = [];
+        // Loop thru
+        fields.forEach(function (field) {
+            // Check
+            if (done.indexOf(field) === -1) {
+                // Add to done
+                done.push(field);
+                // Look up
+                var value = data[field.substr(1, field.length - 2)];
+                // Replace
+                expr = expr.replaceAll(field, value);
+            }
+        });
+
+        return eval(expr);
+    },
+
+    // ---------------------------------------------------------
+    //
     // AO
     // 
     // ---------------------------------------------------------

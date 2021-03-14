@@ -2723,6 +2723,35 @@ nx.util = {
 
     },
 
+    evalJS: function (expr, data) {
+
+        var self = this;
+
+        // Assure
+        expr = self.ifEmpty(expr, '');
+        data = data || {};
+        // RegEx for fields
+        var re = /\x5B[^\x5D]+\x5D/g;
+        // Get all the fields
+        var fields = expr.matchAll(e);
+        // Only do each field once
+        var done = [];
+        // Loop thru
+        fields.forEach(function (field) {
+            // Check
+            if (done.indexOf(field) === -1) {
+                // Add to done
+                done.push(field);
+                // Look up
+                var value = data[field.substr(1, field.length - 2)];
+                // Replace
+                expr = expr.replaceAll(field, value);
+            }
+        });
+
+        return eval(expr);
+    },
+
     // ---------------------------------------------------------
     //
     // Geocoding
