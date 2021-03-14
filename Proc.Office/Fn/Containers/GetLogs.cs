@@ -66,59 +66,14 @@ namespace Fn.Office
                 DockerIFClass c_Client = c_Field.DockerIF;
                 if (c_Client != null)
                 {
-                    foreach (ContainerListResponse c_Ctx in c_Client.ListContainers())
+                    foreach (string sCID in c_Client.ListContainersAll())
                     {
                         // Match?
-                        if(sID.IsSameValue(c_Ctx.ID))
+                        if(sID.IsSameValue(sCID))
                         {
                             // Get the logs
                             sLog = c_Client.GetLogsAsString(sID);
                         }
-                        //// 
-                        //JObject c_Entry = new JObject();
-
-                        //c_Entry.Set("ID", c_Ctx.ID);
-                        //c_Entry.Set("Names", new List<string>(c_Ctx.Names).Join(", "));
-                        //c_Entry.Set("Image", c_Ctx.Image);
-                        //c_Entry.Set("ImageID", c_Ctx.ImageID);
-                        //c_Entry.Set("Command", c_Ctx.Command);
-                        //c_Entry.Set("Created", c_Ctx.Created.ToString());
-
-                        //List<string> c_Values = new List<string>();
-                        //foreach (Port c_Port in c_Ctx.Ports)
-                        //{
-                        //    string sWkg = "{0} {1} {2}:{3}".FormatString(c_Port.Type, c_Port.IP, c_Port.PrivatePort, c_Port.PublicPort);
-                        //    c_Values.Add(sWkg);
-                        //}
-                        //c_Entry.Set("Ports", c_Values.Join(", "));
-
-                        //c_Entry.Set("SizeRw", c_Ctx.SizeRw);
-                        //c_Entry.Set("SizeRootFs", c_Ctx.SizeRootFs);
-
-                        //c_Values = new List<string>();
-                        //foreach (string sKey in c_Ctx.Labels.Keys)
-                        //{
-                        //    string sWkg = "{0}={1}".FormatString(sKey, c_Ctx.Labels[sKey]);
-                        //    c_Values.Add(sWkg);
-                        //}
-                        //c_Entry.Set("Labels", c_Values.Join(", "));
-
-                        //c_Entry.Set("State", c_Ctx.State);
-                        //c_Entry.Set("Status", c_Ctx.Status);
-
-                        ////c_Entry.Set("ID", c_Ctx.ID);
-                        ////[DataMember(Name = "NetworkSettings", EmitDefaultValue = false)]
-                        ////public SummaryNetworkSettings NetworkSettings { get; set; }
-
-                        //c_Values = new List<string>();
-                        //foreach (MountPoint c_Mount in c_Ctx.Mounts)
-                        //{
-                        //    string sWkg = "{0}={1}".FormatString(c_Mount.Source, c_Mount.Destination);
-                        //    c_Values.Add(sWkg);
-                        //}
-                        //c_Entry.Set("Mounts", c_Values.Join(", "));
-
-                        //c_List.Add(c_Entry);
                     }
                     }
 

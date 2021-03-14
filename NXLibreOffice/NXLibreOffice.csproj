@@ -43,6 +43,9 @@
     <None Update="Hive\Genomes\libreoffice\Dockerfile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Hive\Genomes\libreoffice\nxsource">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

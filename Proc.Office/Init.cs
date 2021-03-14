@@ -57,9 +57,6 @@ namespace Proc.Office
             // And workflows
             env.Use("Proc.Workflow");
 
-            // Conversion
-            env.Use("Proc.LibreOffice");
-
             // Call bootstrap
             env.FN("Office.LoadExtensions");
 
