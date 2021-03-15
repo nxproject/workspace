@@ -448,7 +448,7 @@ namespace Proc.AO
                 this.AssureDataset(DatabaseClass.DatasetHelp);
 
                 //
-                var c_SI = this.SiteInfo;
+                SiteInfoClass c_SI = this.SiteInfo;
 
                 // Assure billing
                 if (c_SI.BillingEnabled)
