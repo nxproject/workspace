@@ -440,33 +440,34 @@ namespace Proc.AO
                 //
                 HasInitialized = true;
 
-                //
-                var x = this.SiteInfo;
-
-                List<string> c_Ans = new List<string>();
-
-                // Assure _allowed
+                // Assure system
+                this.AssureDataset(DatabaseClass.DatasetSys);
                 this.AssureDataset(DatabaseClass.DatasetAllowed);
-                // Assure users
                 this.AssureDataset(DatabaseClass.DatasetUser);
-                // Assure users
                 this.AssureDataset(DatabaseClass.DatasetAccount);
-                // Assure _help
                 this.AssureDataset(DatabaseClass.DatasetHelp);
 
+                //
+                var c_SI = this.SiteInfo;
+
                 // Assure billing
-                this.AssureDataset(DatabaseClass.DatasetBiilRate);
-                this.AssureDataset(DatabaseClass.DatasetBiilCharge);
-                this.AssureDataset(DatabaseClass.DatasetBiilInvoice);
-                this.AssureDataset(DatabaseClass.DatasetBiilSubscription);
+                if (c_SI.BillingEnabled)
+                {
+                    this.AssureDataset(DatabaseClass.DatasetBiilRate);
+                    this.AssureDataset(DatabaseClass.DatasetBiilCharge);
+                    this.AssureDataset(DatabaseClass.DatasetBiilInvoice);
+                    this.AssureDataset(DatabaseClass.DatasetBiilSubscription);
+                }
 
                 // Meetings
-                this.AssureDataset(DatabaseClass.DatasetQuorum);
-                this.AssureDataset(DatabaseClass.DatasetQuorumTopic);
-                this.AssureDataset(DatabaseClass.DatasetQuorumComment);
-                this.AssureDataset(DatabaseClass.DatasetQuorumOption);
-                this.AssureDataset(DatabaseClass.DatasetQuorumRating);
-
+                if (c_SI.QuorumEnabled)
+                {
+                    this.AssureDataset(DatabaseClass.DatasetQuorum);
+                    this.AssureDataset(DatabaseClass.DatasetQuorumTopic);
+                    this.AssureDataset(DatabaseClass.DatasetQuorumComment);
+                    this.AssureDataset(DatabaseClass.DatasetQuorumOption);
+                    this.AssureDataset(DatabaseClass.DatasetQuorumRating);
+                }
             }
         }
         #endregion
