@@ -53,6 +53,9 @@ nx.fs = {
         //
         var urlParams = nx.web.urlStart('file', '/f' + path);
 
+        // Show loader
+        nx.util.notifyLoadingStart();
+
         //
         nx.util.runTool('Webview', {
             nxid: 'pdf_' + path,
@@ -85,6 +88,9 @@ nx.fs = {
 
         //
         var urlParams = nx.web.urlStart('file', '/fx/pdf' + path);
+
+        // Show loader
+        nx.util.notifyLoadingStart();
 
         //
         nx.util.runTool('Webview', {
@@ -122,6 +128,9 @@ nx.fs = {
         var urlParams = nx.web.urlStart('file', '/fx/html' + path);
         urlParams = nx.web.urlAdd('winid', winid, urlParams);
 
+        // Show loader
+        nx.util.notifyLoadingStart();
+
         //
         nx.util.runTool('Webview', {
             nxid: winid,
@@ -154,6 +163,9 @@ nx.fs = {
 
         //
         var urlParams = nx.web.urlStart('file', '/f' + path);
+
+        // Show loader
+        nx.util.notifyLoadingStart();
 
         //
         nx.util.runTool('Webview', {
@@ -189,6 +201,9 @@ nx.fs = {
         var urlParams = nx.web.urlStart('file', '/f' + path);
         urlParams = nx.web.urlAdd('ext', ext, urlParams);
 
+        // Show loader
+        nx.util.notifyLoadingStart();
+
         //
         nx.util.runTool('Webview', {
             nxid: 'video_' + path,
@@ -211,6 +226,9 @@ nx.fs = {
 
         //
         var winid = 'fc_' + req.ds;
+
+        // Show loader
+        nx.util.notifyLoadingStart();
 
         nx.desktop._loadDataset(req.ds, function (dsdef) {
 
@@ -316,6 +334,9 @@ nx.fs = {
 
         var self = this;
 
+        // Show loader
+        nx.util.notifyLoadingStart();
+
         nx.desktop._loadDataset(req.ds, function (dsdef) {
 
             // Only the reportable
@@ -405,6 +426,9 @@ nx.fs = {
 
         var self = this;
 
+        // Show loader
+        nx.util.notifyLoadingStart();
+
         nx.desktop._loadDataset(req.ds, function (dsdef) {
 
             //
@@ -466,6 +490,9 @@ nx.fs = {
     wf: function (req) {
 
         var self = this;
+
+        // Show loader
+        nx.util.notifyLoadingStart();
 
         nx.desktop._loadDataset(req.ds, function (dsdef) {
 

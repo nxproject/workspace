@@ -40,8 +40,13 @@ namespace Proc.Docs.Files
         {
             //
             this.Document = this.Parent.MetadataDocument(null, ext);
-            // Convert
-            ConversionClass.Convert(this.Parent, this.Document);
+
+            // Do we need to convert?
+            if (!this.Document.Exists || this.Document.WrittenOn < Document.WrittenOn)
+            {
+                // Convert
+                ConversionClass.Convert(this.Parent, this.Document);
+            }
         }
         #endregion
 

@@ -357,7 +357,7 @@ qx.Class.define('tools.PropertiesField', {
                                     }
                                 ]
                             }, {
-                                caption: nx.setup.viaWeb + 'Meeting',
+                                caption: nx.setup.viaWeb + 'Quorum',
                                 items: [
                                     {
                                         nxtype: 'string',
@@ -619,6 +619,7 @@ qx.Class.define('tools.PropertiesField', {
                             defaultvalue: data.defaultvalue,
                             gridview: data.gridview,
                             linkds: data.linkds,
+                            compute: data.compute,
                             lumap: data.lumap,
                             choices: data.choices,
                             ref: data.ref,

@@ -103,6 +103,23 @@ nx.db = {
 
     /**
      * 
+     * Removes a dataset from cache
+     * 
+     * @param {any} ds
+     */
+    _removeDataset: function (ds) {
+
+        var self = this;
+
+        // Fix ds name
+        ds = nx.util.toDatasetName(ds);
+
+        // remove
+        delete self.__ds[ds];
+    },
+
+    /**
+     * 
      * Loads a view
      * 
      * @param {any} ds

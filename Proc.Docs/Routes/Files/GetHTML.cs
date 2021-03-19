@@ -41,7 +41,7 @@ namespace Proc.Docs
         public override List<string> RouteTree => new List<string>() { RouteClass.GET(), Files.SupportClass.Route, "html", "?path?" };
         public override void Call(HTTPCallClass call, StoreClass store)
         {
-            // Get the full path
+           // Get the full path
             string sPath = store.PathFromEntry(NX.Engine.Files.ManagerClass.MappedFolder, "path").URLDecode();
 
             // Get the manager

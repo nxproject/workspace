@@ -18,8 +18,10 @@
 ///--------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-    
-    using NX.Shared;
+
+using Newtonsoft.Json.Linq;
+
+using NX.Shared;
 using NX.Engine;
 
 namespace Proc.AO.BuiltIn
@@ -46,10 +48,6 @@ namespace Proc.AO.BuiltIn
 
                 case DatabaseClass.DatasetAllowed:
                     ds.Define_Allowed();
-                    break;
-
-                case DatabaseClass.DatasetAccount:
-                    ds.Define_Account();
                     break;
 
                 case DatabaseClass.DatasetUser:
@@ -79,6 +77,16 @@ namespace Proc.AO.BuiltIn
                     ds.Define_IOT("Macro", "script");
                     break;
 
+
+
+                case DatabaseClass.DatasetBillAccount:
+                    ds.Define_BillAccount();
+                    break;
+
+                case DatabaseClass.DatasetBillAccess:
+                    ds.Define_BillAccess();
+                    break;
+
                 case DatabaseClass.DatasetBiilCharge:
                     ds.Define_BillCharge();
                     break;
@@ -94,6 +102,8 @@ namespace Proc.AO.BuiltIn
                 case DatabaseClass.DatasetBiilSubscription:
                     ds.Define_BillSubscription();
                     break;
+
+
 
                 case DatabaseClass.DatasetQuorum:
                     ds.Define_Quorum();
@@ -126,7 +136,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.14a"))
+            if (ds.Definition.ReleaseChanged("2021.03.18a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -135,7 +145,7 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.IDAlias = "id";
                 ds.Definition.Icon = "computer";
                 ds.Definition.SIOEventsAtSave = "$$changed.systemprofile";
-                ds.Definition.Selector = "SY";
+                ds.Definition.Selector = "SYS";
 
                 //
                 ds.Definition.ClearFields();
@@ -293,10 +303,6 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Accounts Enabled";
 
-                c_Field = ds.Definition["phoneaccessds"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
-                c_Field.Label = "Phn.Acc. DS";
-
                 c_Field = ds.Definition["billenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Billing Enabled";
@@ -304,6 +310,10 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["quorumenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Quorum Enabled";
+
+                c_Field = ds.Definition["acctdefallowed"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Allowed;
+                c_Field.Label = "Acct.Def.Alwd";
 
                 c_Field.SaveParent();
             }
@@ -335,8 +345,8 @@ namespace Proc.AO.BuiltIn
                 c_CInfo.ClearFields();
 
                 // Map
-                c_CInfo.UseFields("proccount", 
-                    "phoneaccessds",
+                c_CInfo.UseFields("proccount",
+                    "acctdefallowed",
                     "ttenabled", "quorumenabled", "iotenabled", "acctenabled", "billenabled",
                     "helproot");
 
@@ -549,7 +559,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Help(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.07a"))
+            if (ds.Definition.ReleaseChanged("2021.03.18a"))
             {
                 //
                 ds.Definition.Caption = "Help";
@@ -559,6 +569,7 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.Icon = "key";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "110";
+                ds.Definition.Selector = "HELP";
 
                 ds.Definition.ClearFields();
 
@@ -597,7 +608,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Allowed(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2020.12.25i"))
+            if (ds.Definition.ReleaseChanged("2021.03.18a"))
             {
                 //
                 ds.Definition.Caption = "Allowed Extensions";
@@ -607,6 +618,7 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.Icon = "key";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "100";
+                ds.Definition.Selector = "ALLOWED";
 
                 //  
                 Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
@@ -637,65 +649,10 @@ namespace Proc.AO.BuiltIn
             }
         }
 
-        private static void Define_Account(this DatasetClass ds)
-        {
-            // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.14c"))
-            {
-                //
-                ds.Definition.Caption = "Accounts";
-                ds.Definition.Placeholder = "[_id] '-' [allowed]";
-                ds.Definition.Privileges = "av";
-                ds.Definition.IDAlias = "name";
-                ds.Definition.Icon = "group";
-                ds.Definition.StartGroup = "System";
-                ds.Definition.StartIndex = "101";
-
-                ds.Definition.ChildDSs = new List<string>() { DatabaseClass.DatasetBiilSubscription, DatabaseClass.DatasetBiilCharge, DatabaseClass.DatasetBiilInvoice }.JoinSpaces();
-
-                ds.Definition.ClearFields();
-
-                //  
-                Definitions.DatasetFieldClass c_Field = ds.Definition["name"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.EMail;
-
-                c_Field = ds.Definition["pwd"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Password;
-                c_Field.Label = "Password";
-
-                c_Field = ds.Definition["allowed"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Allowed;
-                c_Field.Label = "Allowed";
-
-                c_Field = ds.Definition["childof"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Users;
-                c_Field.Label = "Child of";
-
-                c_Field = ds.Definition["billon"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
-                c_Field.Label = "Bill On";
-
-                c_Field.SaveParent();
-            }
-
-            // Add the view
-            Definitions.ViewClass c_VDefault = ds.View("default");
-            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
-            {
-                // Clear
-                c_VDefault.ClearFields();
-
-                // And from definition
-                c_VDefault.FromFields();
-
-                c_VDefault.Save();
-            }
-        }
-
         private static void Define_User(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.10a"))
+            if (ds.Definition.ReleaseChanged("2021.03.18a"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("User");
@@ -704,6 +661,7 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.IDAlias = "name";
                 ds.Definition.Icon = ds.Definition.Icon.IfEmpty("user");
                 ds.Definition.SIOEventsAtSave = "$$changed.userprofile";
+                ds.Definition.Selector = "USER";
 
                 // Restart
                 ds.Definition.ClearFields();
@@ -904,14 +862,17 @@ namespace Proc.AO.BuiltIn
         private static void Define_Cron(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.01.25a"))
+            if (ds.Definition.ReleaseChanged("2021.03.18a"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("CRON");
-                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Placeholder = "#datesortable[next])# [name] - [fn]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "name";
                 ds.Definition.Icon = ds.Definition.Icon.IfEmpty("user");
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "600";
+                ds.Definition.Selector = "CRON";
 
                 // Restart
                 ds.Definition.ClearFields();
@@ -1024,6 +985,7 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.Placeholder = "[_id]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.Icon = ds.Definition.Icon.IfEmpty("application_view_list");
+                if (ds.Name.StartsWith("_")) ds.Definition.StartIndex = "hidden";
 
                 // 
                 //Definitions.DatasetFieldClass c_Field = ds.Definition["name"];
@@ -1053,14 +1015,94 @@ namespace Proc.AO.BuiltIn
         #endregion
 
         #region Billing
+        private static void Define_BillAccount(this DatasetClass ds)
+        { }
+
+        private static void Define_BillAccess(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.03.18a"))
+            {
+                //
+                ds.Definition.Caption = "Access";
+                ds.Definition.Placeholder = "[name] '-' [allowed] / #linkdscaption([actual])#:#linkdesc([actual])#";
+                ds.Definition.Privileges = "av";
+                ds.Definition.Icon = "group";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "101";
+                ds.Definition.Selector = "ACCESS";
+
+                ds.Definition.ChildDSs = new List<string>() { DatabaseClass.DatasetBiilSubscription, DatabaseClass.DatasetBiilCharge, DatabaseClass.DatasetBiilInvoice }.JoinSpaces();
+
+                ds.Definition.ClearFields();
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["name"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.XAccount;
+                c_Field.UseIndex = true;
+
+                c_Field = ds.Definition["pwd"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Password;
+                c_Field.Label = "Password";
+
+                c_Field = ds.Definition["allowed"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Allowed;
+                c_Field.Label = "Allowed";
+
+                c_Field = ds.Definition["childof"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Users;
+                c_Field.Label = "Child of";
+
+                c_Field = ds.Definition["billon"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
+                c_Field.Label = "Bill On";
+
+                c_Field = ds.Definition["actual"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
+                c_Field.Label = "Actual Obj";
+
+                c_Field = ds.Definition["acct"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
+                c_Field.Label = "Account";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.UseFields("name", "pwd", "allowed", "childof", "acct");
+
+                c_VDefault.Save();
+            }
+
+            // Add the account view
+            Definitions.ViewClass c_VAcct = ds.View("_usersettings");
+            if (c_VAcct.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VAcct.ClearFields();
+
+                // Only the password
+                c_VAcct.UseFields("pwd");
+
+                c_VAcct.Save();
+            }
+        }
+
         private static void Define_BillRate(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.14c"))
+            if (ds.Definition.ReleaseChanged("2021.03.16b"))
             {
                 //
                 ds.Definition.Caption = "Bill. Rate";
-                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Placeholder = "[code] '-' [desc]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
                 ds.Definition.Icon = "money_rate";
@@ -1102,11 +1144,11 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillCharge(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.14c"))
+            if (ds.Definition.ReleaseChanged("2021.03.16c"))
             {
                 //
                 ds.Definition.Caption = "Bill. Charge";
-                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Placeholder = "[code] '-' [desc] @ #linkdesc([acct])#";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
                 ds.Definition.Icon = "money_charge";
@@ -1127,7 +1169,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Account";
-                c_Field.LinkDS = DatabaseClass.DatasetAccount;
+                c_Field.LinkDS = DatabaseClass.DatasetBillAccount;
 
                 c_Field = ds.Definition["units"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
@@ -1148,6 +1190,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["total"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Total";
+                c_Field.Compute = "([rate]*[price])-[disc]";
 
                 c_Field = ds.Definition["inv"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
@@ -1174,11 +1217,11 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillSubscription(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.14c"))
+            if (ds.Definition.ReleaseChanged("2021.03.16a"))
             {
                 //
                 ds.Definition.Caption = "Bill. Subs";
-                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Placeholder = "[code] '-' [desc] @ #linkdesc([acct])#";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
                 ds.Definition.Icon = "money";
@@ -1201,7 +1244,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Account";
-                c_Field.LinkDS = DatabaseClass.DatasetAccount;
+                c_Field.LinkDS = DatabaseClass.DatasetBillAccount;
 
                 c_Field = ds.Definition["units"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
@@ -1253,17 +1296,18 @@ namespace Proc.AO.BuiltIn
 
         private static void Define_BillInvoice(this DatasetClass ds)
         { // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.14c"))
+            if (ds.Definition.ReleaseChanged("2021.03.16a"))
             {
                 //
                 ds.Definition.Caption = "Bill. Invoice";
-                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Placeholder = "#datesortable([on])# '-' [billed] / [payment]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
                 ds.Definition.Icon = "money_invoice";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "hidden";
                 ds.Definition.Selector = "BILLING";
+                ds.Definition.SortOrder = "desc";
 
                 ds.Definition.ClearFields();
 
@@ -1275,10 +1319,15 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Description";
 
+                c_Field = ds.Definition["on"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "On";
+                c_Field.DefaultValue = "#now()#";
+
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Account";
-                c_Field.LinkDS = DatabaseClass.DatasetAccount;
+                c_Field.LinkDS = DatabaseClass.DatasetBillAccount;
 
                 c_Field = ds.Definition["billed"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
@@ -1314,7 +1363,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Quorum(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.14c"))
+            if (ds.Definition.ReleaseChanged("2021.03.18a"))
             {
                 //
                 ds.Definition.Caption = "Quorum";
@@ -1455,7 +1504,7 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.SortOrder = "desc";
                 ds.Definition.Selector = "QUORUM";
 
-                ds.Definition.ChildDSs = new List<string>() { DatabaseClass.DatasetQuorumComment, DatabaseClass.DatasetQuorumOption }.JoinSpaces() ;
+                ds.Definition.ChildDSs = new List<string>() { DatabaseClass.DatasetQuorumComment, DatabaseClass.DatasetQuorumOption }.JoinSpaces();
 
                 ds.Definition.ClearFields();
 

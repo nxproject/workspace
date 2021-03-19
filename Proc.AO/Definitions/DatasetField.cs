@@ -57,7 +57,7 @@ namespace Proc.AO.Definitions
         {
             ID,
 
-            AccessPhone,
+            Account,
             Address,
             Addressee,
             Allowed,
@@ -68,7 +68,6 @@ namespace Proc.AO.Definitions
             Caps,
             City,
             ComboBox,
-            Computed,
             CreditCard,
             CreditCardExp,
             Currency,
@@ -92,7 +91,6 @@ namespace Proc.AO.Definitions
             Password,
             Protected,
             Phone,
-            PnoneEMail,
             Signature,
             Slider,
             SSN,
@@ -152,6 +150,8 @@ namespace Proc.AO.Definitions
 
             Hidden,
             XOpenMode,
+            XAccount,
+
             UseDataset
         }
 

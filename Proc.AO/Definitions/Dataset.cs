@@ -22,6 +22,7 @@
 /// Install-Package MongoDb.Bson -Version 2.11.0
 ///  
 
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -236,10 +237,23 @@ namespace Proc.AO.Definitions
 
         /// <summary>
         /// 
-        /// List of access phone fields
+        /// List of access fields
         /// 
         /// </summary>
-        public List<string> AccessPhoneFields {  get { return this.Object.GetAsJArray("_accessphone").ToList(); } }
+        public List<string> AccountFields {  get { return this.Object.GetAsJArray("_account").ToList(); } }
+
+        /// <summary>
+        /// 
+        /// Processes at save
+        /// 
+        /// </summary>
+        public Action<JObject, JObject> SavePreProcess { get; set; }
+        /// <summary>
+        /// 
+        /// To be implemented
+        /// 
+        /// </summary>
+        public Action<ObjectClass> SavePostProcess { get; set; }
 
         #region Private
         /// <summary>
@@ -704,7 +718,9 @@ namespace Proc.AO.Definitions
             this.Parent.DataCollection.CreateIndex(ObjectClass.FieldParent);
 
             // List of access items
-            List<string> c_AccessPhone = new List<string>();
+            List<string> c_Account = new List<string>();
+            // List of computed fields
+            List<string> c_Computed = new List<string>();
 
             // Loop thru
             foreach (string sField in this.Fields.ToJObject().Keys())
@@ -712,11 +728,17 @@ namespace Proc.AO.Definitions
                 // Get
                 Definitions.DatasetFieldClass c_Field = this[sField];
 
+                // Computed?
+                if(c_Field.Compute.HasValue())
+                {
+                    c_Computed.Add(sField);
+                }
+
                 // Indexing
                 switch (c_Field.Type)
                 {
-                    case DatasetFieldClass.FieldTypes.AccessPhone:
-                        c_AccessPhone.Add(sField);
+                    case DatasetFieldClass.FieldTypes.Account:
+                        c_Account.Add(sField);
                         this.Parent.DataCollection.CreateIndex(sField);
                         break;
 
@@ -750,8 +772,10 @@ namespace Proc.AO.Definitions
                 }
             }
 
-            // Save list of access phones feilds
-            this.Object.SetAsJArray("_accessphone", c_AccessPhone.ToJArray());
+            // Save list of access fields
+            this.Object.SetAsJArray("_account", c_Account.ToJArray());
+            // Save list of computed
+            this.Object.SetAsJArray("_computed", c_Computed.ToJArray());
 
             // Save
             this.Object.Save(force: true);
@@ -791,13 +815,12 @@ namespace Proc.AO.Definitions
         /// </summary>
         public void Delete()
         {
+            // Delete tags
+            this.Parent.Parent.Tagged.DeleteAll(null, this.Name);
 
             //
             this.Parent.DataCollection.Delete();
             this.Parent.SettingsCollection.Delete();
-
-            //
-            this.Parent.Parent.Parent.SignalChange(this.Parent, true);
 
             this.Parent.Parent.RemoveFromCache(this.Parent.Name);
 
@@ -817,11 +840,9 @@ namespace Proc.AO.Definitions
                     c_DS.View(sView).Save();
                 }
             }
-            else
-            {
-                // Delete tags
-                this.Parent.Parent.Tagged.DeleteAll(null, this.Name);
-            }
+
+            //
+            this.Parent.Parent.Parent.SignalChange(this.Parent, true);
         }
 
         /// <summary>

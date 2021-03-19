@@ -33,13 +33,15 @@ qx.Class.define('t.phoneweb', {
         click: function (widget) {
 
             var value = widget.getValue();
-            if (nx.util.hasValue(value)) {
+            if (nx.util.hasValue(value) && nx.util.isPhone(value)) {
+
                 var data = 'tel:' + value;
 
                 nx.util.runTool('QR', {
                     data: data,
                     caption: nx.setup.viaWeb + 'Voice'
                 });
+
             }
 
         }

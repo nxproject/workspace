@@ -32,18 +32,23 @@ qx.Class.define('t.email', {
 
         click: function (widget) {
 
-            var win = nx.bucket.getWin(widget);
-            var params = nx.bucket.getParams(win);
-            nx.util.runTool('Documents', {
-                fsfn: 'email',
-                fslabel: 'EMail',
-                fsicon: 'email',
-                ds: params.ds,
-                id: params.id,
-                caller: win,
-                fullcaption: 'Select documents to EMail',
-                value: widget.getValue()
-            });
+            var value = widget.getValue();
+            if (nx.util.hasValue(value) && nx.util.isEMail(value)) {
+
+                var win = nx.bucket.getWin(widget);
+                var params = nx.bucket.getParams(win);
+                nx.util.runTool('Documents', {
+                    fsfn: 'email',
+                    fslabel: 'EMail',
+                    fsicon: 'email',
+                    ds: params.ds,
+                    id: params.id,
+                    caller: win,
+                    fullcaption: 'Select documents to EMail',
+                    value: value
+                });
+
+            }
 
         }
     }

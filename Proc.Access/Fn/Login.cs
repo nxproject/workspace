@@ -53,10 +53,82 @@ namespace Proc.Access
                 DatasetClass c_DS = c_Mgr.DefaultDatabase[DatabaseClass.DatasetUser];
                 // Get the user
                 Proc.AO.Definitions.UserClass c_User = Proc.AO.Definitions.UserClass.Get(call.Env, sUser);
+
+                // Get what we need
+                string sName = c_User.Name;
+                string sAllowed = c_User.Allowed;
+
                 // Is it real?
                 bool bOk = c_User.IsValid;
                 // Is it valid?
-                if (bOk) bOk = c_User.ValidatePassword(sPwd);
+                if (bOk) bOk = AO.Definitions.UserClass.ValidatePassword(c_User.Password, sPwd);
+
+                // 
+                if (!bOk)
+                {
+                    // Query access
+                    using (QueryClass c_Qry = new QueryClass(c_Mgr.DefaultDatabase[DatabaseClass.DatasetBillAccess].DataCollection))
+                    {
+                        // As email
+                        c_Qry.Add("name", QueryElementClass.QueryOps.Eq, sUser);
+                        // Any?
+                        List<AO.ObjectClass> c_Poss = c_Qry.FindObjects();
+                        // Loop thru
+                        foreach (AO.ObjectClass c_PO in c_Poss)
+                        {
+                            // Validate
+                            bOk = AO.Definitions.UserClass.ValidatePassword(c_PO["pwd"], sPwd);
+                            if (bOk)
+                            {
+                                sName = sUser.ToLower();
+                                sAllowed = c_PO["allowed"];
+                                break;
+                            }
+                        }
+
+                        // If not as phone
+                        if (!bOk)
+                        {
+                            // Clear
+                            c_Qry.Reset();
+
+                            // Format as phone
+                            string sPhone = sUser.ToPhone();
+
+                            // Any?
+                            if (sPhone.HasValue())
+                            {
+                                // Add
+                                ;
+                                c_Qry.Add("name", QueryElementClass.QueryOps.Eq, sPhone);
+                                // Any?
+                                c_Poss = c_Qry.FindObjects();
+                                // Loop thru
+                                foreach (AO.ObjectClass c_PO in c_Poss)
+                                {
+                                    // Validate
+                                    bOk = AO.Definitions.UserClass.ValidatePassword(c_PO["pwd"], sPwd);
+                                    if (bOk)
+                                    {
+                                        sName = sPhone;
+                                        sAllowed = c_PO["allowed"];
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    c_User["name"] = sName;
+
+                    // Defualt?
+                    if (bOk && !sAllowed.HasValue())
+                    {
+                        // Get from site
+                        sAllowed = c_Mgr.DefaultDatabase.SiteInfo.AccountDefaultAllowed.IfEmpty("?ACCT *:-");
+                    }
+                }
+
                 // Passed tests?
                 if (!bOk)
                 {
@@ -84,14 +156,14 @@ namespace Proc.Access
                     c_User.Parent.ToStore(c_Ans);
 
                     // Call
-                    StoreClass c_Partial = call.FN("Office.GetStartMenu", 
-                                                    new StoreClass("name", c_User.Name, 
-                                                                    "allowed", c_User.Allowed));
+                    StoreClass c_Partial = call.FN("Office.GetStartMenu",
+                                                    new StoreClass("name", sName,
+                                                                    "allowed", sAllowed));
 
                     // And save passed
                     c_Ans.Set("commands", c_Partial["commands"]);
                     c_Ans.Set("menu", c_Partial["menu"]);
-                    c_Ans.Set("datasets", c_Partial["datasets"]); 
+                    c_Ans.Set("datasets", c_Partial["datasets"]);
                     c_Ans.Set("icons", c_Partial["icons"]);
                     c_Ans.Set("docs", c_Partial["docs"]);
                     c_Ans.Set("groups", c_Partial["groups"]);

@@ -33,7 +33,6 @@ namespace Proc.Task
         private const string ArgMsg = "msg";
         private const string ArgSubj = "subj";
         private const string ArgList = "list";
-        private const string ArgMeeting = "meeting";
 
         //private const string ArgIXX = "if";
         #endregion
@@ -54,7 +53,6 @@ namespace Proc.Task
                 c_P.Add(ArgSubj, new ParamDefinitionClass(ParamDefinitionClass.Types.Required, "The subject of the message to be sent"));
                 c_P.Add(ArgMsg, new ParamDefinitionClass(ParamDefinitionClass.Types.Required,  "The message to be sent"));
                 c_P.Add(ArgList, new ParamDefinitionClass(ParamDefinitionClass.Types.Optional, "List of documents to attach", ""));
-                c_P.Add(ArgMeeting, new ParamDefinitionClass(ParamDefinitionClass.Types.Optional, "Calendar object", ""));
 
                 this.AddSystem(c_P);
 
@@ -78,8 +76,7 @@ namespace Proc.Task
             string sTo = args.Get(ArgTo).IfEmpty(ctx.User.Name);
             string sSubj = args.Get(ArgSubj);
             string sMsg = args.Get(ArgMsg);
-            string sList = args.Get(ArgList);
-            string sMeeting = args.Get(ArgMeeting);
+            string sList = args.Get(ArgList);;
 
             //
             using (eMessageClass c_Msg = new eMessageClass(ctx))

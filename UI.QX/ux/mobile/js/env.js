@@ -148,7 +148,7 @@ nx.env = {
      * Clears a bucket
      * 
      */
-    clearBucket: function (url) {
+    clearBucket: function (url, nosave) {
 
         var self = this;
 
@@ -164,7 +164,13 @@ nx.env = {
             if (bucket) {
                 // Get the object
                 var obj = bucket._obj;
-                if (obj) nx.db.setObj(obj, null, nx.util.noOp);
+                if (obj) {
+                    if (nosave) {
+                        nx.db.clearObj(obj, null, nx.util.noOp);
+                    } else {
+                        nx.db.setObj(obj, null, nx.util.noOp);
+                    }
+                }
 
                 // Delete bucket
                 delete self._buckets[data._bucket];

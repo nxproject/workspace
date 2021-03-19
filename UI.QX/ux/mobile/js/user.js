@@ -484,6 +484,7 @@ nx.user = {
                     var ds = msg.message.ds;
                     // If none, just reload
                     if (msg.message.deleted === 'y') {
+                        nx.db._removeDataset(ds);
                         // Load start menu
                         self._reloadUser();
 

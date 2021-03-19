@@ -58,7 +58,7 @@ namespace Proc.Docx
                 return sAns;
             }, 1, 1,
             "Returns the document name",
-            new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The docuemnt reference")));
+            new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The document reference")));
             c_Defs.AddFn(new StaticFunction("docshortname", delegate (Context ctx, object[] ps)
             {
                 AO.ExtendedContextClass c_Ctx = ctx as AO.ExtendedContextClass;
@@ -71,7 +71,7 @@ namespace Proc.Docx
                 return sAns;
             }, 1, 1,
             "Returns the document name without extension",
-            new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The docuemnt reference")));
+            new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The document reference")));
             c_Defs.AddFn(new StaticFunction("docextension", delegate (Context ctx, object[] ps)
             {
                 AO.ExtendedContextClass c_Ctx = ctx as AO.ExtendedContextClass;
@@ -84,7 +84,7 @@ namespace Proc.Docx
                 return sAns;
             }, 1, 1,
             "Returns the document extension",
-            new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The docuemnt reference")));
+            new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The document reference")));
             c_Defs.AddFn(new StaticFunction("docexists", delegate (Context ctx, object[] ps)
             {
                 AO.ExtendedContextClass c_Ctx = ctx as AO.ExtendedContextClass;
@@ -98,6 +98,45 @@ namespace Proc.Docx
             }, 1, 1,
             "Returns true if the document exists",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The document reference")));
+
+            // Conversion
+            NX.Engine.Files.ManagerClass.Conversion = delegate (DocumentClass docin)
+            {
+                // Assume no change
+                DocumentClass c_Out = docin;
+
+                // By the extension
+                switch (docin.Extension.ToLower())
+                {
+                    case "docx":
+                    case "doc":
+                    case "rtf":
+                        c_Out = new DocumentClass(docin.Parent, docin.Path.SetExtensionFromPath("odt"));
+                        break;
+
+                    //case "xlsx":
+                    //case "xls":
+                    //    c_Out = new DocumentClass(docin.Parent, docin.Path.SetExtensionFromPath("ods"));
+                    //    break;
+
+                    //case "pptx":
+                    //case "ppt":
+                    //    c_Out = new DocumentClass(docin.Parent, docin.Path.SetExtensionFromPath("odp"));
+                    //    break;
+
+                }
+
+                // Do we need to convert?
+                if (!docin.Path.IsSameValue(c_Out.Path))
+                {
+                    // Convert
+                    Proc.Docs.Files.ConversionClass.Convert(docin, c_Out);
+                    // If there, delete upload
+                    if (c_Out.Exists) docin.Delete();
+                }
+
+                return c_Out;
+            };
 
             base.Initialize(env);
         }

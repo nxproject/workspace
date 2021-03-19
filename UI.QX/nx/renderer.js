@@ -215,7 +215,7 @@ qx.Class.define('nx.renderer', {
                             var widget = nx.util.eventGetWidget(e);
                             // Get the value
                             var value = widget.getValue(true);
-                            // changed?
+                            // Changed?
                             if (nx.bucket.getBeforeValue(widget) !== value) {
                                 // Format
                                 nx.util.processFormatters(widget, value, 0, function (value) {
@@ -224,6 +224,33 @@ qx.Class.define('nx.renderer', {
                                     if (link) {
                                         link.SIOSend(value);
                                     }
+
+                                    // Computed fields
+                                    var win = nx.bucket.getForm(widget);
+                                    var form = nx.bucket.getForm(widget);
+                                    if (form) {
+                                        var ds = nx.bucket.getDataset(form);
+                                        if (ds && ds._computed) {
+                                            // Get data
+                                            var data = win.getFormData();
+                                            // And result
+                                            var newdata = {};
+                                            // Loop thru
+                                            ds._computed.forEach(function (fld) {
+                                                // Get expression
+                                                var expr = ds.fields[fld].compute;
+                                                if (expr) {
+                                                    // Compute
+                                                    var value = nx.util.evalJS(expr, data, ds);
+                                                    // Save
+                                                    newdata[fld] = value;
+                                                }
+                                            });
+                                            // Save
+                                            win.setFormData(newdata);
+                                        }
+                                    }
+
                                 });
                             }
                         });

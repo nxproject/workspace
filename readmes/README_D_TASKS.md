@@ -64,7 +64,6 @@
 | | |subj|The subject of the message to be sent|Required|
 | | |msg|The message to be sent|Required|
 | | |list|List of documents to attach||
-| | |meeting|Calendar object||
 | | |if|Execute if||
 | | |comment|What does this step accomplish||
 |send.qm|Sends a Quick Message|to|User to send the quick message to|Required|

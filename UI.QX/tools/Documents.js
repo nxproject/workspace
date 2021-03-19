@@ -416,11 +416,25 @@ qx.Class.define('tools.Documents', {
                                     nx.fs.viewPDF(req);
                                 };
                                 break;
-                            case 'docx':
-                                icon = 'docx';
+                            case 'odt':
+                                icon = 'odt';
                                 cb = function (req) {
                                     // Edit docx
                                     nx.fs.editDOCX(req);
+                                };
+                                break;
+                            case 'ods':
+                                icon = 'ods';
+                                cb = function (req) {
+                                    // Edit docx
+                                    nx.fs.viewAsPDF(req);
+                                };
+                                break;
+                            case 'odp':
+                                icon = 'odp';
+                                cb = function (req) {
+                                    // Edit docx
+                                    nx.fs.viewAsPDF(req);
                                 };
                                 break;
                             case 'jpeg':

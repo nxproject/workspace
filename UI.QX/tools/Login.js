@@ -39,7 +39,7 @@ qx.Class.define('tools.Login', {
                 items: [
 
                     {
-                        nxtype: 'keyword',
+                        nxtype: 'lower',
                         top: 1,
                         left: 1,
                         width: 10,

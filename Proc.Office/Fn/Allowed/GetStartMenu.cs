@@ -100,9 +100,6 @@ namespace Proc.Office
             // Get the allowed
             if (!sAllowed.HasValue() || bAdmin)
             {
-                //
-                if (bAdmin) c_DSS.Add(DatabaseClass.DatasetUser);
-
                 // Loop
                 foreach (string sDS in c_DSS)
                 {

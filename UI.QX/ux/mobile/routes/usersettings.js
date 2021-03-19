@@ -26,7 +26,7 @@ nx._routes.push({
 
         var page, data = nx.env.getBucket(routeTo.url);
 
-        var ds = '_user';
+        var ds = (nx.user.getIsSelector('ACCT') ? '_billaccess' : '_user');
         var id = nx.user.getName();
 
         // Get object
@@ -45,11 +45,24 @@ nx._routes.push({
 
                 var page = nx.builder.page(title, true, null, rows,
                     function () {
-                        // Save
-                        nx.db.setObj(result, null, function () {
-                            // And go back
-                            nx.office.goBack();
-                        });
+
+                    // Acct?
+                        if (nx.user.getIsSelector('ACCT')) {
+                            // Update
+                            nx.util.serviceCall('AO.AccessSet', {
+                                ds: ds,
+                                id: user,
+                                data: data
+                            }, function () {
+                                nx.util.notifyOK('Password reset');
+                            });
+                        } else {
+                            // Save
+                            nx.db.setObj(result, null, function () {
+                                // And go back
+                                nx.office.goBack();
+                            });
+                        }
                     }, function () {
                         // Release object
                         nx.db.clearObj(result, null, function () {

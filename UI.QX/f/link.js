@@ -36,8 +36,6 @@ qx.Class.define('f.link', {
                 var chain = Object.assign({}, nx.bucket.getChain(nx.bucket.getForm(widget)));
                 // Add the value
                 if (nx.util.hasValue(value)) chain[ds] = '%' + value;
-                // Flag the filter
-                chain, __filter = ds;
                 // Call view
                 nx.util.runTool('View', {
                     caller: nx.bucket.getForm(widget, true),

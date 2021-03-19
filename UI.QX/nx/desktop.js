@@ -919,34 +919,36 @@ nx.desktop = {
                                                 case '$$changed.dataset':
                                                 case '$$changed.picklist':
                                                 case '$$changed.view':
-                                                    if (req.sysmode) {
-                                                        // Get the params
-                                                        var params = nx.bucket.getParams(nx.bucket.getForm(win));
-                                                        // Fetch the dataset
-                                                        nx.desktop._loadDataset(params.ds, function (result) {
-                                                            // Save
-                                                            params._dsfields = Object.keys(result.fields);
-                                                            // Get the button
-                                                            var button = win.getButtonWithLabel(win.sysToolbar, 'Fields');
-                                                            // Set the menu
-                                                            if (button) {
-                                                                button.setMenu(nx.util.getFieldsContextMenu(win));
-                                                            }
-                                                        }, !!event.message);
+                                                    if (event.message && event.message.deleted !== 'y') {
+                                                        if (req.sysmode) {
+                                                            // Get the params
+                                                            var params = nx.bucket.getParams(nx.bucket.getForm(win));
+                                                            // Fetch the dataset
+                                                            nx.desktop._loadDataset(params.ds, function (result) {
+                                                                // Save
+                                                                params._dsfields = Object.keys(result.fields);
+                                                                // Get the button
+                                                                var button = win.getButtonWithLabel(win.sysToolbar, 'Fields');
+                                                                // Set the menu
+                                                                if (button) {
+                                                                    button.setMenu(nx.util.getFieldsContextMenu(win));
+                                                                }
+                                                            }, !!event.message);
 
-                                                        // Do we refresh ourselves?
-                                                        if (event.fn === '$$changed.view' &&
-                                                            event.message.ds === params.ds &&
-                                                            !win.getChildWindows().length) {
-                                                            // Close
-                                                            win.safeClose();
-                                                            // And reopen
-                                                            nx.util.runTool('object', {
-                                                                ds: params.ds,
-                                                                view: nx.bucket.getView(params)._id.substr(6),
-                                                                sysmode: true,
-                                                                caller: params.caller
-                                                            });
+                                                            // Do we refresh ourselves?
+                                                            if (event.fn === '$$changed.view' &&
+                                                                event.message.ds === params.ds &&
+                                                                !win.getChildWindows().length) {
+                                                                // Close
+                                                                win.safeClose();
+                                                                // And reopen
+                                                                nx.util.runTool('object', {
+                                                                    ds: params.ds,
+                                                                    view: nx.bucket.getView(params)._id.substr(6),
+                                                                    sysmode: true,
+                                                                    caller: params.caller
+                                                                });
+                                                            }
                                                         }
                                                     }
                                                     break;
@@ -1378,6 +1380,17 @@ nx.desktop = {
             });
         }
 
+    },
+
+    _removeDataset: function (ds) {
+
+        var self = this;
+
+        // Fix ds name
+        ds = nx.util.toDatasetName(ds);
+
+        // remove
+        delete self.__ds[ds];
     },
 
     _addDatasetFields: function (ds, flds) {

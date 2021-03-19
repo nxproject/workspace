@@ -157,7 +157,7 @@ namespace Route.ADEX
                 // Is it real?
                 bAns = c_User.IsValid;
                 // Is it valid?
-                if (bAns) bAns = c_User.ValidatePassword(source.Password);
+                if (bAns) bAns = Proc.AO.Definitions.UserClass.ValidatePassword(c_User.Password, source.Password);
 
                 // TBD - Validate rights against dataset
             }

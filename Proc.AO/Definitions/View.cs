@@ -154,16 +154,20 @@ namespace Proc.AO.Definitions
         /// </summary>
         public void Save()
         {
-            //
-            this.Object.SetAsBObject("fields", this.Fields);
+            // Must have a dataset
+            if (this.Parent.Parent.AllDatasets.Contains(this.Parent.Name))
+            {
+                //
+                this.Object.SetAsBObject("fields", this.Fields);
 
-            // Save
-            this.Object.Save(force: true);
+                // Save
+                this.Object.Save(force: true);
 
-            // Signal
-            this.Parent.Parent.Parent.SignalChange(this);
+                // Signal
+                this.Parent.Parent.Parent.SignalChange(this);
 
-            this.Parent.Parent.RemoveFromCache(this.OriginalName);
+                this.Parent.Parent.RemoveFromCache(this.OriginalName);
+            }
         }
 
         /// <summary>
@@ -414,9 +418,6 @@ namespace Proc.AO.Definitions
             //
             this.Object.Delete();
 
-            // Signal
-            this.Parent.Parent.Parent.SignalChange(this, true);
-
             // Get the dataset name
             string sDSName = this.Parent.Name.AsDatasetName();
             // Get the view name
@@ -424,12 +425,19 @@ namespace Proc.AO.Definitions
 
             this.Parent.RemoveFromCache(this.Name.AsViewName());
 
-            // Test
-            if (sViewName.IsSameValue("default") || sViewName.StartsWith("_") || sDSName.StartsWith("_"))
+            // Only if there is a dataset
+            if (this.Parent.Parent.AllDatasets.Contains(sDSName))
             {
-                // Assure exixtance
-                BuiltIn.DefaultClass.Define(this.Parent);
-            }
+                // Test
+                if (sViewName.IsSameValue("default") || sViewName.StartsWith("_") || sDSName.StartsWith("_"))
+                {
+                    // Assure exixtance
+                    BuiltIn.DefaultClass.Define(this.Parent);
+                }
+            };
+
+            // Signal
+            this.Parent.Parent.Parent.SignalChange(this, true);
         }
 
         /// <summary>

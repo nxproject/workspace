@@ -59,10 +59,10 @@ namespace Proc.AO
                 // Get the views
                 List<string> c_Views = c_DS.Views;
                 // Loop thru
-                foreach(string sView in c_Views)
+                foreach (string sView in c_Views)
                 {
                     // Get
-                    Definitions.ViewClass c_View= c_DS.View(sView);
+                    Definitions.ViewClass c_View = c_DS.View(sView);
                     // Save
                     c_Tree.Set(sView, c_View.Object.AsJObject);
                 }

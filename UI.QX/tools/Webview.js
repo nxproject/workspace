@@ -111,6 +111,7 @@ qx.Class.define('tools.Webview', {
             }
 
             var win = nx.desktop.addWindow(wdef);
+
         }
 
     }

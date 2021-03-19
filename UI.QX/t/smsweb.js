@@ -33,7 +33,8 @@ qx.Class.define('t.smsweb', {
         click: function (widget) {
 
             var value = widget.getValue();
-            if (nx.util.hasValue(value)) {
+            if (nx.util.hasValue(value) && nx.util.isPhone(value)) {
+
                 var data = 'sms:' + value;
 
                 nx.util.runTool('QR', {

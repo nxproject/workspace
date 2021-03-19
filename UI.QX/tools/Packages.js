@@ -70,7 +70,7 @@ qx.Class.define('tools.Packages', {
                         width: 'default.fieldWidth',
                         label: 'IOT Enabled'
                     }, {
-                        nxtype: 'boolean',
+                        nxtype: 'keyword',
                         top: 6,
                         left: 1,
                         width: 'default.fieldWidth',

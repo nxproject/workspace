@@ -16,15 +16,24 @@
 
 ************************************************************************ */
 
-qx.Class.define('c.accessphone', {
+qx.Class.define('c.lu', {
 
-    extend: c.phone,
+    extend: c._component,
+
+    implement: i.iComponent,
+
+    construct: function (req) {
+
+        // Call base
+        this.base(arguments, new f.lu(), new c._textfield());
+
+    },
 
     statics: {
 
         makeSelf: function (req) {
 
-            return new c.accessphone(req);
+            return new c.lu(req);
 
         }
     }

@@ -44,6 +44,8 @@ namespace Proc.Docs
             // Get the full path
             string sPath = store.PathFromEntry(NX.Engine.Files.ManagerClass.MappedFolder, "path").URLDecode();
 
+            call.Env.LogInfo("PutHTML: {0}".FormatString(sPath));
+
             // Get the manager
             NX.Engine.Files.ManagerClass c_Mgr = call.Env.Globals.Get<NX.Engine.Files.ManagerClass>();
 
@@ -53,10 +55,11 @@ namespace Proc.Docs
                 using (HTMLDocumentClass c_HTML = c_Doc.HTML())
                 {
                     // Assure backup
-                    c_Doc.AssureBackup();
+                    //c_Doc.AssureBackup();
                     // Get
                     c_Mgr.UploadText(call, c_HTML.Document);
-
+                    // And back
+                    c_HTML.Synchronize();
                 }
             }
         }

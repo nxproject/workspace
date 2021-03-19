@@ -205,20 +205,20 @@
             return ans;
         };
 
-        const getDocument = function () {		
+        const getDocument = function () {
             // Get the contents
             var value = tinymce.activeEditor.getContent();
             // Something about TiyMCE
             if (value && value.length >= 7 && value.substr(0, 7) === '<p></p>') value = value.substr(7);
-			// Handle CR lines
-			value=data=value.replace(/> </g, '><br/><');
+            // Handle CR lines
+            value = data = value.replace(/> </g, '><br/><');
             // Insert
             return '<!DOCTYPE html ><html><body>{0}</body></html>'.replace('{0}', value);
         };
 
         const loadDocument = function (value) {
-			//
-			if (value) value = value.replace(/&amp;lrm;/g, '');
+            //
+            if (value) value = value.replace(/&amp;lrm;/g, '');
             // Get the contents
             tinymce.activeEditor.setContent(value);
         };
@@ -519,6 +519,8 @@
                         assureID(root, winid, 0);
                         //
                         tinymce.activeEditor._nxloaded = true;
+                        // Clear
+                        parent.nx.util.notifyLoadingEnd();
                     });
                 });
             },

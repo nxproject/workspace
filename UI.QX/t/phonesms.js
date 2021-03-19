@@ -32,19 +32,23 @@ qx.Class.define('t.phonesms', {
 
         click: function (widget) {
 
-            var win = nx.bucket.getWin(widget);
-            var params = nx.bucket.getParams(win);
-            nx.util.runTool('Documents', {
-                fsfn: 'sms',
-                fslabel: 'SMS',
-                fsicon: 'phone',
-                ds: params.ds,
-                id: params.id,
-                caller: win,
-                fullcaption: 'Select documents to SMS',
-                value: widget.getValue()
-            });
+            var value = widget.getValue();
+            if (nx.util.hasValue(value) && nx.util.isPhone(value)) {
 
+                var win = nx.bucket.getWin(widget);
+                var params = nx.bucket.getParams(win);
+                nx.util.runTool('Documents', {
+                    fsfn: 'sms',
+                    fslabel: 'SMS',
+                    fsicon: 'phone',
+                    ds: params.ds,
+                    id: params.id,
+                    caller: win,
+                    fullcaption: 'Select documents to SMS',
+                    value: value
+                });
+
+            }
         }
     }
 

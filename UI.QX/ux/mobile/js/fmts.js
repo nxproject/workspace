@@ -137,6 +137,26 @@ nx.fmts = {
 
     },
 
+    emailphone: function (widget, value, cb) {
+
+        if (value) {
+
+            // EMail?
+            if (value.indexOf('@') !== -1) {
+                value = nx.util.ifEmpty(value).replace(/ /g, '').toLowerCase();
+            } else {
+                var raw = value;
+                if (!nx.util.startsWith(raw, '+')) {
+                    raw = raw.replace(/[^0-9]+/g, '');
+                    if (raw.length < 10) raw = ('0000000000' + raw).slice(-10);
+                    value = '(' + raw.substr(0, 3) + ') ' + raw.substr(3, 3) + '-' + raw.substr(6, 4);
+                }
+            }
+        }
+        cb(value);
+
+    },
+
     float: function (widget, value, cb) {
 
         if (value) {
@@ -176,8 +196,6 @@ nx.fmts = {
             var chain = nx.env.getBucketItem('chain');
             // Add the value
             if (nx.util.hasValue(value)) chain[ds] = '%' + value;
-            // Flag the filter
-            chain, __filter = ds;
             // Call view
             nx.calls.pick({
                 ds: ds,
@@ -204,6 +222,38 @@ nx.fmts = {
 
         cb(nx.util.ifEmpty(value).toLowerCase());
 
+    },
+
+    lu: function (widget, value, cb) {
+
+        // Must have a dataset
+        var ds = nx.env.getBucketItem('ds');
+        if (ds && value) {
+
+            // Phony a chain
+            var chain = {};
+            // Add the value
+            chain[ds] = '%' + value;
+            // Call view
+            nx.calls.pick({
+                ds: ds,
+                chain: chain,
+                onSelect: function (e, data) {
+                    // Any?
+                    if (data && data.length) {
+                        var data = data[0];
+                        // Map back
+                        // TBD
+                        cb(data);
+                    } else {
+                        cb(null);
+                    }
+                }
+            });
+
+        } else {
+            cb(value);
+        }
     },
 
     phone: function (widget, value, cb) {
@@ -381,7 +431,7 @@ nx.fmts = {
     _map: {
 
         id: { as: 'text' },
-        accessphone: { as: 'tel', fmt: 'phone' },
+        account: { as: 'text', fmt: 'emailphone' },
         address: { as: 'text', fmt: 'autocaps' },
         addressee: { as: 'text', fmt: 'autocaps' },
         allowed: { as: 'text' },
@@ -503,87 +553,6 @@ nx.fmts = {
      */
     _extras: {
 
-        phone: [{
-            label: 'Call',
-            mobile: true,
-            cb: function (ele) {
-
-                // 
-                var widget = nx.cm.get(ele);
-                // Get the value
-                var value = widget.val();
-                // Call
-                if (value) {
-                    window.open('tel:+1' + nx.util.numbersOnly(value));
-                }
-
-            }
-        }],
-
-        email: [
-            {
-                label: 'Send email',
-                mobile: true,
-                icon: '+email',
-                cb: function (ele) {
-
-                    // 
-                    var widget = nx.cm.get(ele);
-                    // Get the value
-                    var value = widget.val();
-                    // Call
-                    if (value) {
-                        window.open('mailto:' + value);
-                    }
-
-                }
-            }],
-
-        driverlicense: [{
-            label: 'Scan',
-            mobile: true,
-            camera: true,
-            cb: function (ele) {
-
-                var self = nx.fmts;
-
-                // 
-                var widget = nx.cm.get(ele);
-
-                nx.cm.map(widget, 'reldl', function (map) {
-
-                    // Do
-                    nx.web._scanForBarcode(widget, function (data) {
-
-                        // Split
-                        var info = {};
-                        var pieces = data.replace(/\r/g, '').split('\n');
-                        // Loop thru
-                        pieces.forEach(function (entry, index) {
-                        // 
-                            if (index === 1) {
-                                info.DAQ = entry.substring(entry.indexOf('DAQ') + 3);
-                            } else {
-                                info[entry.substr(0, 3)] = entry.substr(3).trim();
-                            }
-                        });
-
-                        // Fill
-                        nx.cm.set(map, 'relname', nx.util.joinSpace(info.DAC, info.DAD, info.DCS, info.DCU).replace(/'/g, ''));
-                        nx.cm.set(map, 'reladdr', info.DAG);
-                        nx.cm.set(map, 'relcity', info.DAI);
-                        nx.cm.set(map, 'relstate', info.DAJ);
-                        nx.cm.set(map, 'relzip', (info.DAK || '').substr(0, 5));
-                        nx.cm.set(map, 'reldob', new Date( info.strstr(4, 4) + '-' + info.substr(2,2) + '-' + info.DBB.substr(0,2)).toISOString());
-
-                        nx.util.popupClose();
-
-                    }, 'BrowserPDF417Reader');
-
-                });
-            }
-        }],
-
         address: [{
             label: 'Verify',
             icon: '+pin',
@@ -654,6 +623,87 @@ nx.fmts = {
                         }
                     });
                 });
+            }
+        }],
+
+        driverlicense: [{
+            label: 'Scan',
+            mobile: true,
+            camera: true,
+            cb: function (ele) {
+
+                var self = nx.fmts;
+
+                // 
+                var widget = nx.cm.get(ele);
+
+                nx.cm.map(widget, 'reldl', function (map) {
+
+                    // Do
+                    nx.web._scanForBarcode(widget, function (data) {
+
+                        // Split
+                        var info = {};
+                        var pieces = data.replace(/\r/g, '').split('\n');
+                        // Loop thru
+                        pieces.forEach(function (entry, index) {
+                            // 
+                            if (index === 1) {
+                                info.DAQ = entry.substring(entry.indexOf('DAQ') + 3);
+                            } else {
+                                info[entry.substr(0, 3)] = entry.substr(3).trim();
+                            }
+                        });
+
+                        // Fill
+                        nx.cm.set(map, 'relname', nx.util.joinSpace(info.DAC, info.DAD, info.DCS, info.DCU).replace(/'/g, ''));
+                        nx.cm.set(map, 'reladdr', info.DAG);
+                        nx.cm.set(map, 'relcity', info.DAI);
+                        nx.cm.set(map, 'relstate', info.DAJ);
+                        nx.cm.set(map, 'relzip', (info.DAK || '').substr(0, 5));
+                        nx.cm.set(map, 'reldob', new Date(info.strstr(4, 4) + '-' + info.substr(2, 2) + '-' + info.DBB.substr(0, 2)).toISOString());
+
+                        nx.util.popupClose();
+
+                    }, 'BrowserPDF417Reader');
+
+                });
+            }
+        }],
+
+        email: [
+            {
+                label: 'Send email',
+                mobile: true,
+                icon: '+email',
+                cb: function (ele) {
+
+                    // 
+                    var widget = nx.cm.get(ele);
+                    // Get the value
+                    var value = widget.val();
+                    // Call
+                    if (value) {
+                        window.open('mailto:' + value);
+                    }
+
+                }
+            }],
+
+        phone: [{
+            label: 'Call',
+            mobile: true,
+            cb: function (ele) {
+
+                // 
+                var widget = nx.cm.get(ele);
+                // Get the value
+                var value = widget.val();
+                // Call
+                if (value) {
+                    window.open('tel:+1' + nx.util.numbersOnly(value));
+                }
+
             }
         }],
 

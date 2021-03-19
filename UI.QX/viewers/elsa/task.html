@@ -128,6 +128,9 @@
             $('#designerHost').attr('data-workflow', JSON.stringify(data));
 
             designer = document.querySelector("#designerHost");
+
+            // Clear
+            parent.nx.util.notifyLoadingEnd();
         });
 
     </script>

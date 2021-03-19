@@ -504,6 +504,8 @@ qx.Class.define('o.user', {
                         var ds = msg.message.ds;
                         // If none, just reload
                         if (msg.message.deleted === 'y') {
+                            // Remove from cache
+                            nx.desktop._removeDataset(ds);
                             // Load start menu
                             self._loadStartMenu();
 

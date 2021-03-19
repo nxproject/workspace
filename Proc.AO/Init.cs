@@ -135,6 +135,29 @@ namespace Proc.AO
             "Returns the dataset portion object UUID",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The object name")));
 
+            c_Defs.AddFn(new StaticFunction("linkdscaption", delegate (Context ctx, object[] ps)
+            {
+                string sAns = "";
+
+
+                AO.ExtendedContextClass c_Ctx = ctx as AO.ExtendedContextClass;
+                if (c_Ctx != null)
+                {
+                    string sID = XCVT.ToString(ps[0]);
+                    if (AO.UUIDClass.IsValid(sID))
+                    {
+                        using (AO.UUIDClass c_UUID = new AO.UUIDClass(c_Ctx.Database, sID))
+                        {
+                            sAns = c_UUID.Dataset.Definition.Caption;
+                        }
+                    }
+                }
+
+                return sAns;
+            }, 1, 1,
+            "Returns the link dataset captio",
+            new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The link value")));
+
             c_Defs.AddFn(new StaticFunction("linkdesc", delegate (Context ctx, object[] ps)
             {
                 string sAns = "";
@@ -158,8 +181,8 @@ namespace Proc.AO
 
                 return sAns;
             }, 1, 1,
-            "Returns the object placeholder",
-            new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The object name")));
+            "Returns the link placeholder",
+            new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The link value")));
 
             c_Defs.AddFn(new StaticFunction("user", delegate (Context ctx, object[] ps)
             {

@@ -305,6 +305,35 @@ nx.fields = {
 
         // Internal
         self.internalOnChange(widget);
+
+        // Get object
+        var obj = nx.env.getBucketItem('_obj');
+        // Any?
+        if (obj) {
+            // Is there a dataset?
+            if (obj._ds) {
+                // Get
+                nx.db._loadDataset(obj._ds, function (dsdef) {
+                    // Any?
+                    if (dsdef && dsdef._computed) {
+                        // And localize current
+                        var data = nx.util.merge({}, obj);
+                        // Loop thru
+                        dsdef._computed.forEach(function (fld) {
+                            // Get expression
+                            var expr = dsdef.fields[fld].compute;
+                            if (expr) {
+                                // Compute
+                                var value = nx.util.evalJS(expr, data, dsdef);
+                                // Save
+                                self.set('[name=' + fld + ']', value);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
     },
 
     /**
@@ -320,7 +349,7 @@ nx.fields = {
         var self = this;
 
         // Save
-        if (typeof widget === 'string') widget = $(ele);
+        if (typeof widget === 'string') widget = $(widget);
 
         // Get fingerprint
         var fp = md5(value);

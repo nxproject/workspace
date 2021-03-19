@@ -42,7 +42,6 @@ namespace NXLibreOffice
 
             // Force the threads to be 2
             c_Env.HTTPThreads = 2;
-            c_Env.HTTPPort = 8088;
 
             // Clear uses
             c_Env.Set("uses", new JArray());
@@ -52,7 +51,8 @@ namespace NXLibreOffice
                 
                 "Docker.DotNet",
                 "SocketIOClient",
-                "Route.File");
+                "Route.File", 
+                "Route.LibreOffice");
         }
         #endregion
     }

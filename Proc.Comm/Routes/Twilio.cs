@@ -166,36 +166,30 @@ namespace Proc.Communication
                 // Get the caller hone
                 string sCaller = this.Params["From"].ToPhone();
 
-                // Get caller dataset
-                string sCallerDS = this.Database.SiteInfo.PhoneAccessDS;
-                // Must have one
-                if (sCallerDS.HasValue())
+                // Get the dataset
+                AO.DatasetClass c_DS = this.Database[DatabaseClass.DatasetBillAccess];
+                // Look up
+                using (QueryClass c_Qry = new QueryClass(c_DS.DataCollection))
                 {
-                    // Get the dataset
-                    AO.DatasetClass c_DS = this.Database[sCallerDS];
-                    // Open the dataset definition
-                    AO.Definitions.DatasetClass c_DSDef = c_DS.Definition;
-                    // Get the fields
-                    List<string> c_LUFields = c_DSDef.AccessPhoneFields;
-                    // Loop until we have one
-                    foreach (string sLUField in c_LUFields)
-                    {
-                        // Look up
-                        using (QueryClass c_Qry = new QueryClass(c_DS.DataCollection))
-                        {
-                            c_Qry.Add(sLUField, QueryElementClass.QueryOps.Eq, sCaller);
+                    c_Qry.Add("name", QueryElementClass.QueryOps.Eq, sCaller);
 
-                            // Get the objects
-                            List<AO.ObjectClass> c_Poss = c_Qry.FindObjects(1);
-                            // Any?
-                            if (c_Poss.Count > 0)
+                    // Get the objects
+                    List<AO.ObjectClass> c_Poss = c_Qry.FindObjects(1);
+                    // Any?
+                    if (c_Poss.Count > 0)
+                    {
+                        // Get the caller
+                        this.Caller = c_Poss[0];
+                        // Do we have a reference?
+                        string sAID = this.Called["actual"];
+                        if(sAID.HasValue())
+                        {
+                            // Get
+                            using(AO.UUIDClass c_UUID = new UUIDClass(this.Database, sAID))
                             {
-                                this.Caller = c_Poss[0];
+                                this.CallerActual = c_UUID.AsObject;
                             }
                         }
-
-                        // Once we got one, we are done
-                        if (this.Caller != null) break;
                     }
                 }
             }
@@ -247,6 +241,13 @@ namespace Proc.Communication
         /// 
         /// </summary>
         public AO.ObjectClass Caller { get; private set; }
+
+        /// <summary>
+        /// 
+        /// The caller actual object (if any)
+        /// 
+        /// </summary>
+        public AO.ObjectClass CallerActual { get; private set; }
 
         /// <summary>
         /// 

@@ -292,7 +292,7 @@ nx.office = {
                 //
                 var xurl = history[i];
                 // Clear
-                nx.env.clearBucket(xurl);
+                nx.env.clearBucket(xurl, true);
                 nx.user.removeTP(xurl);
                 nx.user.removeSIO(xurl);
             }
@@ -300,7 +300,7 @@ nx.office = {
             //
             var xurl = nx._sys.views.current.router.url;
             // Clear
-            nx.env.clearBucket(xurl);
+            nx.env.clearBucket(xurl, true);
             nx.user.removeTP(xurl);
             nx.user.removeSIO(xurl);
         }

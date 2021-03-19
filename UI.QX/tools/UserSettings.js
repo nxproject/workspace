@@ -29,14 +29,32 @@ qx.Class.define('tools.UserSettings', {
         // This is what you override
         do: function (req) {
 
+            var isacct = nx.desktop.user.getIsSelector('ACCT');
+            var user = nx.desktop.user.getName();
+
             nx.desktop.addWindowDS({
-                ds: '_user',
-                id: nx.desktop.user.getName(),
+                ds: (isacct ? '_billaccess' : '_user'),
+                id: user,
                 view: '_usersettings',
                 caption: 'Personal Settings',
                 atSave: function (data) {
-                    //
-                    nx.desktop.user.setValues(data);
+
+                    // Acct?
+                    if (isacct) {
+                        // Update
+                        nx.util.serviceCall('AO.AccessSet', {
+                            ds: '_billaccess',
+                            id: user,
+                            data: data
+                        }, function () {
+                            nx.util.notifyOK('Password reset');
+                        });
+                    } else {
+                        //
+                        nx.desktop.user.setValues(data);
+                    }
+
+                    nx.util.clear(data);
                 }
 
             });

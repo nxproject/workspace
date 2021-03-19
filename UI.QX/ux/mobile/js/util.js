@@ -411,6 +411,32 @@ nx.util = {
 
     noOp: function () { },
 
+    isPhone: function (value) {
+
+        var self = this;
+
+        var ans = false;
+
+        if (self.hasValue(value)) {
+            ans = value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+        }
+
+        return ans;
+    },
+
+    isEMail: function (value) {
+
+        var self = this;
+
+        var ans = false;
+
+        if (self.hasValue(value)) {
+            ans = value.match(/\(\d{3}\)\s*\d{3}-\d{4}/);
+        }
+
+        return ans;
+    },
+
     // ---------------------------------------------------------
     //
     // Expression evaluator
@@ -470,33 +496,73 @@ nx.util = {
 
     },
 
-    evalJS: function (expr, data) {
+    evalJS: function (expr, data, dsdef) {
 
         var self = this;
 
+        var ans;
+
         // Assure
-        expr = self.ifEmpty(expr, '');
+        expr = self.ifEmpty(expr, '0');
         data = data || {};
         // RegEx for fields
-        var re = /\x5B[^\x5D]+\x5D/g;
+        var re = /\x5B[a-z][a-z0-9]*\x5D/gi;
+        // Is this a field?
+        if (dsdef[expr]) {
+            // Get the compute field
+            expr = self.ifEmpty(dsdef[expr].compute, '0');
+        }
         // Get all the fields
-        var fields = expr.matchAll(e);
+        var fields = expr.matchAll(re);
         // Only do each field once
         var done = [];
         // Loop thru
-        fields.forEach(function (field) {
-            // Check
-            if (done.indexOf(field) === -1) {
-                // Add to done
-                done.push(field);
-                // Look up
-                var value = data[field.substr(1, field.length - 2)];
-                // Replace
-                expr = expr.replaceAll(field, value);
-            }
-        });
+        for (var entry of fields) {
+            // Get the field
+            var field = entry[0];
+            // Get the value
+            var value = self.evalGetField(field, data, dsdef, done);
+            // Replace
+            expr = expr.replaceAll(field, value);
+        }
 
-        return eval(expr);
+        try {
+            ans = eval(expr);
+        } catch (e) {
+            ans = 'ERROR: ' + e.message + ' - "' + expr + '"';
+        }
+
+        return ans || expr;
+    },
+
+    evalGetField: function (field, data, dsdef, done) {
+
+        var self = this;
+
+        // Handle if has delims
+        if (self.startsWith(field, '[') && self.endsWith(field, ']')) {
+            field = field.substr(1, field.length - 2);
+        }
+
+        // Check
+        if (done.indexOf(field) === -1) {
+            // Add to done
+            done.push(field);
+            // Get the value
+            var value = data[field];
+            // Get from dataset
+            var def = null;
+            if (dsdef) def = dsdef.fields[field];
+            // Is it in the dataset?
+            if (def && def.compute) {
+                // Get the value
+                value = self.evalGetField(field, data, dsdef, done);
+            }
+            // Save
+            data[field] = value;
+        }
+
+        return data[field];
     },
 
     // ---------------------------------------------------------

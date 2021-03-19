@@ -209,7 +209,10 @@
                                     if (typeof options.rows === 'string') options.rows = JSON.parse(options.rows);
                                     if (typeof options.cols === 'string') options.cols = JSON.parse(options.cols);
 
-                                $("#output").pivotUI(result.data, options, true);
+                                    $("#output").pivotUI(result.data, options, true);
+
+                                    // Clear
+                                    parent.nx.util.notifyLoadingEnd();
                             });
                         }
                     });

@@ -298,17 +298,6 @@ namespace Proc.AO
             get { return this.SynchObject["taxid"]; }
             set { this.SynchObject["taxid"] = value; }
         }
-
-        /// <summary>
-        /// 
-        /// Dataset that holds access phone numbers
-        /// 
-        /// </summary>
-        public string PhoneAccessDS
-        {
-            get { return this.SynchObject["phoneaccessds"].IfEmpty(); }
-            set { this.SynchObject["phoneaccessds"] = value; }
-        }
         #endregion
 
         #region Internal
@@ -321,6 +310,17 @@ namespace Proc.AO
         {
             get { return this.SynchObject["helproot"]; }
             set { this.SynchObject["helproot"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// Default allowed for accounts
+        /// 
+        /// </summary>
+        public string AccountDefaultAllowed
+        {
+            get { return this.SynchObject["acctdefallowed"].IfEmpty(); }
+            set { this.SynchObject["acctdefallowed"] = value; }
         }
         #endregion
 

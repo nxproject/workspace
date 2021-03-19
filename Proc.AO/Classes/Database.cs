@@ -38,7 +38,6 @@ namespace Proc.AO
         public const string DatasetSys = "_sys";
         public const string DatasetHelp = "_help";
         public const string DatasetUser = "_user";
-        public const string DatasetAccount = "_account";
         public const string DatasetAllowed = "_allowed";
         public const string DatasetCookies = "_cookies";
         public const string DatasetIndexStore = "_indexstore";
@@ -48,6 +47,8 @@ namespace Proc.AO
         public const string DatasetTagged = "_tagged";
         public const string DatasetTaggedDetail = "_taggeddet";
 
+        public const string DatasetBillAccount = "_billaccount";
+        public const string DatasetBillAccess = "_billaccess";
         public const string DatasetBiilCharge = "_billcharge";
         public const string DatasetBiilInvoice = "_billinvoice";
         public const string DatasetBiilRate = "_billrate";
@@ -224,18 +225,29 @@ namespace Proc.AO
         /// All the user defined datasets
         /// 
         /// </summary>
-        public List<string>UserDatasets
+        public List<string> UserDatasets
         {
             get
             {
                 // Satrt with all available
                 List<string> c_Ans = this.Datasets;
                 // Loop thru
-                for(int i= c_Ans.Count -1;i>=0;i--)
+                for (int i = c_Ans.Count - 1; i >= 0; i--)
                 {
-                    // remove system
-                    if (c_Ans[i].StartsWith("_")) c_Ans.RemoveAt(i);
+                    //
+                    string sDS = c_Ans[i];
+
+                    // Remove system
+                    if (sDS.StartsWith("_"))
+                    {
+                        // Does it have a selector?
+                        if (!this[sDS].Definition.Selector.HasValue())
+                        {
+                            c_Ans.RemoveAt(i);
+                        }
+                    }
                 }
+
                 return c_Ans;
             }
         }
@@ -444,7 +456,7 @@ namespace Proc.AO
                 this.AssureDataset(DatabaseClass.DatasetSys);
                 this.AssureDataset(DatabaseClass.DatasetAllowed);
                 this.AssureDataset(DatabaseClass.DatasetUser);
-                this.AssureDataset(DatabaseClass.DatasetAccount);
+                this.AssureDataset(DatabaseClass.DatasetBillAccess);
                 this.AssureDataset(DatabaseClass.DatasetHelp);
 
                 //
@@ -453,13 +465,14 @@ namespace Proc.AO
                 // Assure billing
                 if (c_SI.BillingEnabled)
                 {
+                    this.AssureDataset(DatabaseClass.DatasetBillAccount);
                     this.AssureDataset(DatabaseClass.DatasetBiilRate);
-                    this.AssureDataset(DatabaseClass.DatasetBiilCharge);
-                    this.AssureDataset(DatabaseClass.DatasetBiilInvoice);
                     this.AssureDataset(DatabaseClass.DatasetBiilSubscription);
+                    this.AssureDataset(DatabaseClass.DatasetBiilInvoice);
+                    this.AssureDataset(DatabaseClass.DatasetBiilCharge);
                 }
 
-                // Meetings
+                // Quorums
                 if (c_SI.QuorumEnabled)
                 {
                     this.AssureDataset(DatabaseClass.DatasetQuorum);

@@ -43,7 +43,11 @@ namespace Proc.LibreOffice
             //
             this.AvailabilityChanged += delegate (bool isavailable)
             {
-                // ???
+                // Get the NginX manager
+                Proc.NginX.ManagerClass c_Mgr = this.Parent.Globals.Get<Proc.NginX.ManagerClass>();
+
+                // Recycle
+                c_Mgr.MakeConfig(true, true);
             };
 
             this.CheckForAvailability();

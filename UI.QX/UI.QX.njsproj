@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Content Include="c\accessphone.js" />
+    <Content Include="c\account.js" />
     <Content Include="c\address.js" />
     <Content Include="c\addressee.js" />
     <Content Include="c\allowed.js" />
@@ -31,6 +31,7 @@
     <Content Include="c\driverlicense.js" />
     <Content Include="c\image.js" />
     <Content Include="c\lower.js" />
+    <Content Include="c\lu.js" />
     <Content Include="c\protected.js" />
     <Content Include="c\reportable.js" />
     <Content Include="c\signature.js" />
@@ -39,6 +40,8 @@
     <Content Include="c\twiliophone.js" />
     <Content Include="c\users.js" />
     <Content Include="c\vin.js" />
+    <Content Include="c\xaccount.js" />
+    <Content Include="c\_currency.js" />
     <Content Include="c\_date.js" />
     <Content Include="c\_gridcellrenderer.js" />
     <Content Include="c\_gridrowrenderer.js" />
@@ -126,11 +129,13 @@
     <Content Include="f\datetime.js" />
     <Content Include="f\duration.js" />
     <Content Include="f\email.js" />
+    <Content Include="f\emailphone.js" />
     <Content Include="f\float.js" />
     <Content Include="f\int.js" />
     <Content Include="f\keyword.js" />
     <Content Include="f\link.js" />
     <Content Include="f\lower.js" />
+    <Content Include="f\lu.js" />
     <Content Include="f\phone.js" />
     <Content Include="f\reportable.js" />
     <Content Include="f\ssignature.js" />
@@ -188,6 +193,7 @@
     <Content Include="tools\SystemSettings.js" />
     <Content Include="tools\UserSettings.js" />
     <Content Include="tools\Webview.js" />
+    <Content Include="t\account.js" />
     <Content Include="t\addressvalid.js" />
     <Content Include="t\addressweb.js" />
     <Content Include="t\addresseeweb.js" />

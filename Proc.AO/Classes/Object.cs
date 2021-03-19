@@ -504,22 +504,28 @@ namespace Proc.AO
             c_Changes.Remove(FieldToken);
             c_Changes.Remove(FieldSIO);
 
+            // Prepare
+            if (orig == null) orig = this.AsJObject;
+            // Make changes object
+            JObject c_CData = new JObject();
+            // Loop thru
+            foreach (string sField in c_Changes)
+            {
+                // Save
+                c_CData.Set(sField, this[sField]);
+            }
+
+            // Do pre process
+            if (this.IsData && this.Dataset.Definition.SavePreProcess != null)
+            {
+                this.Dataset.Definition.SavePreProcess(orig, c_CData);
+            }
+
             // Call task
             string sTask = this.Dataset.Definition.TaskAtSave;
             if (sTask.HasValue() && runtask)
             {
-                // Assure
-                if (orig == null) orig = this.AsJObject;
-                // Make changes object
-                JObject c_CData = new JObject();
-                // Loop thru
-                foreach (string sField in c_Changes)
-                {
-                    // Save
-                    c_CData.Set(sField, this[sField]);
-                }
-
-                // Call
+               // Call
                 using (TaskParamsClass c_Params = new TaskParamsClass(this.Parent.Parent.Parent.Parent))
                 {
                     c_Params.Task = sTask;
@@ -611,8 +617,8 @@ namespace Proc.AO
                                                     bDo = false;
                                                     break;
 
-                                                case Definitions.DatasetFieldClass.FieldTypes.AccessPhone:
-                                                    // TBD
+                                                case Definitions.DatasetFieldClass.FieldTypes.Account:
+                                                    this.UpdateAccount(orig.Get(sField), c_CData.Get(sField));
                                                     break;
 
                                                 case Definitions.DatasetFieldClass.FieldTypes.TwilioPhone:
@@ -622,7 +628,6 @@ namespace Proc.AO
                                                         c_Info["ref"] = this.UUID.ToString();
                                                         this.Parent.Parent.Parent.Parent.FN("Communication.TwilioRegister", c_Info);
                                                     }
-                                                    // TBD
                                                     break;
                                             }
                                         }
@@ -765,6 +770,75 @@ namespace Proc.AO
                             c_Msg.Send();
                         }
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// Updates account Access table
+        /// 
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="newvalue"></param>
+        private void UpdateAccount(string orig, string newvalue)
+        {
+            // Get the UUID of ourselves
+            string sOUUID = this.UUID.ToString();
+
+            // Assure
+            orig = orig.IfEmpty();
+            newvalue = newvalue.IfEmpty();
+
+            // Get new
+            ObjectClass c_New = null;
+            if (newvalue.HasValue())
+            {
+                // The UUID of the new
+                string sNUUID = sOUUID.CombinePath(newvalue).MD5HashString();
+
+                using (UUIDClass c_UUID = new UUIDClass(this.Dataset.Parent, DatabaseClass.DatasetBillAccess, sNUUID))
+                {
+                    c_New = c_UUID.AsObject;
+                }
+            }
+
+            // Changed?
+            if (orig.IsSameValue(newvalue) || !orig.HasValue())
+            {
+                // Set
+                c_New["name"] = newvalue;
+                c_New["actual"] = sOUUID;
+                // Do we have an account?
+                if (!c_New["acct"].HasValue()) c_New["acct"] = UUIDClass.MakeString(DatabaseClass.DatasetBillAccount, this.UUID.ID);
+                c_New.Save();
+            }
+            else
+            {
+                // The UUID of the original
+                string sXUUID = sOUUID.CombinePath(orig).MD5HashString();
+
+                // Get original
+                using (UUIDClass c_UUID = new UUIDClass(this.Dataset.Parent, DatabaseClass.DatasetBillAccess, sXUUID))
+                {
+                    ObjectClass c_Orig = c_UUID.AsObject;
+
+                    // If not a delete
+                    if (c_New != null)
+                    {
+                        // Copy
+                        c_Orig.CopyTo(c_New);
+                        // Set
+                        c_New["name"] = newvalue;
+                        c_New["actual"] = sOUUID;
+                        // Do we have an account?
+                        if (!c_New["acct"].HasValue()) c_New["acct"] = UUIDClass.MakeString(DatabaseClass.DatasetBillAccount, this.UUID.ID);
+                        // save
+                        c_New.Save();
+                    }
+
+                    // Delete original
+                    c_Orig.Delete();
                 }
             }
         }
@@ -1037,6 +1111,15 @@ namespace Proc.AO
                 // Delete documents
                 this.Folder.Delete();
 
+                // Delete acces points
+                using(QueryClass c_AP = new QueryClass(this.Parent.Parent[DatabaseClass.DatasetBillAccess].DataCollection))
+                {
+                    // Any one related to us
+                    c_AP.Add("actual", this.UUID.ToString());
+                    // Bye
+                    c_AP.Delete(true);
+                }
+
                 // Get the Dataset and ID
                 string sDS = this.UUID.Dataset.Name;
                 string sID = this.UUID.ID;
@@ -1205,8 +1288,12 @@ namespace Proc.AO
             // Loop thru
             foreach (string sField in this.Fields)
             {
-                // Set
-                to[sField] = this[sField];
+                // Not any system
+                if (!sField.StartsWith("_"))
+                {
+                    // Set
+                    to[sField] = this[sField];
+                }
             }
         }
 

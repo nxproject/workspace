@@ -33,7 +33,7 @@ qx.Class.define('t.emailweb', {
         click: function (widget) {
 
             var value = widget.getValue();
-            if (nx.util.hasValue(value)) {
+            if (nx.util.hasValue(value) && nx.util.isEMail(value)) {
                 var data = 'mailto:' + value;
 
                 nx.util.runTool('QR', {

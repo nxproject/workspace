@@ -212,18 +212,6 @@ namespace Proc.AO.Definitions
         {
             this.Password = value;
         }
-
-        /// <summary>
-        /// 
-        /// Validates the password
-        /// 
-        /// </summary>
-        /// <param name="value">The cleartext password</param>
-        /// <returns>True if the password matches the stored value</returns>
-        public bool ValidatePassword(string value)
-        {
-            return this.Password.IsExactSameValue(value.MD5HashString());
-        }
         #endregion
 
         #region Statics
@@ -255,6 +243,18 @@ namespace Proc.AO.Definitions
             }
 
             return c_Ans;
+        }
+
+        /// <summary>
+        /// 
+        /// Validates the password
+        /// 
+        /// </summary>
+        /// <param name="value">The cleartext password</param>
+        /// <returns>True if the password matches the stored value</returns>
+        public static bool ValidatePassword(string pwd, string value)
+        {
+            return pwd.IsExactSameValue(value.MD5HashString());
         }
         #endregion
     }

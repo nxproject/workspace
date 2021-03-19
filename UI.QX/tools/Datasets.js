@@ -184,8 +184,13 @@ qx.Class.define('tools.Datasets', {
 
                         case '$$changed.dataset':
                         case '$$changed.view':
+                            // If none, just reload
+                            if (event.message && event.message.deleted === 'y') {
+                                // Remove from cache
+                                nx.desktop._removeDataset(event.message.ds);
+                            }
 
-                            // Get datasets
+                            // Get datasets'AO.DSViewList'
                             nx.util.serviceCall('AO.DSViewList', {}, function (result) {
                                 //
                                 var raw = result.list;

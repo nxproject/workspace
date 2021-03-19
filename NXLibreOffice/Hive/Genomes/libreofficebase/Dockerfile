@@ -17,10 +17,10 @@ RUN apt-get -qq -y update \
 
 ENV LANG='en_US.UTF-8'
 
-RUN groupadd -g 1000 -r app \
-    && useradd -m -u 1000 -d /tmp -s /bin/false -g app app
+# RUN groupadd -g 1000 -r app \
+#     && useradd -m -u 1000 -d /tmp -s /bin/false -g app app
 
-USER app
+# USER app
 
 #HEALTHCHECK --interval=10s --timeout=10s --retries=100 \
 #    CMD curl -f http://localhost:3000/health/live || exit 1

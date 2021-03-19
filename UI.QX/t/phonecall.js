@@ -32,11 +32,15 @@ qx.Class.define('t.phonecall', {
 
         click: function (widget) {
 
-            nx.util.serviceCall('Comm.Process', {
-                fn: 'voice',
-                to: widget.getValue()
-            });
+            var value = widget.getValue();
+            if (nx.util.hasValue(value) && nx.util.isPhone(value)) {
 
+                nx.util.serviceCall('Comm.Process', {
+                    fn: 'voice',
+                    to: value
+                });
+
+            }
         }
     }
 

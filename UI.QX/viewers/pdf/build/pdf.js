@@ -13372,7 +13372,11 @@ class PDFFetchStreamReader {
       done
     } = await this._reader.read();
 
-    if (done) {
+      if (done) {
+
+          // Clear
+          parent.nx.util.notifyLoadingEnd();
+
       return {
         value,
         done
@@ -13449,7 +13453,11 @@ class PDFFetchStreamRangeReader {
       done
     } = await this._reader.read();
 
-    if (done) {
+      if (done) {
+
+          // Clear
+          parent.nx.util.notifyLoadingEnd();
+
       return {
         value,
         done

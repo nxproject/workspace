@@ -46,7 +46,6 @@ namespace Proc.AO
 
             //
             List<string> c_DSS = c_Mgr.DefaultDatabase.UserDatasets;
-            c_DSS.Add(DatabaseClass.DatasetUser);
 
             // Loop thru
             foreach (string sDS in c_DSS)

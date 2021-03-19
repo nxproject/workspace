@@ -104,6 +104,7 @@ namespace Proc.Access
                         // Remove
                         c_List.Remove("usedataset");
                         c_List.Remove("xopenmode");
+                        c_List.Remove("xaccount");
                         // Save
                         c_Ans.Set("fieldtypes", c_List.ToJArray());
                     }
