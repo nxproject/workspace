@@ -75,7 +75,7 @@ namespace Route.LibreOffice
                             string sExt = c_Target.Extension;
 
                             // 
-                            call.Env.LogInfo("Converting {0} to {1}".FormatString(sSource, sTarget));
+                            call.Env.LogVerbose("Converting {0} to {1}".FormatString(sSource, sTarget));
 
                             // Remove
                             c_Target.Delete(true);
@@ -121,12 +121,6 @@ namespace Route.LibreOffice
                             }
                             finally
                             {
-                                // Copy output
-                                if (c_Proc != null)
-                                {
-                                    call.Env.LogInfo("STDOUT: " + c_Proc.StandardOutput.ReadToEnd());
-                                    call.Env.LogInfo("STDERR: " + c_Proc.StandardError.ReadToEnd());
-                                }
                                 // End
                                 c_Proc.WaitForExit();
                             }

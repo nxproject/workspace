@@ -113,17 +113,6 @@ namespace Proc.Docx
                     case "rtf":
                         c_Out = new DocumentClass(docin.Parent, docin.Path.SetExtensionFromPath("odt"));
                         break;
-
-                    //case "xlsx":
-                    //case "xls":
-                    //    c_Out = new DocumentClass(docin.Parent, docin.Path.SetExtensionFromPath("ods"));
-                    //    break;
-
-                    //case "pptx":
-                    //case "ppt":
-                    //    c_Out = new DocumentClass(docin.Parent, docin.Path.SetExtensionFromPath("odp"));
-                    //    break;
-
                 }
 
                 // Do we need to convert?
