@@ -105,6 +105,9 @@ namespace Proc.Task
 
         public ContextStoreClass<MemoClass> Memos { get; internal set; }
         public ContextStoreClass<TextClass> Texts { get; internal set; }
+        public ContextStoreClass<HTMLClass> HTML { get; internal set; }
+        public ContextStoreClass <Proc.Communication.eMessageClass> Messages { get; internal set; }
+
         public ContextStoreClass<TaskQueryClass> Queries { get; internal set; }
         #endregion
 

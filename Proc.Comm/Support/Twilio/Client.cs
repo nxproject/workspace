@@ -49,9 +49,7 @@ namespace Proc.Communication
         {
             //
             string sAcctSID = this.Parent.SiteInfo.TwilioAccount;
-            this.Parent.Parent.LogInfo("Twilio Account SID is {0}".FormatString(sAcctSID));
             string sToken = this.Parent.SiteInfo.TwilioToken;
-            this.Parent.Parent.LogInfo("Twilio Auth Token is {0}".FormatString(sToken));
 
             //
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
@@ -72,7 +70,7 @@ namespace Proc.Communication
         /// <param name="msg"></param>
         /// <param name="attachments"></param>
         /// <returns></returns>
-        public string SendSMS(string to, string from, string msg, List<DocumentClass> attachments)
+        public string SendSMS(string to, string from, string msg)
         {
             string sAns = null;
 
@@ -81,16 +79,6 @@ namespace Proc.Communication
                 CreateMessageOptions c_Opts = new CreateMessageOptions(new PhoneNumber(to.PhoneNumberAse164()));
 
                 c_Opts.From = new PhoneNumber(from.PhoneNumberAse164());
-
-                if (attachments != null && attachments.Count > 0)
-                {
-                    foreach (DocumentClass c_File in attachments)
-                    {
-                        if (msg.HasValue()) msg += "\r\n" + "\r\n";
-                        msg += c_File.Name + " " + c_File.URL;
-                    }
-                }
-
                 c_Opts.Body = msg;
 
                 MessageResource c_Resp = MessageResource.Create(c_Opts);

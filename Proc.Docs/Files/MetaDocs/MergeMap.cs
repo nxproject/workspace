@@ -75,7 +75,7 @@ namespace Proc.Docs.Files
                     // According to the type
                 switch (doc.Extension)
                 {
-                    case "docx":
+                    case "odt":
                         using (HTMLSupportClass c_Filler = new HTMLSupportClass(doc.HTML()))
                         {
                             // And merge

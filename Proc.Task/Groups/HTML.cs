@@ -23,30 +23,27 @@
 /// 
 
 using System;
-using System.Text;
 using System.Collections.Generic;
+using System.IO;
 
 using Newtonsoft.Json.Linq;
 
 using NX.Shared;
 using NX.Engine;
-using NX.Engine.Files;
 
-namespace Proc.Communication.EMailIF
+namespace Proc.Task
 {
-    public class EngineClass : IDisposable
+    public class HTMLClass : IDisposable
     {
         #region Constants
         #endregion
 
         #region Constructor
-        public EngineClass(string friendly, string name, string pwd, string prov)
+        public HTMLClass(string name)
         {
             //
-            this.Friendly = friendly;
             this.Name = name;
-            this.Pwd = pwd;
-            this.Provider = prov;
+            this.Text = new HTMLTextClass();
         }
         #endregion
 
@@ -56,30 +53,8 @@ namespace Proc.Communication.EMailIF
         #endregion
 
         #region Properties
-        public string Friendly { get; internal set; }
         public string Name { get; internal set; }
-        public string Pwd { get; internal set; }
-        public string Provider { get; internal set; }
-        #endregion
-
-        #region Methods
-        public string SendHTML(AO.ExtendedContextClass ctx,
-                                string to,
-                                string subj,
-                                string msg)
-        {
-            //
-            using (ClientClass c_Client = new ClientClass(this.Friendly,
-                                                                this.Name,
-                                                                this.Pwd,
-                                                                ClientClass.ProviderFromString(this.Provider)))
-            {
-                return c_Client.Send(to,
-                                subj,
-                                msg
-                                );
-            }
-        }
+        public HTMLTextClass Text { get; set; }
         #endregion
     }
 }

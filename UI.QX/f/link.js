@@ -30,7 +30,7 @@ qx.Class.define('f.link', {
 
             // Must have a dataset
             var ds = nx.bucket.getParams(widget).linkds;
-            if (ds) {
+            if (ds && !nx.util.isUUID(value)) {
 
                 // Get the current chain
                 var chain = Object.assign({}, nx.bucket.getChain(nx.bucket.getForm(widget)));

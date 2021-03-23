@@ -555,35 +555,26 @@ qx.Class.define('c._window', {
 
                             });
 
-                            // Flag 
-                            var found = true;
-                            // Do until no changes
-                            while (found) {
-                                // Reset
-                                found = false;
-                                // Loop thru
-                                windows.forEach(function (win) {
+                            // Loop thru
+                            windows.forEach(function (win) {
 
-                                    // Skip the root
-                                    if (win !== rootwin) {
-                                        // Get the bounds
-                                        var bounds = nx.util.getAbsoluteBounds(win);
-                                        // Must be below or to the right
-                                        if (bounds.top >= rootbounds.top && bounds.left >= rootbounds.left) {
-                                            // But within reach
-                                            if ((bounds.top - rootbounds.top) <= nx.setup.winOffsetDiff &&
-                                                (bounds.left - rootbounds.left) <= nx.setup.winOffsetDiff) {
-                                                // Switch
-                                                rootwin = win;
-                                                rootbounds = bounds;
-                                                // And flag
-                                                found = true;
-                                            }
+                                // Skip the root
+                                if (win !== rootwin) {
+                                    // Get the bounds
+                                    var bounds = nx.util.getAbsoluteBounds(win);
+                                    // Must be below or to the right
+                                    if (bounds.top >= rootbounds.top && bounds.left >= rootbounds.left) {
+                                        // But within reach
+                                        if ((bounds.top - rootbounds.top) <= nx.setup.winOffsetDiff &&
+                                            (bounds.left - rootbounds.left) <= nx.setup.winOffsetDiff) {
+                                            // Switch
+                                            rootwin = win;
+                                            rootbounds = bounds;
                                         }
                                     }
+                                }
 
-                                });
-                            }
+                            });
 
                             // Use the root window
                             top = rootbounds.top;

@@ -36,32 +36,46 @@ namespace Proc.Communication
     public class eAttachmentListClass : ChildOfClass<eMessageClass>
     {
         #region Constructor
-        public eAttachmentListClass(eMessageClass msg, string keys)
+        public eAttachmentListClass(eMessageClass msg)
             : base(msg)
-        {
-            //
-            JArray c_Values = this.Parent.Values.AssureJArray(keys);
-
-            // Make the attachments
-            for (int iLoop = 0; iLoop < c_Values.Count; iLoop++)
-            {
-                this.Add(c_Values.Get(iLoop));
-            }
-        }
+        { }
         #endregion
 
-        #region Properties        
-        internal List<DocumentClass> Documents { get; set; } = new List<DocumentClass>();
-        public List<string> Paths
+        #region Properties
+        /// <summary>
+        /// 
+        /// The list of documents
+        /// 
+        /// </summary>
+        public List<eAttachmenClass> Documents { get; private set; } = new List<eAttachmenClass>();
+
+        /// <summary>
+        /// 
+        /// The number of documents
+        /// 
+        /// </summary>
+        public int Count
+        {
+            get { return this.Documents.Count; }
+        }
+
+        /// <summary>
+        /// 
+        /// Returns a list of the documents
+        /// 
+        /// </summary>
+        public List<DocumentClass> AsDocuments
         {
             get
             {
-                List<string> c_Ans = new List<string>();
+                List<DocumentClass> c_Ans = new List<DocumentClass>();
 
-                foreach (DocumentClass c_Doc in this.Documents)
+                
+                foreach(eAttachmenClass c_File in this.Documents)
                 {
-                    c_Ans.Add(c_Doc.Path);
+                    c_Ans.Add(c_File.Document);
                 }
+
                 return c_Ans;
             }
         }
@@ -76,7 +90,7 @@ namespace Proc.Communication
             }
         }
 
-        public void Add(string path)
+        public void Add(string path, string name=null)
         {
             DocumentClass c_Doc = new DocumentClass(this.Parent.Parent.DocumentManager, path);
             this.Add(c_Doc);
@@ -90,15 +104,32 @@ namespace Proc.Communication
             }
         }
 
-        public void Add(DocumentClass doc)
+        public void Add(DocumentClass doc, string name = null)
         {
-            this.Documents.Add(doc);
+            this.Documents.Add(new eAttachmenClass(doc, name));
         }
+        #endregion
+    }
 
-        public void Attach(string doc)
+    public class eAttachmenClass : IDisposable
+    {
+        #region Constructor
+        public eAttachmenClass(DocumentClass doc, string caption)
         {
-            // TBD
+            //
+            this.Document = doc;
+            this.Caption = caption;
         }
+        #endregion
+
+        #region IDisposable
+        public void Dispose()
+        { }
+        #endregion
+
+        #region Properties
+        public string Caption { get; set; }
+        public DocumentClass Document { get; set; }
         #endregion
     }
 }

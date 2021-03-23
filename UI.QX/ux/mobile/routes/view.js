@@ -250,7 +250,7 @@ nx._routes.push({
     }
 });
 
-// Set the call
+// Set the calls
 nx.calls.view = function (req) {
     //
     if (typeof req === 'string') {

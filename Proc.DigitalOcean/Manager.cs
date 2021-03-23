@@ -24,13 +24,13 @@
 
 using System;
 
-using Stripe;
+using DigitalOcean.API;
 
 using NX.Shared;
 using NX.Engine;
 using Proc.AO;
 
-namespace Proc.Stripe
+namespace Proc.DigitalOcean
 {
     public class ManagerClass : ChildOfClass<EnvironmentClass>
     {
@@ -44,10 +44,10 @@ namespace Proc.Stripe
             this.SiteInfo = c_Mgr.DefaultDatabase.SiteInfo;
 
             //
-            if (this.SiteInfo.StripeSecurity.HasValue())
+            if(this.SiteInfo.DigitalOceanToken.HasValue())
             {
                 // Make
-                this.Client = new StripeClient(this.SiteInfo.StripeSecurity);
+                this.Client = new DigitalOceanClient(this.SiteInfo.DigitalOceanToken);
             }
         }
         #endregion
@@ -62,10 +62,10 @@ namespace Proc.Stripe
 
         /// <summary>
         /// 
-        /// The Stripe IF
+        /// The Digital Ocean IF
         /// 
         /// </summary>
-        public StripeClient Client { get; set; }
+        public DigitalOceanClient Client { get; private set; }
         #endregion
     }
 }

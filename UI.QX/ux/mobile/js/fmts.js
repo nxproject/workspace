@@ -189,31 +189,44 @@ nx.fmts = {
     link: function (widget, value, cb) {
 
         // Must have a dataset
-        var ds = nx.env.getBucketItem('ds');
-        if (ds) {
+        var ds = nx.env.getBucketItem('_obj')._ds;
+        if (ds && !nx.util.isUUID(value)) {
 
-            // Get the current chain
-            var chain = nx.env.getBucketItem('chain');
-            // Add the value
-            if (nx.util.hasValue(value)) chain[ds] = '%' + value;
-            // Call view
-            nx.calls.pick({
-                ds: ds,
-                chain: chain,
-                onSelect: function (e, data) {
-                    // Any?
-                    if (data && data.length) {
-                        var data = data[0];
-                        data._ds = ds;
-                        cb(data);
-                    } else {
-                        cb(null);
-                    }
+            // Phony a chain
+            var chain = {
+                queries: [{
+                    field: '_desc',
+                    value: '%' + value
+                }]
+            };
+                // Get the dataset
+            nx.db._loadDataset(ds, function (dsdef) {
+            // Get the link ds
+                var fdef = dsdef.fields[widget.attr('name')];
+                if (fdef && fdef.linkds) {
+                    // Call view
+                    nx.calls.pick({
+                        ds: fdef.linkds,
+                        chain: chain,
+                        onSelect: function (id) {
+                            // The values
+                            var values = {};
+                            // Fill
+                            values[widget.attr('name')] = id;
+                            // And callback
+                            nx.office.goBack(null, values);
+                        }
+                    });
                 }
             });
 
         } else {
-            cb(value);
+            // The values
+            var values = {};
+            // Fill
+            values[widget.attr('name')] = id;
+            // And callback
+            nx.office.goBack(null, values);
         }
 
     },
@@ -231,28 +244,51 @@ nx.fmts = {
         if (ds && value) {
 
             // Phony a chain
-            var chain = {};
-            // Add the value
-            chain[ds] = '%' + value;
-            // Call view
-            nx.calls.pick({
-                ds: ds,
-                chain: chain,
-                onSelect: function (e, data) {
-                    // Any?
-                    if (data && data.length) {
-                        var data = data[0];
-                        // Map back
-                        // TBD
-                        cb(data);
-                    } else {
-                        cb(null);
-                    }
+            var chain = {
+                queries: [{
+                    field: '_desc',
+                    value: '%' + value
+                }]
+            };
+            // Get the dataset
+            nx.db._loadDataset(ds, function (dsdef) {
+                // Get the field definiion
+                var fdef = dsdef.fields[widget.attr('name')];
+                if (fdef && fdef.linkds) {
+                    // Call view
+                    nx.calls.pick({
+                        ds: fdef.linkds,
+                        chain: chain,
+                        onSelect: function (id) {
+                            // Any?
+                            if (id) {
+                                // Parse
+                                var parsed = nx.db.parseID(id);
+                                // Get
+                                nx.db.getObj(parsed.ds, parsed.id, function (data) {
+                                    // The values
+                                    var values = {};
+                                    // Get map
+                                    var map = nx.util.splitSpace(fdef.lumap);
+                                    // Do the widget
+                                    values[widget.attr('name')] = data[map[0]];
+                                    // Fill rest
+                                    for (var i = 1; i < map.length; i += 2) {
+                                        values[map[i]] = data[map[i + 1]];
+                                    }
+                                    // Release
+                                    nx.db.clearObj(data);
+                                    // And callback
+                                    nx.office.goBack(null, values);
+                                });
+                            } else {
+                                nx.office.goBack();
+                            }
+                        }
+                    });
                 }
             });
 
-        } else {
-            cb(value);
         }
     },
 

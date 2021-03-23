@@ -71,7 +71,7 @@ namespace Proc.Help
                 c_Values.Merge(call.Env.AsParameters);
                 c_Values.Merge(c_DBMgr.DefaultDatabase.SiteInfo.AsJObject);
                 // Apply changes
-                sContents = sContents.Handlebars(c_Values);
+                sContents = sContents.Handlebars(new StoreClass(c_Values));
 
                 // Extend
                 var c_PB = new Markdig.MarkdownPipelineBuilder();

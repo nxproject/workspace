@@ -23,62 +23,65 @@
 /// 
 
 using System;
-using System.Text;
 using System.Collections.Generic;
 
 using Newtonsoft.Json.Linq;
 
 using NX.Shared;
 using NX.Engine;
-using NX.Engine.Files;
+using Common.TaskWF;
+using Proc.AO;
+using Proc.Docs;
 
-namespace Proc.Communication.EMailIF
+namespace Proc.Task
 {
-    public class EngineClass : IDisposable
+    public class MessageSetFooter : CommandClass
     {
         #region Constants
+        private const string ArgMsg = "msg";
+        private const string ArgValue = "value";
         #endregion
 
         #region Constructor
-        public EngineClass(string friendly, string name, string pwd, string prov)
-        {
-            //
-            this.Friendly = friendly;
-            this.Name = name;
-            this.Pwd = pwd;
-            this.Provider = prov;
-        }
-        #endregion
-
-        #region IDisposable
-        public void Dispose()
+        public MessageSetFooter()
         { }
         #endregion
 
-        #region Properties
-        public string Friendly { get; internal set; }
-        public string Name { get; internal set; }
-        public string Pwd { get; internal set; }
-        public string Provider { get; internal set; }
+        #region IStep
+        public override DescriptionClass Description
+        {
+            get
+            {
+                NamedListClass<ParamDefinitionClass> c_P = new NamedListClass<ParamDefinitionClass>();
+
+                c_P.Add(ArgMsg, new ParamDefinitionClass(ParamDefinitionClass.Types.Optional, "The message to use"));
+                c_P.Add(ArgValue, new ParamDefinitionClass(ParamDefinitionClass.Types.Required, "The footer text"));
+
+                this.AddSystem(c_P);
+
+                return new DescriptionClass(CategoriesClass.Store, "Sets the message footer text", c_P);
+            }
+        }
         #endregion
 
-        #region Methods
-        public string SendHTML(AO.ExtendedContextClass ctx,
-                                string to,
-                                string subj,
-                                string msg)
+        #region Code Line
+        public override string Command
+        {
+            get { return "msg.set.footer"; }
+        }
+
+        public override ReturnClass ExecStep(TaskContextClass ctx, ArgsClass args)
         {
             //
-            using (ClientClass c_Client = new ClientClass(this.Friendly,
-                                                                this.Name,
-                                                                this.Pwd,
-                                                                ClientClass.ProviderFromString(this.Provider)))
-            {
-                return c_Client.Send(to,
-                                subj,
-                                msg
-                                );
-            }
+            ReturnClass eAns = ReturnClass.Done;
+
+            // Get
+            string sMsg = args.Get(ArgMsg);
+
+            // Do
+            ctx.Messages[sMsg].Footer = args.Get(ArgValue);
+
+            return eAns;
         }
         #endregion
     }

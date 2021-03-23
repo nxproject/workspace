@@ -71,9 +71,6 @@ namespace Route.LibreOffice
                             // Make the folder
                             c_Target.Folder.AssurePath();
 
-                            // Get the extension
-                            string sExt = c_Target.Extension;
-
                             // 
                             call.Env.LogVerbose("Converting {0} to {1}".FormatString(sSource, sTarget));
 
@@ -82,7 +79,7 @@ namespace Route.LibreOffice
 
                             // Arguments
                             List<string> c_Args = new List<string>() {
-                                        "-env:UserInstallation=file:///tmp",
+                                        //"-env:UserInstallation=file:///tmp",
                                         "--nologo",
                                         "--headless",
                                         "--nocrashreport",
@@ -91,7 +88,7 @@ namespace Route.LibreOffice
                                         "--nolockcheck",
                                         "--invisible",
                                         "--convert-to" ,
-                                        sExt,
+                                        this.ConvertExtensionToFilterType(c_Source.Extension, c_Target.Extension),
                                         "--outdir",
                                         c_Target.Folder.Location,
                                         c_Source.Location
@@ -121,6 +118,12 @@ namespace Route.LibreOffice
                             }
                             finally
                             {
+                                // Copy output
+                                if (c_Proc != null)
+                                {
+                                    call.Env.LogVerbose("STDOUT: " + c_Proc.StandardOutput.ReadToEnd());
+                                    call.Env.LogVerbose("STDERR: " + c_Proc.StandardError.ReadToEnd());
+                                }
                                 // End
                                 c_Proc.WaitForExit();
                             }
@@ -130,6 +133,50 @@ namespace Route.LibreOffice
             }
 
             call.RespondWithStore(c_Ans);
+        }
+
+        /// <summary>
+        /// 
+        /// Gets the --convert-to setting
+        /// 
+        /// </summary>
+        /// <param name="extension"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        private string ConvertExtensionToFilterType(string extension, string target)
+        {
+            string sFilter = null;
+
+            switch (extension.IfEmpty().ToLower())
+            {
+                case "doc":
+                case "docx":
+                case "txt":
+                case "rtf":
+                case "html":
+                case "htm":
+                case "xml":
+                case "odt":
+                case "wps":
+                case "wpd":
+                    sFilter= ":writer_{0}_Export".FormatString(target);
+                    break;
+
+                case "xls":
+                case "xlsb":
+                case "xlsx":
+                case "ods":
+                    sFilter = ":calc_{0}_Export".FormatString(target);
+                    break;
+
+                case "ppt":
+                case "pptx":
+                case "odp":
+                    sFilter = ":impress_{0}_Export".FormatString(target);
+                    break;
+            }
+
+            return target + sFilter.IfEmpty();
         }
     }
 }

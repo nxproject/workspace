@@ -240,17 +240,21 @@ nx.db = {
      * @param {any} id
      */
     parseID: function (id) {
-        // Split
-        var pieces = id.split(':');
-        // Must have siz pieces
-        if (pieces.length === 6) {
-            // Return
-            return {
-                ds: pieces[2],
-                id: pieces[3]
-            }
-        } else {
+        if (!id) {
             return null;
+        } else {
+            // Split
+            var pieces = id.split(':');
+            // Must have siz pieces
+            if (pieces.length === 6) {
+                // Return
+                return {
+                    ds: pieces[2],
+                    id: pieces[3]
+                }
+            } else {
+                return null;
+            }
         }
     },
 

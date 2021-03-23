@@ -34,19 +34,12 @@ namespace Proc.Communication
     public class eAddressesClass : ChildOfClass<eMessageClass>
     {
         #region Constructor
-        public eAddressesClass(eMessageClass msg, string key)
+        public eAddressesClass(eMessageClass msg)
             : base(msg)
-        {
-            //
-            this.Key = key;
-            this.Parse(this.Message.Values.Get(this.Key), eAddressClass.AddressTypes.SMS);
-        }
+        { }
         #endregion
 
         #region Properties
-        public eMessageClass Message { get { return this.Root as eMessageClass; } }
-        private string Key { get; set; }
-
         public eAddressListClass EMail { get; set; } = new eAddressListClass();
         public eAddressListClass SMS { get; set; } = new eAddressListClass();
         public eAddressListClass FedEx { get; set; } = new eAddressListClass();
@@ -55,6 +48,13 @@ namespace Proc.Communication
         #endregion
 
         #region Methods
+        /// <summary>
+        /// 
+        /// Adds a to to the address list
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="pref"></param>
         public void Add(string value, eAddressClass.AddressTypes pref)
         {
             if (value.HasValue())
@@ -82,12 +82,33 @@ namespace Proc.Communication
             }
         }
 
+        /// <summary>
+        /// 
+        /// Parses a string
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="pref"></param>
         public void Parse(string value, eAddressClass.AddressTypes pref)
         {
             foreach (string sTo in value.Split(';'))
             {
                 this.Add(sTo, pref);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// Resets all tos
+        /// 
+        /// </summary>
+        public void Clear()
+        {
+            this.EMail = new eAddressListClass();
+            this.SMS = new eAddressListClass();
+            this.FedEx = new eAddressListClass();
+            this.Users = new eAddressListClass();
+            this.Voice = new eAddressListClass();
         }
         #endregion
     }

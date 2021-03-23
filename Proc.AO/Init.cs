@@ -197,6 +197,13 @@ namespace Proc.AO
                 return sAns;
             }, 0, 0,
             "Returns the current user name"));
+
+            // Handle init
+            env.Hive.QueenChanged += delegate ()
+            {
+                // Update
+                c_Mgr.DefaultDatabase.SiteInfo.UpdateEnv(true, true);
+            };
         }
 
 

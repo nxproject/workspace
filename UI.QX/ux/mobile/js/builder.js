@@ -1055,17 +1055,29 @@ nx.builder = {
      * @param {any} data
      * @param {any} bucketid
      */
-    picklist: function (ds, data, bucketid) {
+    picklist: function (ds, data, bucketid, onselect) {
 
         var self = this;
 
         // Assure
         if (!Array.isArray(data)) data = [data];
 
+        //
+        if (onselect) {
+            nx.env.setBucketItem('onSelect', onselect);
+        }
+
         // Holder
         var holder = [];
         // Loop thru
         data.forEach(function (row, index) {
+        // Click
+            var onclick = null;
+            if (onselect) {
+                onclick = "nx.calls.pickselect('::" + ds + ":" + row._id + "::');";
+            } else {
+                onclick = "nx.calls.view('::" + ds + ":" + row._id + "::');";
+            }
             // Make
             holder.push(self.tag('li', [
                 self.tag('div', '', ['class', 'item=media']),
@@ -1074,7 +1086,7 @@ nx.builder = {
                         self.link(row._desc),
                         ['class', 'item-title']),
                     ['class', 'item-inner'])],
-                ['class', 'item-content', 'onclick', "nx.calls.view('::" + ds + ":" + row._id + "::');"]));
+                ['class', 'item-content', 'onclick', onclick]));
         });
 
         // Android

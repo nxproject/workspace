@@ -156,45 +156,103 @@ nx.office = {
                                         winid: win
                                     });
                                 }
+                            }
 
-                                // Find all of the fields
-                                $('[_onsetup=link]').each(function (index, ele) {
-                                    //
-                                    var poss = $(ele);
-                                    // Only once
-                                    poss.removeAttr('_onsetup');
+                            // Handle return values
+                            if (nx.office.retValue) {
+
+                                //
+                                var data = nx.office.retValue;
+                                // Loop thru
+                                Object.keys(data).forEach(function (fld) {
                                     // Get the value
-                                    var value = poss.attr('_value');
-                                    // Parse
-                                    var wkg = nx.db.parseID(value);
-                                    // Call
-                                    nx.db.get(wkg.ds, [{
-                                        field: '_id',
-                                        op: 'Eq',
-                                        value: wkg.id
-                                    }], 0, 1, '_desc', null, '_id _desc', function (data) {
-                                        if (data && data.length) {
-                                            // Fill
-                                            poss.val(data[0]._desc);
+                                    var value = data[fld];
+                                    // Map field
+                                    var local = $('[name=' + fld + ']');
+                                    // Save in database
+                                    nx.db.objSetField(nx.env.getBucketItem('_obj'), fld, value);
+                                    // Handle non-value
+                                    if (!value) {
+                                        local.val(value);
+                                    } else {
+                                        // According to type
+                                        switch (local.attr('nxtype')) {
+                                            case 'link':
+                                                // Parse
+                                                var wkg = nx.db.parseID(value);
+                                                if (wkg) {
+                                                    // Call
+                                                    nx.db.get(wkg.ds, [{
+                                                        field: '_id',
+                                                        op: 'Eq',
+                                                        value: wkg.id
+                                                    }], 0, 1, '_desc', null, '_id _desc', function (data) {
+                                                        if (data && data.length) {
+                                                            // Fill
+                                                            local.val(data[0]._desc);
+                                                        }
+                                                    });
+                                                }
+                                                break;
+
+                                            default:
+                                                local.val(value);
+                                                break;
                                         }
-                                    });
+                                    }
                                 });
 
-                                // Find all of the fields
-                                $('[_onsetup=textarea]').each(function (index, ele) {
-                                    //
-                                    var poss = $(ele);
-                                    // Only once
-                                    poss.removeAttr('_onSetup');
+                                // Clear
+                                delete nx.office.retValue;
+                            }
+
+                            // Find all of the fields
+                            $('[nxtype=link]').each(function (index, ele) {
+                                //
+                                var poss = $(ele);
+                                // Only once
+                                if (!poss.attr('_onsetupdone')) {
+                                    // Flag
+                                    poss.attr('_onsetupdone', 'y');
+                                    // Get the value
+                                    var value = poss.attr('_value');
+                                    // Must have value
+                                    if (value && nx.util.is) {
+                                        // Parse
+                                        var wkg = nx.db.parseID(value);
+                                        if (wkg) {
+                                            // Call
+                                            nx.db.get(wkg.ds, [{
+                                                field: '_id',
+                                                op: 'Eq',
+                                                value: wkg.id
+                                            }], 0, 1, '_desc', null, '_id _desc', function (data) {
+                                                if (data && data.length) {
+                                                    // Fill
+                                                    poss.val(data[0]._desc);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+
+                            // Find all of the fields
+                            $('[nxtype=textarea]').each(function (index, ele) {
+                                //
+                                var poss = $(ele);
+                                // Only once
+                                if (!poss.attr('_onsetupdone')) {
+                                    // Flag
+                                    poss.attr('_onsetupdone', 'y');
                                     // Get the value
                                     var value = poss.attr('_value');
                                     // Fill
                                     poss.val(value);
-                                });
+                                }
+                            });
 
-                                nx.office.updateTimers();
-
-                            }
+                            nx.office.updateTimers();
 
                         }
                     }
@@ -273,7 +331,7 @@ nx.office = {
      * Goes back a page
      * 
      */
-    goBack: function (url) {
+    goBack: function (url, retvalue) {
 
         var self = nx.office;
 
@@ -304,6 +362,9 @@ nx.office = {
             nx.user.removeTP(xurl);
             nx.user.removeSIO(xurl);
         }
+
+        // Fill
+        self.retValue = retvalue;
 
         // And go
         nx._sys.views.main.router.back(url, {

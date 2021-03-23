@@ -104,7 +104,7 @@ namespace Proc.Communication
                     eReturnClass c_Ret = c_Msg.Send();
 
                     string sQM = "Result of {0} request: {1}".FormatString(eType, c_Ret.ToString());
-                    c_Ctx.SendQM(c_Ctx.User.Name, sQM, null);
+                    c_Ctx.SendNotification(c_Ctx.User.Name, sQM, null);
                 }
             }
 

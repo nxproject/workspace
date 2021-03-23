@@ -1,9 +1,9 @@
 ﻿<!doctype html>
 <html>
 <head>
-    <meta name = "viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>{owner} EMail</title>
+    <title>{{site}} EMail</title>
     <style>
         /* -------------------------------------
             INLINED WITH htmlemail.io/inline
@@ -11,9 +11,8 @@
         /* -------------------------------------
             RESPONSIVE AND MOBILE FRIENDLY STYLES
         ------------------------------------- */
-        @media only screen and(max-width: 620px)
-{
-    table[class=body] h1 {
+        @media only screen and(max-width: 620px) {
+            table[class=body] h1 {
                 font-size: 28px !important;
                 margin-bottom: 10px !important;
             }
@@ -47,17 +46,15 @@
                 border-right-width: 0 !important;
             }
 
-            table[class=body] .btn table
-{
-    width: 100% !important;
-}
+            table[class=body] .btn table {
+                width: 100% !important;
+            }
 
-table[class=body] .btn a
-{
-    width: 100% !important;
-}
+            table[class=body] .btn a {
+                width: 100% !important;
+            }
 
-table[class=body] .img-responsive {
+            table[class=body] .img-responsive {
                 height: auto !important;
                 max-width: 100% !important;
                 width: auto !important;
@@ -67,34 +64,30 @@ table[class=body] .img-responsive {
         /* -------------------------------------
             PRESERVE THESE STYLES IN THE HEAD
         ------------------------------------- */
-        @media all
-{
-            .ExternalClass
-    {
-        width: 100 %;
-    }
+        @media all {
+            .ExternalClass {
+                width: 100 %;
+            }
 
                 .ExternalClass,
                 .ExternalClass p,
                 .ExternalClass span,
                 .ExternalClass font,
                 .ExternalClass td,
-                .ExternalClass div
-    {
-        line - height: 100 %;
-    }
+                .ExternalClass div {
+                    line - height: 100 %;
+                }
 
-            .apple-link a
-    {
-        color: inherit!important;
-        font - family: inherit!important;
-        font - size: inherit!important;
-        font - weight: inherit!important;
-        line - height: inherit!important;
-        text - decoration: none!important;
-    }
+            .apple-link a {
+                color: inherit !important;
+                font - family: inherit !important;
+                font - size: inherit !important;
+                font - weight: inherit !important;
+                line - height: inherit !important;
+                text - decoration: none !important;
+            }
 
-    p [class=button] {
+            p [class=button] {
                 font-family: sans-serif;
                 font-size: 14px;
                 vertical-align: top;
@@ -151,36 +144,56 @@ table[class=body] .img-responsive {
     </style>
 </head>
 <body class="email">
-    {4}
-    <table border = "0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background-color: #f6f6f6;">
+    <table border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background-color: #f6f6f6;">
         <tr>
-            <td style = " vertical-align top;" > &nbsp;</td>
+            <td style=" vertical-align top;"> &nbsp;</td>
             <td class="container" style=" vertical-align top; display block; Margin 0 auto; max-width 580px; padding 10px; width 580px;">
                 <div class="content" style="box-sizing: border-box; display: block; Margin: 0 auto; max-width: 580px; padding: 10px;">
                     <!-- START CENTERED WHITE CONTAINER -->
                     <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">This is preheader text.Some clients will show this text as a preview.</span>
+
+                    <h2>{{subject}}</h2>
                     <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
                         <!-- START MAIN CONTENT AREA -->
                         <tr>
-                            <td class="wrapper" style=" vertical-align top; box-sizing border-box; padding 20px;">
-                                <table border = "0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+                            <td class="wrapper" style=" vertical-align top; box-sizing border-box; padding 10px;">
+                                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
                                     <tr>
-                                        <td style = " vertical-align top;" >
-                                            < p class="pre">{0}</p>
-                                            <table border = "0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; box-sizing: border-box;">
+                                        <td style=" vertical-align top;">
+                                            <p class="pre">{{message}}</p>
+                                            <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; box-sizing: border-box;">
                                                 <tbody>
+                                                    {{#if attachments}}
+                                                    <hr />
+                                                    <h4>Attachments</h4>
+                                                    {{@each attachments}}
                                                     <tr>
-                                                        <td align = "left" style=" vertical-align top; padding-bottom 15px;">
-                                                            <table border = "0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
-                                                                <tbody>
-                                                                            {1}
-                                                                </tbody>
-                                                            </table>
+                                                        <td style="font-family: sans-serif; font-size: 14px; vertical-align: top; text-align: center;">
+                                                            <a href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};\">
+                                                                {{this.caption}}
+                                                            </a>
                                                         </td>
                                                     </tr>
+                                                    {{/each}}
+                                                    <hr />
+                                                    <br />
+                                                    {{/if}}
+                                                    <tr>
+                                                        <td align="center" style=" vertical-align top; padding-bottom 15px;">{{post}}</td>
+                                                    </tr>
+                                                    {{#if actions}}
+                                                    <tr>
+                                                        {{#each actions}}
+                                                        <td align="center" style=" vertical-align top; padding-bottom 15px;">
+                                                            <a href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};\">
+                                                                {{this.caption}}
+                                                            </a>
+                                                        </td>
+                                                        {{/each}}
+                                                    </tr>
+                                                    {{/if}}
                                                 </tbody>
                                             </table>
-                                            <p class="post">{2}</p>
                                         </td>
                                     </tr>
                                 </table>
@@ -190,16 +203,16 @@ table[class=body] .img-responsive {
                     </table>
                     <!-- START FOOTER -->
                     <div class="footer" style="clear: both; Margin-top: 10px; text-align: center; width: 100%;">
-                        <table border = "0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+                        <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
                             <tr>
                                 <td class="content-block" style=" vertical-align top; padding-bottom 10px; padding-top 10px; color #999999; text-align center;">
-                                    <span class="apple-link" style="color: #999999; text-align: center;">{3}</span>
+                                    <span class="apple-link" style="color: #999999; text-align: center;">{{footer}}</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="content-block powered-by" style=" vertical-align top; padding-bottom 10px; padding-top 10px; font-size 12px; color #999999; text-align center;">
                                     <br />
-                                    Powered by <a href="{nxofficeurl}" style="color: #999999; font-size: 12px; text-align: center; text-decoration: none;">NX.Project</a>.
+                                    Powered by <a href="{{url}}" style="color: #999999; font-size: 12px; text-align: center; text-decoration: none;">NX.Project</a>.
                                 </td>
                             </tr>
                         </table>
@@ -208,7 +221,7 @@ table[class=body] .img-responsive {
                     <!-- END CENTERED WHITE CONTAINER -->
                 </div>
             </td>
-            <td style = " vertical-align top;" > &nbsp;</td>
+            <td style=" vertical-align top;"> &nbsp;</td>
         </tr>
     </table>
 </body>

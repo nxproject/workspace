@@ -55,7 +55,7 @@ nx._routes.push({
                 }
 
                 // Child pick
-                if (chain) {
+                if (chain && chain.queries) {
                     // Copy
                     chain.queries.forEach(function (qry) {
                         // Add
@@ -130,7 +130,7 @@ nx._routes.push({
                         rbl,
                         [
                             nx.builder.searchbar(nx.env.getBucketItem('_search', routeTo.url)),
-                            nx.builder.picklist(ds, data, nx.env.getBucketID(routeTo.url))
+                            nx.builder.picklist(ds, data, nx.env.getBucketID(routeTo.url), nx.env.getBucketItem('onSelect', routeTo.url))
                         ],
                         (nx.user.opAllowed(ds, 'a') ?
                             {
@@ -202,6 +202,7 @@ nx.calls.pick = function (req) {
 
 // Set the call
 nx.calls.pickchild = function (req) {
+
     // Get the object
     var obj = nx.env.getBucketItem('_obj');
 
@@ -230,3 +231,15 @@ nx.calls.pickchild = function (req) {
     // Call
     nx.office.goTo('pick', req);
 };
+
+nx.calls.pickselect = function (req) {
+
+    // Get the callbact
+    var cb = nx.env.getBucketItem('onSelect');
+
+    // Any?
+    if (cb) {
+        cb(req);
+    }
+
+}

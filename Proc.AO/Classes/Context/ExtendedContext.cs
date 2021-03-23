@@ -285,7 +285,7 @@ namespace Proc.AO
         #endregion
 
         #region SIO
-        public void SendQM(string user, string mesaage, List<string> attachments)
+        public void SendNotification(string user, string mesaage, List<DocumentClass> attachments)
         {
             SIO.ManagerClass c_Mgr = this.Parent.Globals.Get<SIO.ManagerClass>();
 

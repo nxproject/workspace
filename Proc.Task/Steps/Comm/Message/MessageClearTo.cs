@@ -23,62 +23,63 @@
 /// 
 
 using System;
-using System.Text;
 using System.Collections.Generic;
 
 using Newtonsoft.Json.Linq;
 
 using NX.Shared;
 using NX.Engine;
-using NX.Engine.Files;
+using Common.TaskWF;
+using Proc.AO;
+using Proc.Docs;
 
-namespace Proc.Communication.EMailIF
+namespace Proc.Task
 {
-    public class EngineClass : IDisposable
+    public class MessageClearTo : CommandClass
     {
         #region Constants
+        private const string ArgMsg = "msg";
         #endregion
 
         #region Constructor
-        public EngineClass(string friendly, string name, string pwd, string prov)
-        {
-            //
-            this.Friendly = friendly;
-            this.Name = name;
-            this.Pwd = pwd;
-            this.Provider = prov;
-        }
-        #endregion
-
-        #region IDisposable
-        public void Dispose()
+        public MessageClearTo()
         { }
         #endregion
 
-        #region Properties
-        public string Friendly { get; internal set; }
-        public string Name { get; internal set; }
-        public string Pwd { get; internal set; }
-        public string Provider { get; internal set; }
+        #region IStep
+        public override DescriptionClass Description
+        {
+            get
+            {
+                NamedListClass<ParamDefinitionClass> c_P = new NamedListClass<ParamDefinitionClass>();
+
+                c_P.Add(ArgMsg, new ParamDefinitionClass(ParamDefinitionClass.Types.Optional, "The message to use"));
+
+                this.AddSystem(c_P);
+
+                return new DescriptionClass(CategoriesClass.Store, "Removes all to's from the message", c_P);
+            }
+        }
         #endregion
 
-        #region Methods
-        public string SendHTML(AO.ExtendedContextClass ctx,
-                                string to,
-                                string subj,
-                                string msg)
+        #region Code Line
+        public override string Command
+        {
+            get { return "msg.tos.clear"; }
+        }
+
+        public override ReturnClass ExecStep(TaskContextClass ctx, ArgsClass args)
         {
             //
-            using (ClientClass c_Client = new ClientClass(this.Friendly,
-                                                                this.Name,
-                                                                this.Pwd,
-                                                                ClientClass.ProviderFromString(this.Provider)))
-            {
-                return c_Client.Send(to,
-                                subj,
-                                msg
-                                );
-            }
+            ReturnClass eAns = ReturnClass.Done;
+
+            // Get
+            string sMsg = args.Get(ArgMsg);
+
+            // Do
+            ctx.Messages[sMsg].To.Clear();
+
+            return eAns;
         }
         #endregion
     }

@@ -531,6 +531,14 @@ namespace Proc.AO
         }
         #endregion
 
+        #region DigitalOcean
+        public string DigitalOceanToken
+        {
+            get { return this.SynchObject["dotoken"]; }
+            set { this.SynchObject["dotoken"] = value; }
+        }
+        #endregion
+
         #region Methods
         /// <summary>
         /// 
@@ -573,14 +581,14 @@ namespace Proc.AO
         /// 
         /// </summary>
         /// <param name="recyclenginx"></param>
-        public void UpdateEnv(bool recyclenginx)
+        public void UpdateEnv(bool recyclenginx, bool force=false)
         {
             //
             bool bChanged = false;
             bool bNChanged = false;
 
             // To environment
-            if (!this.Domain.IsSameValue(this.DomainShadow))
+            if (force || !this.Domain.IsSameValue(this.DomainShadow))
             {
                 this.DomainShadow = this.Domain;
                 this.Parent.Parent.Parent.Domain = this.Domain;
@@ -589,7 +597,7 @@ namespace Proc.AO
                 bNChanged = true;
             }
 
-            if (!this.CertEMail.IsSameValue(this.CertEMailShadow))
+            if (force || !this.CertEMail.IsSameValue(this.CertEMailShadow))
             {
                 this.CertEMailShadow = this.CertEMail;
                 this.Parent.Parent.Parent["certbot_email"] = this.CertEMail;
@@ -598,7 +606,7 @@ namespace Proc.AO
                 bNChanged = true;
             }
 
-            if (this.ProcessorCount != this.ProcessorCountShadow)
+            if (force || this.ProcessorCount != this.ProcessorCountShadow)
             {
                 this.ProcessorCountShadow = this.ProcessorCount;
                 this.Parent.Parent.Parent["qd_worker"] = this.ProcessorCount.ToString();
@@ -610,13 +618,14 @@ namespace Proc.AO
             if (bChanged) this.SynchObject.Save();
 
             // Recycle NginX
-            if (recyclenginx && bNChanged)
+            if (force || (recyclenginx && bNChanged))
             {
-                using (Proc.NginX.ManagerClass c_Mgr = new NginX.ManagerClass(this.Parent.Parent.Parent))
-                {
-                    // Only if we are the queen
-                    c_Mgr.MakeConfig(c_Mgr.IsAvailable && c_Mgr.IsQueen);
-                }
+                // Remove old NginX
+                this.Parent.Parent.Parent.Globals.Remove<Proc.NginX.ManagerClass>();
+
+                // And remake
+                Proc.NginX.ManagerClass c_Mgr = this.Parent.Parent.Parent.Globals.Get<Proc.NginX.ManagerClass>();
+                c_Mgr.MakeConfig(true);
             }
 
             // Relink twilio

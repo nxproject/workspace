@@ -39,25 +39,49 @@ namespace Proc.Communication
     public class eMessageClass : ChildOfClass<AO.ExtendedContextClass>
     {
         #region Constants
-        private const string KeySubj = "subj";
-        private const string KeyMsg = "msg";
-        private const string KeyTo = "to";
-        private const string KeyAtt = "att";
-        private const string KeyCO = "co";
+        private const string KeySubj = "subject";
+        private const string KeyMsg = "message";
+        private const string KeyPost = "post";
+        private const string KeyFooter = "footer";
+        private const string KeySite = "site";
+        private const string KeyURL = "url";
         #endregion
 
         #region Constructor
         public eMessageClass(AO.ExtendedContextClass ctx)
             : base(ctx)
         {
-            this.Values = new JObject();
+            this.Values = new StoreClass();
+
+            this.Initialize();
         }
 
         public eMessageClass(AO.ExtendedContextClass ctx, string value)
             : base(ctx)
         {
-            this.Values = value.ToJObject();
-            if (this.Values == null) this.Values = new JObject();
+            this.Values = new StoreClass(value.ToJObject());
+
+            this.Initialize();
+        }
+
+        private void Initialize()
+        {
+            // 
+            this.Subject = "A message for you";
+            this.Message = "";
+            this.Post = "";
+            this.Site = this.Parent.Database.SiteInfo.Name;
+            this.URL = this.Parent.Parent.LoopbackURL;
+            this.Footer = this.Parent.User.CommFooter;
+            
+        }
+        #endregion
+
+        #region Indexer
+        public string this[string key]
+        {
+            get { return this.Values[key]; }
+            set { this.Values[key] = value; }
         }
         #endregion
 
@@ -67,28 +91,49 @@ namespace Proc.Communication
         /// The working values
         /// 
         /// </summary>
-        internal JObject Values { get; set; }
+        internal StoreClass Values { get; set; }
 
         /// <summary>
         /// 
         /// Subject text for message
         /// 
         /// </summary>
-        public string Subject { get { return this.Values.Get(KeySubj); } set { this.Values.Set(KeySubj, value); } }
+        public string Subject { get { return this.Values[KeySubj]; } set { this.Values[KeySubj] = value; } }
 
         /// <summary>
         /// 
         /// The message body
         /// 
         /// </summary>
-        public string Message { get { return this.Values.Get(KeyMsg); } set { this.Values.Set(KeyMsg, value); } }
+        public string Message { get { return this.Values[KeyMsg]; } set { this.Values[KeyMsg] = value; } }
 
         /// <summary>
         /// 
-        /// The care/of
+        /// The post text
         /// 
         /// </summary>
-        public string CO { get { return this.Values.Get(KeyCO); } set { this.Values.Set(KeyCO, value); } }
+        public string Post { get { return this.Values[KeyPost]; } set { this.Values[KeyPost] = value; } }
+
+        /// <summary>
+        /// 
+        /// The message footer
+        /// 
+        /// </summary>
+        public string Footer { get { return this.Values[KeyFooter]; } set { this.Values[KeyFooter] = value; } }
+
+        /// <summary>
+        /// 
+        /// The site name
+        /// 
+        /// </summary>
+        public string Site { get { return this.Values[KeySite]; } set { this.Values[KeySite] = value; } }
+
+        /// <summary>
+        /// 
+        /// The site URL
+        /// 
+        /// </summary>
+        public string URL { get { return this.Values[KeyURL]; } set { this.Values[KeyURL] = value; } }
 
         /// <summary>
         /// 
@@ -102,7 +147,7 @@ namespace Proc.Communication
             {
                 if (this.ITo == null)
                 {
-                    this.ITo = new eAddressesClass(this, KeyTo);
+                    this.ITo = new eAddressesClass(this);
                 }
 
                 return this.ITo;
@@ -121,10 +166,78 @@ namespace Proc.Communication
             {
                 if (this.IAttachments == null)
                 {
-                    this.IAttachments = new eAttachmentListClass(this, KeyAtt);
+                    this.IAttachments = new eAttachmentListClass(this);
                 }
 
                 return this.IAttachments;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// Actions
+        /// 
+        /// </summary>
+        private eActiontListClass IActions { get; set; }
+        public eActiontListClass Actions
+        {
+            get
+            {
+                if (this.IActions == null)
+                {
+                    this.IActions = new eActiontListClass(this);
+                }
+
+                return this.IActions;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// The data object
+        /// 
+        /// </summary>
+        public AO.ObjectClass Object { get; set; }
+
+        /// <summary>
+        /// 
+        /// The template to use for emails
+        /// 
+        /// </summary>
+        public string EMailTemplate { get; set; }
+
+        private string IEMailHTML { get; set; }
+        public string EMailHTML
+        {
+            get
+            {
+                if(this.IEMailHTML == null)
+                {
+                    this.IEMailHTML = this.FormatEMail(this.EMailTemplate);
+                }
+
+                return this.IEMailHTML;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// The template to use for SMS
+        /// 
+        /// </summary>
+        public string SMSTemplate { get; set; }
+
+        private string ISMSHTML { get; set; }
+        public string SMSHTML
+        {
+            get
+            {
+                if (this.ISMSHTML == null)
+                {
+                    this.ISMSHTML = this.FormatSMS(this.SMSTemplate);
+                }
+
+                return this.ISMSHTML;
             }
         }
 
@@ -133,14 +246,30 @@ namespace Proc.Communication
         #endregion
 
         #region Methods
+        /// <summary>
+        /// 
+        /// Converts message to string
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return this.Values.ToSimpleString();
+            return this.Values.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// Generic send
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public eReturnClass Send()
         {
             eReturnClass c_Ans = new eReturnClass();
+
+            // Rset messages
+            this.IEMailHTML = null;
+            this.ISMSHTML = null;
 
             foreach (eAddressClass sTo in this.To.Users.Values)
             {
@@ -150,7 +279,7 @@ namespace Proc.Communication
                 }
                 else
                 {
-                    this.SendQM(sTo, c_Ans);
+                    this.SendNotification(sTo, c_Ans);
                 }
             }
 
@@ -177,13 +306,27 @@ namespace Proc.Communication
             return c_Ans;
         }
 
-        private void SendQM(eAddressClass to, eReturnClass result)
+        /// <summary>
+        /// 
+        /// Sends a notification
+        /// 
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="result"></param>
+        private void SendNotification(eAddressClass to, eReturnClass result)
         {
-            this.Parent.SendQM(to.To, this.Message, this.Attachments.Paths);
+            this.Parent.SendNotification(to.To, this.Message, this.Attachments.AsDocuments);
 
             result.Log(to);
         }
 
+        /// <summary>
+        /// 
+        /// Sends an email
+        /// 
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="result"></param>
         private void SendEMail(eAddressClass to, eReturnClass result)
         {
             try
@@ -192,13 +335,13 @@ namespace Proc.Communication
                 string sEMailPwd = this.Parent.User.EMailPassword;
                 string sEMailProvider = this.Parent.User.EMailProvider;
                 string sFriendly = this.Parent.User.Displayable;
-                string sEMailFooter = this.Parent.User.CommFooter;
+
+                // Format
+                string sHTML = this.IEMailHTML;
 
                 //Validate
                 if (sEMailLogin.HasValue() && sEMailPwd.HasValue())
                 {
-                    string sFinal = this.Message.TextToHTML();
-
                     using (EMailIF.EngineClass c_Client = new EMailIF.EngineClass(sFriendly,
                                                                                     sEMailLogin,
                                                                                     sEMailPwd,
@@ -206,10 +349,7 @@ namespace Proc.Communication
                     {
                         string sResp = c_Client.SendHTML(this.Parent, to.To,
                                         this.Subject,
-                                        sFinal,
-                                        sEMailFooter,
-                                        this.Attachments.Documents,
-                                        false
+                                        sHTML
                                         );
 
                         if (sResp.HasValue())
@@ -224,7 +364,14 @@ namespace Proc.Communication
                 }
                 else
                 {
-                    result.Log(to, "EMail has not been setup");
+                    if (!this.SendViaSendGrid(to, result, sHTML))
+                    {
+                        result.Log(to, "EMail has not been setup");
+                    }
+                    else
+                    {
+                        result.Log(to);
+                    }
                 }
             }
             catch (Exception e)
@@ -233,6 +380,13 @@ namespace Proc.Communication
             }
         }
 
+        /// <summary>
+        /// 
+        /// Sends an SMS
+        /// 
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="result"></param>
         private void SendSMS(eAddressClass to, eReturnClass result)
         {
             //
@@ -241,12 +395,14 @@ namespace Proc.Communication
                 string sFriendly = this.Parent.User.Displayable;
                 string sUserPhone = this.Parent.User.TwilioPhone;
 
+                // Format
+                string sHTML = this.SMSHTML;
+
                 //
                 string sResp = c_Client.SendSMS(
                                         to.To,
                                         sUserPhone,
-                                        this.Message,
-                                        this.Attachments.Documents
+                                        sHTML
                                         );
 
                 if (sResp.HasValue())
@@ -260,6 +416,13 @@ namespace Proc.Communication
             }
         }
 
+        /// <summary>
+        /// 
+        /// Makes a phone call
+        /// 
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="result"></param>
         private void MakeCall(eAddressClass to, eReturnClass result)
         {
             //
@@ -288,16 +451,164 @@ namespace Proc.Communication
             this.SendEMail(new eAddressClass("printandgo@fedex.com", eAddressClass.AddressTypes.EMail), result);
         }
 
-        public void SendViaSendGrid(eAddressClass to, eReturnClass result, string html, AO.SiteInfoClass si)
+        /// <summary>
+        /// 
+        /// Sends an email via SendGrid
+        /// 
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="result"></param>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        private bool SendViaSendGrid(eAddressClass to, eReturnClass result, string html)
         {
-            SendGridClient c_Client = new SendGridClient(si.SendGridAPI);
+            // Assume failure
+            bool bAns = false;
 
-            var from = new EmailAddress(si.SendGridEmail, si.SendGridFriendlyName);
-            EmailAddress c_To = new EmailAddress(to.To);
-            var msg = MailHelper.CreateSingleEmail(from, c_To, this.Subject, "", html);
-            Response c_Resp = c_Client.SendEmailAsync(msg).Result;
+            // Get site info
+            AO.SiteInfoClass c_SI = this.Parent.Database.SiteInfo;
 
-            result.Log(to, c_Resp.IsSuccessStatusCode ? "" : "Error while sending via SendGrid: {0}".FormatString(c_Resp.StatusCode));
+            // Must be setup
+            if (c_SI.SendGridAPI.HasValue())
+            {
+                SendGridClient c_Client = new SendGridClient(c_SI.SendGridAPI);
+
+                var from = new EmailAddress(c_SI.SendGridEmail, c_SI.SendGridFriendlyName.IfEmpty(c_SI.Name));
+                EmailAddress c_To = new EmailAddress(to.To);
+                var msg = MailHelper.CreateSingleEmail(from, c_To, this.Subject, "", html);
+                Response c_Resp = c_Client.SendEmailAsync(msg).Result;
+
+                //
+                bAns = c_Resp.IsSuccessStatusCode;
+
+                result.Log(to, bAns ? "" : "Error while sending via SendGrid: {0}".FormatString(c_Resp.StatusCode));
+            }
+
+            return bAns;
+        }
+        #endregion
+
+        #region Formatters
+        /// <summary>
+        /// 
+        /// Formats the message in HTML format
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <returns></returns>
+        private string FormatEMail(string template)
+        {
+            string sTemplate = template;
+            if (!sTemplate.HasValue()) sTemplate = this.GetResource("EMailTemplate.html").FromBytes();
+
+            // Build attachment list
+            if (this.Attachments != null && this.Attachments.Count > 0)
+            {
+                JArray c_Attachments = new JArray();
+                
+                // Loop thru
+                foreach (eAttachmenClass c_File in this.Attachments.Documents)
+                {
+                    //
+                    JObject c_Entry = new JObject();
+
+                    c_Entry.Set("color", "#3498db");
+                    c_Entry.Set("href", c_File.Document.URL);
+                    c_Entry.Set("caption", c_File.Caption.IfEmpty(c_File.Document.Name).ToUpper());
+
+                    c_Attachments.Add(c_Entry);
+                }
+
+                this.Values.Set("attachments", c_Attachments);
+            }
+
+            // Build actions list
+            if(this.Actions != null && this.Actions.Count > 0)
+            {
+                JArray c_Actions = new JArray();
+
+                // Loop thru
+                foreach (eActionClass c_Action in this.Actions.Actions)
+                {
+                    //
+                    JObject c_Entry = new JObject();
+
+                    c_Entry.Set("color", c_Action.Color);
+                    c_Entry.Set("href", c_Action.URL);
+                    c_Entry.Set("caption", c_Action.Caption.ToUpper());
+
+                    c_Actions.Add(c_Entry);
+                }
+
+                this.Values.Set("actions", c_Actions);
+            }
+
+            // Predined
+            this.Values.Set("sys", this.Parent.Database.SiteInfo.AsJObject);
+            this.Values.Set("user", this.Parent.User.SynchObject);
+
+            // Data
+            if(this.Object != null)
+            {
+                // Get
+                JObject c_Data = this.Object.AsJObject;
+                // Get linked
+                this.FillLinks(c_Data);
+
+                // Save
+                this.Values.Set("data", c_Data);
+            }
+
+            return sTemplate.Handlebars(this.Values);
+        }
+
+        /// <summary>
+        /// 
+        /// Formats the message in HTML format
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <returns></returns>
+        private string FormatSMS(string template)
+        {
+            string sTemplate = template;
+            if (!sTemplate.HasValue()) sTemplate = this.GetResource("SMSTemplate.html").FromBytes();
+
+            return this.FormatEMail(sTemplate);
+        }
+
+        /// <summary>
+        /// 
+        /// Build data tree
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        private void FillLinks(JObject obj)
+        {
+            // Loop thru
+            foreach(string sKey in obj.Keys())
+            {
+                // Get the value
+                string sValue = obj.Get(sKey);
+                // Is it a link?
+                if(AO.UUIDClass.IsValid(sValue))
+                {
+                    // Make UUID
+                    using (AO.UUIDClass c_UUID = new AO.UUIDClass(this.Parent.Database, sValue))
+                    {
+                        // 
+                        using (AO.ObjectClass c_Child = c_UUID.AsObject)
+                        {
+                            // Build
+                            JObject c_CData = c_Child.AsJObject;
+                            // Fill
+                            this.FillLinks(c_CData);
+                            // Get
+                            obj.Set(sKey, c_CData);
+                        }
+                    }
+                }
+            }
         }
         #endregion
     }

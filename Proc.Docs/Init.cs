@@ -108,9 +108,15 @@ namespace Proc.Docx
                 // By the extension
                 switch (docin.Extension.ToLower())
                 {
-                    case "docx":
                     case "doc":
+                    case "docx":
+                    case "txt":
                     case "rtf":
+                    case "html":
+                    case "htm":
+                    case "odt":
+                    case "wps":
+                    case "wpd":
                         c_Out = new DocumentClass(docin.Parent, docin.Path.SetExtensionFromPath("odt"));
                         break;
                 }

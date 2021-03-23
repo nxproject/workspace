@@ -83,7 +83,7 @@ namespace Proc.Docs.Files
             // According to type
             switch (doc.Extension)
             {
-                case "docx":
+                case "odt":
                     doc.HTML().Merge(result, ctx);
                     break;
 

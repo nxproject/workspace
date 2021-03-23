@@ -46,7 +46,6 @@ namespace Proc.Office
 
             // Help
             env.Use("Markdig");
-            env.Use("Handlebars");
             env.Use("Proc.Help");
 
             // Common

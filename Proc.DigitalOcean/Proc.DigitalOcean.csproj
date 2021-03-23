@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Stripe" Version="1.12.0" />
+    <PackageReference Include="DigitalOcean.API.Core" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>

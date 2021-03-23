@@ -23,7 +23,6 @@
 /// 
 
 using System;
-using System.Text;
 using System.Collections.Generic;
 
 using Newtonsoft.Json.Linq;
@@ -32,53 +31,48 @@ using NX.Shared;
 using NX.Engine;
 using NX.Engine.Files;
 
-namespace Proc.Communication.EMailIF
+namespace Proc.Communication
 {
-    public class EngineClass : IDisposable
+    public class eActiontListClass : ChildOfClass<eMessageClass>
     {
-        #region Constants
-        #endregion
-
         #region Constructor
-        public EngineClass(string friendly, string name, string pwd, string prov)
-        {
-            //
-            this.Friendly = friendly;
-            this.Name = name;
-            this.Pwd = pwd;
-            this.Provider = prov;
-        }
-        #endregion
-
-        #region IDisposable
-        public void Dispose()
+        public eActiontListClass(eMessageClass msg)
+            : base(msg)
         { }
         #endregion
 
         #region Properties
-        public string Friendly { get; internal set; }
-        public string Name { get; internal set; }
-        public string Pwd { get; internal set; }
-        public string Provider { get; internal set; }
+        /// <summary>
+        /// 
+        /// The list of documents
+        /// 
+        /// </summary>
+        public List<eActionClass> Actions { get; private set; } = new List<eActionClass>();
+
+        /// <summary>
+        /// 
+        /// The number of actions
+        /// 
+        /// </summary>
+        public int Count
+        {
+            get { return this.Actions.Count; }
+        }
         #endregion
 
         #region Methods
-        public string SendHTML(AO.ExtendedContextClass ctx,
-                                string to,
-                                string subj,
-                                string msg)
+        public void Add(List<eActionClass> actions)
+        {
+            foreach (eActionClass c_Action in actions)
+            {
+                this.Add(c_Action);
+            }
+        }
+
+        public void Add(eActionClass action)
         {
             //
-            using (ClientClass c_Client = new ClientClass(this.Friendly,
-                                                                this.Name,
-                                                                this.Pwd,
-                                                                ClientClass.ProviderFromString(this.Provider)))
-            {
-                return c_Client.Send(to,
-                                subj,
-                                msg
-                                );
-            }
+            this.Actions.Add(action);
         }
         #endregion
     }

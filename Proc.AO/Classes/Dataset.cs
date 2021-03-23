@@ -187,7 +187,14 @@ namespace Proc.AO
         #region Views
         public List<string> Views
         {
-            get { return this.SettingsCollection.Names(Definitions.ViewClass.Prefix); }
+            get 
+            { 
+                List<string> c_Ans = this.SettingsCollection.Names(Definitions.ViewClass.Prefix);
+                // Must jave default
+                if (!c_Ans.Contains("default")) c_Ans.Add("default");
+
+                return c_Ans;
+            }
         }
 
         /// <summary>
