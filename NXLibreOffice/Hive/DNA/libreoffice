@@ -12,6 +12,6 @@
     "--config",
     "config.json"
   ],
-  "Image": "{repo_project}/libreoffice:{hive}",
+  "Image": "{repo_project}/{hive}:libreoffice",
   "WorkingDir": "/etc/wd"
 }
