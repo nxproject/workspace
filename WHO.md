@@ -53,8 +53,8 @@ This project is licensed under the MIT License - see the [LICENSE](https://mit-l
 
 ## Packages used
 
+* [cRontrue](https://github.com/bradymholt/cronstrue)
 * [Docker.DotNet](https://github.com/dotnet/Docker.DotNet)
-* [DocumentFormat.OpenXML](https://github.com/OfficeDev/Open-Xml-Sdk)
 * [Elsa Designer](https://github.com/elsa-workflows/elsa-designer)
 * [fast-xml-parser](https://github.com/NaturalIntelligence/fast-xml-parser)
 * [FullCalendar](https://github.com/fullcalendar)
@@ -73,7 +73,6 @@ This project is licensed under the MIT License - see the [LICENSE](https://mit-l
 * [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 * [Notiflix](https://github.com/notiflix/Notiflix)
 * [Octokit](https://github.com/octokit)
-* [OpenXmlPowerTools](https://github.com/OfficeDev/Open-Xml-PowerTools)
 * [PDF.js](https://github.com/mozilla/pdf.js/)
 * [PivotTable](https://github.com/nicolaskruchten/pivottable)
 * [SendGrid](https://github.com/sendgrid/sendgrid-csharp)

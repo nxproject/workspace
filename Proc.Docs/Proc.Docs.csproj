@@ -19,9 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>..\..\Others\Open-XML-SDK-master\src\OpenXmlPowerTools\bin\Debug\netcoreapp3.1\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\..\Others\iTextSharp\src\extras\itextsharp.xmlworker\bin\Debug\netcoreapp3.1\itextsharp.dll</HintPath>
     </Reference>
@@ -33,9 +30,6 @@
     </Reference>
     <Reference Include="NX.Shared">
       <HintPath>..\..\Node\NX.Shared\bin\Debug\netcoreapp3.1\NX.Shared.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenXmlPowerTools">
-      <HintPath>..\..\Others\Open-XML-SDK-master\src\OpenXmlPowerTools\bin\Debug\netcoreapp3.1\OpenXmlPowerTools.dll</HintPath>
     </Reference>
   </ItemGroup>
 

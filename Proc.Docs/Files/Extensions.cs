@@ -28,8 +28,6 @@
 /// Install-Package Newtonsoft.Json -Version 12.0.3
 /// Install-Package itextSharp -Version 5.5.13.1
 /// Install-Package itextSharp.xmlworker -Version 5.5.13.1
-/// Install-Package OpenXmlPowerTools -Version 4.5.3.2
-/// Install-Package DocumentFormat.OpenXML -Version 2.11.3
 /// 
 
 using System;
@@ -38,8 +36,6 @@ using System.Text;
 
 using Newtonsoft.Json.Linq;
 
-using OpenXmlPowerTools;
-using DocumentFormat.OpenXml.Packaging;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;

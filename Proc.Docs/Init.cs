@@ -39,8 +39,6 @@ namespace Proc.Docx
 
             // Load third party assemblies
             "itextsharp.xmlworker.dll".LoadAssembly(env);
-            "DocumentFormat.OpenXml.dll".LoadAssembly(env);
-            "OpenXmlPowerTools.dll".LoadAssembly(env);
 
             // Extend eval
             FunctionsDefinitions c_Defs = Context.FunctionsTable;
