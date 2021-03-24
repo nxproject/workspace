@@ -68,11 +68,11 @@ namespace Proc.Office
             if (env["document"].FromDBBoolean())
             {
                 // Write the functions documentation
-                env.FNS.GenerateMD(@"C:\Candid Concepts\NX\Office\UI.QX\help\info.\README_FNS.md");
+                env.FNS.GenerateMD(@"C:\Candid Concepts\NX\Workspace\readmes\README_FNS.md");
 
                 // Write the eval functions documentation
                 FunctionsDefinitions c_Defs = Context.FunctionsTable;
-                c_Defs.GenerateMD(@"C:\Candid Concepts\NX\Office\UI.QX\help\info.\README_LE.md");
+                c_Defs.GenerateMD(@"C:\Candid Concepts\NX\Workspace\readmes\README_LE.md");
             }
 
             base.Initialize(env);

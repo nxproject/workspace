@@ -59,7 +59,7 @@ namespace Proc.Task
 
                 this.AddSystem(c_P);
 
-                return new DescriptionClass(CategoriesClass.Store, "Sets the message subject", c_P);
+                return new DescriptionClass(CategoriesClass.Comm, "Sets the message subject", c_P);
             }
         }
         #endregion

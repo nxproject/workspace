@@ -216,7 +216,7 @@ namespace Proc.Task
             if (env["document"].FromDBBoolean())
             {
                 // Write MD
-                c_Mgr.GenerateMD(@"C:\Candid Concepts\NX\Office\UI.QX\help\info.\README_D_TASKS.md");
+                c_Mgr.GenerateMD(@"C:\Candid Concepts\NX\Workspace\readmes\README_D_TASKS.md");
                 // Write Elsa file
                 c_Mgr.GenerateElsa(@"C:\Candid Concepts\NX\Others\Elsa\src\plugins\task-activities.ts");
             }

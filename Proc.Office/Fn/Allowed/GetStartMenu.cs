@@ -535,7 +535,7 @@ namespace Proc.Office
             else
             {
                 // The dataset dictates
-                bAns = ds.Hidden || ds.StartIndex.IsSameValue("hidden");
+                bAns = (ds.AtStart == AO.Definitions.DatasetClass.AtStartOptions.Yes) || ds.StartIndex.IsSameValue("hidden");
             }
 
             return bAns;

@@ -61,7 +61,7 @@ namespace Proc.Task
 
                 this.AddSystem(c_P);
 
-                return new DescriptionClass(CategoriesClass.Store, "Adds an action to the message", c_P);
+                return new DescriptionClass(CategoriesClass.Comm, "Adds an action to the message", c_P);
             }
         }
         #endregion

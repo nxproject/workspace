@@ -88,13 +88,14 @@ qx.Class.define('tools.PropertiesDataset', {
                                             aoFld: 'icon',
                                             value: dsdef.icon
                                         }, {
-                                            nxtype: 'boolean',
+                                            nxtype: 'combobox',
                                             top: 5,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Hide in Start',
                                             aoFld: 'hidden',
-                                            value: dsdef.hidden
+                                            value: dsdef.hidden,
+                                            choices: ['y', 'n', 'v']
                                         }, {
                                             nxtype: 'string',
                                             top: 6,

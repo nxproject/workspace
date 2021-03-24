@@ -45,7 +45,7 @@ namespace Proc.Workflow
             if (env["document"].FromDBBoolean())
             {
                 // Write MD
-                c_Mgr.GenerateMD(@"C:\Candid Concepts\NX\Office\UI.QX\help\info.\README_D_WF.md");
+                c_Mgr.GenerateMD(@"C:\Candid Concepts\NX\Workspace\readmes\README_D_WF.md");
                 // Write Elsa file
                 c_Mgr.GenerateElsa(@"C:\Candid Concepts\NX\Others\Elsa\src\plugins\wf-activities.ts");
             }

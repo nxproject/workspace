@@ -57,7 +57,7 @@ namespace Proc.Task
 
                 this.AddSystem(c_P);
 
-                return new DescriptionClass(CategoriesClass.Store, "Sets the default message", c_P);
+                return new DescriptionClass(CategoriesClass.Comm, "Sets the default message", c_P);
             }
         }
         #endregion

@@ -147,7 +147,7 @@ qx.Class.define('tools.View', {
 
                 // None if prefix
                 if (!req.idprefix) {
-//
+                    //
                     viewdef.bottomToolbar = nx.util.createPickToolbar(req.ds, function (e) {
                         // Refresh the grid
                         nx.util.eventGetWindow(e).getFieldsOfClass('c._grid')[0].refresh();
@@ -307,20 +307,24 @@ qx.Class.define('tools.View', {
                 // Can we add?
                 if (nx.desktop.user.opAllowed(req.ds, 'a')) {
                     commands.push('>');
-                    commands.push({
-                        label: 'Add',
-                        icon: 'application_add',
-                        click: function (e) {
-                            nx.util.runTool(req.tool || 'Object', {
-                                ds: req.ds,
-                                view: nx.desktop.user.getDSInfo(req.ds).view,
-                                caller: nx.util.eventGetWindow(e),
-                                chain: req.chain,
-                                idprefix: req.idprefix,
-                                tptool: req.tptool
-                            });
-                        }
-                    });
+                // View only?
+                    if (dsdef.hidden != 'v') {
+                       
+                        commands.push({
+                            label: 'Add',
+                            icon: 'application_add',
+                            click: function (e) {
+                                nx.util.runTool(req.tool || 'Object', {
+                                    ds: req.ds,
+                                    view: nx.desktop.user.getDSInfo(req.ds).view,
+                                    caller: nx.util.eventGetWindow(e),
+                                    chain: req.chain,
+                                    idprefix: req.idprefix,
+                                    tptool: req.tptool
+                                });
+                            }
+                        });
+                    }
                 }
 
                 // Any commands?

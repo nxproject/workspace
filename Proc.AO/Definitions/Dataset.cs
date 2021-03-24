@@ -45,6 +45,16 @@ namespace Proc.AO.Definitions
         }
         #endregion
 
+        #region Enums
+        public enum AtStartOptions
+        {
+            Undefined,
+            Yes,
+            No,
+            ViewOnly            
+        }
+        #endregion
+
         #region Indexer
         public DatasetFieldClass this[string name]
         {
@@ -141,10 +151,48 @@ namespace Proc.AO.Definitions
         /// Can the dataset be displayed in start menu?
         /// 
         /// </summary>
-        public bool Hidden
+        public AtStartOptions AtStart
         {
-            get { return this.Object["hidden"].FromDBBoolean(); }
-            set { this.Object["hidden"] = value.ToDBBoolean(); }
+            get 
+            {
+                AtStartOptions eAns = AtStartOptions.Undefined;
+
+                switch(this.Object["hidden"])
+                {
+                    case "y":
+                        eAns = AtStartOptions.Yes;
+                        break;
+
+                    case "n":
+                        eAns = AtStartOptions.No;
+                        break;
+
+                    case "v":
+                        eAns = AtStartOptions.ViewOnly;
+                        break;
+                }
+                return eAns; 
+            }
+            set 
+            {
+                string sValue = "";
+
+                switch(value)
+                {
+                    case AtStartOptions.Yes:
+                        sValue = "y";
+                        break;
+
+                    case AtStartOptions.No:
+                        sValue = "n";
+                        break;
+
+                    case AtStartOptions.ViewOnly:
+                        sValue = "v";
+                        break;
+                }
+                this.Object["hidden"] = sValue; 
+            }
         }
 
         /// <summary>

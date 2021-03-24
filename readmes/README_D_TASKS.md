@@ -60,21 +60,65 @@
 ### Comm
 |Command|Description|Parameter|Use| |
 |-|-|-|-|-|
-|send.email|Sends an EMail|to|E-Mail address to send the email|Required|
-| | |subj|The subject of the message to be sent|Required|
-| | |msg|The message to be sent|Required|
-| | |list|List of documents to attach||
+|msg.action.add|Adds an action to the message|msg|The message to use||
+| | |task|The task|Required|
+| | |name|The name to display||
 | | |if|Execute if||
 | | |comment|What does this step accomplish||
-|send.qm|Sends a Quick Message|to|User to send the quick message to|Required|
-| | |subj|The subject of the message to be sent|Required|
-| | |msg|The message to be sent|Required|
-| | |list|List of documents to attach||
+|msg.attachment.add|Adds an attachment to the message|msg|The message to use||
+| | |doc|The document|Required|
+| | |name|The name to display||
 | | |if|Execute if||
 | | |comment|What does this step accomplish||
-|send.sms|Sends a SMS message|to|Phone number to send SMS message to (self if empty)||
-| | |msg|The message to be sent|Required|
-| | |list|List of documents to attach||
+|msg.to.add|Adds an addressee to the message|msg|The message to use||
+| | |to|The to|Required|
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.actions.clear|Removes all actions from the message|msg|The message to use||
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.attachments.clear|Removes all attachments from the message|msg|The message to use||
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.tos.clear|Removes all to's from the message|msg|The message to use||
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.remove|Removes the message from the stack|msg|The message to remove||
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.set.template.email|Sets the message EMail template|msg|The message to use||
+| | |value|The template|Required|
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.set.footer|Sets the message footer text|msg|The message to use||
+| | |value|The footer text|Required|
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.set.item|Sets the message item text|msg|The message to use||
+| | |item|The  item|Required|
+| | |value|The  text|Required|
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.set.message|Sets the message text|msg|The message to use||
+| | |value|The body text|Required|
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.set.post|Sets the message post text|msg|The message to use||
+| | |value|The post text|Required|
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.set.template.sms|Sets the message SMS template|msg|The message to use||
+| | |value|The template|Required|
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.set.subject|Sets the message subject|msg|The message to use||
+| | |value|The subject|Required|
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|msg.use|Sets the default message|msg|The message to use||
+| | |if|Execute if||
+| | |comment|What does this step accomplish||
+|send|Sends a message|msg|The message to be sent||
 | | |if|Execute if||
 | | |comment|What does this step accomplish||
 

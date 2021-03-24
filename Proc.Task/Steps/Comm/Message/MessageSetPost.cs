@@ -59,7 +59,7 @@ namespace Proc.Task
 
                 this.AddSystem(c_P);
 
-                return new DescriptionClass(CategoriesClass.Store, "Sets the message post text", c_P);
+                return new DescriptionClass(CategoriesClass.Comm, "Sets the message post text", c_P);
             }
         }
         #endregion

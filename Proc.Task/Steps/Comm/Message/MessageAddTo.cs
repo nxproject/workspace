@@ -59,7 +59,7 @@ namespace Proc.Task
 
                 this.AddSystem(c_P);
 
-                return new DescriptionClass(CategoriesClass.Store, "Adds an addressee to the message", c_P);
+                return new DescriptionClass(CategoriesClass.Comm, "Adds an addressee to the message", c_P);
             }
         }
         #endregion

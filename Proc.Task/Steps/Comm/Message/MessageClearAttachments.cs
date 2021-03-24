@@ -57,7 +57,7 @@ namespace Proc.Task
 
                 this.AddSystem(c_P);
 
-                return new DescriptionClass(CategoriesClass.Store, "Removes all attachments from the message", c_P);
+                return new DescriptionClass(CategoriesClass.Comm, "Removes all attachments from the message", c_P);
             }
         }
         #endregion

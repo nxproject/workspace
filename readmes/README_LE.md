@@ -138,6 +138,10 @@ Statements are evaluated using a set of operations and functions:
 |datesortable|datesortable(a)|The date and time formatted as yyy-MM-dd HH:mm|The date value (Required)|The timezone (Optional)|
 |datetimefull|datetimefull(a)|A date and time value formatted|The date value (Required)|
 |dateyear|dateyear(a)|The year portion of a date|The date value (Required)|
+|docexists|docexists(a)|True if the document exists|The document reference (Required)|
+|docextension|docextension(a)|The document extension|The document reference (Required)|
+|docname|docname(a)|The document name|The document reference (Required)|
+|docshortname|docshortname(a)|The document name without extension|The document reference (Required)|
 |endswith|endswith(a,b)|True if a value ends with a value|The value (Required)|The ending value (Required)|
 |eval|eval(a)|Evaluates an expression|The expression (Required)|
 |exp|exp(a)|Exponential of a value|The value (Required)|
@@ -164,6 +168,7 @@ Statements are evaluated using a set of operations and functions:
 |len|len(a)|The length of a value|The value (Required)|
 |lf|lf()|A line feed|
 |linkdesc|linkdesc(a)|The placeholder of the object|The object name (Required)|
+|linkdscaption|linkdscaption(a)|The link dataset captio|The link value (Optional)|
 |ln|ln(a)|Log n of a value|The value (Required)|
 |log|log(a)|Log of a value|The value (Required)|The base (default: 10) (Optional)|
 |lower|lower(a)|The lowercase representation of a value|The value (Required)|

@@ -57,7 +57,7 @@ namespace Proc.Task
 
                 this.AddSystem(c_P);
 
-                return new DescriptionClass(CategoriesClass.Store, "Removes the message from the stack", c_P);
+                return new DescriptionClass(CategoriesClass.Comm, "Removes the message from the stack", c_P);
             }
         }
         #endregion
