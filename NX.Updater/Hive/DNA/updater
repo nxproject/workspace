@@ -1,0 +1,14 @@
+﻿{
+  "@Map": [
+    "{shared_folder}:/etc/shared",
+    "{shared_folder}/files:/etc/files"
+  ],
+  "Cmd": [
+    "dotnet",
+    "NXUpdater.dll",
+    "--config",
+    "config.json"
+  ],
+  "Image": "{repo_project}/{hive}:updater",
+  "WorkingDir": "/etc/wd"
+}

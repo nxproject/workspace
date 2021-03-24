@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="NX.Engine">
+      <HintPath>..\..\Node\NX.Engine\bin\Debug\netcoreapp3.1\NX.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="NX.Shared">
+      <HintPath>..\..\Node\NX.Shared\bin\Debug\netcoreapp3.1\NX.Shared.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -58,6 +58,9 @@ namespace Proc.Office
             // LibreOffice
             env.Use("Proc.LibreOffice");
 
+            // The updater logic
+            env.Use("Proc.Updater");
+
             // Call bootstrap
             env.FN("Office.LoadExtensions");
 
