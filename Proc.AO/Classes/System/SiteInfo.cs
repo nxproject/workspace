@@ -518,7 +518,7 @@ namespace Proc.AO
         }
         #endregion
 
-        #region Billing
+        #region Quorums
         /// <summary>
         /// 
         /// Is billing enabled?
@@ -528,14 +528,6 @@ namespace Proc.AO
         {
             get { return this.SynchObject["quorumenabled"].FromDBBoolean(); }
             set { this.SynchObject["quorumenabled"] = value.ToDBBoolean(); }
-        }
-        #endregion
-
-        #region DigitalOcean
-        public string DigitalOceanToken
-        {
-            get { return this.SynchObject["dotoken"]; }
-            set { this.SynchObject["dotoken"] = value; }
         }
         #endregion
 

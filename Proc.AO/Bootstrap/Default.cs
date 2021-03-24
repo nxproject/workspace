@@ -136,7 +136,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.22a"))
+            if (ds.Definition.ReleaseChanged("2021.03.24a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -315,10 +315,6 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Allowed;
                 c_Field.Label = "Acct.Def.Alwd";
 
-                c_Field = ds.Definition["dotoken"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Protected;
-                c_Field.Label = "Token";
-
                 c_Field.SaveParent();
             }
 
@@ -400,21 +396,6 @@ namespace Proc.AO.BuiltIn
                 c_CInfo.UseFields("defaultfieldWidth", "defaultpickWidth", "defaultpickHeight");
 
                 c_CInfo.Save();
-            }
-
-            Definitions.ViewClass c_VDO = ds.View("do");
-            if (c_VDO.ReleaseChanged(ds.Definition.Release))
-            {
-                //
-                c_VDO.Caption = "DigitalOcean";
-
-                // Clear
-                c_VDO.ClearFields();
-
-                // Map
-                c_VDO.UseFields("dotoken");
-
-                c_VDO.Save();
             }
 
             Definitions.ViewClass c_VTwitter = ds.View("twitter");
@@ -552,7 +533,7 @@ namespace Proc.AO.BuiltIn
                 // Make the tabs
                 Definitions.ViewFieldClass c_Field = c_VTP.AsTabs("sysve");
                 c_Field.Height = "14";
-                c_Field.Views = "twilio sendgrid ps stripe vebye do twitter";
+                c_Field.Views = "twilio sendgrid ps stripe vebye twitter";
 
                 c_VTP.Save();
             }
