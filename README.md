@@ -39,7 +39,7 @@ across a varied landscape.
 A ready to run Docker image is kept at:
 
 ```
-docker pull nxproject/processor:dev
+docker pull nxproject/site:processor
 ```
 
 The code will automatically build and launch all other needed containers.
