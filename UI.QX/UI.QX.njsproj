@@ -232,6 +232,7 @@
     <Content Include="ux\mobile\js\util.js" />
     <Content Include="ux\mobile\js\web.js" />
     <Content Include="ux\mobile\routes\chat.js" />
+    <Content Include="ux\mobile\routes\delete.js" />
     <Content Include="ux\mobile\routes\documents.js" />
     <Content Include="ux\mobile\routes\logout.js" />
     <Content Include="ux\mobile\routes\menu.js" />

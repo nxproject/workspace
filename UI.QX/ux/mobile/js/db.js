@@ -501,6 +501,63 @@ nx.db = {
 
     /**
      * 
+     * 
+     * Deletes object
+     * 
+     * @param {any} ds
+     * @param {any} id
+     * @param {any} cb
+     */
+    deleteObj: function (ds, id, cb) {
+
+        var self = this;
+
+        var goback;
+
+        // Handle view Back
+        if (!ds) {
+            // Get the current object
+            ds = nx.env.getBucketItem('_obj');
+            goback = true;
+        }
+
+        // Do we have an object?
+        if (typeof ds === 'object') {
+            // Get info from object
+            id = ds._id;
+            ds = ds._ds;
+        }
+
+        // Make the object id
+        var oid = self.makeID(ds, id);
+        // Do we have it?
+        if (self._objs[oid]) {
+            // Delete
+            nx.util.serviceCall('AO.ObjectDelete', {
+                ds: ds,
+                id: id
+            }, function () {
+                // Remove
+                delete self._objs[oid];
+                //
+                if (goback) {
+                    nx.office.goBack();
+                } else if (cb) {
+                    cb(true);
+                }
+            });
+        } else {
+            // Call
+            if (goback) {
+                nx.office.goBack();
+            } else if (cb) {
+                cb(false);
+            }
+        }
+    },
+
+    /**
+     * 
      * Returns true if object is in memory
      * 
      * @param {any} id

@@ -193,7 +193,7 @@ nx._routes.push({
                                         tool: 'TTContinue'
                                     }, {
                                         label: 'End',
-                                        icon: 'stop',
+                                        icon: 'flag_purple',
                                         tool: 'TTEnd'
                                     }, {
                                         label: 'Show',
@@ -201,6 +201,18 @@ nx._routes.push({
                                         tool: 'TTShow'
                                     }
                                 ]);
+                            }
+
+                            if (nx.user.opAllowed(ds, 'x')) {
+                                if (!sep && rb.length) {
+                                    rb.push('-');
+                                    sep = true;
+                                }
+                                rb.push({
+                                    label: 'Delete',
+                                    icon: 'stop',
+                                    tool: 'Delete'
+                                });
                             }
 
                             //

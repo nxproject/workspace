@@ -79,6 +79,7 @@ nx.office = {
             'routes/timetrack',
             'routes/organizer',
             'routes/merge',
+            'routes/delete',
             'routes/atend'
 
         ], function () {
