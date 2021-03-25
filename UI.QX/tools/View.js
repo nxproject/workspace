@@ -308,7 +308,7 @@ qx.Class.define('tools.View', {
                 if (nx.desktop.user.opAllowed(req.ds, 'a')) {
                     commands.push('>');
                 // View only?
-                    if (dsdef.hidden != 'v') {
+                    if (dsdef.hidden != 'v' || req.chain) {
                        
                         commands.push({
                             label: 'Add',
