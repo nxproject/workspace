@@ -1,7 +1,7 @@
 {
   "entries": [
-    "components\\context-menu\\context-menu.js",
     "components\\context-menu\\context-menu-item.js",
+    "components\\context-menu\\context-menu.js",
     "components\\field-editors\\boolean-field\\boolean-field.js",
     "components\\field-editors\\expression-field\\expression-field.js",
     "components\\field-editors\\list-field\\list-field.js",

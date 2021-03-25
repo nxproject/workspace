@@ -523,7 +523,7 @@ namespace Proc.AO
 
             // Call task
             string sTask = this.Dataset.Definition.TaskAtSave;
-            if (sTask.HasValue() && runtask)
+            if (sTask.HasValue() && runtask && this.IsData)
             {
                // Call
                 using (TaskParamsClass c_Params = new TaskParamsClass(this.Parent.Parent.Parent.Parent))
@@ -533,6 +533,7 @@ namespace Proc.AO
                     c_Params.AddObject("passed", this);
                     c_Params.AddStore("changes", new StoreClass(c_CData));
                     c_Params.AddStore("current", new StoreClass(orig));
+                    c_Params["_user"] = user;
 
                     c_Params.Call();
                 }

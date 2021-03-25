@@ -59,7 +59,7 @@ namespace Proc.Task
                     // Get the database manager
                     AO.ManagerClass c_DBMgr = call.Env.Globals.Get<AO.ManagerClass>();
 
-                    TaskContextClass c_Ctx = new TaskContextClass(call.Env, call.UserInfo.Name, delegate (TaskContextClass ctx)
+                    TaskContextClass c_Ctx = new TaskContextClass(call.Env, call.UserInfo.Name.IfEmpty(store["_user"]), delegate (TaskContextClass ctx)
                     {
                         // Load from params
                         foreach (string sKey in c_Params.Keys)

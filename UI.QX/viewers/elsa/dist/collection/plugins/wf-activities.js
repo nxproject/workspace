@@ -1,4 +1,4 @@
-// Generated on 3/24/2021 4:32:48 PM
+// Generated on 3/25/2021 10:59:55 AM
 import { OutcomeNames } from "../models/outcome-names";
 import pluginStore from '../services/workflow-plugin-store';
 export class WorkflowActivities {

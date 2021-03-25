@@ -66,6 +66,13 @@ namespace Common.TaskWF
         public string Message { get; internal set; }
         #endregion
 
+        #region Methods
+        public override string ToString()
+        {
+            return "OUTCOME: {0}, MESSAGE: {1}".FormatString(this.Outcome, this.Message);
+        }
+        #endregion
+
         #region Statics
         public static ReturnClass Done
         {

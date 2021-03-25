@@ -155,6 +155,7 @@ namespace Proc.Task
                             catch (Exception e)
                             {
                                 eAns = ReturnClass.Failure(e);
+                                this.Parent.Parent.LogException("TASK STEP {0} FAULTED".FormatString(c_Step.Type), e);
                             }
 
                             // Assure

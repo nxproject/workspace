@@ -41,14 +41,42 @@ namespace Proc.Task
             this.Arrays = new ContextStoreClass<ArrayClass>();
             this.Charges = new ContextStoreClass<ChargesClass>();
 
-            this.Stores = new ContextStoreClass<StoreClass>();
-            this.Documents = new ContextStoreClass<NX.Engine.Files.DocumentClass>();
-
-            this.ObjectLists = new ContextStoreClass<ObjectListClass>();
-            this.DocumentLists = new ContextStoreClass<DocumentListClass>();
-
-            this.HTTP = new ContextStoreClass<HTTPClientClass>();
-            this.FTP = new ContextStoreClass<FTPClientClass>();
+            this.ObjectLists = new ContextStoreClass<ObjectListClass>(delegate()
+            {
+                return new ObjectListClass();
+            });
+            this.DocumentLists = new ContextStoreClass<DocumentListClass>(delegate ()
+            {
+                return new DocumentListClass();
+            });
+            this.HTTP = new ContextStoreClass<HTTPClientClass>(delegate ()
+            {
+                return new HTTPClientClass();
+            });
+            this.FTP = new ContextStoreClass<FTPClientClass>(delegate ()
+            {
+                return new FTPClientClass();
+            });
+            this.Memos = new ContextStoreClass<MemoClass>(delegate ()
+            {
+                return new MemoClass("");
+            });
+            this.Texts = new ContextStoreClass<TextClass>(delegate ()
+            {
+                return new TextClass("");
+            });
+            this.HTML = new ContextStoreClass<HTMLClass>(delegate ()
+            {
+                return new HTMLClass("");
+            });
+            this.Messages = new ContextStoreClass<Communication.eMessageClass>(delegate ()
+            {
+                return new Communication.eMessageClass(this);
+            });
+            this.Queries = new ContextStoreClass<TaskQueryClass>(delegate ()
+            {
+                return new TaskQueryClass("");
+            });
 
             if (cb != null) cb(this);
         }

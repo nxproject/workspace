@@ -28,6 +28,7 @@ export declare class TaskActivities implements WorkflowPlugin {
     private msgactionsclear;
     private msgattachmentsclear;
     private msgtosclear;
+    private msgcreate;
     private msgremove;
     private msgsettemplateemail;
     private msgsetfooter;

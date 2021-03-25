@@ -22,7 +22,7 @@ namespace Proc.AO.Definitions
     public class WorkflowClass : ElsaClass
     {
         #region Constants
-        public const string Prefix = "tsk_";
+        public const string Prefix = "#tsk_";
         #endregion
 
         #region Constructor

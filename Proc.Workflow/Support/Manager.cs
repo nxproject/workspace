@@ -236,18 +236,26 @@ namespace Proc.Workflow
             // Flag
             bool bFirst = true;
 
+            List<string> c_Done = new List<string>();
+
             // Loop thru
             foreach (string sCmd in this.Names)
             {
                 // Get
                 ActivityClass c_Cmd = this.GetActivity(sCmd);
+
                 // Generate
                 Tuple<string, string> c_Elsa = c_Cmd.GenerateElsa();
-                if (c_Elsa != null)
+
+                // Valid?
+                if (c_Elsa != null && c_Elsa.Item1.HasValue())
                 {
-                    // Valid?
-                    if (c_Elsa.Item1.HasValue())
+                    // Only once
+                    if (!c_Done.Contains(c_Elsa.Item1))
                     {
+                        // Flag
+                        c_Done.Add(c_Elsa.Item1);
+
                         // Save name
                         if (!bFirst) c_Fns.AppendLine(",");
                         bFirst = false;

@@ -46,6 +46,7 @@ namespace Proc.AO
             : base(env)
         {
             //
+            this.Values = new StoreClass();
             this.Values.Set(KeyObjects, new JObject());
             this.Values.Set(KeyStore, new JObject());
         }
@@ -55,6 +56,7 @@ namespace Proc.AO
         {
             //
             this.Values = values;
+            if (this.Values == null) this.Values = new StoreClass();
         }
         #endregion
 

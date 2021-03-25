@@ -14655,7 +14655,7 @@ var TimerActivities = /** @class */ (function () {
 }());
 TimerActivities.Category = "Timers";
 pluginStore.add(new TimerActivities());
-// Generated on 3/24/2021 4:32:48 PM
+// Generated on 3/25/2021 10:59:55 AM
 var TaskActivities = /** @class */ (function () {
     function TaskActivities() {
         var _this_1 = this;
@@ -14685,6 +14685,7 @@ var TaskActivities = /** @class */ (function () {
             _this_1.msgactionsclear(),
             _this_1.msgattachmentsclear(),
             _this_1.msgtosclear(),
+            _this_1.msgcreate(),
             _this_1.msgremove(),
             _this_1.msgsettemplateemail(),
             _this_1.msgsetfooter(),
@@ -14813,6 +14814,7 @@ var TaskActivities = /** @class */ (function () {
         this.msgactionsclear = function () { return ({ type: 'msg.actions.clear', displayName: 'msg.actions.clear,', description: 'Removes all actions from the message,', category: 'Comm', icon: 'fas fa-tty', outcomes: [OutcomeNames.Done], properties: [{ name: 'msg', type: 'expression', label: 'Msg', hint: 'The message to use' }, { name: 'if', type: 'expression', label: 'If', hint: 'Execute if' }, { name: 'comment', type: 'text', label: 'Comment', hint: 'What does this step accomplish' }] }); };
         this.msgattachmentsclear = function () { return ({ type: 'msg.attachments.clear', displayName: 'msg.attachments.clear,', description: 'Removes all attachments from the message,', category: 'Comm', icon: 'fas fa-tty', outcomes: [OutcomeNames.Done], properties: [{ name: 'msg', type: 'expression', label: 'Msg', hint: 'The message to use' }, { name: 'if', type: 'expression', label: 'If', hint: 'Execute if' }, { name: 'comment', type: 'text', label: 'Comment', hint: 'What does this step accomplish' }] }); };
         this.msgtosclear = function () { return ({ type: 'msg.tos.clear', displayName: 'msg.tos.clear,', description: 'Removes all tos from the message,', category: 'Comm', icon: 'fas fa-tty', outcomes: [OutcomeNames.Done], properties: [{ name: 'msg', type: 'expression', label: 'Msg', hint: 'The message to use' }, { name: 'if', type: 'expression', label: 'If', hint: 'Execute if' }, { name: 'comment', type: 'text', label: 'Comment', hint: 'What does this step accomplish' }] }); };
+        this.msgcreate = function () { return ({ type: 'msg.create', displayName: 'msg.create,', description: 'Creates a message in the stack,', category: 'Comm', icon: 'fas fa-tty', outcomes: [OutcomeNames.Done], properties: [{ name: 'msg', type: 'expression', label: 'Msg', hint: 'The message to remove' }, { name: 'if', type: 'expression', label: 'If', hint: 'Execute if' }, { name: 'comment', type: 'text', label: 'Comment', hint: 'What does this step accomplish' }] }); };
         this.msgremove = function () { return ({ type: 'msg.remove', displayName: 'msg.remove,', description: 'Removes the message from the stack,', category: 'Comm', icon: 'fas fa-tty', outcomes: [OutcomeNames.Done], properties: [{ name: 'msg', type: 'expression', label: 'Msg', hint: 'The message to remove' }, { name: 'if', type: 'expression', label: 'If', hint: 'Execute if' }, { name: 'comment', type: 'text', label: 'Comment', hint: 'What does this step accomplish' }] }); };
         this.msgsettemplateemail = function () { return ({ type: 'msg.set.template.email', displayName: 'msg.set.template.email,', description: 'Sets the message EMail template,', category: 'Comm', icon: 'fas fa-tty', outcomes: [OutcomeNames.Done], properties: [{ name: 'msg', type: 'expression', label: 'Msg', hint: 'The message to use' }, { name: 'value', type: 'expression', label: 'Value', hint: 'The template' }, { name: 'if', type: 'expression', label: 'If', hint: 'Execute if' }, { name: 'comment', type: 'text', label: 'Comment', hint: 'What does this step accomplish' }] }); };
         this.msgsetfooter = function () { return ({ type: 'msg.set.footer', displayName: 'msg.set.footer,', description: 'Sets the message footer text,', category: 'Comm', icon: 'fas fa-tty', outcomes: [OutcomeNames.Done], properties: [{ name: 'msg', type: 'expression', label: 'Msg', hint: 'The message to use' }, { name: 'value', type: 'expression', label: 'Value', hint: 'The footer text' }, { name: 'if', type: 'expression', label: 'If', hint: 'Execute if' }, { name: 'comment', type: 'text', label: 'Comment', hint: 'What does this step accomplish' }] }); };
@@ -14921,7 +14923,7 @@ var TaskActivities = /** @class */ (function () {
 }());
 TaskActivities.Category = "Activity";
 pluginStore.add(new TaskActivities());
-// Generated on 3/24/2021 4:32:48 PM
+// Generated on 3/25/2021 10:59:55 AM
 var WorkflowActivities = /** @class */ (function () {
     function WorkflowActivities() {
         var _this_1 = this;

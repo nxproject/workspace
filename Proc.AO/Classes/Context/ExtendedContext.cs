@@ -66,9 +66,6 @@ namespace Proc.AO
             //
             this.Objects = new ContextStoreClass<AO.ObjectClass>();
 
-            this.Stores = new ContextStoreClass<StoreClass>();
-            this.Documents = new ContextStoreClass<NX.Engine.Files.DocumentClass>();
-
             // Did we get a store?
             if (store != null)
             {

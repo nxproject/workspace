@@ -24,7 +24,7 @@ namespace Proc.AO.Definitions
     public class TaskClass : ElsaClass
     {
         #region Constants
-        public const string Prefix = "tsk_";
+        public const string Prefix = "#tsk_";
         #endregion
 
         #region Constructor
