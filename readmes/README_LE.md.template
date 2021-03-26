@@ -112,8 +112,8 @@ There are two types of definitions:
 ||<|Less than comparison|
 ||<=|Less tha or equal to comparison|
 |is|field value|Directive block is used if the field is the same as the value, case insensitive|
-||isnt|fiedl value|Directive block is used if the field is not the same as the value, case insensitive|
-|unless||field|Directive block is used if field does not exist|
+|isnt|field value|Directive block is used if the field is not the same as the value, case insensitive|
+|unless|field|Directive block is used if field does not exist|
 |each|field|Directive block is used once for each entry in the field list|
 |with|field|Directive block is used with the field as the root value|
 
