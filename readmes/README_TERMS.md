@@ -21,7 +21,7 @@
 ---
 
 * ```User``` - A person/entity that uses a site.  Normally a person in the organization that owns the system.  Users have a name which is a keyword.
-* ```Account``` - A person/entity that uses the system.  Differs from an user in that the person/entity is not part of the organization that owns the system.  Accounts have names which are user defined.
+* ```Account``` - A person/entity that uses the system.  Differs from an user in that the person/entity is not part of the organization that owns the system.  Accounts have names which are user defined, however phone numbers and email addresses are most common.
 * ```Allowed``` - The rules that govern users and accounts.  It tells the system which datasets can be accesed and how.
 
 ---
@@ -35,7 +35,7 @@
 
 ---
 
-* ```Desktop``` - The visual displayed in a browser window when a user connects to the site.
+* ```webtop``` - The visual displayed in a browser window when a user connects to the site.
 * ```Taskbar``` - The bar at the bottom of the desktop.  It has a ***Start*** button in the leftmost position and a date/time display on the right, which also doubles as the ***Pinned*** menu.  The center holds task bar buttons, one for each window in the desktop.
 * ```Taskbar button``` - The button that represents the window in the desktop.  Displays the caption text for the window.  When clicked, the window will cycle through the ***selected***, ***hidden*** and ***shown*** modes.
 * ```Window ``` - The display of a view or a tool on the desktop.
@@ -44,6 +44,8 @@
 * ```Command bar``` - The set of command or menu buttons displayed below any bottom toolbar or the data are of a window.
 * ```System command bar``` - The set of command or menu buttons displayed below the command bar of a window.
 * ```Notifications``` - A visual pop-up note that are displayed in the upper right corner of the desktop.  Notifications are designed to live for a short amount of time unless user interaction is required.
+
+* ```Mobile``` - The visual displayed in a phone or tablet when a user connects to the site.
 
 ---
 
