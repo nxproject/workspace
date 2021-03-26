@@ -83,9 +83,19 @@ Note that it may take a few minutes to obtain a new SSL certificate from ***Let'
 
 |Field|Meaning|
 |-|-|
-|Twilio Acct|The Twilio account ID|
-|Twilio Token|The Twilio account token|
-|Twilio Phone|Site-wide Twilio phone|
+|Acct|The Twilio account ID|
+|Token|The Twilio account token|
+|Phone|Site-wide Twilio phone|
+
+---
+
+![image](images/Site15.png)
+
+|Field|Meaning|
+|-|-|
+|API Key|YThe API key for the PositionStack service|
+|EMail|The email address to use|
+|Friendly name|The displayed name|
 
 ---
 
@@ -93,7 +103,7 @@ Note that it may take a few minutes to obtain a new SSL certificate from ***Let'
 
 |Field|Meaning|
 |-|-|
-|API Key|YThe API key for the PositionStack service|
+|API Key|The API key for the PositionStack service|
 
 ---
 

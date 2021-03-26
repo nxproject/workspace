@@ -360,17 +360,6 @@ namespace Proc.AO
 
         /// <summary>
         /// 
-        /// The Twilio access datasets
-        /// 
-        /// </summary>
-        public string TwilioAccess
-        {
-            get { return this.SynchObject["twilioaccess"]; }
-            set { this.SynchObject["twilioaccess"] = value; }
-        }
-
-        /// <summary>
-        /// 
         /// The task to run on incoming
         /// 
         /// </summary>

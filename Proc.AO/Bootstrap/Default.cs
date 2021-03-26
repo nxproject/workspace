@@ -136,7 +136,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.26a"))
+            if (ds.Definition.ReleaseChanged("2021.03.26b"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -290,10 +290,6 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["sendgridfriendly"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Name;
                 c_Field.Label = "Friendly Name";
-
-                c_Field = ds.Definition["twilioaccess"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Via DS";
 
                 c_Field = ds.Definition["helproot"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
@@ -458,7 +454,7 @@ namespace Proc.AO.BuiltIn
                 c_VTwilio.ClearFields();
 
                 // Map
-                c_VTwilio.UseFields("twilioacct", "twiliotoken", "twiliophone", "twilioaccess");
+                c_VTwilio.UseFields("twilioacct", "twiliotoken", "twiliophone");
 
                 c_VTwilio.Save();
             }
