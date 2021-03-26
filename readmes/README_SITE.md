@@ -37,9 +37,24 @@ The Site Settings allow you to set the information that is global to the site:
 
 |Field|Meaning|
 |-|-|
-|Proc. Count|Number of processor instances allowed|
+|Accounts|Are account available|
+|Acct.Def.Alwd|The default allowed for accounts|
+|Billing Enabled|Is billing available|
 |Time Track|Is the time track option available|
-|IOT Enabled|Is the IOT option enabled|
+|Quorum|Is the quorum option available|
+|IOT Enabled|Is the IOT option available|
+|Help root|The starting page for user defined help|
+|Proc. Count|Number of processor instances allowed|
+---
+
+![image](images/Site6.png)
+
+|Field|Meaning|
+|-|-|
+|Timezone|Site-wide time zone|
+|Office Opens|The hour of the day when the office opens|
+|Offic Closes|The hour of the day when the office closes|
+
 
 ---
 
@@ -50,6 +65,8 @@ The Site Settings allow you to set the information that is global to the site:
 |Domain|The domain to use in the SSL certificate|
 |Cert. EMail|The email address to use in the SSL certificate|
 
+Note that it may take a few minutes to obtain a new SSL certificate from ***Let's Encrypt***.
+
 ---
 
 ![image](images/Site5.png)
@@ -59,16 +76,6 @@ The Site Settings allow you to set the information that is global to the site:
 |Field Width|The default field width used at time of creation (default 20)|
 |Pick Width|The width os a pick field (default 20)|
 |Pick Height|The height of the pick field (default dependent on screen size)|
-
----
-
-![image](images/Site6.png)
-
-|Field|Meaning|
-|-|-|
-|Timezone|Site-wide time zone|
-|Office Opens|The hour of the day when the office opens|
-|Offic Closes|The hour of the day when the office closes|
 
 ---
 

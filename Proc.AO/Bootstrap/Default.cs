@@ -136,7 +136,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.24a"))
+            if (ds.Definition.ReleaseChanged("2021.03.26a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -301,11 +301,11 @@ namespace Proc.AO.BuiltIn
 
                 c_Field = ds.Definition["acctenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
-                c_Field.Label = "Accounts Enabled";
+                c_Field.Label = "Accounts";
 
                 c_Field = ds.Definition["billenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
-                c_Field.Label = "Billing Enabled";
+                c_Field.Label = "Billing";
 
                 c_Field = ds.Definition["quorumenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
@@ -345,10 +345,15 @@ namespace Proc.AO.BuiltIn
                 c_CInfo.ClearFields();
 
                 // Map
-                c_CInfo.UseFields("proccount",
-                    "acctdefallowed",
-                    "ttenabled", "quorumenabled", "iotenabled", "acctenabled", "billenabled",
-                    "helproot");
+                c_CInfo.UseFields(
+                    "acctenabled", "acctdefallowed",
+                    "billenabled",
+                    "ttenabled", 
+                    "quorumenabled", 
+                    "iotenabled",  
+                    "helproot",
+                    "proccount"
+                    );
 
                 c_CInfo.Save();
             }
