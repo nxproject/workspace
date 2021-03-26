@@ -35,6 +35,15 @@ This will display the field defition window for the field:
 
 ---
 
+![image](images/Fd10.png)
+
+
+|Field|Meaning|
+|-|-|
+|JS Statement|The javaScript statement that uses field definitions as defined in expressions|
+
+---
+
 ![image](images/Fd4.png)
 
 
@@ -62,13 +71,37 @@ This will display the field defition window for the field:
 |-|-|
 |Reference|The field that holds the name/type of the reference.  For example, a phone field may use a name field as the reference|
 
+---
+
+In the following screens, the field definitions that are uses for the creation of ***NXCodes*** and the distribution of data obtained from third parties are defined:
+
+![image](images/Fd11.png)
+
+---
+
+![image](images/Fd12.png)
+
+---
+
+![image](images/Fd13.png)
+
+---
+
+## Field types
+
+## Field types
+
+## Field types
+
 ## Field types
 
 ### Simple fields
 
 These are fields which hold a sinlge line of text:
 
+* ```Account``` - Account definition
 * ```Address``` - Mailing address
+* ```Addressee``` - 
 * ```Allowed``` - Rules for a user or account
 * ```AutoCaps``` - Capitalize each word
 * ```Caps``` - Capitalize all text
@@ -78,6 +111,7 @@ These are fields which hold a sinlge line of text:
 * ```Currency``` - Money amount
 * ```Date``` - Date
 * ```DateTime``` - Date and time
+* ```DriverLicense``` - 
 * ```Duration``` - Length of time
 * ```EMail``` - EMail address
 * ```Float``` - Floating point number
@@ -157,5 +191,10 @@ Date fields are designed to handle most date/time format and extract information
 * ```5 days ago```
 * ```Sat Aug 17 2013 18:40:39 GMT+0900 (JST)```
 * ```2014-11-30T08:15:30-05:30```
+
+## Size unit
+
+All sizes are in multiple of 25 pixels.
+
 
 [Back* ``` to top](/help/README.md)
