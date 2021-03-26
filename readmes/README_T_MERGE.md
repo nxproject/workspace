@@ -1,6 +1,6 @@
 # Merging
 
-Merging is accomplished by creating ***docx*** documents with embedded merge codes.  This is an example:
+Merging is accomplished by creating ***odt*** documents with embedded merge codes.  This is an example:
 
 ![image](images/Merge2.png)
 

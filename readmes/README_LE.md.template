@@ -84,4 +84,37 @@ Statements are evaluated using a set of operations and functions:
 
 {{fns}}
 
+## Directives
+
+Directives are macro-like operations.  They are defined with the following format:
+
+[[definition]]
+
+There are two types of definitions:
+
+|Type|-Meaning|
+|-|-|
+|Field|Defines a field.  Similar to [xxx] above|
+|Comamnd|Defines a command.  Starts with a [[#cmd]] and ends with a [[/cmd]]|
+
+### Commands
+
+|Command|Parameters|Meaning|
+|-|-|-|
+|if|field|Directive block is used if the field exists|
+|iff|field comparison  value|Directive block is used if field comparison with value is true|
+||=|Equality comparison, case insensitive|
+||==|Equality comparison, case insensitive|
+||!=|Inequiality comparino, case insensitive|
+|!==|Inequality comparison, case sensitive|
+||>|Greater than comparison|
+||>=|Greater than or equal to comparison|
+||<|Less than comparison|
+||<=|Less tha or equal to comparison|
+|is|field value|Directive block is used if the field is the same as the value, case insensitive|
+||isnt|fiedl value|Directive block is used if the field is not the same as the value, case insensitive|
+|unless||field|Directive block is used if field does not exist|
+|each|field|Directive block is used once for each entry in the field list|
+|with|field|Directive block is used with the field as the root value|
+
 [Home](../README.md)
