@@ -106,7 +106,7 @@ There are two types of definitions:
 ||=|Equality comparison, case insensitive|
 ||==|Equality comparison, case insensitive|
 ||!=|Inequiality comparino, case insensitive|
-|!==|Inequality comparison, case sensitive|
+||!==|Inequality comparison, case sensitive|
 ||>|Greater than comparison|
 ||>=|Greater than or equal to comparison|
 ||<|Less than comparison|
