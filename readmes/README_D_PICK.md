@@ -30,6 +30,7 @@ Once selecte dthe ***Pick Properties*** window is displayed:
 |-|-|
 |Label|The label to be used in the ***Pick List*** window|
 |Icon|The icon to be displayed|
+|Selected|Is the pick to be active when the pisk list is displayed|
 |All or Any|Do all of the conditions have to be met or just one|
 |Query||
 |Field|The field to use|
