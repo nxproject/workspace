@@ -64,9 +64,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		readmes\README_T_ANALYZE.md = readmes\README_T_ANALYZE.md
 		readmes\README_T_CAL.md = readmes\README_T_CAL.md
 		readmes\README_T_EDITOR.md = readmes\README_T_EDITOR.md
+		readmes\README_T_IMAGE.md = readmes\README_T_IMAGE.md
 		readmes\README_T_MERGE.md = readmes\README_T_MERGE.md
 		readmes\README_T_PDF.md = readmes\README_T_PDF.md
 		readmes\README_T_REPORT.md = readmes\README_T_REPORT.md
+		readmes\README_T_VIDEO.md = readmes\README_T_VIDEO.md
 		readmes\README_TERMS.md = readmes\README_TERMS.md
 		readmes\README_USERS.md = readmes\README_USERS.md
 		readmes\README_VISUALS.md = readmes\README_VISUALS.md
@@ -79,9 +81,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proc.LibreOffice", "Proc.Li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Route.LibreOffice", "Route.LibreOffice\Route.LibreOffice.csproj", "{2756EB66-F16F-4127-96B1-613A8BB3C16A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NX.Updater", "NX.Updater\NX.Updater.csproj", "{49329C53-2541-43C1-A9F3-C8CB67A7A638}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NX.Updater", "NX.Updater\NX.Updater.csproj", "{49329C53-2541-43C1-A9F3-C8CB67A7A638}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proc.Updater", "Proc.Updater\Proc.Updater.csproj", "{A4E8DF76-EFF1-4064-8CC5-390666CA22C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proc.Updater", "Proc.Updater\Proc.Updater.csproj", "{A4E8DF76-EFF1-4064-8CC5-390666CA22C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

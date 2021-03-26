@@ -22,6 +22,8 @@ across a varied landscape.
 			* [Merging](readmes/README_T_MERGE.md)
 			* [Editor](readmes/README_T_EDITOR.md)
 			* [PDF Viewer](readmes/README_T_PDF.md)
+			* [Image Viewer](readmes/README_T_IMAGE.md)
+			* [Video Viewer](readmes/README_T_VIDEO.md)
 		* [Calendar](readmes/README_T_CAL.md)
 		* [Report](readmes/README_T_REPORT.md)
 		* [Analyze](readmes/README_T_ANALYZE.md)
