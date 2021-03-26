@@ -95,7 +95,7 @@ There are two types of definitions:
 |Type|-Meaning|
 |-|-|
 |Field|Defines a field.  Similar to [xxx] above|
-|Comamnd|Defines a command.  Starts with a [[#cmd]] and ends with a [[/cmd]]|
+|Command|Defines a command.  Starts with a [[#cmd]] and ends with a [[/cmd]]|
 
 ### Commands
 
