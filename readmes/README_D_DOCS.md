@@ -4,10 +4,42 @@ Each object has a document store that is viewed via the ***Documents*** tool:
 
 ![image](images/Doc1.png)
 
+NX.Workspace supports the following tpes of documents:
+
+|Extension|Converted to|Meaning|
+|-|-|-|
+|3g2||Video format|
+|3gp||Video format|
+|avi||Video format|
+|docx|odt|Microsoft DOCX format|
+|doc|odt|Microsoft DOC format|
+|flv||Video format|
+|gif||Image format|
+|html|odt|Hypertext markup language format|
+|htm|odt|Hypertext markup language format|
+|jpeg||Image format|
+|jpg||Image format|
+|mkv||Video format|
+|mov||Video format|
+|mp4||Video format|
+|mpg||Video format|
+|odt||Open document format|
+|ogv||Video format|
+|pdf||Portable document format|
+|png||Image format|
+|rtf|odt|Rich text format|
+|svg||Image format|
+|txt|odt|Plain text format|
+|webm||Video format|
+|wmv||Video format|
+|wpd|odt|Word Perfect format|
+|wps|odt|Microsoft Works format|
+
+
 ## Uploading documents
 
 You can upload any type of documents to the store by clicking on the ***Upload*** button at the bottom of the tool.
-You will be asked to select a file from your computer, which gets uploaded to the store:
+You will be asked to select a file from your computer, which gets uploaded to the store under the ***Upload*** folder:
 
 ![image](images/Doc2.png)
 

@@ -190,5 +190,4 @@ Date fields are designed to handle most date/time format and extract information
 
 All sizes are in multiple of 25 pixels.
 
-
-[Back* ``` to top](/help/README.md)
+[Home](../README.md)
