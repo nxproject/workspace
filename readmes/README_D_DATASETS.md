@@ -57,6 +57,16 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 
 ---
 
+![image](images/Ds21.png)
+
+|Field|Meaning|
+|-|-|
+|Enable|Is the time track feature available for the dataset|
+
+Note that time tracking must be also enabled in the ***Site Settings***
+
+---
+
 ![image](images/Ds6.png)
 
 |Field|Meaning|
