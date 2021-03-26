@@ -66,9 +66,9 @@ namespace Proc.Docs
                         if (sTemplate.StartsWith("!"))
                         {
                             // The system document
-                            string sQXDir = "".WorkingDirectory().CombinePath("ui.qx").CombinePath("docs").CombinePath(sTemplate.Substring(1) + ".docx");
+                            string sQXDir = "".WorkingDirectory().CombinePath("ui.qx").CombinePath("docs").CombinePath(sTemplate.Substring(1) + ".odt");
                             // A temp
-                            c_Template = new DocumentClass(c_Mgr, c_Folder.SubFolder("_merge"), "F" + sQXDir.MD5HashString() + ".docx");
+                            c_Template = new DocumentClass(c_Mgr, c_Folder.SubFolder("_merge"), "F" + sQXDir.MD5HashString() + ".odt");
                             // Copy
                             c_Template.ValueAsBytes = sQXDir.ReadFileAsBytes();
                             // Remember to delete
@@ -80,7 +80,7 @@ namespace Proc.Docs
                         }
 
                         // Make target
-                        using (DocumentClass c_Target = new DocumentClass(c_Mgr, c_Folder, sName + ".docx"))
+                        using (DocumentClass c_Target = new DocumentClass(c_Mgr, c_Folder, sName + ".odt"))
                         {
                             // Merge?
                             if (bNoMerge)
