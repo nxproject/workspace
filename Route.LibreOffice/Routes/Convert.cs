@@ -50,6 +50,8 @@ namespace Route.LibreOffice
             string sSource = store["source"].FromBase64URL();
             string sTarget = store["target"].FromBase64URL();
 
+            call.Env.LogInfo("Convert {0} to {1}".FormatString(sSource, sTarget));
+
             // Must have one
             if (sSource.HasValue() && sTarget.HasValue())
             {
@@ -68,11 +70,13 @@ namespace Route.LibreOffice
                             // Set the path
                             c_Ans["path"] = c_Target.Path;
 
+                            call.Env.LogInfo("Insuring path");
+
                             // Make the folder
                             c_Target.Folder.AssurePath();
 
                             // 
-                            call.Env.LogVerbose("Converting {0} to {1}".FormatString(sSource, sTarget));
+                            call.Env.LogInfo("Converting...");
 
                             // Remove
                             c_Target.Delete(true);
@@ -88,7 +92,7 @@ namespace Route.LibreOffice
                                         "--nolockcheck",
                                         "--invisible",
                                         "--convert-to" ,
-                                        this.ConvertExtensionToFilterType(c_Source.Extension, c_Target.Extension),
+                                        c_Target.Extension,
                                         "--outdir",
                                         c_Target.Folder.Location,
                                         c_Source.Location
@@ -121,12 +125,15 @@ namespace Route.LibreOffice
                                 // Copy output
                                 if (c_Proc != null)
                                 {
-                                    call.Env.LogVerbose("STDOUT: " + c_Proc.StandardOutput.ReadToEnd());
-                                    call.Env.LogVerbose("STDERR: " + c_Proc.StandardError.ReadToEnd());
+                                    call.Env.LogInfo("STDOUT: " + c_Proc.StandardOutput.ReadToEnd());
+                                    call.Env.LogInfo("STDERR: " + c_Proc.StandardError.ReadToEnd());
                                 }
                                 // End
                                 c_Proc.WaitForExit();
                             }
+
+                            // 
+                            call.Env.LogInfo("Done...");
                         }
                     }
                 }
@@ -159,7 +166,7 @@ namespace Route.LibreOffice
                 case "odt":
                 case "wps":
                 case "wpd":
-                    sFilter= ":writer_{0}_Export".FormatString(target);
+                    sFilter = ":writer_{0}_Export".FormatString(target);
                     break;
 
                 case "xls":
