@@ -27,6 +27,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 |-|-|
 |Only one|If ***y*** only one child object is to be displaye at a time|
 |Default Cmd|The ***command** to execute when the ***Enter*** key is pressed|
+|Selector|The selector code if the dataset is to be limited use|
 
 ---
 
@@ -45,6 +46,14 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 |Field|Meaning|
 |-|-|
 |At save|A list of SIO commands to be sent when the object is saved|
+
+---
+
+![image](images/Ds20.png)
+
+|Field|Meaning|
+|-|-|
+|Enable|Is the chat feature available for the dataset|
 
 ---
 
