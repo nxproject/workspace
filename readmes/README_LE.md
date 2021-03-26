@@ -262,5 +262,6 @@ There are two types of definitions:
 |unless|field|Directive block is used if field does not exist|
 |each|field|Directive block is used once for each entry in the field list|
 |with|field|Directive block is used with the field as the root value|
+|eval|expression|Directive block is replaced with the evaluated expression|
 
 [Home](../README.md)

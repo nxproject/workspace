@@ -559,7 +559,13 @@ namespace Proc.Communication
                 this.Values.Set("data", c_Data);
             }
 
-            return sTemplate.Handlebars(this.Values);
+            return sTemplate.Handlebars(this.Values, delegate (string value)
+            {
+                using (Context c_Ctx = new Context(this.Parent.Parent, this.Values))
+                {
+                    return Expression.Eval(c_Ctx, value).Value;
+                }
+            });
         }
 
         /// <summary>

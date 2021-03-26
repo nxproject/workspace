@@ -116,6 +116,12 @@ namespace Proc.Docs.Files
             {
                 // Get the text
                 string sWkg = this.Parent.Parent.Value;
+
+                // Do handlerbars
+                sWkg = sWkg.Handlebars(ctx.Stores[Names.Passed], delegate (string expr)
+                {
+                    return Expression.Eval(ctx, expr).Value;
+                });
                 // Find all the fields
                 MatchCollection c_Matches = Regex.Matches(sWkg, @"\x5B[^\x5D]*\x5D");
                 // Loop thru

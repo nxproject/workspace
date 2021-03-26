@@ -154,4 +154,8 @@ And documents can be added to the folder:
 
 ![image](images/Merge16.png)
 
+## Dirctives
+
+Directives are supported when merging documents.
+
 [Home](../README.md)

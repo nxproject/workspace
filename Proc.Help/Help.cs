@@ -52,7 +52,7 @@ namespace Proc.Help
 
             // Get the template
             string sTemplate = sPath.CombinePath("template.html").ReadFile();
-            
+
             // Get the database
             AO.ManagerClass c_DBMgr = call.Env.Globals.Get<AO.ManagerClass>();
 
@@ -61,7 +61,7 @@ namespace Proc.Help
 
             // Get the contents
             AO.ObjectClass c_Obj = c_DBMgr.DefaultDatabase[AO.DatabaseClass.DatasetHelp][sFile];
-            if(c_Obj != null)
+            if (c_Obj != null)
             {
                 // Read the file
                 string sContents = c_Obj["text"];
@@ -71,7 +71,13 @@ namespace Proc.Help
                 c_Values.Merge(call.Env.AsParameters);
                 c_Values.Merge(c_DBMgr.DefaultDatabase.SiteInfo.AsJObject);
                 // Apply changes
-                sContents = sContents.Handlebars(new StoreClass(c_Values));
+                sContents = sContents.Handlebars(new StoreClass(c_Values), delegate (string value)
+                {
+                    using (Context c_Ctx = new Context(call.Env, new StoreClass(c_Values)))
+                    {
+                        return Expression.Eval(c_Ctx, value).Value;
+                    }
+                });
 
                 // Extend
                 var c_PB = new Markdig.MarkdownPipelineBuilder();
