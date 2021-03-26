@@ -89,12 +89,6 @@ In the following screens, the field definitions that are uses for the creation o
 
 ## Field types
 
-## Field types
-
-## Field types
-
-## Field types
-
 ### Simple fields
 
 These are fields which hold a sinlge line of text:
