@@ -88,7 +88,7 @@ namespace Proc.Office
                     c_Docs.RemoveAt(i - 1);
                 }
             }
-            for (int i = 0; i < c_Docs.Count; i++) c_Docs[i] = c_Docs[i].Replace(".docx", "");
+            for (int i = 0; i < c_Docs.Count; i++) c_Docs[i] = c_Docs[i].Replace(".odt", "");
             c_Ans.Set("docs", c_Docs.ToJArray());
 
             // Make the dataset privileges

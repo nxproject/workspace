@@ -43,6 +43,9 @@ namespace Proc.Docs
     {
         public override StoreClass Do(HTTPCallClass call, StoreClass store)
         {
+
+            call.Env.Debug();
+
             // Make return
             StoreClass c_Ans = new StoreClass();
 

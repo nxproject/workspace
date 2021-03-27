@@ -82,16 +82,14 @@ namespace Proc.Docs
                         // Make target
                         using (DocumentClass c_Target = new DocumentClass(c_Mgr, c_Folder, sName + ".odt"))
                         {
+                            // Copy
+                            c_Template.CopyTo(c_Target, true);
+
                             // Merge?
-                            if (bNoMerge)
-                            {
-                                // Copy
-                                c_Template.CopyTo(c_Target, true);
-                            }
-                            else
+                            if (!bNoMerge)
                             {
                                 // Make the context
-                                using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, c_Passed,  null, call.UserInfo.Name))
+                                using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, c_Passed, null, call.UserInfo.Name))
                                 {
                                     // Merge
                                     c_Template.Merge(c_Target, c_Template.MergeMap().Eval(c_Ctx));
@@ -99,7 +97,7 @@ namespace Proc.Docs
                             }
 
                             // Pass back
-                            c_Ans["path"] = c_Target.Path;
+                            if (c_Target.Exists) c_Ans["path"] = c_Target.Path;
                         }
 
                         // Delete

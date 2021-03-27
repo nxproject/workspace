@@ -80,7 +80,7 @@ namespace Proc.Docs.Files
             switch (doc.Extension)
             {
                 case "odt":
-                    doc.HTML().Merge(result, ctx);
+                    doc.ODT().Merge(result, ctx);
                     break;
 
                 case "pdf":
@@ -117,6 +117,18 @@ namespace Proc.Docs.Files
         public static HTMLDocumentClass HTML(this DocumentClass doc, bool uniqueid = false)
         {
             return new HTMLDocumentClass(doc, uniqueid);
+        }
+        #endregion
+
+        #region ODT
+        /// <summary>
+        /// 
+        /// Returns the ODT version of the file
+        /// 
+        /// </summary>
+        public static ODTDocumentClass ODT(this DocumentClass doc)
+        {
+            return new ODTDocumentClass(doc);
         }
         #endregion
     }

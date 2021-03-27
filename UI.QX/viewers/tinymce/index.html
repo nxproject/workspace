@@ -497,9 +497,10 @@
                 // Get the document
                 var data = getDocument();
                 // Send to server
-                $.post(file, data);
-                // Close (maybe not for Save & Continue)
-                parent.nx.desktop.findWindow(winid).safeClose();
+                $.post(file, data, function () {
+                    // Close (maybe not for Save & Continue)
+                    parent.nx.desktop.findWindow(winid).safeClose();
+                });
             },
             setup: function (editor) {
                 editor.on('init', function (e) {

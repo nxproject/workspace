@@ -85,11 +85,8 @@ namespace Proc.Docs.Files
         /// <param name="doc">The byte array of the document contents</param>
         /// <param name="values">The store</param>
         /// <returns>A byte array of the merged document</returns>
-        public byte[] Merge(byte[] doc, ExtendedContextClass ctx)
+        public void Merge(PDFDocumentClass doc, ExtendedContextClass ctx, NX.Engine.Files.DocumentClass result)
         {
-            //
-            byte[] abAns = null;
-
             // Get the fields
             List<FieldInfoClass> c_Fields = this.Fields(doc);
 
@@ -97,7 +94,7 @@ namespace Proc.Docs.Files
             using (System.IO.MemoryStream c_Stream = new System.IO.MemoryStream())
             {
                 // Set the input
-                PdfReader c_Reader = new PdfReader(doc);
+                PdfReader c_Reader = new PdfReader(doc.Location);
 
                 // And the output
                 PdfStamper c_Stamper = new PdfStamper(c_Reader, c_Stream);
@@ -128,10 +125,8 @@ namespace Proc.Docs.Files
                 c_Reader.Close();
 
                 // Get the result
-                abAns = c_Stream.ToArray();
+                result.ValueAsBytes = c_Stream.ToArray();
             }
-
-            return abAns;
         }
         #endregion
 
@@ -143,13 +138,13 @@ namespace Proc.Docs.Files
         /// </summary>
         /// <param name="doc">The byte array of the document contents</param>
         /// <returns>The list of fields</returns>
-        public List<FieldInfoClass> Fields(byte[] doc)
+        public List<FieldInfoClass> Fields(PDFDocumentClass doc)
         {
             List<FieldInfoClass> c_Ans = new List<FieldInfoClass>();
 
             try
             {
-                PdfReader pdfReader = new PdfReader(doc);
+                PdfReader pdfReader = new PdfReader(doc.Location);
                 AcroFields pdfFormFields = pdfReader.AcroFields;
 
                 foreach (KeyValuePair<string, AcroFields.Item> kvp in pdfFormFields.Fields)

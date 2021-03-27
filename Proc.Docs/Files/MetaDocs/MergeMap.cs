@@ -76,10 +76,10 @@ namespace Proc.Docs.Files
                 switch (doc.Extension)
                 {
                     case "odt":
-                        using (HTMLSupportClass c_Filler = new HTMLSupportClass(doc.HTML()))
+                        using (ODTClass c_Filler = new ODTClass())
                         {
                             // And merge
-                            c_Wkg = c_Filler.Fields(doc.ValueAsBytes);
+                            c_Wkg = c_Filler.Fields(doc.ODT());
                         }
                         break;
 
@@ -87,7 +87,7 @@ namespace Proc.Docs.Files
                     case "fdf":
                         using (PDFClass c_Filler = new PDFClass())
                         {
-                            c_Wkg = c_Filler.Fields(doc.ValueAsBytes);
+                            c_Wkg = c_Filler.Fields(doc.PDF());
                         }
                         break;
                 }

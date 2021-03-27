@@ -125,8 +125,10 @@ nx.fs = {
         var winid = 'doc_' + path;
 
         //
-        var urlParams = nx.web.urlStart('file', '/fx/html' + path);
+        var urlParams = nx.web.urlStart('file', '/f' + path);
+        //var urlParams = nx.web.urlStart('file', '/fx/html' + path);
         urlParams = nx.web.urlAdd('winid', winid, urlParams);
+        urlParams = nx.web.urlAdd('user', nx.desktop.user.getName(), urlParams);
 
         // Show loader
         nx.util.notifyLoadingStart();
@@ -136,7 +138,8 @@ nx.fs = {
             nxid: winid,
             caption: caption,
             icon: 'docx',
-            value: nx.util.loopbackURL() + '/viewers/tinymce/index.html' + urlParams,
+            value: nx.util.loopbackURL() + '/viewers/webodf/index.html' + urlParams,
+            //value: nx.util.loopbackURL() + '/viewers/tinymce/index.html' + urlParams,
             caller: req.caller, urlParams,
             chat: !req.noChat,
             adjustWidth: req.adjustWidth,

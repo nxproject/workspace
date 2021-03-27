@@ -81,27 +81,6 @@ namespace Proc.Docs.Files
 
         /// <summary>
         /// 
-        /// Merges the document with a given store of data
-        /// 
-        /// </summary>
-        /// <param name="result"></param>
-        /// <param name="data"></param>
-        public void Merge(DocumentClass result, ExtendedContextClass ctx)
-        {
-            // Create support object for MS Word
-            using (HTMLSupportClass c_Filler = new HTMLSupportClass(this))
-            {
-                using (HTMLDocumentClass c_Result = result.HTML())
-                {
-                    // And merge
-                    c_Result.ValueAsBytes = c_Filler.Merge(ctx);
-                    c_Result.Synchronize();
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
         /// Add a unique id to each element
         /// 
         /// </summary>
@@ -147,6 +126,7 @@ namespace Proc.Docs.Files
                 }
             }
         }
+
         /// <summary>
         /// 
         /// Fixes tags in HTML

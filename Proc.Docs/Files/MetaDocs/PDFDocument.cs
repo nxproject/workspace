@@ -52,7 +52,7 @@ namespace Proc.Docs.Files
             using (PDFClass c_Filler = new PDFClass())
             {
                 // And merge
-                result.ValueAsBytes = c_Filler.Merge(this.ValueAsBytes, ctx);
+                c_Filler.Merge(this, ctx, result);
             }
         }
         #endregion

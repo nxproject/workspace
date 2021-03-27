@@ -112,7 +112,6 @@ namespace Proc.Docx
                     case "rtf":
                     case "html":
                     case "htm":
-                    case "odt":
                     case "wps":
                     case "wpd":
                         c_Out = new DocumentClass(docin.Parent, docin.Path.SetExtensionFromPath("odt"));

@@ -39,13 +39,21 @@ namespace Proc.Docs.Files
             : base(odoc)
         {
             //
-            this.Document = this.Parent.MetadataDocument(null, ext);
-
-            // Do we need to convert?
-            if (!this.Document.Exists || this.Document.WrittenOn < Document.WrittenOn)
+            if (odoc.Extension.IsSameValue(ext))
             {
-                // Convert
-                ConversionClass.Convert(this.Parent, this.Document);
+                this.Document = odoc;
+            }
+            else
+            {
+                //
+                this.Document = this.Parent.MetadataDocument(null, ext);
+
+                // Do we need to convert?
+                if (!this.Document.Exists || this.Document.WrittenOn < Document.WrittenOn)
+                {
+                    // Convert
+                    ConversionClass.Convert(this.Parent, this.Document);
+                }
             }
         }
         #endregion
