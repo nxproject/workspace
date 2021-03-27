@@ -1,8 +1,8 @@
 # Editor
 
-The editor allows you to edit ***docx*** documents.  It is invoked when you ***View*** a ***docx*** document:
+The editor allows you to edit ***odt*** documents.  It is invoked when you ***View*** an ***odt*** document:
 
-![image](images/edit1.png)
+![image](images/edit3.png)
 
 ## Top toolbar
 
