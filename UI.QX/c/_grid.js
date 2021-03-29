@@ -567,6 +567,11 @@ qx.Class.define('c._grid', {
             this.__loading_column_state = false;
         },
 
+    },
+
+    events: {
+        // Placeholder
+        selected: 'qx.event.type.Data'
     }
 
 });

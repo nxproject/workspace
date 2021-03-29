@@ -2476,6 +2476,38 @@ nx.util = {
 
     },
 
+    eventOnVisible: function (e, cb) {
+
+        var self = this;
+
+        // 
+        var ele = $(e.getTarget().getFocusElement());
+        // ID?
+        if (!self.hasValue(ele.attr('id'))) {
+            ele.attr('id', self.localUUID('cmp'));
+        }
+        // Get the id
+        var id = ele.attr('id');
+
+        // Start loop
+        self.eventOnVisibleSub(id, cb);
+    },
+
+    eventOnVisibleSub: function (id, cb) {
+
+        var self = this;
+
+        // Visible?
+        if (document.getElementById(id)) {
+            // Call
+            cb(id);
+        } else {
+            setTimeout(function () {
+                self.eventOnVisibleSub(id, cb);
+            }, 400);
+        }
+    },
+
     // ---------------------------------------------------------
     //
     // COOKIES

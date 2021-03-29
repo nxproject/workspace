@@ -46,6 +46,11 @@ namespace Proc.AO.BuiltIn
                     ds.Define_Help();
                     break;
 
+                case DatabaseClass.DatasetWeb:
+                    ds.Define_Web();
+                    break;
+
+
                 case DatabaseClass.DatasetAllowed:
                     ds.Define_Allowed();
                     break;
@@ -560,7 +565,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Help(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.18a"))
+            if (ds.Definition.ReleaseChanged("2021.03.28f"))
             {
                 //
                 ds.Definition.Caption = "Help";
@@ -571,6 +576,57 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "110";
                 ds.Definition.Selector = "HELP";
+
+                ds.Definition.ClearFields();
+
+                //  
+                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+
+                c_Field = ds.Definition["desc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Description";
+
+                c_Field = ds.Definition["text"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.XMDEditor;
+                c_Field.Label = "Text";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                // Give some room
+                c_VDefault["text"].Height = "15";
+                c_VDefault["text"].Label = "";
+                c_VDefault["text"].Width = "default.fieldWidth@2";
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_Web(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.03.28a"))
+            {
+                //
+                ds.Definition.Caption = "Help";
+                ds.Definition.Placeholder = "[_id] '-' [desc]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "code";
+                ds.Definition.Icon = "key";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "150";
+                ds.Definition.Selector = "WEB";
 
                 ds.Definition.ClearFields();
 

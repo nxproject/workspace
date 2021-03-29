@@ -37,6 +37,7 @@ namespace Proc.AO
         #region Constants
         public const string DatasetSys = "_sys";
         public const string DatasetHelp = "_help";
+        public const string DatasetWeb = "_web";
         public const string DatasetUser = "_user";
         public const string DatasetAllowed = "_allowed";
         public const string DatasetCookies = "_cookies";

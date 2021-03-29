@@ -122,7 +122,7 @@ namespace Proc.AO.Definitions
         /// The steps
         /// 
         /// </summary>
-        public NamedListClass<ElsaActivityClass> Steps { get; private set; }
+        public NamedListClass<ElsaActivityClass> Steps { get; private set; } = new NamedListClass<ElsaActivityClass>();
 
         /// <summary>
         /// 

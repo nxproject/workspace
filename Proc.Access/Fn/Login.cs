@@ -152,6 +152,13 @@ namespace Proc.Access
                 // Make return
                 if (bOk)
                 {
+                    // Delete temp files
+                    NX.Engine.Files.ManagerClass c_DocMgr = call.Env.Globals.Get<NX.Engine.Files.ManagerClass>();
+                    using(NX.Engine.Files.FolderClass c_Folder = new NX.Engine.Files.FolderClass(c_DocMgr, AO.ExtendedUserClass.UserFolder.CombinePath(sName)))
+                    {
+                        c_Folder.Delete();
+                    }
+
                     // Fill
                     c_User.Parent.ToStore(c_Ans);
 
@@ -179,6 +186,7 @@ namespace Proc.Access
                     c_List.Remove("usedataset");
                     c_List.Remove("xopenmode");
                     c_List.Remove("xaccount");
+                    c_List.Remove("xmdeditor");
                     c_List.Remove("allowed");
                     // Save
                     c_Ans.Set("fieldtypes", c_List.ToJArray());

@@ -26,6 +26,7 @@ using Newtonsoft.Json.Linq;
 using NX.Shared;
 using NX.Engine;
 using Proc.AO;
+using Common.TaskWF;
 
 namespace Proc.Task
 {
@@ -236,7 +237,18 @@ namespace Proc.Task
             // If tracing
             if (this.TraceBuffer != null)
             {
-                // TBD
+                using (NX.Engine.Files.DocumentClass c_Doc = ctx.User.File("TRACE{0}".FormatString()))
+                {
+                    // Fill
+                    c_Doc.Value = this.TraceBuffer.ToString();
+
+                    //
+                    this.SIO("$$noti",
+                        "to", ctx.User.Name,
+                        "type", "QM",
+                        "msg", "Here is the trace",
+                        "att", c_Doc.Path);
+                }
             }
         }
 
@@ -253,6 +265,45 @@ namespace Proc.Task
         /// 
         /// </summary>
         public bool IsTracing { get { return this.TraceBuffer != null; } }
+
+        /// <summary>
+        /// 
+        /// Adds a line to the trace
+        /// 
+        /// </summary>
+        /// <param name="line">The command being executed</param>
+        /// <param name="args">The args passed</param>
+        public void TraceAdd(AO.Definitions.ElsaActivityClass line, ArgsClass args, ReturnClass rc)
+        {
+            this.TraceAdd(line.Type, args, rc.Outcome + ":" + rc.Message);
+        }
+
+        public void TraceAdd(string cmd, ArgsClass args, string extra = "")
+        {
+            this.TraceAdd("{0} :: {1} {2}".FormatString(cmd, args.ToString(), extra), args.Depth);
+        }
+
+        public void TraceAdd(string msg, int depth)
+        {
+            // Tracing?
+            if (this.TraceBuffer != null)
+            {
+                int iCount = depth;
+                if (iCount > 0) iCount--;
+                if (iCount < 0) iCount = 0;
+                string sSpacer = "".RPad(4 * iCount, " ");
+                this.TraceBuffer.AppendLine().Append(sSpacer).Append("[{0}]".FormatString(msg));
+            }
+        }
+
+        public void TraceClear()
+        {
+            // Tracing?
+            if (this.TraceBuffer != null)
+            {
+                this.TraceBuffer = new StringBuilder();
+            }
+        }
         #endregion
 
         #region On

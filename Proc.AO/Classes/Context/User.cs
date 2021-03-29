@@ -34,12 +34,20 @@ namespace Proc.AO
 {
     public class ExtendedUserClass : StoreClass
     {
+        #region Constants
+        public const string UserFolder = "_user";
+        #endregion
+
         #region Constructor
         public ExtendedUserClass(JObject values, SiteInfoClass si)
             : base(values)
         {
             //
             this.SiteInfo = si;
+
+            //
+            NX.Engine.Files.ManagerClass c_Mgr = si.Parent.Parent.Parent.Globals.Get<NX.Engine.Files.ManagerClass>();
+            this.Folder = new NX.Engine.Files.FolderClass(c_Mgr, UserFolder.CombinePath(this.Name));
         }
         #endregion
 
@@ -239,6 +247,27 @@ namespace Proc.AO
         public override string ToString()
         {
             return base.SynchObject.ToSimpleString();
+        }
+        #endregion
+
+        #region Files
+        /// <summary>
+        /// 
+        /// The user folder
+        /// 
+        /// </summary>
+        public NX.Engine.Files.FolderClass Folder { get; private set; }
+
+        /// <summary>
+        /// 
+        /// Returns a file in the user folder
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public NX.Engine.Files.DocumentClass File(string name)
+        {
+            return new NX.Engine.Files.DocumentClass(this.Folder.Parent, this.Folder, name);
         }
         #endregion
     }

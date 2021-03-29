@@ -105,11 +105,6 @@ nx.desktop = {
             'c._component',
             'c.string',
             'c._textfield',
-            //'o.aomanager',
-            //'o.aoobject',
-            //'o.dataset',
-            //'o.object',
-            //'o.user'
 
             'tools.Documents',
 

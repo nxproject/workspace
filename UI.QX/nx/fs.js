@@ -36,6 +36,50 @@ nx.fs = {
 
     },
 
+    view: function (req) {
+
+        var self = this;
+
+        var path = req.path;
+
+        // Get the extension
+        var pos = path.lastIndexOf('.');
+        if (pos !== -1) {
+            var ext = path.substr(pos + 1).toLowerCase();
+            switch (ext) {
+                case 'pdf':
+                    self.viewPDF(req);
+                    break;
+                case 'odt':
+                    self.editDOCX(req);
+                    break;
+                case 'jpeg':
+                case 'jpg':
+                case 'png':
+                case 'gif':
+                case 'svg':
+                    self.viewImage(req);
+                    break;
+                case 'mp4':
+                case 'webm':
+                case 'avi':
+                case 'mov':
+                case 'mpg':
+                case 'wmv':
+                case 'flv':
+                case 'mkv':
+                case 'ogv':
+                case '3gp':
+                case '3g2':
+                    self.viewVideo(req, ext);
+                    break;
+                default:
+                    self.download('/f' + req.path);
+                    break;
+            }
+        }
+    },
+
     viewPDF: function (req) {
 
         var self = this;

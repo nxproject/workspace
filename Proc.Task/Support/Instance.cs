@@ -162,10 +162,10 @@ namespace Proc.Task
                             if (eAns == null) eAns = ReturnClass.Failure("Invalid command");
 
                             // Trace
-                            if (this.Tracing)
+                            if (ctx.IsTracing)
                             {
                                 //
-                                this.TraceAdd(c_Step, c_Args, eAns);
+                                ctx.TraceAdd(c_Step, c_Args, eAns);
                             }
                         }
 
@@ -265,86 +265,6 @@ namespace Proc.Task
             }
 
             return eAns;
-        }
-        #endregion
-
-        #region Tracing
-        /// <summary>
-        /// 
-        /// The buffer
-        /// 
-        /// </summary>
-        private StringBuilder TraceBuffer { get; set; }
-
-        /// <summary>
-        /// 
-        /// Are we tracing?
-        /// 
-        /// </summary>
-        public bool Tracing { get { return this.TraceBuffer != null; } }
-
-        /// <summary>
-        /// 
-        /// Adds a line to the trace
-        /// 
-        /// </summary>
-        /// <param name="line">The command being executed</param>
-        /// <param name="args">The args passed</param>
-        public void TraceAdd(AO.Definitions.ElsaActivityClass line, ArgsClass args, ReturnClass rc)
-        {
-            this.TraceAdd(line.Type, args, rc.Outcome + ":" + rc.Message);
-        }
-
-        public void TraceAdd(string cmd, ArgsClass args, string extra = "")
-        {
-            this.TraceAdd("{0} :: {1} {2}".FormatString(cmd, args.ToString(), extra), args.Depth);
-        }
-
-        public void TraceAdd(string msg, int depth)
-        {
-            // Tracing?
-            if (this.TraceBuffer != null)
-            {
-                int iCount = depth - 1;
-                if (iCount > 0) iCount--;
-                string sSpacer = "".RPad(4 * iCount, " ");
-                this.TraceBuffer.AppendLine().Append(sSpacer).Append("[{0}]".FormatString(msg));
-            }
-        }
-
-        public void TraceClear()
-        {
-            // Tracing?
-            if (this.TraceBuffer != null)
-            {
-                this.TraceBuffer = new StringBuilder();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// Starts the trace
-        /// 
-        /// </summary>
-        public void StartTracing()
-        {
-            if (this.TraceBuffer == null)
-            {
-                this.TraceBuffer = new StringBuilder();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// Ends the trace
-        /// 
-        /// </summary>
-        public void StopTracing()
-        {
-            if (this.TraceBuffer != null)
-            {
-                this.TraceBuffer = null;
-            }
         }
         #endregion
     }

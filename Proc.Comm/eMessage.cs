@@ -446,6 +446,13 @@ namespace Proc.Communication
             }
         }
 
+        /// <summary>
+        /// 
+        /// Send FedEx print request
+        /// 
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="result"></param>
         private void SendFedEx(eAddressClass to, eReturnClass result)
         {
             this.SendEMail(new eAddressClass("printandgo@fedex.com", eAddressClass.AddressTypes.EMail), result);

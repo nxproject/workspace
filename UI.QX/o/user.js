@@ -438,8 +438,9 @@ qx.Class.define('o.user', {
                 switch (msg.fn) {
 
                     case '$$noti':
+                    case '$$document.view':
                         // Is it for us?
-                        if (msg.message.to === self.getField('sioid') || msg.message.to === '*') {
+                        if (msg.message.to === '*' || msg.message.to === self.getField('sioid') || msg.message.to === self.getName()) {
                             // Is it a valid type?
                             var fn = 'notify' + msg.message.type;
                             if (nx.util[fn]) {
@@ -448,6 +449,18 @@ qx.Class.define('o.user', {
                                 // Show
                                 nx.util[fn](xmsg, {
                                     from: msg.user
+                                });
+                            }
+                            // Display files
+                            if (msg.message.att) {
+                                // Assure array
+                                var path = msg.message.att;
+                                if (!Array.isArray(path)) path = [path];
+                                // Loop thru
+                                path.forEach(function (entry) {
+                                    nx.fs.view({
+                                        path: entry
+                                    });
                                 });
                             }
                         }
@@ -635,6 +648,9 @@ qx.Class.define('o.user', {
                             var pos = self._allusers.indexOf(msg.message.id);
                             if (pos !== -1) self._allusers.splice(pos, 1);
                         }
+                        break;
+
+                    case '$$object.view':
                         break;
                 }
 

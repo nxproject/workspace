@@ -151,6 +151,7 @@ namespace Proc.AO.Definitions
             Hidden,
             XOpenMode,
             XAccount,
+            XMDEditor,
 
             UseDataset
         }

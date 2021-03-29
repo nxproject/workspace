@@ -83,6 +83,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://mit-l
 * [TinyMCE](https://github.com/tinymce/tinymce)
 * [a Tiny Parser Generator v1.2](https://www.codeproject.com/Articles/28294/a-Tiny-Parser-Generator-v1-2)
 * [Underscore.js](https://github.com/jashkenas/underscore)
+* [WebODF](https://webodf.org/)
 * [ZXing](https://github.com/zxing-js/browser)
 
 ## Acknowledgments

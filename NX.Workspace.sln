@@ -85,6 +85,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NX.Updater", "NX.Updater\NX
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proc.Updater", "Proc.Updater\Proc.Updater.csproj", "{A4E8DF76-EFF1-4064-8CC5-390666CA22C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proc.Web", "Proc.Web\Proc.Web.csproj", "{B0CE0819-5F25-43FF-A056-26134192A41D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -175,6 +177,10 @@ Global
 		{A4E8DF76-EFF1-4064-8CC5-390666CA22C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4E8DF76-EFF1-4064-8CC5-390666CA22C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4E8DF76-EFF1-4064-8CC5-390666CA22C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0CE0819-5F25-43FF-A056-26134192A41D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0CE0819-5F25-43FF-A056-26134192A41D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0CE0819-5F25-43FF-A056-26134192A41D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0CE0819-5F25-43FF-A056-26134192A41D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

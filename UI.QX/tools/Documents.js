@@ -399,10 +399,6 @@ qx.Class.define('tools.Documents', {
 
                     // Default icon
                     var icon = 'download';
-                    var cb = function (req) {
-                        // Download
-                        nx.fs.download('/f' + req.path);
-                    };
 
                     // Get the extension
                     var pos = entry.name.lastIndexOf('.');
@@ -411,31 +407,9 @@ qx.Class.define('tools.Documents', {
                         switch (ext) {
                             case 'pdf':
                                 icon = 'pdf';
-                                cb = function (req) {
-                                    // View PDF
-                                    nx.fs.viewPDF(req);
-                                };
                                 break;
                             case 'odt':
                                 icon = 'odt';
-                                cb = function (req) {
-                                    // Edit docx
-                                    nx.fs.editDOCX(req);
-                                };
-                                break;
-                            case 'ods':
-                                icon = 'ods';
-                                cb = function (req) {
-                                    // Edit docx
-                                    nx.fs.viewAsPDF(req);
-                                };
-                                break;
-                            case 'odp':
-                                icon = 'odp';
-                                cb = function (req) {
-                                    // Edit docx
-                                    nx.fs.viewAsPDF(req);
-                                };
                                 break;
                             case 'jpeg':
                             case 'jpg':
@@ -443,10 +417,6 @@ qx.Class.define('tools.Documents', {
                             case 'gif':
                             case 'svg':
                                 icon = 'photo';
-                                cb = function (req) {
-                                    // Edit docx
-                                    nx.fs.viewImage(req);
-                                };
                                 break;
                             case 'mp4':
                             case 'webm':
@@ -460,10 +430,6 @@ qx.Class.define('tools.Documents', {
                             case '3gp':
                             case '3g2':
                                 icon = 'drive_web';
-                                cb = function (req) {
-                                    // Edit docx
-                                    nx.fs.viewVideo(req, ext);
-                                };
                                 break;
                         }
                     }
@@ -475,7 +441,9 @@ qx.Class.define('tools.Documents', {
                         label: entry.name,
                         path: folder,
                         icon: icon,
-                        cb: cb,
+                        cb: function (req) {
+                            nx.fs.view(req);
+                        },
                         win: win,
                         contextMenu: dm,
 
