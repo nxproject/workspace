@@ -48,7 +48,9 @@ namespace Proc.Web
             AO.ManagerClass c_DBMgr = call.Env.Globals.Get<AO.ManagerClass>();
 
             // Get the file name
-            string sFile = store["file"].IfEmpty(c_DBMgr.DefaultDatabase.SiteInfo.HelpRoot).IfEmpty("index").GetFileNameOnlyFromPath();
+            string sFile = store["file"];
+
+            call.Env.LogInfo("GET: {0}".FormatString(sFile));
 
             // Get the contents
             AO.ObjectClass c_Obj = c_DBMgr.DefaultDatabase[AO.DatabaseClass.DatasetWeb][sFile];
@@ -75,6 +77,10 @@ namespace Proc.Web
                 {
                     call.RespondWithStream("", "text/html", false, c_Stream);
                 }
+            }
+            else
+            {
+                call.Env.LogInfo("MISSING: {0}".FormatString(sFile));
             }
 
         }

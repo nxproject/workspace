@@ -58,6 +58,9 @@ namespace Proc.Office
             // LibreOffice
             env.Use("Proc.LibreOffice");
 
+            // The website
+            env.Use("Proc.Web");
+
             // The updater logic
             env.Use("Proc.Updater");
 

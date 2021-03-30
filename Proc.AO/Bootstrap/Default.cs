@@ -565,7 +565,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Help(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.28f"))
+            if (ds.Definition.ReleaseChanged("2021.03.29a"))
             {
                 //
                 ds.Definition.Caption = "Help";
@@ -606,7 +606,6 @@ namespace Proc.AO.BuiltIn
 
                 // Give some room
                 c_VDefault["text"].Height = "15";
-                c_VDefault["text"].Label = "";
                 c_VDefault["text"].Width = "default.fieldWidth@2";
 
                 c_VDefault.Save();
@@ -616,10 +615,10 @@ namespace Proc.AO.BuiltIn
         private static void Define_Web(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.28a"))
+            if (ds.Definition.ReleaseChanged("2021.03.29c"))
             {
                 //
-                ds.Definition.Caption = "Help";
+                ds.Definition.Caption = "Web";
                 ds.Definition.Placeholder = "[_id] '-' [desc]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
@@ -632,14 +631,14 @@ namespace Proc.AO.BuiltIn
 
                 //  
                 Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Lower;
 
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Description";
 
                 c_Field = ds.Definition["text"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.XHTMLEditor;
                 c_Field.Label = "Text";
 
                 c_Field.SaveParent();
@@ -657,6 +656,7 @@ namespace Proc.AO.BuiltIn
 
                 // Give some room
                 c_VDefault["text"].Height = "15";
+                c_VDefault["text"].Width = "default.fieldWidth@2";
 
                 c_VDefault.Save();
             }

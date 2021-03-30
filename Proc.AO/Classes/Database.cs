@@ -459,6 +459,7 @@ namespace Proc.AO
                 this.AssureDataset(DatabaseClass.DatasetUser);
                 this.AssureDataset(DatabaseClass.DatasetBillAccess);
                 this.AssureDataset(DatabaseClass.DatasetHelp);
+                this.AssureDataset(DatabaseClass.DatasetWeb);
 
                 //
                 SiteInfoClass c_SI = this.SiteInfo;

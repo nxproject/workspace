@@ -16,24 +16,23 @@
 
 ************************************************************************ */
 
-qx.Class.define('c.xmdeditor', {
+qx.Class.define('t.xhtmleditor', {
 
-    extend: c._component,
+    extend: qx.core.Object,
 
-    implement: i.iComponent,
+    implement: i.iTool,
 
-    construct: function () {
+    members: {
 
-        // Call base
-        this.base(arguments, new t.xmdeditor(),  new c._textarea());
+        caption: 'Edit',
 
-    },
+        icon: 'pencil',
 
-    statics: {
+        setup: function (widget, button) { },
 
-        makeSelf: function (req) {
+        click: function (widget) {
 
-            return new c.xmdeditor(req);
+            alert('ok');
 
         }
     }

@@ -16,7 +16,7 @@
 
 ************************************************************************ */
 
-qx.Class.define('c.xmdeditor', {
+qx.Class.define('c.xhtmleditor', {
 
     extend: c._component,
 
@@ -25,7 +25,7 @@ qx.Class.define('c.xmdeditor', {
     construct: function () {
 
         // Call base
-        this.base(arguments, new t.xmdeditor(),  new c._textarea());
+        this.base(arguments, new t.xhtmleditor(), new c._textarea());
 
     },
 
@@ -33,7 +33,7 @@ qx.Class.define('c.xmdeditor', {
 
         makeSelf: function (req) {
 
-            return new c.xmdeditor(req);
+            return new c.xhtmleditor(req);
 
         }
     }

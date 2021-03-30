@@ -152,6 +152,7 @@ namespace Proc.AO.Definitions
             XOpenMode,
             XAccount,
             XMDEditor,
+            XHTMLEditor,
 
             UseDataset
         }

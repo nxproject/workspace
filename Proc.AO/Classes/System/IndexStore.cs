@@ -131,7 +131,7 @@ namespace Proc.AO
                             if (c_ItemR.Owner.IsSameValue(owner))
                             {
                                 // Got one
-                                c_Ans = c_Item;
+                                c_Ans = c_ItemR;
                             }
                             else
                             {

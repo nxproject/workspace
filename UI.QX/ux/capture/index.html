@@ -21,15 +21,15 @@
     <form action="/ux/capture">
         <div class="tm-container-fluid">
 
-            <section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-2 tm-border-rounded">
+            <section class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-2 tm-border-rounded onclick="resetUpload()"">
                 <div class="tm-about-header tm-flex-center">
-                    <i id="iconp" class="fas fa-camera fa-2x" onclick="resetUpload()"></i>
+                    <i id="iconp" class="fas fa-camera fa-2x"></i>
                     <h2 id="msgp">Get picture, video or file</h2>
                 </div>
             </section>
-            <section id="sctu" class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-1 tm-border-rounded" style="display:none">
+            <section id="sctu" class="tm-about tm-mb-80 tm-p-50 tm-bgcolor-1 tm-border-rounded" style="display:none" onclick="upload()">
                 <div class="tm-about-header tm-flex-center">
-                    <i class="fas fa-check fa-2x" onclick="upload()"></i>
+                    <i class="fas fa-check fa-2x"></i>
                     <h2 id="msgx">Upload</h2>
                 </div>
             </section>
