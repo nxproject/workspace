@@ -123,7 +123,7 @@ Note that it may take a few minutes to obtain a new SSL certificate from ***Let'
 |Datasets/Fields|List of datasets and key fieds to be searched by AutoHotKeys|
 
 You can get the ***AutoHotKeys*** program [here](https://www.autohotkey.com/).
-You can get the ***NX.Workspace*** script file [here](https://github.com/nxproject/workspace/blob/master/readmes/nxproject.ahk).
+You can get the ***NX.Workspace*** script file [here](https://github.com/nxproject/workspace/blob/master/readmes/nxworkspace.ahk).
 
 ---
 
