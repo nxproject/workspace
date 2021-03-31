@@ -116,11 +116,22 @@ Note that it may take a few minutes to obtain a new SSL certificate from ***Let'
 
 ---
 
+![image](images/Site12.png)
+
+|Field|Meaning|
+|-|-|
+|Datasets/Fields|List of datasets and key fieds to be searched by AutoHotKeys|
+
+You can get the ***AutoHotKeys*** program [here](https://www.autohotkey.com/).
+You can get the **NX.Workspace *** script file [here](nxproject.ahk).
+
+---
+
 ![image](images/Site10.png)
 
 |Field|Meaning|
 |-|-|
-|API Key|YThe API key for the 8x8 Jitse service|
+|API Key|The API key for the 8x8 Jitse service|
 
 ---
 
