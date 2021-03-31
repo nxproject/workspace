@@ -153,6 +153,17 @@ namespace Proc.AO.Definitions
             //
             this.Values = def;
 
+            // Build parameters
+            JObject c_PRaw = this.Values.GetJObject("state");
+            // Loop thru
+            foreach (string sFld in c_PRaw.Keys())
+            {
+                // Get the value
+                JObject c_PValue = c_PRaw.GetJObject(sFld);
+                // Save
+                this.Parameters[sFld] = c_PValue.Get("expression");
+            }
+
             // Build connectors
             for (int i = 0; i < conn.Count; i++)
             {
@@ -186,7 +197,7 @@ namespace Proc.AO.Definitions
         /// <returns></returns>
         public string this[string fld]
         {
-            get { return this.Values.Get(fld); }
+            get { return this.Parameters[fld]; }
         }
         #endregion
 
@@ -228,10 +239,37 @@ namespace Proc.AO.Definitions
 
         /// <summary>
         /// 
+        /// Parameters
+        /// 
+        /// </summary>
+        public NamedListClass<string> Parameters { get; private set; } = new NamedListClass<string>();
+
+        /// <summary>
+        /// 
+        /// Returns a list of parameters
+        /// 
+        /// </summary>
+        public List<string> Keys { get { return new List<string>(this.Parameters.Keys); } }
+        /// <summary>
+        /// 
         /// Is it called by another
         /// 
         /// </summary>
         public bool IsCalled { get; set; }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// 
+        /// Returns true if key is a parameter
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool Contains(string key)
+        {
+            return this.Parameters.Contains(key);
+        }
         #endregion
     }
 }

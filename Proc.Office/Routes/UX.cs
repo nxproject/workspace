@@ -75,8 +75,6 @@ namespace Proc.Office
 
         public override void AtAdd(RouterClass router)
         {
-            router.Parent.Debug();
-
             // Make the folder path
             string sPath = "".WorkingDirectory().CombinePath("ui." + router.Parent.UI.Replace("+", "").ToLower()).CombinePath("ux").AdjustPathToOS();
 

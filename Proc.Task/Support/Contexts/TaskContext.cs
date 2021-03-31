@@ -237,7 +237,7 @@ namespace Proc.Task
             // If tracing
             if (this.TraceBuffer != null)
             {
-                using (NX.Engine.Files.DocumentClass c_Doc = ctx.User.File("TRACE{0}".FormatString()))
+                using (NX.Engine.Files.DocumentClass c_Doc = ctx.User.File("TRACE{0}.txt".FormatString(DateTime.Now.ToTimeStamp())))
                 {
                     // Fill
                     c_Doc.Value = this.TraceBuffer.ToString();
@@ -247,7 +247,7 @@ namespace Proc.Task
                         "to", ctx.User.Name,
                         "type", "QM",
                         "msg", "Here is the trace",
-                        "att", c_Doc.Path);
+                        "att", "/"+ c_Doc.Path);
                 }
             }
         }

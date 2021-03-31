@@ -18,6 +18,8 @@
 
 // Set the call
 nx.calls.logout = function (req) {
+    // Clean remember me
+    nx.env.setRM('');
     //
     location.reload();
 };

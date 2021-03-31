@@ -1925,14 +1925,16 @@ nx.util = {
         options = self.merge({
             style: 'Info',
             callback: function () {
-                nx.util.runTool('QM', {
-                    to: options.from
-                });
+                if (options.from) {
+                    nx.util.runTool('QM', {
+                        to: options.from
+                    });
+                }
             },
-            callbackOnTextClick: true
+            callbackOnTextClick: !!options.from
         }, options || {});
 
-        self._notify(msg + ' // Click here to respond', options);
+        self._notify(msg + (options.from  ? ' // Click here to respond' : ''), options);
     },
 
     sendNotify: function (to, msg, type) {

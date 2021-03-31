@@ -42,6 +42,20 @@ namespace Proc.Access
             // Get the params
             string sUser = values["user"];
             string sPwd = values["pwd"];
+            bool bRM = values["rm"].FromDBBoolean();
+
+            // Is it a remembeer me token?
+            if (bRM)
+            {
+                // Valid?
+                Tuple<string, string>c_RM = call.Env.RMDecode(sUser);
+                // Valid?
+                if (c_RM.Item1.HasValue() && c_RM.Item2.HasValue())
+                {
+                    sUser = c_RM.Item1;
+                    sPwd = c_RM.Item2;
+                }
+            }
 
             // Valid?
             if (sUser.HasValue() && sPwd.HasValue())
@@ -191,6 +205,13 @@ namespace Proc.Access
                     c_List.Remove("allowed");
                     // Save
                     c_Ans.Set("fieldtypes", c_List.ToJArray());
+
+                    // Remember me?
+                    if (bRM)
+                    {
+                        c_Ans.Set("_rm", call.Env.RMEncode(sUser, sPwd));
+                    }
+
                 }
 
                 // Cleanup

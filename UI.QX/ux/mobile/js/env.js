@@ -43,6 +43,7 @@ nx.env = {
     // ---------------------------------------------------------
 
     _buckets: {},
+    _defaultBucket: null,
 
     /**
      * 
@@ -65,6 +66,21 @@ nx.env = {
                 // Parse
                 data = nx._sys.utils.parseUrlQuery(history[i]);
                 i--;
+            }
+        }
+
+        // If none, make one
+        if (!data._bucket) {
+            // Use default
+            data._bucket = self._defaultBucket;
+            // None?
+            if (!data._bucket) {
+                // Make the id
+                data._bucket = nx.util.localUUID('Bucket');
+                // Create
+                self._buckets[data._bucket] = {};
+                // Save
+                self._defaultBucket = data._bucket;
             }
         }
 
@@ -398,5 +414,43 @@ nx.env = {
 
         }, 1000);
 
+    },
+
+    // ---------------------------------------------------------
+    //
+    // Private
+    // 
+    // ---------------------------------------------------------
+
+    /**
+     * 
+     * Sets the "remember me" token
+     * 
+     * @param {any} rows
+     */
+    setRM: function (value) {
+
+        var self = this;
+
+        // Save
+        self.setStore('rm', value);
+    },
+
+    /**
+     * 
+     * Gets the "remember me" token
+     * 
+     */
+    getRM: function () {
+
+        var self = this;
+
+        var ans = self.getStore('rm');
+        // Clear
+        self.setRM('');
+
+        return ans;
+
     }
+
 };

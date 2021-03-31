@@ -29,63 +29,82 @@ qx.Class.define('tools.Login', {
         // This is what you override
         do: function (req) {
 
-            nx.desktop.addWindow({
+            // If we have remember me token, use
+            var rm = nx.env.getRM();
+            if (nx.util.hasValue(rm)) {
 
-                nxid: 'login',
-                caption: 'Login',
-                center: 'both',
-                defaultCommand: 'Ok',
+                // Login
+                nx.desktop.user.login(rm, '', 'y');
 
-                items: [
+            } else {
 
-                    {
-                        nxtype: 'lower',
-                        top: 1,
-                        left: 1,
-                        width: 10,
-                        label: 'Name'
-                    }, {
-                        nxtype: 'password',
-                        top: 2,
-                        left: 1,
-                        width: 10,
-                        label: 'Password'
-                    }
-                ],
+                nx.desktop.addWindow({
 
-                commands: {
+                    nxid: 'login',
+                    caption: 'Login',
+                    center: 'both',
+                    defaultCommand: 'Ok',
 
                     items: [
 
-                        '>', {
+                        {
+                            nxtype: 'lower',
+                            top: 1,
+                            left: 1,
+                            width: 10,
+                            label: 'Name'
+                        }, {
+                            nxtype: 'password',
+                            top: 2,
+                            left: 1,
+                            width: 10,
+                            label: 'Password'
+                        }, {
+                            nxtype: 'boolean',
+                            top: 3,
+                            left: 1,
+                            width: 10,
+                            label: 'Remember me',
+                            aoFld: 'rm'
+                        }
+                    ],
 
-                            label: 'Ok',
-                            icon: 'accept',
-                            click: function (e) {
+                    commands: {
 
-                                // Get the button
-                                var widget = nx.util.eventGetWidget(e);
+                        items: [
 
-                                // Map window
-                                var win = nx.bucket.getWin(widget);
+                            '>', {
 
-                                // Get values
-                                var name = win.getValue('Name');
-                                var pwd = win.getValue('Password');
+                                label: 'Ok',
+                                icon: 'accept',
+                                click: function (e) {
 
-                                // Login
-                                nx.desktop.user.login(name, pwd);
+                                    // Get the button
+                                    var widget = nx.util.eventGetWidget(e);
 
-                                // Close
-                                win.safeClose();
+                                    // Map window
+                                    var win = nx.bucket.getWin(widget);
+
+                                    // Get values
+                                    var name = win.getValue('Name');
+                                    var pwd = win.getValue('Password');
+                                    var rm = win.getValue('rm');
+
+                                    // Login
+                                    nx.desktop.user.login(name, pwd, rm);
+
+                                    // Close
+                                    win.safeClose();
+                                }
+
                             }
 
-                        }
+                        ]
+                    }
 
-                    ]
-                }
+                });
 
-            });
+            }
 
         }
 

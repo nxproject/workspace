@@ -588,27 +588,54 @@ nx.builder = {
     // 
     // ---------------------------------------------------------
 
-    _callbackBucketURL: null,
-    _callbackBucketRef: null,
-
     /**
      * 
      * Sets the holder for the callbacks for the route
      * 
      * @param {any} url
      */
-    setCallbackBucket: function (url) {
+    setCallbackBucket: function (url, value) {
 
         var self = this;
 
-        //
-        self._callbackBucketRef = 'nx.env._buckets.' + nx.env.getBucketID(url) + '._callbacks.';
+        // Make the holder
+        nx.env.setBucketItem('_callbacks', (value || {}), url);
+    },
 
-        // Get the bucket
-        self._callbackBucketURL = url;
+    /**
+     * 
+     * Gets the holder for the callbacks for the route
+     * 
+     * @param {any} url
+     */
+    getCallbackBucket: function (url) {
+
+        var self = this;
 
         // Make the holder
-        nx.env.setBucketItem('_callbacks', {}, url);
+        var ans = nx.env.getBucketItem('_callbacks', url);
+        // New?
+        if (!ans) {
+            // New
+            ans = {};
+            // SAve
+            self.setCallbackBucket(url, ans);
+        }
+        return ans;
+    },
+
+    /**
+     * 
+     * The callback bucket reference
+     * 
+     * @param {any} url
+     */
+    getCallbackBucketRef: function (url) {
+
+        var self = this;
+
+    //
+        return 'nx.env._buckets.' + nx.env.getBucketID(url) + '._callbacks.';
     },
 
     /**
@@ -628,15 +655,11 @@ nx.builder = {
             // Make name
             var name = nx.util.localUUID('cb_');
             // Get holder
-            var holder = nx.env.getBucketItem('_callbacks', self._callbackBucketURL);
-            if (!holder) {
-                holder = {};
-                nx.env.setBucketItem('_callbacks', holder, self._callbackBucketURL);
-            }
+            var holder = self.getCallbackBucket();
             // Save
             holder[name] = cb;
 
-            ans = self._callbackBucketRef + name + '(this)';
+            ans = self.getCallbackBucketRef() + name + '(this)';
         }
 
         return ans;

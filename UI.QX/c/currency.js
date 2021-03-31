@@ -25,7 +25,7 @@ qx.Class.define('c.currency', {
     construct: function () {
 
         // Call base
-        this.base(arguments, new f.currency(), new c._currency());
+        this.base(arguments, new f.currency(), new c._textfield());
 
     },
 

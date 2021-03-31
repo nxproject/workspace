@@ -745,14 +745,16 @@ nx.util = {
         options = self.merge({
             style: 'Info',
             callback: function () {
-                nx.calls.qm({
-                    to: options.from
-                });
+                if (options.from) {
+                    nx.calls.qm({
+                        to: options.from
+                    });
+                }
             },
-            callbackOnTextClick: true
+            callbackOnTextClick: !!options.from
         }, options || {});
 
-        self._notify(msg + ' // Click here to respond', options);
+        self._notify(msg + (options.from ? ' // Click here to respond' : ''), options);
     },
 
     notifyDisplay: function (msg, options) {

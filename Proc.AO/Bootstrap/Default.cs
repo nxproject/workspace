@@ -141,7 +141,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.26b"))
+            if (ds.Definition.ReleaseChanged("2021.03.31a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -316,6 +316,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Allowed;
                 c_Field.Label = "Acct.Def.Alwd";
 
+                c_Field = ds.Definition["ahksearch"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Lower;
+                c_Field.Label = "Datasets/Fields";
+
                 c_Field.SaveParent();
             }
 
@@ -355,6 +359,21 @@ namespace Proc.AO.BuiltIn
                     "helproot",
                     "proccount"
                     );
+
+                c_CInfo.Save();
+            }
+
+            c_CInfo = ds.View("ahk");
+            if (c_CInfo.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_CInfo.Caption = "AutoHotKeys";
+
+                // Clear
+                c_CInfo.ClearFields();
+
+                // Map
+                c_CInfo.UseFields("ahksearch");
 
                 c_CInfo.Save();
             }
@@ -539,7 +558,7 @@ namespace Proc.AO.BuiltIn
                 // Make the tabs
                 Definitions.ViewFieldClass c_Field = c_VTP.AsTabs("sysve");
                 c_Field.Height = "14";
-                c_Field.Views = "twilio sendgrid ps stripe vebye twitter";
+                c_Field.Views = "twilio sendgrid ps stripe ahk vebye twitter";
 
                 c_VTP.Save();
             }

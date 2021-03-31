@@ -48,22 +48,6 @@ namespace Common.TaskWF
             this.LineID = line;
             this.Step = this.Definition[this.LineID];
             this.Depth = depth;
-            
-            // Loop thru
-            foreach (string sKey in this.Step.Values.Keys())
-            {
-                switch (sKey)
-                {
-                    case "id":
-                    case "type":
-                        break;
-
-                    default:
-                        // Save
-                        this.IDefined[sKey] = this.Step.Values.Get(sKey);
-                        break;
-                }
-            }
         }
 
         public ArgsClass(Context ctx, string values, int depth)
@@ -71,32 +55,19 @@ namespace Common.TaskWF
         {
             //
             this.Depth = depth;
+            this.LocalParameters = new NamedListClass<string>();
 
             //
             if (values.HasValue())
             {
                 List<string> c_Passed = values.IfEmpty().SplitSpaces();
                 // Loop thru
-                for(int iLoop =0;iLoop < c_Passed.Count;iLoop+=2)
+                for (int iLoop = 0; iLoop < c_Passed.Count; iLoop += 2)
                 {
-                    this.IDefined[c_Passed[iLoop]] = c_Passed[iLoop + 1];
+                    this.LocalParameters[c_Passed[iLoop]] = c_Passed[iLoop + 1];
                 }
             }
         }
-
-        public ArgsClass(ArgsClass from)
-            : base(from.Parent)
-        {
-            // Loop thru
-            foreach (string sKey in from.IDefined.Keys)
-            {
-                this.IDefined[sKey] = from.IDefined[sKey];
-            }
-
-            this.Step = from.Step;
-            this.Depth = from.Depth;
-        }
-
         #endregion
 
         #region Properties
@@ -105,7 +76,7 @@ namespace Common.TaskWF
         /// Internals
         /// 
         /// </summary>
-        public NamedListClass<string> IDefined { get; private set; } = new NamedListClass<string>();
+        //public NamedListClass<string> IDefined { get; private set; } = new NamedListClass<string>();
 
         /// <summary>
         /// 
@@ -134,6 +105,13 @@ namespace Common.TaskWF
         /// 
         /// </summary>
         public int Depth { get; private set; }
+
+        /// <summary>
+        /// 
+        /// Parameters used in original call
+        /// 
+        /// </summary>
+        private NamedListClass<string> LocalParameters { get; set; }
         #endregion
 
         #region Methods
@@ -145,7 +123,19 @@ namespace Common.TaskWF
         /// <returns>The raw value</returns>
         public string GetRaw(string fld)
         {
-            return this.IDefined[fld];
+            string sAns = null;
+
+            // Local?
+            if (this.LocalParameters != null)
+            {
+                sAns = this.LocalParameters[fld];
+            }
+            else if (this.Step != null)
+            {
+                sAns = this.Step[fld];
+            }
+
+            return sAns;
         }
 
         /// <summary>
@@ -208,11 +198,23 @@ namespace Common.TaskWF
             // Default
             bool bIf = true;
 
-            // Do we have an if?
-            if (this.IDefined.ContainsKey("if"))
+            // Local?
+            if (this.LocalParameters != null)
             {
-                // Do we do?
-                bIf = this.GetAsBool("if");
+                // Check
+                if (this.LocalParameters.Contains("if"))
+                {
+                    bIf = this.GetAsBool("if");
+                }
+            }
+            else if (this.Step != null)
+            {
+                // Do we have an if?
+                if (this.Step.Contains("if"))
+                {
+                    // Do we do?
+                    bIf = this.GetAsBool("if");
+                }
             }
 
             return bIf;
@@ -229,11 +231,24 @@ namespace Common.TaskWF
             // 
             JObject c_Wkg = new JObject();
 
-            // Loop theu
-            foreach (string sKey in this.IDefined.Keys)
+            // Local?
+            if (this.LocalParameters != null)
             {
-                // Addthis
-                c_Wkg.Set(sKey, this.GetRaw(sKey));
+                // Loop theu
+                foreach (string sKey in this.LocalParameters.Keys)
+                {
+                    // Addthis
+                    c_Wkg.Set(sKey, this.GetRaw(sKey));
+                }
+            }
+            else if (this.Step != null)
+            {
+                // Loop theu
+                foreach (string sKey in this.Step.Keys)
+                {
+                    // Addthis
+                    c_Wkg.Set(sKey, this.GetRaw(sKey));
+                }
             }
 
             return c_Wkg.ToSimpleString();

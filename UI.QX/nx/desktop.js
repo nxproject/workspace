@@ -2235,3 +2235,91 @@ nx.desktop = {
         return kd.CTRL.isDown()
     }
 };
+
+nx.env = {
+
+
+    // ---------------------------------------------------------
+    //
+    // Storage
+    // 
+    // ---------------------------------------------------------
+
+    /**
+     * 
+     * Gets item from storage
+     * 
+     * @param {any} key
+     */
+    getStore: function (key) {
+        // Get the raw value
+        var ans = localStorage.getItem(key);
+        // Any?
+        if (ans) {
+            // Parse
+            ans = JSON.parse(ans);
+            // Get the value
+            ans = ans.value;
+        }
+        return ans;
+    },
+
+    /**
+     * 
+     * Sets an item into storgae
+     * 
+     * @param {any} key
+     * @param {any} value
+     */
+    setStore: function (key, value) {
+        // Any?
+        if (value === null) {
+            localStorage.setItem(key, value);
+        } else {
+            // Make into object
+            var wkg = {
+                value: value
+            };
+            // Save
+            localStorage.setItem(key, JSON.stringify(wkg));
+        }
+    },
+
+    // ---------------------------------------------------------
+    //
+    // Private
+    // 
+    // ---------------------------------------------------------
+
+    /**
+     * 
+     * Sets the "remember me" token
+     * 
+     * @param {any} rows
+     */
+    setRM: function (value) {
+
+        var self = this;
+
+        // Save
+        self.setStore('rm', value);
+    },
+
+    /**
+     * 
+     * Gets the "remember me" token
+     * 
+     */
+    getRM: function () {
+
+        var self = this;
+
+        var ans = self.getStore('rm');
+        // Clear
+        self.setRM('');
+
+        return ans;
+
+    }
+
+}

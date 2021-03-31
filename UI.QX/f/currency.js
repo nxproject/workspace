@@ -29,7 +29,7 @@ qx.Class.define('f.currency', {
             if (value) {
                 value = nx.util.toNumber(value);
                 if (isNaN(value)) value = 0;
-                value = '$' + value.toFixed(2);
+                value = value.toFixed(2);
             }
             cb(value);
 

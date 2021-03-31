@@ -430,6 +430,27 @@ namespace Proc.AO
                 this.Cache.Remove(name);
             }
         }
+
+        /// <summary>
+        /// 
+        /// Reloads all datasets in cache
+        /// 
+        /// </summary>
+        public void RebuildCache()
+        {
+            // Get list of datasets
+            List<string> c_DSS = this.AllDatasets;
+            // Reset
+            this.Cache = new NamedListClass<DatasetClass>();
+            // Reload
+            foreach(string sDS in c_DSS)
+            {
+                // Map
+                DatasetClass c_DS = this[sDS];
+                // Tell world
+                this.Parent.SignalChange(c_DS);
+            }
+        }
         #endregion
 
         #region Initialize

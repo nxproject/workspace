@@ -47,6 +47,8 @@ qx.Class.define('tools.Logout', {
 
             } else {
 
+            // Clear
+                nx.env.setRM('');
                 // Create null user
                 nx.desktop.resetUser();
                 //

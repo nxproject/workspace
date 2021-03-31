@@ -290,7 +290,11 @@ namespace Proc.AO
             string sAtt = new JArray(attachments).ToSimpleString();
 
             //
-            using(SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, SIO.MessageClass.Modes.Internal, "$$noti", "to", user, "type", "QM", "msg", mesaage, "att", sAtt))
+            using(SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, SIO.MessageClass.Modes.Internal, "$$noti", 
+                "to", user, 
+                "type", "QM", 
+                "msg", mesaage, 
+                "att", sAtt))
             {
                 c_Msg.Send();
             }

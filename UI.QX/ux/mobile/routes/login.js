@@ -39,6 +39,12 @@ nx._routes.push({
                         left: 1,
                         width: 10,
                         label: 'Password'
+                    }, {
+                        nxtype: 'boolean',
+                        top: 3,
+                        left: 1,
+                        width: 10,
+                        label: 'Remember me'
                     }
                 ]))
             ],
@@ -46,7 +52,7 @@ nx._routes.push({
                 // Get the data
                 var data = nx.fields.getFormData();
                 // Login
-                nx.user.login(data.Name, data.Password);
+                nx.user.login(data.Name, data.Password, data['Remember me']);
             }
         );
 
@@ -68,12 +74,24 @@ nx.calls.login = function (req) {
     // Reset?
     if (req.force) nx.env.reset();
 
-    // Are we logged in?
+    // Do we have a remember me token?
     if (!nx.user.getName()) {
 
-        $('title').text('NX.Project');
+        var rm = nx.env.getRM();
 
-        nx.office.goTo('login', req);
+        if (nx.util.hasValue(rm)) {
+
+            // Login
+            nx.user.login(rm, '', 'y');
+
+        } else {
+
+            // Are we logged in?
+            $('title').text('NX.Project');
+
+            nx.office.goTo('login', req);
+
+        }
     } else {
 
         $('title').text(nx.user.getSIField('name') || 'NX.Project');

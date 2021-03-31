@@ -426,7 +426,7 @@ nx.user = {
                         var fn = 'notify' + msg.message.type;
                         if (nx.util[fn]) {
                             // Make the message
-                            var xmsg = '[' + msg.user + '] ' + msg.message.msg;
+                            var xmsg = (msg.user ? '[' + msg.user + '] ' : '') + msg.message.msg;
                             // Show
                             nx.util[fn](xmsg, {
                                 from: msg.user
@@ -676,10 +676,10 @@ nx.user = {
     processSIO: function (event) {
 
         var self = this;
-        
+
         // Do we still have a message?
         if (event) {
-             // And callbacks
+            // And callbacks
             Object.keys(self.callbacksSIO).forEach(function (name) {
                 self.callbacksSIO[name](name, event);
             });
@@ -749,18 +749,20 @@ nx.user = {
      * 
      * @param {any} name
      * @param {any} pwd
+     * @param {any} rm
      */
-    login: function (name, pwd) {
+    login: function (name, pwd, rm) {
 
         var self = this;
 
         // Do the load
-        if (name && pwd) {
+        if (name) {
 
             // Call
             nx.util.serviceCall('Access.Login', {
                 user: name,
-                pwd: pwd
+                pwd: pwd,
+                rm: rm
             }, function (result) {
 
                 self.processLogin(name, pwd, result);
@@ -785,6 +787,9 @@ nx.user = {
             nx.calls.login();
 
         } else {
+
+            // Save the remember me token
+            nx.env.setRM(result._rm);
 
             // Make the object
             var user = nx.aoobject.prep(result);

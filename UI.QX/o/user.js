@@ -445,7 +445,7 @@ qx.Class.define('o.user', {
                             var fn = 'notify' + msg.message.type;
                             if (nx.util[fn]) {
                                 // Make the message
-                                var xmsg = '[' + msg.user + '] ' + msg.message.msg;
+                                var xmsg = (msg.user ? '[' + msg.user + '] ' : '') + msg.message.msg;
                                 // Show
                                 nx.util[fn](xmsg, {
                                     from: msg.user
@@ -674,19 +674,24 @@ qx.Class.define('o.user', {
          * 
          * @param {any} name
          * @param {any} pwd
+         * @param {any} rm
          */
-        login: function (name, pwd) {
+        login: function (name, pwd, rm) {
 
             var self = this;
 
             // Do the load
-            if (name && pwd) {
+            if (name) {
 
                 // Call
                 nx.util.serviceCall('Access.Login', {
                     user: name,
-                    pwd: pwd
+                    pwd: pwd,
+                    rm: rm
                 }, function (result) {
+
+                    // Save remember me token
+                    nx.env.setRM(result._rm);
 
                     self.processLogin(result);
 

@@ -26,7 +26,7 @@ nx.fields = {
 
         var self = this;
 
-        return $('input[nxtype]');
+        return $('[nxtype]');
     },
 
     /**
@@ -193,7 +193,11 @@ nx.fields = {
             ];
 
             var attrsl = [
-                'name', '_' + aoFld + '_',
+                'name', aoFld,
+                'nxtype', nxtype,
+                'nxfmt', fmtr,
+                'tabIndex', index,
+                'id', id,
                 'onchange', 'nx.fields.onblur(this);'
             ]
 

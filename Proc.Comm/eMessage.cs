@@ -315,7 +315,12 @@ namespace Proc.Communication
         /// <param name="result"></param>
         private void SendNotification(eAddressClass to, eReturnClass result)
         {
-            this.Parent.SendNotification(to.To, this.Message, this.Attachments.AsDocuments);
+            List<string> c_Pieces = new List<string>();
+
+            if (this.Subject.HasValue()) c_Pieces.Add(this.Subject);
+            if (this.Message.HasValue()) c_Pieces.Add(this.Message);
+
+            this.Parent.SendNotification(to.To,c_Pieces.Join(" - "), this.Attachments.AsDocuments);
 
             result.Log(to);
         }

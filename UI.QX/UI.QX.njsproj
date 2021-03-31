@@ -43,7 +43,6 @@
     <Content Include="c\xaccount.js" />
     <Content Include="c\xhtmleditor.js" />
     <Content Include="c\xmdeditor.js" />
-    <Content Include="c\_currency.js" />
     <Content Include="c\_date.js" />
     <Content Include="c\_gridcellrenderer.js" />
     <Content Include="c\_gridrowrenderer.js" />

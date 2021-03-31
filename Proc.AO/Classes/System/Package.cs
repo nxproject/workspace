@@ -95,7 +95,7 @@ namespace Proc.AO
                             string sValue = "";
                             string sKey = sDSRaw;
                             int iPos = sKey.IndexOf("-");
-                            if(iPos != -1)
+                            if (iPos != -1)
                             {
                                 sValue = sKey.Substring(iPos + 1);
                                 sKey = sKey.Substring(0, iPos);
@@ -246,24 +246,26 @@ namespace Proc.AO
                 }
 
                 // Clear cache
-                if (sCDS.HasValue()) this.DatasetChange(sCDS, c_Changed);
+                //if (sCDS.HasValue()) this.DatasetChange(sCDS, c_Changed);
 
                 // Turn on messaging
                 c_SIO.Enabled = true;
 
-                // Loop thru
-                foreach(string sDS in c_Changed)
-                {
-                    // Map
-                    DatasetClass c_DS = this.Parent[sDS];
-                    // Reload
-                    c_DS.Definition.Reload();
-                    // Tell world
-                    this.Parent.Parent.SignalChange(c_DS);
-                }
+                this.Parent.RebuildCache();
+
+                //// Loop thru
+                //foreach (string sDS in c_Changed)
+                //{
+                //    // Map
+                //    DatasetClass c_DS = this.Parent[sDS];
+                //    // Reload
+                //    c_DS.Definition.Reload();
+                //    // Tell world
+                //    this.Parent.Parent.SignalChange(c_DS);
+                //}
 
                 // Save settings
-                if(bSettChanged)
+                if (bSettChanged)
                 {
                     this.Parent.SiteInfo.Save();
                 }
