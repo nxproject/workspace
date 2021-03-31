@@ -19,6 +19,8 @@
 
 using System.Collections.Generic;
 
+using Newtonsoft.Json.Linq;
+
 using NX.Engine;
 using NX.Shared;
 
@@ -42,6 +44,7 @@ namespace Proc.AO
             string sValue = store["value"];
             string sMatches = store["matches"];
             bool bCreate = store["create"].FromDBBoolean();
+            JObject c_Data = store["data"].ToJObject();
 
             // Get the manager
             ManagerClass c_Mgr = call.Env.Globals.Get<ManagerClass>();
@@ -77,7 +80,7 @@ namespace Proc.AO
                 }
 
                 // Do we need to create?
-                if(bCreate && !c_Ans["id"].HasValue())
+                if (bCreate && !c_Ans["id"].HasValue())
                 {
                     // Get
                     sDS = c_List[0].AsDatasetName();
@@ -89,6 +92,16 @@ namespace Proc.AO
                     {
                         // Fill in
                         c_Obj[sFld] = sValue;
+                        // The extra data
+                        if (c_Data != null)
+                        {
+                            // Loop thru
+                            foreach (string sKey in c_Data.Keys())
+                            {
+                                // Map
+                                c_Obj[sKey] = c_Data.Get(sKey);
+                            }
+                        }
                         // Save
                         c_Obj.Save();
                         // And pass back
@@ -115,12 +128,22 @@ namespace Proc.AO
                         // Save the id
                         c_Ans["id"] = c_Poss[0].UUID.ToString();
                     }
-                    else if(bCreate)
+                    else if (bCreate)
                     {
-                        using(ObjectClass c_Obj = c_DS.New())
+                        using (ObjectClass c_Obj = c_DS.New())
                         {
                             // Fill in
                             c_Obj[sFld] = sValue;
+                            // The extra data
+                            if (c_Data != null)
+                            {
+                                // Loop thru
+                                foreach (string sKey in c_Data.Keys())
+                                {
+                                    // Map
+                                    c_Obj[sKey] = c_Data.Get(sKey);
+                                }
+                            }
                             // Save
                             c_Obj.Save();
                             // And pass back

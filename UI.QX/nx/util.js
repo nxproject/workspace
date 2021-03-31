@@ -2993,9 +2993,14 @@ nx.ahk = {
                 if (self._lastts !== cmd.ts) {
                     // Save
                     self._lastts = cmd.ts;
+                    // defaults
+                    var create = 'n';
                     // According to command
                     switch (cmd.command) {
 
+
+                        case 'SearchOrCreate':
+                            create = 'y';
                         case 'Search':
                             // Must be logged in
                             if (nx.desktop.user.getName()) {
@@ -3003,6 +3008,8 @@ nx.ahk = {
                                 var value = cmd.value;
                                 // Must have one
                                 if (value) {
+                                    // Extra values
+                                    var extra = cmd.data || {};
                                     // Get the search list
                                     var tbs = nx.desktop.user.getSIField('ahksearch');
                                     // Any?
@@ -3010,42 +3017,9 @@ nx.ahk = {
                                         // Get the id
                                         nx.util.serviceCall('AO.ObjectGeMatch', {
                                             value: value,
-                                            create: 'n',
-                                            matches: tbs
-                                        }, function (result) {
-                                            //
-                                            if (result && result.id) {
-                                                // Parse
-                                                var parsed = nx.util.parseID(result.id);
-                                                if (parsed != null) {
-                                                    // View
-                                                    nx.fs.viewObject(parsed);
-                                                    // Exit loop 
-                                                    i = tbs.length;
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                            break;
-
-                        case 'SearchOrCreate':
-                            // Must be logged in
-                            if (nx.desktop.user.getName()) {
-                                // Get the value
-                                var value = cmd.value;
-                                // Must have one
-                                if (value) {
-                                    // Get the search list
-                                    var tbs = nx.desktop.user.getSIField('ahksearch');
-                                    // Any?
-                                    if (nx.util.hasValue(tbs)) {
-                                        // Get the id
-                                        nx.util.serviceCall('AO.ObjectGeMatch', {
-                                            value: value,
-                                            create: 'y',
-                                            matches: tbs
+                                            create: create,
+                                            matches: tbs,
+                                            data: extra
                                         }, function (result) {
                                             //
                                             if (result && result.id) {
