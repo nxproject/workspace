@@ -206,6 +206,21 @@ nx.desktop = {
             });
 
         })
+
+        // Link in AutoHotKeys
+        window.onfocus = function () {
+            // Get the clipboard text
+            if (navigator.clipboard) {
+                navigator.clipboard.readText()
+                    .then(text => {
+                        // Handle
+                        nx.ahk.process(text);
+                    })
+                    .catch(err => {
+                        //console.error('Failed to read clipboard contents: ', err);
+                    });
+            }
+        };
     },
 
     // The active window

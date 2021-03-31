@@ -651,6 +651,10 @@ qx.Class.define('o.user', {
                         break;
 
                     case '$$object.view':
+                        nx.fs.viewObject({
+                            ds: msg.message.ds,
+                            id: msg.message.id
+                        });
                         break;
                 }
 

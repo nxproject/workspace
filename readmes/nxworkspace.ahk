@@ -5,6 +5,15 @@ payload := GetPayload()
 packet := {}
 packet.ts := A_TickCount
 packet.value := GetActiveField()
+packet.command := "SearchOrCreate"
+SetPayload(payload, packet)
+return
+
+#l::
+payload := GetPayload()
+packet := {}
+packet.ts := A_TickCount
+packet.value := GetActiveField()
 packet.command := "Search"
 SetPayload(payload, packet)
 return

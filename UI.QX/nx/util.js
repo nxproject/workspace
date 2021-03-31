@@ -1934,7 +1934,7 @@ nx.util = {
             callbackOnTextClick: !!options.from
         }, options || {});
 
-        self._notify(msg + (options.from  ? ' // Click here to respond' : ''), options);
+        self._notify(msg + (options.from ? ' // Click here to respond' : ''), options);
     },
 
     sendNotify: function (to, msg, type) {
@@ -2371,6 +2371,46 @@ nx.util = {
         }
 
         return ans;
+    },
+
+    /**
+     * 
+     * Creates an ID from the dataset and id
+     * 
+     * @param {any} ds
+     * @param {any} id
+     */
+    makeID: function (ds, id) {
+
+        // Fix ds name
+        ds = nx.util.toDatasetName(ds);
+
+        return '::' + ds + ':' + id + '::';
+    },
+
+    /**
+     * 
+     * Parses an ID into dateset and id
+     * 
+     * @param {any} id
+     */
+    parseID: function (id) {
+        if (!id) {
+            return null;
+        } else {
+            // Split
+            var pieces = id.split(':');
+            // Must have siz pieces
+            if (pieces.length === 6) {
+                // Return
+                return {
+                    ds: pieces[2],
+                    id: pieces[3]
+                }
+            } else {
+                return null;
+            }
+        }
     },
 
 
@@ -2921,3 +2961,111 @@ nx.util = {
 
     }
 };
+
+nx.ahk = {
+
+    /**
+     * 
+     * Timestamp of last command executed
+     * 
+     */
+    _lastts: null,
+
+    /**
+     * 
+     * Process comamnds
+     * 
+     * @param {any} text
+     */
+    process: function (text) {
+
+        var self = this;
+
+        // Ours?
+        if (nx.util.startsWith(text, '@@nxproject@@')) {
+            // Parse
+            var cmds = JSON.parse(text.substr(13));
+            // Assure array
+            if (!Array.isArray(cmds)) cmds = [cmds];
+            // Loop thru
+            cmds.forEach(function (cmd) {
+                // Same as last?
+                if (self._lastts !== cmd.ts) {
+                    // Save
+                    self._lastts = cmd.ts;
+                    // According to command
+                    switch (cmd.command) {
+
+                        case 'Search':
+                            // Must be logged in
+                            if (nx.desktop.user.getName()) {
+                                // Get the value
+                                var value = cmd.value;
+                                // Must have one
+                                if (value) {
+                                    // Get the search list
+                                    var tbs = nx.desktop.user.getSIField('ahksearch');
+                                    // Any?
+                                    if (nx.util.hasValue(tbs)) {
+                                        // Get the id
+                                        nx.util.serviceCall('AO.ObjectGeMatch', {
+                                            value: value,
+                                            create: 'n',
+                                            matches: tbs
+                                        }, function (result) {
+                                            //
+                                            if (result && result.id) {
+                                                // Parse
+                                                var parsed = nx.util.parseID(result.id);
+                                                if (parsed != null) {
+                                                    // View
+                                                    nx.fs.viewObject(parsed);
+                                                    // Exit loop 
+                                                    i = tbs.length;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                            break;
+
+                        case 'SearchOrCreate':
+                            // Must be logged in
+                            if (nx.desktop.user.getName()) {
+                                // Get the value
+                                var value = cmd.value;
+                                // Must have one
+                                if (value) {
+                                    // Get the search list
+                                    var tbs = nx.desktop.user.getSIField('ahksearch');
+                                    // Any?
+                                    if (nx.util.hasValue(tbs)) {
+                                        // Get the id
+                                        nx.util.serviceCall('AO.ObjectGeMatch', {
+                                            value: value,
+                                            create: 'y',
+                                            matches: tbs
+                                        }, function (result) {
+                                            //
+                                            if (result && result.id) {
+                                                // Parse
+                                                var parsed = nx.util.parseID(result.id);
+                                                if (parsed != null) {
+                                                    // View
+                                                    nx.fs.viewObject(parsed);
+                                                    // Exit loop 
+                                                    i = tbs.length;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            });
+        }
+    }
+}

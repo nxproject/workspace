@@ -125,6 +125,8 @@ Note that it may take a few minutes to obtain a new SSL certificate from ***Let'
 You can get the ***AutoHotKeys*** program [here](https://www.autohotkey.com/).
 You can get the ***NX.Workspace*** script file [here](https://github.com/nxproject/workspace/blob/master/readmes/nxworkspace.ahk).
 
+Note that AutoHotKeys support requires a site that is reachable via ***https***.
+
 ---
 
 ![image](images/Site10.png)

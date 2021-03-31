@@ -18,6 +18,21 @@
 
 nx.fs = {
 
+    viewObject: function (req) {
+
+        var self = this;
+
+        // View
+        nx.desktop.addWindowDS({
+            ds: req.ds,
+            id: req.id,
+            view: nx.desktop.user.getDSInfo(req.ds).view,
+            caller:req. caller,
+            chain: req.chain
+        });
+
+    },
+
     download: function (path) {
 
         var self = this;
