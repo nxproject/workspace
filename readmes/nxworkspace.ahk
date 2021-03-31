@@ -9,7 +9,7 @@ packet.command := "SearchOrCreate"
 SetPayload(payload, packet)
 return
 
-#l::
+#f::
 payload := GetPayload()
 packet := {}
 packet.ts := A_TickCount
