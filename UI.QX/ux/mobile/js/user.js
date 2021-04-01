@@ -73,8 +73,6 @@ nx.user = {
             if (self.aoobject && self.getField('name')) {
 
                 //
-                var sioid = self.getField('name');
-
                 if (!self.SIO) {
 
                     self.SIO = io({
@@ -85,7 +83,7 @@ nx.user = {
                     self.SIO.uuid = nx.util.uuid();
                     self.SIO.on('connection', async (socket) => {
                         var name = self.getField('sioid');
-                        if (name && sockert && socket.join) {
+                        if (name && socket && socket.join) {
                             socket.join(name);
                         }
                     });

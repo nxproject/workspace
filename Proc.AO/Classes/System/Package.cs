@@ -270,6 +270,7 @@ namespace Proc.AO
                             // Save
                             using (NX.Engine.Files.DocumentClass c_Doc = new NX.Engine.Files.DocumentClass(c_DocMgr, c_Info.Get("path")))
                             {
+                                c_Doc.Folder.AssurePath();
                                 c_Doc.ValueAsBytes = c_Info.Get("content").FromBase64Bytes();
                             }
                         }

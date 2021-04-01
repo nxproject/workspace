@@ -71,29 +71,32 @@ qx.Class.define('tools.View', {
                                     var params = nx.bucket.getParams(widget);
                                     // Get the data
                                     var data = nx.util.eventGetData(e);
+                                    if (data && data.length) {
 
-                                    // Callback
-                                    if (req.onSelect) {
+                                        // Callback
+                                        if (req.onSelect) {
 
-                                        req.onSelect(e, data);
+                                            req.onSelect(e, data);
 
-                                        nx.bucket.getForm(widget).safeClose();
+                                            nx.bucket.getForm(widget).safeClose();
 
-                                    } else {
+                                        } else {
 
-                                        // Open all selected
-                                        data.forEach(function (row) {
-                                            nx.desktop.addWindowDS({
-                                                ds: req.ds,
-                                                id: row._id,
-                                                view: req.view,
-                                                sysmode: req.sysmode,
-                                                caller: nx.util.eventGetWindow(e),
-                                                chain: req.chain
+                                            // Open all selected
+                                            data.forEach(function (row) {
+                                                nx.desktop.addWindowDS({
+                                                    ds: req.ds,
+                                                    id: row._id,
+                                                    view: req.view,
+                                                    sysmode: req.sysmode,
+                                                    caller: nx.util.eventGetWindow(e),
+                                                    chain: req.chain
+                                                });
                                             });
-                                        });
 
-                                        widget.resetSelection();
+                                            widget.resetSelection();
+
+                                        }
 
                                     }
                                 }

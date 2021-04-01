@@ -191,6 +191,8 @@ namespace Proc.Access
                     c_Ans.Set("sio", c_Partial["sio"]);
                     c_Ans.Set("selectors", c_Partial["selectors"]);
 
+                    c_Ans.Set("sioid", sUser);
+
                     // Add list
                     List<string> c_List = Enum.GetValues(typeof(AO.Definitions.DatasetFieldClass.FieldTypes))
                         .Cast<AO.Definitions.DatasetFieldClass.FieldTypes>()

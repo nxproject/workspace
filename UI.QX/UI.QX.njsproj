@@ -19,6 +19,19 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Content Include="base\index.html" />
+    <Content Include="base\index.js" />
+    <Content Include="base\nojs.html" />
+    <Content Include="base\package-0.js" />
+    <Content Include="base\package-1.js" />
+    <Content Include="base\package-11.js" />
+    <Content Include="base\package-13.js" />
+    <Content Include="base\package-15.js" />
+    <Content Include="base\package-3.js" />
+    <Content Include="base\package-5.js" />
+    <Content Include="base\package-7.js" />
+    <Content Include="base\package-9.js" />
+    <Content Include="base\polyfill.js" />
     <Content Include="c\account.js" />
     <Content Include="c\address.js" />
     <Content Include="c\addressee.js" />
@@ -232,6 +245,7 @@
     <Content Include="ux\mobile\static\404.html" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="base\" />
     <Folder Include="ux\capture\js\" />
     <Folder Include="ux\mobile\" />
     <Folder Include="ux\" />

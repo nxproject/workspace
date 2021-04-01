@@ -57,7 +57,7 @@ namespace Proc.AO
                             string[] asPieces = param.Path.Split('/', System.StringSplitOptions.RemoveEmptyEntries);
                             bool bDeleted = param.Action == NX.Engine.Files.FileSystemParamClass.Actions.Delete;
 
-                            if (asPieces.Length > 3 && asPieces[0].IsSameValue("ao"))
+                            if (asPieces.Length >= 3 && asPieces[0].IsSameValue("ao"))
                             {
                                 // Make message
                                 using (SIO.MessageClass c_Msg = new SIO.MessageClass(this.Synch, SIO.MessageClass.Modes.Internal, "$$changed.document",

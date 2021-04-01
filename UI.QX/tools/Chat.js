@@ -207,6 +207,10 @@ qx.Class.define('tools.Chat', {
 
                         var self = this;
 
+                        //
+                        var grid = nx.util.eventGetWindow(e).getField('grid');
+                        grid._ecVarRowSize = true;
+
                         // Send
                         if (!req.response) {
                             nx.desktop.user.SIOSend('$$chat.open', {
