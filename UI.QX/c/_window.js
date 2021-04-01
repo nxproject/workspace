@@ -1309,7 +1309,7 @@ qx.Class.define('c._window', {
          * Saves AO Object and closes window
          * 
          */
-        save: function () {
+        save: function (cb) {
 
             var self = this;
 
@@ -1327,11 +1327,11 @@ qx.Class.define('c._window', {
                     // Any?
                     if (params) {
                         // Get the callback
-                        var cb = params.atSave;
+                        var lcb = params.atSave;
                         // Any?
-                        if (cb) {
+                        if (lcb) {
                             //
-                            cb(data);
+                            lcb(data);
                         }
                     }
                 }
@@ -1347,14 +1347,29 @@ qx.Class.define('c._window', {
                 });
 
                 // Write out
-                nx.desktop.aomanager.set(self._aoobject);
+                nx.desktop.aomanager.set(self._aoobject, function (ok) {
+
+                    // Call children handler
+                    self._call('save');
+
+                    if (cb) {
+
+                        cb(ok);
+
+                    } else {
+
+                        // Close
+                        self.safeClose();
+
+                    }
+                });
+
+            } else {
+
+                // Close
+                self.safeClose();
+
             }
-
-            // Call children handler
-            self._call('save');
-
-            // Close
-            self.safeClose();
 
         },
 

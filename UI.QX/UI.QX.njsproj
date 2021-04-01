@@ -200,8 +200,6 @@
     <Content Include="ux\iot\index.html" />
     <Content Include="ux\iot\js\html5-qrcode.min.js" />
     <Content Include="ux\mobile\index.html" />
-    <Content Include="ux\mobile\js\aomanager.js" />
-    <Content Include="ux\mobile\js\aoobject.js" />
     <Content Include="ux\mobile\js\db.js" />
     <Content Include="ux\mobile\js\env.js" />
     <Content Include="ux\mobile\js\fields.js" />

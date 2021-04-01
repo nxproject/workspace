@@ -359,19 +359,23 @@ nx.db = {
                     ds: ds,
                     id: id,
                     data: changes
-                }, function () {
-                    // Remove
-                    if (!keep) {
-                        delete self._objs[oid];
-                    } else {
-                        // Reset
-                        obj._changes = [];
-                    }
-                    //
-                    if (goback) {
-                        nx.office.goBack();
+                }, function (result) {
+                    if (result && result.ok === 'y') {
+                        // Remove
+                        if (!keep) {
+                            delete self._objs[oid];
+                        } else {
+                            // Reset
+                            obj._changes = [];
+                        }
+                        //
+                        if (goback) {
+                            nx.office.goBack();
+                        } else if (cb) {
+                            cb(true);
+                        }
                     } else if (cb) {
-                        cb(true);
+                        cb(false);
                     }
                 });
             } else {

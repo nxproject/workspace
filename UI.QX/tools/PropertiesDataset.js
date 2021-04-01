@@ -228,7 +228,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             value: dsdef.ttAllow
                                         }
                                     ]
-                                },{
+                                }, {
                                     caption: 'Privacy',
                                     items: [
                                         {

@@ -88,7 +88,7 @@ namespace Proc.AO
                 //
                 List<string> c_Ans = this.Values.Keys;
                 // Loop thru
-                for(int i=c_Ans.Count -1;i>=0;i--)
+                for (int i = c_Ans.Count - 1; i >= 0; i--)
                 {
                     if (c_Ans[i].StartsWith("__")) c_Ans.RemoveAt(i);
                 }
@@ -127,6 +127,13 @@ namespace Proc.AO
             get { return this.Values[KeyTask]; }
             set { this.Values[KeyTask] = value; }
         }
+
+        /// <summary>
+        /// 
+        /// Cancel amy save operation
+        /// 
+        /// </summary>
+        public bool CancelSave { get; set; }
         #endregion
 
         #region Methods

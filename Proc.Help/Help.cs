@@ -70,6 +70,7 @@ namespace Proc.Help
                 JObject c_Values = new JObject();
                 c_Values.Merge(call.Env.AsParameters);
                 c_Values.Merge(c_DBMgr.DefaultDatabase.SiteInfo.AsJObject);
+                c_Values.Merge(c_Obj.AsJObject);
                 // Apply changes
                 sContents = sContents.Handlebars(new StoreClass(c_Values), delegate (string value)
                 {

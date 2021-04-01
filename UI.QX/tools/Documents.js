@@ -214,7 +214,7 @@ qx.Class.define('tools.Documents', {
                         var self = this;
 
                         // Set the path
-                        var path = '/f/ao' + nx.bucket.getWindowID(self).substr(4).replace(/_/g, '/');
+                        var path = '/f/ao' + nx.bucket.getWindowID(self).substr(4).replace(/_/g, '/').replace(/\/\//g, '/_');
                         // Button
                         var button = self.getRenderer().getChildren()[1];
                         // Setup upload

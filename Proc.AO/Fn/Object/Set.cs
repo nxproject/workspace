@@ -70,7 +70,7 @@ namespace Proc.AO
                         }
 
                         // Save
-                        c_Obj.Save(force: !c_Obj.Collection.IsData, user: store["_user"], runtask: true, orig: c_Orig);
+                        store["ok"] = c_Obj.Save(force: !c_Obj.Collection.IsData, user: store["_user"], runtask: true, orig: c_Orig).ToDBBoolean();
                     }
                 }
             }

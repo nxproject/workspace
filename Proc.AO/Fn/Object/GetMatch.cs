@@ -45,6 +45,7 @@ namespace Proc.AO
             string sMatches = store["matches"];
             bool bCreate = store["create"].FromDBBoolean();
             JObject c_Data = store["data"].ToJObject();
+            bool bForce = store["force"].FromDBBoolean();
 
             // Get the manager
             ManagerClass c_Mgr = call.Env.Globals.Get<ManagerClass>();
@@ -72,6 +73,26 @@ namespace Proc.AO
                         // Any?
                         if (c_Poss.Count == 1)
                         {
+                            //
+                            if(bForce)
+                            {
+                                // The extra data
+                                if (c_Data != null)
+                                {
+                                    // Get the object
+                                    ObjectClass c_Obj = c_Poss[0];
+
+                                    // Loop thru
+                                    foreach (string sKey in c_Data.Keys())
+                                    {
+                                        // Map
+                                        c_Obj[sKey] = c_Data.Get(sKey);
+                                    }
+
+                                    // Save
+                                    c_Obj.Save();
+                                }
+                            }
                             // Save the id
                             c_Ans["id"] = c_Poss[0].UUID.ToString();
                             break;
@@ -125,6 +146,26 @@ namespace Proc.AO
                     // Any?
                     if (c_Poss.Count == 1)
                     {
+                        // Do we need to update?
+                        if(bForce)
+                        {
+                            // The extra data
+                            if (c_Data != null)
+                            {
+                                // Get the object
+                                ObjectClass c_Obj = c_Poss[0];
+
+                                // Loop thru
+                                foreach (string sKey in c_Data.Keys())
+                                {
+                                    // Map
+                                    c_Obj[sKey] = c_Data.Get(sKey);
+                                }
+
+                                // Save
+                                c_Obj.Save();
+                            }
+                        }
                         // Save the id
                         c_Ans["id"] = c_Poss[0].UUID.ToString();
                     }

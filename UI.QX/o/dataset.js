@@ -159,7 +159,7 @@ qx.Class.define('o.dataset', {
             var self = this;
 
             // Start with empty
-            var ans = { };
+            var ans = {};
 
             // Any?
             if (self.aoobject) {
@@ -216,7 +216,7 @@ qx.Class.define('o.dataset', {
                 });
                 // Do left
                 if (req.leftCommands) {
-                // Assure array
+                    // Assure array
                     if (!Array.isArray(req.leftCommands)) req.leftCommands = [req.leftCommands];
                     // Add
                     list.concat(req.leftCommands);

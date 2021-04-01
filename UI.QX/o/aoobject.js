@@ -74,12 +74,12 @@ qx.Class.define('o.aoobject', {
          * Sets the changed field into the database
          * 
          * */
-        set: function () {
+        set: function (cb) {
 
             var self = this;
 
             // Via desktop
-            nx.desktop.aomanager.set(self);
+            nx.desktop.aomanager.set(self, cb);
 
         },
 

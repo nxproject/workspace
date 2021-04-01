@@ -881,10 +881,10 @@ nx.desktop = {
                                                 if (!params.sysmode) {
 
                                                     // Save
-                                                    win.save();
-
-                                                    // Close
-                                                    win.safeClose();
+                                                    win.save(function (ok) {
+                                                        // Close
+                                                        if (ok) win.safeClose();
+                                                    });
                                                 }
                                             }
                                         });

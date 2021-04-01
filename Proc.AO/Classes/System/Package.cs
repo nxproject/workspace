@@ -81,6 +81,9 @@ namespace Proc.AO
         /// <param name="dss">If + is part of the name, the data will also be packaged</param>
         public void DumpFromSystem(List<string> dss)
         {
+            //
+            NX.Engine.Files.ManagerClass c_DocMgr = this.Parent.Parent.Parent.Globals.Get<NX.Engine.Files.ManagerClass>();
+
             using (FileStream c_ZStream = new FileStream(this.Document.Location, FileMode.Create))
             {
                 using (ZipArchive c_Pkg = new ZipArchive(c_ZStream, ZipArchiveMode.Update))
@@ -116,7 +119,10 @@ namespace Proc.AO
                             this.CopyCollection(c_Pkg, c_DS.SettingsCollection);
 
                             //
-                            if (bIncludeData) this.CopyCollection(c_Pkg, c_DS.DataCollection);
+                            if (bIncludeData)
+                            {
+                                this.CopyCollection(c_Pkg, c_DS.DataCollection, c_DocMgr);
+                            }
                         }
                     }
                 }
@@ -130,7 +136,7 @@ namespace Proc.AO
         /// </summary>
         /// <param name="pkg"></param>
         /// <param name="coll"></param>
-        private void CopyCollection(ZipArchive pkg, CollectionClass coll)
+        private void CopyCollection(ZipArchive pkg, CollectionClass coll, NX.Engine.Files.ManagerClass docmgr = null)
         {
             // Open a query
             using (QueryClass c_Qry = new QueryClass(coll))
@@ -143,7 +149,51 @@ namespace Proc.AO
 
                     // Add
                     this.AddEntry(pkg, sTarget, c_Obj.ToJObject().ToSimpleString());
+
+                    // Include docs?
+                    if (docmgr != null)
+                    {
+                        // Gte path
+                        using (NX.Engine.Files.FolderClass c_Folder = new NX.Engine.Files.FolderClass(docmgr, "/ao/{0}/{1}".FormatString(coll.Parent.Name, c_Obj.GetField("_id"))))
+                        {
+                            // Do
+                            this.AddDocuments(pkg, c_Folder);
+                        }
+                    }
                 }
+            }
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <param name="folder"></param>
+        private void AddDocuments(ZipArchive pkg, NX.Engine.Files.FolderClass folder)
+        {
+            // Get all the files
+            List<NX.Engine.Files.DocumentClass> c_Files = folder.Files;
+            // Loop thru
+            {
+                foreach (NX.Engine.Files.DocumentClass c_Doc in c_Files)
+                {
+                    // Make the ID
+                    string sID = "!" + c_Doc.Path.MD5HashString();
+                    // Make the payload
+                    JObject c_Info = new JObject();
+                    c_Info.Set("path", c_Doc.Path);
+                    c_Info.Set("contents", c_Doc.ValueAsBytes.ToBase64());
+                    // Save
+                    this.AddEntry(pkg, sID, c_Info.ToSimpleString());
+                }
+            }
+
+            // Get directories
+            List<NX.Engine.Files.FolderClass> c_Folders = folder.Folders;
+            // Loop thru
+            foreach(NX.Engine.Files.FolderClass c_Folder in c_Folders)
+            {
+                // Do
+                this.AddDocuments(pkg, c_Folder);
             }
         }
 
@@ -175,6 +225,9 @@ namespace Proc.AO
         /// </summary>
         public void LoadIntoSystem()
         {
+            //
+            NX.Engine.Files.ManagerClass c_DocMgr = this.Parent.Parent.Parent.Globals.Get<NX.Engine.Files.ManagerClass>();
+
             using (ZipArchive c_Pkg = ZipFile.OpenRead(this.Document.Location))
             {
                 // Disable messaging
@@ -198,11 +251,28 @@ namespace Proc.AO
                     // Handle settings
                     if (sUUID.StartsWith("^"))
                     {
-                        // Get the valye
+                        // Get the value
                         string sValue = this.GetEntry(c_Entry);
                         // Save
                         this.Parent.SiteInfo.Set(sUUID.Substring(1), sValue);
                         bSettChanged = true;
+                    }
+                    else if (sUUID.StartsWith("!"))
+                    {
+                        // TBD
+                        // Get the value
+                        string sValue = this.GetEntry(c_Entry);
+                        // Parse
+                        JObject c_Info = sValue.ToJObject();
+                        // Valid?
+                        if (c_Info != null && c_Info.Get("path").HasValue())
+                        {
+                            // Save
+                            using (NX.Engine.Files.DocumentClass c_Doc = new NX.Engine.Files.DocumentClass(c_DocMgr, c_Info.Get("path")))
+                            {
+                                c_Doc.ValueAsBytes = c_Info.Get("content").FromBase64Bytes();
+                            }
+                        }
                     }
                     else
                     {

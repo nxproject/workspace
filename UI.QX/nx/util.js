@@ -2998,7 +2998,6 @@ nx.ahk = {
                     // According to command
                     switch (cmd.command) {
 
-
                         case 'SearchOrCreate':
                             create = 'y';
                         case 'Search':
@@ -3008,8 +3007,6 @@ nx.ahk = {
                                 var value = cmd.value;
                                 // Must have one
                                 if (value) {
-                                    // Extra values
-                                    var extra = cmd.data || {};
                                     // Get the search list
                                     var tbs = nx.desktop.user.getSIField('ahksearch');
                                     // Any?
@@ -3019,7 +3016,8 @@ nx.ahk = {
                                             value: value,
                                             create: create,
                                             matches: tbs,
-                                            data: extra
+                                            data: cmd.data || {},
+                                            force: cmd.force || 'n'
                                         }, function (result) {
                                             //
                                             if (result && result.id) {

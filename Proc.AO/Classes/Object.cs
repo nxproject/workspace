@@ -376,6 +376,19 @@ namespace Proc.AO
                     }
                 }
             }
+
+            this.SetSysValues();
+        }
+
+        private void SetSysValues()
+        {
+            // Set system values
+            if (!this.Document.Contains(FieldID)) this.Document[FieldID] = this.ID;
+            if (!this.Document.Contains(FieldDataset)) this.Document[FieldDataset] = this.Parent.Name;
+            if (!this.Document.Contains(FieldCreatedOn)) this.Document[FieldCreatedOn] = ObjectId.GenerateNewId().ToString();
+
+            // Set dynamic
+            this.Document.Set("_documents", "/f/ao/{0}/{1}".FormatString(this.Dataset.Name, this.ID));
         }
 
         /// <summary>
@@ -418,9 +431,7 @@ namespace Proc.AO
             }
 
             // Assure
-            if (!this.Document.Contains(FieldID)) this.Document[FieldID] = this.ID;
-            if (!this.Document.Contains(FieldDataset)) this.Document[FieldDataset] = this.Parent.Name;
-            if (!this.Document.Contains(FieldCreatedOn)) this.Document[FieldCreatedOn] = ObjectId.GenerateNewId().ToString();
+            this.SetSysValues();
         }
 
         /// <summary>
@@ -460,8 +471,11 @@ namespace Proc.AO
         /// Saves the changes
         /// 
         /// </summary>
-        public void Save(bool force = false, string user = "", bool runtask = false, bool signal = false, JObject orig = null)
+        public bool Save(bool force = false, string user = "", bool runtask = false, bool signal = false, JObject orig = null)
         {
+            //
+            bool bAns = true;
+
             // Get the changes
             List<string> c_Changes = this[FieldChanges].ToJArrayOptional().ToList();
 
@@ -521,11 +535,14 @@ namespace Proc.AO
                 this.Dataset.Definition.SavePreProcess(orig, c_CData);
             }
 
+            // Assume normal
+            bool bSave = true;
+
             // Call task
             string sTask = this.Dataset.Definition.TaskAtSave;
             if (sTask.HasValue() && runtask && this.IsData)
             {
-               // Call
+                // Call
                 using (TaskParamsClass c_Params = new TaskParamsClass(this.Parent.Parent.Parent.Parent))
                 {
                     c_Params.Task = sTask;
@@ -535,10 +552,18 @@ namespace Proc.AO
                     c_Params.AddStore("current", new StoreClass(orig));
                     c_Params["_user"] = user;
 
-                    c_Params.Call();
+                    StoreClass c_Resp = c_Params.Call();
+
+                    if (c_Params.CancelSave)
+                    {
+                        // Cancel the save
+                        bSave = false;
+                    }
                 }
             }
-            else
+
+            // Do we save?
+            if (bSave)
             {
                 // Only if changes
                 if (c_Changes.Count > 0)
@@ -765,7 +790,10 @@ namespace Proc.AO
                     foreach (string sFN in c_SIO)
                     {
                         // Make a message
-                        using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, SIO.MessageClass.Modes.Both, sFN, "ds", sDS, "id", sID, "winid", sWindID))
+                        using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, SIO.MessageClass.Modes.Both, sFN,
+                            "ds", sDS,
+                            "id", sID,
+                            "winid", sWindID))
                         {
                             // Send
                             c_Msg.Send();
@@ -773,6 +801,13 @@ namespace Proc.AO
                     }
                 }
             }
+            else
+            {
+                // Flag out
+                bAns = false;
+            }
+
+            return bAns;
         }
 
         /// <summary>
@@ -1113,7 +1148,7 @@ namespace Proc.AO
                 this.Folder.Delete();
 
                 // Delete acces points
-                using(QueryClass c_AP = new QueryClass(this.Parent.Parent[DatabaseClass.DatasetBillAccess].DataCollection))
+                using (QueryClass c_AP = new QueryClass(this.Parent.Parent[DatabaseClass.DatasetBillAccess].DataCollection))
                 {
                     // Any one related to us
                     c_AP.Add("actual", this.UUID.ToString());

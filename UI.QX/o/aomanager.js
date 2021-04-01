@@ -150,7 +150,7 @@ qx.Class.define('o.aomanager', {
          * 
          * @param {o.aoobject} obj
          */
-        set: function (obj) {
+        set: function (obj, cb) {
 
             //
             var self = this;
@@ -182,11 +182,33 @@ qx.Class.define('o.aomanager', {
                             ds: values._ds,
                             id: values._id,
                             data: changed
-                        }, function () {
-                            // Reset
-                            values._changes = [];
+                        }, function (result) {
+                            // Check
+                            if (result && result.ok === 'y') {
+                                // Reset
+                                values._changes = [];
+                                if (cb) {
+                                    cb(true);
+                                }
+                            } else {
+                                if (cb) {
+                                    cb(false);
+                                }
+                            }
                         });
+                    } else {
+                        if (cb) {
+                            cb(true);
+                        }
                     }
+                } else {
+                    if (cb) {
+                        cb(true);
+                    }
+                }
+            } else {
+                if (cb) {
+                    cb(true);
                 }
             }
         }
