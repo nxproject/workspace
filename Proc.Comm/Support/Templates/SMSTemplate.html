@@ -1,13 +1,12 @@
-﻿<smil>
-    <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <layout>
-            <root-layout />
-            <region id="Text" width="100%" height="100%" />
-        </layout>
-    </head>
-    <body>
-
-    </body>
-</html>
-</smil>
+﻿{{subject}} - {{message}}
+{{#if attachments}}
+Attachments
+{{#each attachments}}
+{{this.caption}}: {{this.href}}
+{{/each}}
+{{/if}}
+{{#if actions}}
+{{#each actions}}
+{{this.caption}} -- {{this.href}}
+{{/each}}
+{{/if}}

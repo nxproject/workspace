@@ -38,6 +38,7 @@ namespace Proc.AO
         public const string DatasetSys = "_sys";
         public const string DatasetHelp = "_help";
         public const string DatasetWeb = "_web";
+        public const string DatasetEMailTemplates = "_emailtemplates";
         public const string DatasetUser = "_user";
         public const string DatasetAllowed = "_allowed";
         public const string DatasetCookies = "_cookies";
@@ -481,6 +482,7 @@ namespace Proc.AO
                 this.AssureDataset(DatabaseClass.DatasetBillAccess);
                 this.AssureDataset(DatabaseClass.DatasetHelp);
                 this.AssureDataset(DatabaseClass.DatasetWeb);
+                this.AssureDataset(DatabaseClass.DatasetEMailTemplates);
 
                 //
                 SiteInfoClass c_SI = this.SiteInfo;

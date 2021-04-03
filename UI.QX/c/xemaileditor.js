@@ -16,7 +16,7 @@
 
 ************************************************************************ */
 
-qx.Class.define('c.vin', {
+qx.Class.define('c.xemaileditor', {
 
     extend: c._component,
 
@@ -25,7 +25,7 @@ qx.Class.define('c.vin', {
     construct: function () {
 
         // Call base
-            this.base(arguments, new f.caps(), new t.vin(), new c._textfield());
+        this.base(arguments, new t.xemaileditor(), new c._textarea());
 
     },
 
@@ -33,7 +33,7 @@ qx.Class.define('c.vin', {
 
         makeSelf: function (req) {
 
-            return new c.vin(req);
+            return new c.xemaileditor(req);
 
         }
     }

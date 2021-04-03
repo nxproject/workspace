@@ -103,11 +103,16 @@ namespace Proc.Docs.Files
                 string sWkg = this.GetContents(doc.Location);
 
                 // Map the store
-                StoreClass c_Data = ctx.Stores[Names.Passed];
+                HandlebarDataClass c_Data = new HandlebarDataClass();
+                c_Data.Merge(ctx.Stores[Names.Passed]);
 
                 // Process handlebars
-                sWkg = sWkg.Handlebars(c_Data, delegate (string field)
+                sWkg = sWkg.Handlebars(c_Data, delegate (string field, object thisvalue)
                 {
+                    // Save this
+                    c_Data.Set("this", thisvalue);
+
+                    // Eval
                     return Expression.Eval(ctx, field).Value;
                 });
                 // Find all the fields

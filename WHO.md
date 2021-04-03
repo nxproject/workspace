@@ -53,10 +53,10 @@ This project is licensed under the MIT License - see the [LICENSE](https://mit-l
 
 ## Packages used
 
+* [Automyzy](https://github.com/Automizy/Automizy-Email-Editor)
 * [cRontrue](https://github.com/bradymholt/cronstrue)
 * [Docker.DotNet](https://github.com/dotnet/Docker.DotNet)
 * [Elsa Designer](https://github.com/elsa-workflows/elsa-designer)
-* [fast-xml-parser](https://github.com/NaturalIntelligence/fast-xml-parser)
 * [FullCalendar](https://github.com/fullcalendar)
 * [Framework7](https://github.com/framework7io/Framework7)
 * [Handlebars.NET](https://github.com/Handlebars-Net/Handlebars.Net)

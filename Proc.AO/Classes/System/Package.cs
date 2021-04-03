@@ -118,9 +118,17 @@ namespace Proc.AO
                             // Do
                             this.CopyCollection(c_Pkg, c_DS.SettingsCollection);
 
+                            // Make the templates folder
+                            using (NX.Engine.Files.FolderClass c_Templates = new NX.Engine.Files.FolderClass(c_DocMgr, "/ao/{0}/templates".FormatString(sDS)))
+                            {
+                                // Add
+                                this.AddDocuments(c_Pkg, c_Templates);
+                            }
+
                             //
                             if (bIncludeData)
                             {
+                                // Copy the data
                                 this.CopyCollection(c_Pkg, c_DS.DataCollection, c_DocMgr);
                             }
                         }
@@ -190,7 +198,7 @@ namespace Proc.AO
             // Get directories
             List<NX.Engine.Files.FolderClass> c_Folders = folder.Folders;
             // Loop thru
-            foreach(NX.Engine.Files.FolderClass c_Folder in c_Folders)
+            foreach (NX.Engine.Files.FolderClass c_Folder in c_Folders)
             {
                 // Do
                 this.AddDocuments(pkg, c_Folder);

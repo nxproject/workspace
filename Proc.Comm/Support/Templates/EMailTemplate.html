@@ -166,10 +166,10 @@
                                                     {{#if attachments}}
                                                     <hr />
                                                     <h4>Attachments</h4>
-                                                    {{@each attachments}}
+                                                    {{#each attachments}}
                                                     <tr>
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top; text-align: center;">
-                                                            <a href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};\">
+                                                            <a href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};">
                                                                 {{this.caption}}
                                                             </a>
                                                         </td>
@@ -185,7 +185,7 @@
                                                     <tr>
                                                         {{#each actions}}
                                                         <td align="center" style=" vertical-align top; padding-bottom 15px;">
-                                                            <a href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};\">
+                                                            <a href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};">
                                                                 {{this.caption}}
                                                             </a>
                                                         </td>

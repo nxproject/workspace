@@ -204,6 +204,7 @@ namespace Proc.Access
                     c_List.Remove("xaccount");
                     c_List.Remove("xmdeditor");
                     c_List.Remove("xhtmleditor");
+                    c_List.Remove("xemaileditor");
                     c_List.Remove("allowed");
                     // Save
                     c_Ans.Set("fieldtypes", c_List.ToJArray());

@@ -24,8 +24,14 @@ qx.Class.define('c.address', {
 
     construct: function () {
 
-        // Call base
-        this.base(arguments, new f.autocaps(), new t.addressvalid(), new t.addressweb(), new c._textfield());
+        // Do we have a setting?
+        if (nx.desktop.user.getSIField('psapi')) {
+            // Call base
+            this.base(arguments, new f.autocaps(), new t.addressvalid(), new t.addressweb(), new c._textfield());
+        } else {
+            // Call base
+            this.base(arguments, new f.autocaps(), new c._textfield());
+        }
 
     },
 

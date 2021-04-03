@@ -579,6 +579,9 @@ nx.fmts = {
             ans = self._extras[self._getActualFmt(type)];
         }
 
+        // 
+        if (ans) ans = ans();
+
         return ans;
     },
 
@@ -589,129 +592,171 @@ nx.fmts = {
      */
     _extras: {
 
-        address: [{
-            label: 'Verify',
-            icon: '+pin',
-            cb: function (ele) {
+        address: function () {
 
-                // 
-                var widget = nx.cm.get(ele);
+            var ans = null;
 
-                nx.cm.map(widget, 'reladdr', function (map) {
+            if (nx.user.getSIField('psapi')) {
+                ans = [
+                    {
+                        label: 'Verify',
+                        icon: '+pin',
+                        cb: function (ele) {
 
-                    var passed = (map.reladdr || '') + ' ' + (map.relcity || '') + ' ' + (map.relstate || '') + ' ' + (map.relzip || '');
+                            // 
+                            var widget = nx.cm.get(ele);
 
-                    $.ajax({
-                        url: 'http://api.positionstack.com/v1/forward',
-                        data: {
-                            access_key: nx.user.getSIField('psapi'),
-                            query: passed,
-                            limit: 1
+                            nx.cm.map(widget, 'reladdr', function (map) {
+
+                                var passed = (map.reladdr || '') + ' ' + (map.relcity || '') + ' ' + (map.relstate || '') + ' ' + (map.relzip || '');
+
+                                $.ajax({
+                                    url: window.location.protocol + '//api.positionstack.com/v1/forward',
+                                    data: {
+                                        access_key: nx.user.getSIField('psapi'),
+                                        query: passed,
+                                        limit: 1
+                                    }
+                                }).done(function (data) {
+
+                                    if (data.data && Array.isArray(data.data) && data.data.length) {
+
+                                        var info = data.data[0];
+
+                                        // Must be a match
+                                        if (info.confidence >= 0.9) {
+
+                                            // Fill
+                                            nx.cm.set(map, 'reladdr', info.name);
+                                            nx.cm.set(map, 'relcity', info.locality);
+                                            nx.cm.set(map, 'relstate', info.region_code);
+                                            nx.cm.set(map, 'relzip', info.postal_code);
+                                        } else {
+                                            nx.util.notifyWarning('Not enough information');
+                                        }
+                                    }
+                                });
+                            });
+
                         }
-                    }).done(function (data) {
+                    }, {
+                        label: 'Map',
+                        mobile: true,
+                        cb: function (ele) {
 
-                        if (data.data && Array.isArray(data.data) && data.data.length) {
+                            // 
+                            var widget = nx.cm.get(ele);
 
-                            var info = data.data[0];
+                            nx.cm.map(widget, 'reladdr', function (map) {
 
-                            // Must be a match
-                            if (info.confidence >= 0.9) {
+                                var passed = (map.reladdr || '') + ' ' + (map.relcity || '') + ' ' + (map.relstate || '') + ' ' + (map.relzip || '');
+
+                                $.ajax({
+                                    url: window.location.protocol + '//api.positionstack.com/v1/forward',
+                                    data: {
+                                        access_key: nx.user.getSIField('psapi'),
+                                        query: passed,
+                                        limit: 1
+                                    }
+                                }).done(function (data) {
+
+                                    if (data.data && Array.isArray(data.data) && data.data.length) {
+
+                                        var info = data.data[0];
+
+                                        window.open('geo:' + info.latitude + ',' + info.longitude);
+                                    }
+                                });
+                            });
+                        }
+                    }
+                ];
+            }
+            return ans;
+        },
+
+        driverlicense: function () {
+
+            var ans = null;
+
+            if (nx.util.hasCamera()) {
+                ans = [{
+                    label: 'Scan',
+                    mobile: true,
+                    camera: true,
+                    cb: function (ele) {
+
+                        var self = nx.fmts;
+
+                        // 
+                        var widget = nx.cm.get(ele);
+
+                        nx.cm.map(widget, 'reldl', function (map) {
+
+                            // Do
+                            nx.web._scanForBarcode(widget, function (data) {
+
+                                // Split
+                                var info = {};
+                                var pieces = data.replace(/\r/g, '').split('\n');
+                                // Loop thru
+                                pieces.forEach(function (entry, index) {
+                                    // 
+                                    if (index === 1) {
+                                        info.DAQ = entry.substring(entry.indexOf('DAQ') + 3);
+                                    } else {
+                                        info[entry.substr(0, 3)] = entry.substr(3).trim();
+                                    }
+                                });
 
                                 // Fill
-                                nx.cm.set(map, 'reladdr', info.name);
-                                nx.cm.set(map, 'relcity', info.locality);
-                                nx.cm.set(map, 'relstate', info.region_code);
-                                nx.cm.set(map, 'relzip', info.postal_code);
-                            } else {
-                                nx.util.notifyWarning('Not enough information');
-                            }
-                        }
-                    });
-                });
+                                nx.cm.set(map, 'relname', nx.util.joinSpace(info.DAC, info.DAD, info.DCS, info.DCU).replace(/'/g, ''));
+                                nx.cm.set(map, 'reladdr', info.DAG);
+                                nx.cm.set(map, 'relcity', info.DAI);
+                                nx.cm.set(map, 'relstate', info.DAJ);
+                                nx.cm.set(map, 'relzip', (info.DAK || '').substr(0, 5));
+                                nx.cm.set(map, 'reldob', new Date(info.strstr(4, 4) + '-' + info.substr(2, 2) + '-' + info.DBB.substr(0, 2)).toISOString());
 
-            }
-        }, {
-            label: 'Map',
-            mobile: true,
-            cb: function (ele) {
+                                nx.util.popupClose();
 
-                // 
-                var widget = nx.cm.get(ele);
+                            }, 'BrowserPDF417Reader');
 
-                nx.cm.map(widget, 'reladdr', function (map) {
-
-                    var passed = (map.reladdr || '') + ' ' + (map.relcity || '') + ' ' + (map.relstate || '') + ' ' + (map.relzip || '');
-
-                    $.ajax({
-                        url: 'http://api.positionstack.com/v1/forward',
-                        data: {
-                            access_key: nx.user.getSIField('psapi'),
-                            query: passed,
-                            limit: 1
-                        }
-                    }).done(function (data) {
-
-                        if (data.data && Array.isArray(data.data) && data.data.length) {
-
-                            var info = data.data[0];
-
-                            window.open('geo:' + info.latitude + ',' + info.longitude);
-                        }
-                    });
-                });
-            }
-        }],
-
-        driverlicense: [{
-            label: 'Scan',
-            mobile: true,
-            camera: true,
-            cb: function (ele) {
-
-                var self = nx.fmts;
-
-                // 
-                var widget = nx.cm.get(ele);
-
-                nx.cm.map(widget, 'reldl', function (map) {
-
-                    // Do
-                    nx.web._scanForBarcode(widget, function (data) {
-
-                        // Split
-                        var info = {};
-                        var pieces = data.replace(/\r/g, '').split('\n');
-                        // Loop thru
-                        pieces.forEach(function (entry, index) {
-                            // 
-                            if (index === 1) {
-                                info.DAQ = entry.substring(entry.indexOf('DAQ') + 3);
-                            } else {
-                                info[entry.substr(0, 3)] = entry.substr(3).trim();
-                            }
                         });
-
-                        // Fill
-                        nx.cm.set(map, 'relname', nx.util.joinSpace(info.DAC, info.DAD, info.DCS, info.DCU).replace(/'/g, ''));
-                        nx.cm.set(map, 'reladdr', info.DAG);
-                        nx.cm.set(map, 'relcity', info.DAI);
-                        nx.cm.set(map, 'relstate', info.DAJ);
-                        nx.cm.set(map, 'relzip', (info.DAK || '').substr(0, 5));
-                        nx.cm.set(map, 'reldob', new Date(info.strstr(4, 4) + '-' + info.substr(2, 2) + '-' + info.DBB.substr(0, 2)).toISOString());
-
-                        nx.util.popupClose();
-
-                    }, 'BrowserPDF417Reader');
-
-                });
+                    }
+                }];
             }
-        }],
 
-        email: [
-            {
-                label: 'Send email',
+            return ans;
+        },
+
+        email: function () {
+
+            return [
+                {
+                    label: 'Send email',
+                    mobile: true,
+                    icon: '+email',
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value) {
+                            window.open('mailto:' + value);
+                        }
+
+                    }
+                }];
+
+        },
+
+        phone: function () {
+
+            return [{
+                label: 'Call',
                 mobile: true,
-                icon: '+email',
                 cb: function (ele) {
 
                     // 
@@ -720,65 +765,58 @@ nx.fmts = {
                     var value = widget.val();
                     // Call
                     if (value) {
-                        window.open('mailto:' + value);
+                        window.open('tel:+1' + nx.util.numbersOnly(value));
                     }
 
                 }
-            }],
+            }];
+        },
 
-        phone: [{
-            label: 'Call',
-            mobile: true,
-            cb: function (ele) {
+        vin: function () {
 
-                // 
-                var widget = nx.cm.get(ele);
-                // Get the value
-                var value = widget.val();
-                // Call
-                if (value) {
-                    window.open('tel:+1' + nx.util.numbersOnly(value));
-                }
+            var ans = null;
 
+            if (nx.util.hasCamera()) {
+                ans = [{
+                    label: 'Scan',
+                    mobile: true,
+                    camera: true,
+                    cb: function (ele) {
+
+                        var self = nx.fmts;
+
+                        // 
+                        var widget = nx.cm.get(ele);
+
+                        // Do
+                        nx.web._scanForBarcode(widget, function (data) {
+
+                            // Save
+                            widget.val(data);
+                            // Lookup
+                            nx.web._lookupVIN(widget);
+
+                            nx.util.popupClose();
+
+                        });
+                    }
+                }, {
+                    label: 'Get data',
+                    icon: '+car',
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+
+                        //
+                        nx.web._lookupVIN(widget);
+
+                    }
+                }];
             }
-        }],
 
-        vin: [{
-            label: 'Scan',
-            mobile: true,
-            camera: true,
-            cb: function (ele) {
-
-                var self = nx.fmts;
-
-                // 
-                var widget = nx.cm.get(ele);
-
-                // Do
-                nx.web._scanForBarcode(widget, function (data) {
-
-                    // Save
-                    widget.val(data);
-                    // Lookup
-                    nx.web._lookupVIN(widget);
-
-                    nx.util.popupClose();
-
-                });
-            }
-        }, {
-            label: 'Get data',
-            icon: '+car',
-            cb: function (ele) {
-
-                // 
-                var widget = nx.cm.get(ele);
-
-                //
-                nx.web._lookupVIN(widget);
-
-            }
-        }]
+            return ans;
+        }
     }
 
 };

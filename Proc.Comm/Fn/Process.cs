@@ -51,7 +51,7 @@ namespace Proc.Communication
 
             // Get the params
             string sTo = store["to"];
-            string sFn = store["fn"];
+            string sFn = store["cmd"];
             string sSubj = store["subject"];
             string sMsg = store["message"];
             string sAtt = store["attachments"];
@@ -97,7 +97,7 @@ namespace Proc.Communication
 
                     for (int i = 0; i < c_Att.Count; i++)
                     {
-                        string sWkg = c_To.Get(i);
+                        string sWkg = c_Att.Get(i);
                         if (sWkg.HasValue()) c_Msg.Attachments.Add(sWkg);
                     }
 

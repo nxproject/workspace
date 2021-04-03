@@ -1778,7 +1778,7 @@ nx.util = {
 
     },
 
-    isPhone: function (value) {
+    isEMail: function (value) {
 
         var self = this;
 
@@ -1791,7 +1791,7 @@ nx.util = {
         return ans;
     },
 
-    isEMail: function (value) {
+    isPhone: function (value) {
 
         var self = this;
 
@@ -1802,6 +1802,111 @@ nx.util = {
         }
 
         return ans;
+    },
+
+    // ---------------------------------------------------------
+    //
+    // User Agent
+    // 
+    // ---------------------------------------------------------
+
+    _ua: {},
+
+    isSecure: function () {
+
+        var self = this;
+
+        return window.location.protocol === 'https:'
+    },
+
+    isMobile: function () {
+
+        var self = this;
+
+        return self.userAgentHas('mobile');
+
+    },
+
+    isTablet: function () {
+
+        var self = this;
+
+        return self.userAgentHas('tablet');
+
+    },
+
+    isAndroid: function () {
+
+        var self = this;
+
+        return self.userAgentHas('android');
+
+    },
+
+    /**
+     *  User agent check
+     *  I know that this is dumb, but is all I need
+     *  
+     * @param {any} text
+     */
+    userAgentHas: function (text) {
+
+        var self = this;
+
+        var ans;
+
+        // See if we already done
+        if (typeof self._ua[text] === 'undefined') {
+
+            // Make regex
+            var re = new RegExp(text);
+            // Match
+            ans = re.exec(navigator.userAgent.toLowerCase()) != null;
+            // Save
+            self._ua[text] = ans;
+
+        } else {
+
+            // Get
+            ans = self._ua[text];
+
+        }
+
+        return ans;
+    },
+
+    /**
+     * 
+     * Checks for camera
+     * Must be calle once before any real use
+     * 
+     */
+    hasCamera: function () {
+
+        var self = this;
+
+        //
+        if (typeof self._ua._camera === 'undefined') {
+
+            // Secure?
+            if (!self.isSecure()) {
+                // Nope
+                self._ua._camera = false;
+            } else {
+                if (navigator.getUserMedia && self.isSecure()) {
+                    navigator.getUserMedia({ video: true, audio: false }, function () {
+                        self._ua._camera = true;
+                    }, function () {
+                        self._ua._camera = false;
+                    });
+                }
+
+                //
+                return false;
+            }
+        }
+
+        return self._ua._camera;
     },
 
     // ---------------------------------------------------------
@@ -2921,42 +3026,48 @@ nx.util = {
     // 
     // ---------------------------------------------------------
 
-    geocode: function (addr, city, state, zip, cb) {
+    positionStack: function (query, cb) {
 
-        var passed = (addr || '') + ' ' + (city || '') + ' ' + (state || '') + ' ' + (zip || '');
+        var self = this;
 
         $.ajax({
-            url: 'http://api.positionstack.com/v1/forward',
+            url: window.location.protocol + '//api.positionstack.com/v1/forward',
+            crossDomain: true,
             data: {
                 access_key: nx.desktop.user.getSIField('psapi'),
-                query: passed,
+                query: query,
                 limit: 1
             }
         }).done(function (data) {
             if (data.data && Array.isArray(data.data) && data.data.length) {
                 var info = data.data[0];
-                if (cb) cb(info.latitude, info.longitude);
+                if (cb) cb(info);
             }
+        }).fail(function (xhr, status) {
+            nx.util.notifyError('Unable to connect to PositionStack, check your settings and/or account');
+        });
+    },
+
+    geocode: function (addr, city, state, zip, cb) {
+
+        var self = this;
+
+        var passed = (addr || '') + ' ' + (city || '') + ' ' + (state || '') + ' ' + (zip || '');
+
+        self.positionStack(passed, function (info) {
+            if (cb) cb(info.latitude, info.longitude);
         });
 
     },
 
     addressLookup: function (addr, city, state, zip, cb) {
 
+        var self = this;
+
         var passed = (addr || '') + ' ' + (city || '') + ' ' + (state || '') + ' ' + (zip || '');
 
-        $.ajax({
-            url: 'http://api.positionstack.com/v1/forward',
-            data: {
-                access_key: nx.desktop.user.getSIField('psapi'),
-                query: passed,
-                limit: 1
-            }
-        }).done(function (data) {
-            if (data.data && Array.isArray(data.data) && data.data.length) {
-                var info = data.data[0];
-                if (cb) cb(info.name, info.locality, info.region_code, info.postal_code, info.confidence);
-            }
+        self.positionStack(passed, function (info) {
+            if (cb) cb(info.name, info.locality, info.region_code, info.postal_code, info.confidence);
         });
 
     }

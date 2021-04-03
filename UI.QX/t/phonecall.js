@@ -35,8 +35,8 @@ qx.Class.define('t.phonecall', {
             var value = widget.getValue();
             if (nx.util.hasValue(value) && nx.util.isPhone(value)) {
 
-                nx.util.serviceCall('Comm.Process', {
-                    fn: 'voice',
+                nx.util.serviceCall('Communication.Process', {
+                    cmd: 'voice',
                     to: value
                 });
 

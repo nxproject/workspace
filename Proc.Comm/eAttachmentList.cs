@@ -70,8 +70,8 @@ namespace Proc.Communication
             {
                 List<DocumentClass> c_Ans = new List<DocumentClass>();
 
-                
-                foreach(eAttachmenClass c_File in this.Documents)
+
+                foreach (eAttachmenClass c_File in this.Documents)
                 {
                     c_Ans.Add(c_File.Document);
                 }
@@ -90,10 +90,10 @@ namespace Proc.Communication
             }
         }
 
-        public void Add(string path, string name=null)
+        public void Add(string path, string name = null)
         {
             DocumentClass c_Doc = new DocumentClass(this.Parent.Parent.DocumentManager, path);
-            this.Add(c_Doc);
+            this.Add(c_Doc, name);
         }
 
         public void Add(List<DocumentClass> docs)
@@ -114,11 +114,11 @@ namespace Proc.Communication
     public class eAttachmenClass : IDisposable
     {
         #region Constructor
-        public eAttachmenClass(DocumentClass doc, string caption)
+        public eAttachmenClass(DocumentClass doc, string label)
         {
             //
             this.Document = doc;
-            this.Caption = caption;
+            this.Label = label;
         }
         #endregion
 
@@ -128,7 +128,7 @@ namespace Proc.Communication
         #endregion
 
         #region Properties
-        public string Caption { get; set; }
+        public string Label { get; set; }
         public DocumentClass Document { get; set; }
         #endregion
     }

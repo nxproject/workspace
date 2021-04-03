@@ -87,7 +87,7 @@ namespace Proc.AO
                         }
 
                         // Count
-                        c_Ans["count"] = c_Query.ComputeCount(999).ToString();
+                        c_Ans["count"] = c_Query.ComputeCount().ToString();
                     }
                 }
             }

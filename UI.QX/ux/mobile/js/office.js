@@ -54,6 +54,8 @@ nx.office = {
 
             'js/env',
             'js/util',
+            'js/aomanager',
+            'js/aoobject',
             'js/user',
             'js/builder',
             'js/fmts',

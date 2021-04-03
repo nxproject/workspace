@@ -69,6 +69,8 @@ namespace Proc.Communication
             }
             else if (sTo.IsFormattedPhone())
             {
+                sType = sType.IfEmpty(SMS);
+
                 if (sType.IsSameValue(SMS))
                 { }
                 else
@@ -132,6 +134,13 @@ namespace Proc.Communication
             return sAns;
         }
 
+        /// <summary>
+        /// 
+        /// Compare two addresses
+        /// 
+        /// </summary>
+        /// <param name="addr"></param>
+        /// <returns></returns>
         public bool IsSameValue(eAddressClass addr)
         {
             return this.To.IsSameValue(addr.To) && this.Type == addr.Type;

@@ -64,13 +64,13 @@ namespace Proc.Communication
 
             if (this.Success.Count > 0)
             {
-                c_Buffer.Append("Success: {0}".FormatString(this.Success.Join(", ")));
+                c_Buffer.Append("Success: {0}".FormatString(this.Success.Unique().Join(", ")));
             }
 
             if (this.Failures.Count > 0)
             {
                 if (c_Buffer.Length > 0) c_Buffer.Append(", ");
-                c_Buffer.Append("Failed: {0}".FormatString(this.Failures.Join(", ")));
+                c_Buffer.Append("Failed: {0}".FormatString(this.Failures.Unique().Join(", ")));
             }
 
             return c_Buffer.ToString();

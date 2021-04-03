@@ -51,7 +51,7 @@ namespace Proc.Communication
         public eMessageClass(AO.ExtendedContextClass ctx)
             : base(ctx)
         {
-            this.Values = new StoreClass();
+            this.Values = new HandlebarDataClass();
 
             this.Initialize();
         }
@@ -59,7 +59,8 @@ namespace Proc.Communication
         public eMessageClass(AO.ExtendedContextClass ctx, string value)
             : base(ctx)
         {
-            this.Values = new StoreClass(value.ToJObject());
+            this.Values = new HandlebarDataClass();
+            this.Values.Merge(value.ToJObject());
 
             this.Initialize();
         }
@@ -80,8 +81,8 @@ namespace Proc.Communication
         #region Indexer
         public string this[string key]
         {
-            get { return this.Values[key]; }
-            set { this.Values[key] = value; }
+            get { return this.Values.GetAsString(key); }
+            set { this.Values.Set(key, value); }
         }
         #endregion
 
@@ -91,49 +92,49 @@ namespace Proc.Communication
         /// The working values
         /// 
         /// </summary>
-        internal StoreClass Values { get; set; }
+        internal HandlebarDataClass Values { get; set; }
 
         /// <summary>
         /// 
         /// Subject text for message
         /// 
         /// </summary>
-        public string Subject { get { return this.Values[KeySubj]; } set { this.Values[KeySubj] = value; } }
+        public string Subject { get { return this.Values.GetAsString(KeySubj); } set { this.Values.Set(KeySubj, value); } }
 
         /// <summary>
         /// 
         /// The message body
         /// 
         /// </summary>
-        public string Message { get { return this.Values[KeyMsg]; } set { this.Values[KeyMsg] = value; } }
+        public string Message { get { return this.Values.GetAsString(KeyMsg); } set { this.Values.Set(KeyMsg, value); } }
 
         /// <summary>
         /// 
         /// The post text
         /// 
         /// </summary>
-        public string Post { get { return this.Values[KeyPost]; } set { this.Values[KeyPost] = value; } }
+        public string Post { get { return this.Values.GetAsString(KeyPost); } set { this.Values.Set(KeyPost, value); } }
 
         /// <summary>
         /// 
         /// The message footer
         /// 
         /// </summary>
-        public string Footer { get { return this.Values[KeyFooter]; } set { this.Values[KeyFooter] = value; } }
+        public string Footer { get { return this.Values.GetAsString(KeyFooter); } set { this.Values.Set(KeyFooter, value); } }
 
         /// <summary>
         /// 
         /// The site name
         /// 
         /// </summary>
-        public string Site { get { return this.Values[KeySite]; } set { this.Values[KeySite] = value; } }
+        public string Site { get { return this.Values.GetAsString(KeySite); } set { this.Values.Set(KeySite, value); } }
 
         /// <summary>
         /// 
         /// The site URL
         /// 
         /// </summary>
-        public string URL { get { return this.Values[KeyURL]; } set { this.Values[KeyURL] = value; } }
+        public string URL { get { return this.Values.GetAsString(KeyURL); } set { this.Values.Set(KeyURL, value); } }
 
         /// <summary>
         /// 
@@ -342,7 +343,7 @@ namespace Proc.Communication
                 string sFriendly = this.Parent.User.Displayable;
 
                 // Format
-                string sHTML = this.IEMailHTML;
+                string sHTML = this.EMailHTML;
 
                 //Validate
                 if (sEMailLogin.HasValue() && sEMailPwd.HasValue())
@@ -510,6 +511,8 @@ namespace Proc.Communication
         /// <returns></returns>
         private string FormatEMail(string template)
         {
+            this.Parent.Parent.Debug();
+
             string sTemplate = template;
             if (!sTemplate.HasValue()) sTemplate = this.GetResource("EMailTemplate.html").FromBytes();
 
@@ -526,7 +529,7 @@ namespace Proc.Communication
 
                     c_Entry.Set("color", "#3498db");
                     c_Entry.Set("href", c_File.Document.URL);
-                    c_Entry.Set("caption", c_File.Caption.IfEmpty(c_File.Document.Name).ToUpper());
+                    c_Entry.Set("caption", c_File.Label.IfEmpty(c_File.Document.Name).ToUpper());
 
                     c_Attachments.Add(c_Entry);
                 }
@@ -571,9 +574,13 @@ namespace Proc.Communication
                 this.Values.Set("data", c_Data);
             }
 
-            return sTemplate.Handlebars(this.Values, delegate (string value)
+            return sTemplate.Handlebars(this.Values, delegate (string value, object thisvalue)
             {
-                using (Context c_Ctx = new Context(this.Parent.Parent, this.Values))
+                // Save this
+                this.Values.Set("this", thisvalue);
+
+                // Eval
+                using (Context c_Ctx = new Context(this.Parent.Parent, vars: this.Values))
                 {
                     return Expression.Eval(c_Ctx, value).Value;
                 }

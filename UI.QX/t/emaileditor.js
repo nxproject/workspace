@@ -16,24 +16,23 @@
 
 ************************************************************************ */
 
-qx.Class.define('c.vin', {
+qx.Class.define('t.xemaileditor', {
 
-    extend: c._component,
+    extend: qx.core.Object,
 
-    implement: i.iComponent,
+    implement: i.iTool,
 
-    construct: function () {
+    members: {
 
-        // Call base
-            this.base(arguments, new f.caps(), new t.vin(), new c._textfield());
+        caption: 'Edit',
 
-    },
+        icon: 'pencil',
 
-    statics: {
+        setup: function (widget, button) { },
 
-        makeSelf: function (req) {
+        click: function (widget) {
 
-            return new c.vin(req);
+            alert('ok');
 
         }
     }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+
+        <link rel="stylesheet" type="text/css" href="automizy-email-editor-min.css">	<!-- Automizy Email Editor styles -->
+        <script src="automizy-email-editor-min.js"></script>	<!-- Automizy Email Editor JavaScript -->
+        <script>
+
+            $AEE.init().open().ready(function () {
+                $AA.token().credentialsLogin({
+                    clientId: automizyClientId,
+                    clientSecret: automizyClientSecret
+                }).done(function(){
+                    $AEE.emailPreviewApiUrl(automizyEmailPreviewApiUrl);
+                })
+            });
+
+        </script>
+
+    </head>
+    <body style="font-family:Arial"></body>
+</html>

@@ -149,7 +149,7 @@ nx.desktop = {
                     nx.desktop.resetUser();
                 });
 
-
+                nx.util.hasCamera();
 
                 // System setup
                 nx.setup.__sys();

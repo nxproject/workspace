@@ -49,6 +49,12 @@ namespace Proc.Communication
         #endregion
 
         #region Methods
+        /// <summary>
+        /// 
+        /// Adds an address making sure of no duplicates
+        /// 
+        /// </summary>
+        /// <param name="addr"></param>
         internal void Add(eAddressClass addr)
         {
             bool bFound = false;

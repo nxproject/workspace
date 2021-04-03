@@ -67,14 +67,18 @@ namespace Proc.Help
                 string sContents = c_Obj["text"];
 
                 // Get the values
-                JObject c_Values = new JObject();
+                HandlebarDataClass c_Values = new HandlebarDataClass();
                 c_Values.Merge(call.Env.AsParameters);
                 c_Values.Merge(c_DBMgr.DefaultDatabase.SiteInfo.AsJObject);
                 c_Values.Merge(c_Obj.AsJObject);
                 // Apply changes
-                sContents = sContents.Handlebars(new StoreClass(c_Values), delegate (string value)
+                sContents = sContents.Handlebars(c_Values, delegate (string value, object thisvalue)
                 {
-                    using (Context c_Ctx = new Context(call.Env, new StoreClass(c_Values)))
+                    // Save this
+                    c_Values.Set("this", thisvalue);
+
+                    // Eval
+                    using (Context c_Ctx = new Context(call.Env, vars: c_Values))
                     {
                         return Expression.Eval(c_Ctx, value).Value;
                     }

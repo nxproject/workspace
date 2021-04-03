@@ -90,8 +90,8 @@ qx.Class.define('tools.Comm', {
                                 }
 
                                 // 
-                                nx.util.serviceCall('Comm.Process', {
-                                    fn: req.fsfn,
+                                nx.util.serviceCall('Communication.Process', {
+                                    cmd: req.fsfn,
                                     to: req.value,
                                     subject: subj,
                                     message: msg,
