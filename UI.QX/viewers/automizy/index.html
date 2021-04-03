@@ -1,23 +1,76 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
 
-        <link rel="stylesheet" type="text/css" href="automizy-email-editor-min.css">	<!-- Automizy Email Editor styles -->
-        <script src="automizy-email-editor-min.js"></script>	<!-- Automizy Email Editor JavaScript -->
-        <script>
+    <link rel="stylesheet" type="text/css" href="automizy-email-editor.css">	<!-- Automizy Email Editor styles -->
+    <script src="automizy-email-editor.js"></script>	<!-- Automizy Email Editor JavaScript -->
+    <script>
 
-            $AEE.init().open().ready(function () {
-                $AA.token().credentialsLogin({
-                    clientId: automizyClientId,
-                    clientSecret: automizyClientSecret
-                }).done(function(){
-                    $AEE.emailPreviewApiUrl(automizyEmailPreviewApiUrl);
-                })
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const ds = urlParams.get('ds');
+        const id = urlParams.get('id');
+        const images = urlParams.get('images');
+        const winid = urlParams.get('winid');
+
+        $AEE.init().open().layoutReady(function () {
+
+            // Load the contents
+            parent.nx.util.serviceCall('AO.ObjectGet', {
+                ds: ds,
+                id: id
+            }, function (result) {
+
+                // Cancel the busy
+                parent.nx.util.notifyLoadingEnd();
+
+                // Set the paths
+                $AEE.d.config.imageUploadApiUrl = images;
+                $AEE.d.config.imageGalleryApiUrl = images;
+
+                // And the callbacks
+                $AEE.save(function () {
+                    // Get the code
+                    var code = $AEE.getEditorCode();
+                    // Save
+                    parent.nx.util.serviceCall('AO.ObjectSet', {
+                        ds: ds,
+                        id: id,
+                        data: {
+                            text: code
+                        }
+                    }, function () { });
+                });
+                $AEE.saveAndExit(function () {
+                    // Get the code
+                    var code = $AEE.getEditorCode();
+                    // Save
+                    parent.nx.util.serviceCall('AO.ObjectSet', {
+                        ds: ds,
+                        id: id,
+                        data: {
+                            text: code
+                        }
+                    }, function () {
+                        var win = parent.nx.desktop.findWindow(winid);
+                        if (win) {
+                            win.safeClose();;
+                        }
+                    });
+                });
+
+                //
+                var html = '';
+                if (result && result.text) html = result.text;
+                // Load it
+                $AEE.setEditorCode(html);
             });
+        });
 
-        </script>
+    </script>
 
-    </head>
-    <body style="font-family:Arial"></body>
+</head>
+<body style="font-family:Arial">
+</body>
 </html>

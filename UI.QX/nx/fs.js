@@ -199,7 +199,7 @@ nx.fs = {
             icon: 'docx',
             value: nx.util.loopbackURL() + '/viewers/webodf/index.html' + urlParams,
             //value: nx.util.loopbackURL() + '/viewers/tinymce/index.html' + urlParams,
-            caller: req.caller, urlParams,
+            caller: req.caller, 
             chat: !req.noChat,
             adjustWidth: req.adjustWidth,
             noCenter: req.noCenter,
@@ -622,7 +622,39 @@ nx.fs = {
                 node.removeNode(true);
             }
         }
-    }
+    },
+
+    editEMAIL: function (req) {
+
+        var self = this;
+
+        //
+        var path = '/ao/' + req.ds + '/' + req.id;
+        var winid = 'email_' + req.ds + '_' + req.id;
+
+        //
+        var urlParams = nx.web.urlStart('images', nx.util.loopbackURL() + '/f' + path + '/Upload');
+        urlParams = nx.web.urlAdd('winid', winid, urlParams);
+        urlParams = nx.web.urlAdd('ds', req.ds, urlParams);
+        urlParams = nx.web.urlAdd('id', req.id, urlParams);
+
+        // Show loader
+        nx.util.notifyLoadingStart();
+
+        //
+        nx.util.runTool('Webview', {
+            nxid: winid,
+            caption: req.caption,
+            icon: 'docx',
+            value: nx.util.loopbackURL() + '/viewers/automizy/index.html' + urlParams,
+            caller: req.caller, 
+            chat: false,
+            adjustWidth: req.adjustWidth,
+            noCenter: req.noCenter,
+            topToolbar: req.topToolbar,
+            bottomToolbar: req.bottomToolbar
+        });
+    },
 
 };
 

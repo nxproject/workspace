@@ -688,7 +688,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_EMailTemplate(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.02a"))
+            if (ds.Definition.ReleaseChanged("2021.04.03b"))
             {
                 //
                 ds.Definition.Caption = "EMail Templates";
@@ -704,7 +704,7 @@ namespace Proc.AO.BuiltIn
 
                 //  
                 Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Lower;
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
 
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;

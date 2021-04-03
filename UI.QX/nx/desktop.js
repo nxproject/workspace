@@ -511,7 +511,7 @@ nx.desktop = {
 
                                 // Handle new
                                 if (!id && data) {
-                                    id = data.values._id;
+                                    req.id = id = data.values._id;
                                 }
 
                                 //
