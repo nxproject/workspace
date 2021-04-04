@@ -27,7 +27,7 @@ nx.fs = {
             ds: req.ds,
             id: req.id,
             view: nx.desktop.user.getDSInfo(req.ds).view,
-            caller:req. caller,
+            caller: req.caller,
             chain: req.chain
         });
 
@@ -199,7 +199,7 @@ nx.fs = {
             icon: 'docx',
             value: nx.util.loopbackURL() + '/viewers/webodf/index.html' + urlParams,
             //value: nx.util.loopbackURL() + '/viewers/tinymce/index.html' + urlParams,
-            caller: req.caller, 
+            caller: req.caller,
             chat: !req.noChat,
             adjustWidth: req.adjustWidth,
             noCenter: req.noCenter,
@@ -634,9 +634,14 @@ nx.fs = {
 
         //
         var urlParams = nx.web.urlStart('images', nx.util.loopbackURL() + '/f' + path + '/Upload');
-        urlParams = nx.web.urlAdd('winid', winid, urlParams);
+        var urlParams = nx.web.urlStart('winid', winid);
         urlParams = nx.web.urlAdd('ds', req.ds, urlParams);
         urlParams = nx.web.urlAdd('id', req.id, urlParams);
+        urlParams = nx.web.urlAdd('url', nx.util.loopbackURL(), urlParams);
+        urlParams = nx.web.urlAdd('up', '/fat', urlParams);
+        urlParams = nx.web.urlAdd('dn', '/f', urlParams);
+        urlParams = nx.web.urlAdd('list', '/fx/augallery', urlParams);
+        urlParams = nx.web.urlAdd('ex', '/Upload', urlParams);
 
         // Show loader
         nx.util.notifyLoadingStart();
@@ -647,7 +652,7 @@ nx.fs = {
             caption: req.caption,
             icon: 'docx',
             value: nx.util.loopbackURL() + '/viewers/automizy/index.html' + urlParams,
-            caller: req.caller, 
+            caller: req.caller,
             chat: false,
             adjustWidth: req.adjustWidth,
             noCenter: req.noCenter,

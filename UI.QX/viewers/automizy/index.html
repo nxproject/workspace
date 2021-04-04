@@ -11,8 +11,27 @@
         const urlParams = new URLSearchParams(queryString);
         const ds = urlParams.get('ds');
         const id = urlParams.get('id');
-        const images = urlParams.get('images');
+        const url = urlParams.get('url');
         const winid = urlParams.get('winid');
+        const up = urlParams.get('up');
+        const dn = urlParams.get('dn');
+        const ex = urlParams.get('ex');
+        const list = urlParams.get('list');
+
+        const cleanOut = function (text) {
+            text = text || '';
+            text = text.replaceAll('http://developers.automizy.com/automizyemaileditor', '{{publicurl}}/viewers/automizy');
+            text = text.replaceAll(url, '{{publicurl}}');
+            return text;
+        };
+
+        const cleanIn = function (text) {
+            text = text || '';
+            text = text.replace(/{{publicurl}}/g, url);
+            return text;
+        };
+
+        $AEE.d.config.url = url + '/viewers/automizy';
 
         $AEE.init().open().layoutReady(function () {
 
@@ -26,8 +45,8 @@
                 parent.nx.util.notifyLoadingEnd();
 
                 // Set the paths
-                $AEE.d.config.imageUploadApiUrl = images;
-                $AEE.d.config.imageGalleryApiUrl = images;
+                $AEE.d.config.imageUploadApiUrl = url + up + '/ao/' + ds + '/' + id + ex;
+                $AEE.d.config.imageGalleryApiUrl = url + list + '/ao/' + ds + '/' + id + ex;
 
                 // And the callbacks
                 $AEE.save(function () {
@@ -38,7 +57,7 @@
                         ds: ds,
                         id: id,
                         data: {
-                            text: code
+                            text: cleanOut(code)
                         }
                     }, function () { });
                 });
@@ -50,7 +69,7 @@
                         ds: ds,
                         id: id,
                         data: {
-                            text: code
+                            text: cleanOut(code)
                         }
                     }, function () {
                         var win = parent.nx.desktop.findWindow(winid);
@@ -62,7 +81,9 @@
 
                 //
                 var html = '';
-                if (result && result.text) html = result.text;
+                    if (result && result.text) html = result.text;
+                    //
+                    html = cleanIn(html);
                 // Load it
                 $AEE.setEditorCode(html);
             });

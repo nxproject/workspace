@@ -513,8 +513,30 @@ namespace Proc.Communication
         {
             this.Parent.Parent.Debug();
 
-            string sTemplate = template;
-            if (!sTemplate.HasValue()) sTemplate = this.GetResource("EMailTemplate.html").FromBytes();
+            // Start with nothing
+            string sTemplate = null;
+            // Did we get a template name?
+            if(template.HasValue())
+            {
+                // Fetch
+                using(AO.ObjectClass c_Template = this.Parent.DBManager.DefaultDatabase[AO.DatabaseClass.DatasetEMailTemplates][template])
+                {
+                    // Get the text
+                    string sText = c_Template["text"];
+                    // Any?
+                    if(sText.HasValue())
+                    {
+                        // Format
+                        sTemplate = this.GetResource("EMailHolder.html").FromBytes().Replace("{0}", sText);
+                    }
+                }
+            }
+
+            // Handle missing
+            if (!template.HasValue())
+            {
+                sTemplate = this.GetResource("EMailTemplate.html").FromBytes();
+            }
 
             // Build attachment list
             if (this.Attachments != null && this.Attachments.Count > 0)

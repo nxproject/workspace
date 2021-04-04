@@ -7,10 +7,12 @@
 
   <ItemGroup>
     <None Remove="Support\EMail\EMailTemplate.html" />
+    <None Remove="Support\Templates\EMailHolder.html" />
     <None Remove="Support\Templates\SMSTemplate.html" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Support\Templates\EMailHolder.html" />
     <EmbeddedResource Include="Support\Templates\EMailTemplate.html" />
     <EmbeddedResource Include="Support\Templates\SMSTemplate.html" />
   </ItemGroup>

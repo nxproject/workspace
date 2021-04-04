@@ -957,7 +957,7 @@
                         url: $AEE.imageGalleryApiUrl(),
                         type: 'GET',
                         dataType: 'json',
-                        headers: { Authorization: 'Bearer ' + $AA.token().get() },
+                        //headers: { Authorization: 'Bearer ' + $AA.token().get() },         // ECANDIDUS 2021-04-04
                         beforeSend: function (xhr, data) {
                             data.url = $AEE.imageGalleryApiUrl();
                         }
@@ -989,7 +989,9 @@
                             });
                             var $helper = $('<span class="automizy-image-picker-gallery-image-helper"></span>');
                             var $img = $('<img/>').attr({
-                                src: data[i].thumbnailUrl,
+                                //src: data[i].thumbnailUrl,                // ECANDIDUS 2021-04-01
+                                style: 'height: 55vw; width: auto;',
+                                src: data[i].url,                           // END ECANDIDUS
                                 alt: data[i].alt,
                                 title: data[i].title
                             }).data('url', data[i].url).error(function () {
@@ -1032,7 +1034,7 @@
                 beforeSend: function (xhr, data) {
                     data.url = $AEE.imageUploadApiUrl();
                     var file = data.files[0];
-                    xhr.setRequestHeader('Authorization', 'Bearer ' + $AA.token().get());
+                    //xhr.setRequestHeader('Authorization', 'Bearer ' + $AA.token().get());         // ECANDIDUS 2021-04-03
                     t.d.inputs.upload.data('automizyButton').disable();
                     t.d.inputs.upload.widget().find('input[type="file"]').prop('disabled', true);
                     t.d.inputs.url.disable();
@@ -1054,10 +1056,12 @@
                     t.closable(true);
                 },
                 error: function () {
-                    alert('Something wrong');
+                    parent.nx.util.notifyError('Unable to upload');
                 },
                 done: function (e, data) {
-                    t.d.img.src = data.result[Object.keys(data.result)[0]].url;
+                    //t.d.img.src = data.result[Object.keys(data.result)[0]].url;
+                    t.d.img.src = data.result.url;                                         // ECANDIDUS 2021-04-03
+                    if (data.result.error) parent.nx.util.notifyError('Unable to upload');  // END ECANDIDUS
                     t.d.$previewImage.attr({
                         src: t.d.img.src
                     }).show();
@@ -1076,7 +1080,8 @@
             });
 
             t.d.inputs.url = $A.newInput({
-                placeholder: $A.translate('Enter the image url here'),
+                //placeholder: $A.translate('Enter the image url here'),
+                placeholder: $A.translate('Enter the image name here'),                 // ECANDIDUS 2021-04-04
                 target: t.d.$controlImageBox,
                 type: 'text',
                 labelWidth: 'auto',
@@ -1092,7 +1097,7 @@
                     });
                 },
                 change: function () {
-                    t.d.img.src = this.val();
+                    t.d.img.src = $AEE.d.config.imageUploadApiUrl + '/' + this.val();
                     t.d.$previewImage.attr('src', t.d.img.src).show();
                 }
             });
@@ -3781,7 +3786,7 @@
         $AEE.saved = false;
 
         $AEE.buttons.saveAndExitButton = $A.newButton({
-            text: $A.translate('Save and next >>'),
+            text: $A.translate('Save and exit >>'),
             skin: 'simple-orange',
             float: 'right',
             thin: true,
@@ -3836,7 +3841,7 @@
             $AEE.clickToPreview();
             $AEE.elements.$mobileMenu.stop().fadeOut();
         });
-        $AEE.elements.$mobileSaveAndExitButton = $('<div class="aee-mobilemenu-item"></div>').html($A.translate('Save and next >>')).appendTo($AEE.elements.$mobileMenu).click(function () {
+        $AEE.elements.$mobileSaveAndExitButton = $('<div class="aee-mobilemenu-item"></div>').html($A.translate('Save and exit >>')).appendTo($AEE.elements.$mobileMenu).click(function () {
             $AEE.clickToSaveAndExit();
             $AEE.elements.$mobileMenu.stop().fadeOut();
         });
@@ -4713,7 +4718,7 @@
             formData: { directory: 'emaileditor' },
             beforeSend: function (xhr, data) {
                 data.url = $AEE.imageUploadApiUrl();
-                xhr.setRequestHeader('Authorization', 'Bearer ' + $AA.token().get());
+                //xhr.setRequestHeader('Authorization', 'Bearer ' + $AA.token().get());         // ECANDIDUS 2021-04-04
             },
             submit: function (e, data) {
                 if (data.originalFiles.length == 1) {
@@ -5083,7 +5088,7 @@
                                 subject: $AEE.subject(),
                                 htmlCode: $AEE.getHtmlCode({ conditions: false })
                             },
-                            headers: { Authorization: 'Bearer ' + $AA.token().get() },
+                            //headers: { Authorization: 'Bearer ' + $AA.token().get() },         // ECANDIDUS 2021-04-04
                             beforeSend: function (xhr, data) {
                                 data.url = $AEE.emailPreviewApiUrl();
                             }

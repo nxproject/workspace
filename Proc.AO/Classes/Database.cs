@@ -48,6 +48,8 @@ namespace Proc.AO
         public const string DatasetGroup = "_group";
         public const string DatasetTagged = "_tagged";
         public const string DatasetTaggedDetail = "_taggeddet";
+        public const string DatasetTelemetry = "_telemetry";
+        public const string DatasetTelemetryData = "_telemetrydata";
 
         public const string DatasetBillAccount = "_billaccount";
         public const string DatasetBillAccess = "_billaccess";
@@ -165,6 +167,7 @@ namespace Proc.AO
                 bool bIOT = this.SiteInfo.IOTEnabled;
                 bool bBilling = this.SiteInfo.BillingEnabled;
                 bool bQuorumEnabled = this.SiteInfo.QuorumEnabled;
+                bool bTelemetryEnabled = this.SiteInfo.TelemetryEnabled;
 
                 // Loop thru
                 for (int i = c_Ans.Count; i > 0; i--)
@@ -204,6 +207,10 @@ namespace Proc.AO
 
                             case "QUORUM":
                                 bRemove = !bQuorumEnabled;
+                                break;
+
+                            case "TELEMETRY":
+                                bRemove = !bTelemetryEnabled;
                                 break;
                         }
                     }
@@ -505,6 +512,13 @@ namespace Proc.AO
                     this.AssureDataset(DatabaseClass.DatasetQuorumComment);
                     this.AssureDataset(DatabaseClass.DatasetQuorumOption);
                     this.AssureDataset(DatabaseClass.DatasetQuorumRating);
+                }
+
+                // Telemetry
+                if(c_SI.TelemetryEnabled)
+                {
+                    this.AssureDataset(DatabaseClass.DatasetTelemetry);
+                    this.AssureDataset(DatabaseClass.DatasetTelemetryData);
                 }
             }
         }

@@ -61,6 +61,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://mit-l
 * [Framework7](https://github.com/framework7io/Framework7)
 * [Handlebars.NET](https://github.com/Handlebars-Net/Handlebars.Net)
 * [HtmlAgilityPack](https://github.com/zzzprojects/html-agility-pack)
+* [Http-Multipart-Data-Parser](https://github.com/Http-Multipart-Data-Parser/Http-Multipart-Data-Parser)
 * [ICSharpCode.SharpZipLib](https://github.com/icsharpcode/SharpZipLib)
 * [iTextSharp](https://github.com/itext/itextsharp)
 * [itextSharp.xmlworker](https://github.com/itext/itextsharp)

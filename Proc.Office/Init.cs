@@ -50,6 +50,7 @@ namespace Proc.Office
 
             // Common
             env.Use("SendGrid");
+            env.Use("Proc.Telemetry");
             env.Use("Common.TaskWF");
             env.Use("Proc.Communication");
             // And tasks

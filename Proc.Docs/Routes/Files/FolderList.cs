@@ -24,6 +24,8 @@
 
 using System.Collections.Generic;
 
+using Newtonsoft.Json.Linq;
+
 using NX.Engine;
 using NX.Engine.Files;
 using NX.Shared;
@@ -33,34 +35,43 @@ namespace Proc.Docs
 {
     /// <summary>
     /// 
-    /// Uploads a file
     /// 
     /// </summary>
-    public class PutHTML : RouteClass
+    public class FolderList : RouteClass
     {
-        public override List<string> RouteTree => new List<string>() { RouteClass.POST(), Files.SupportClass.Route, "html", "?path?" };
+        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), Files.SupportClass.Route, "augallery", "?path?" };
         public override void Call(HTTPCallClass call, StoreClass store)
         {
             // Get the full path
             string sPath = store.PathFromEntry(NX.Engine.Files.ManagerClass.MappedFolder, "path").URLDecode();
 
-            call.Env.LogInfo("PutHTML: {0}".FormatString(sPath));
-
             // Get the manager
-            NX.Engine.Files.ManagerClass c_Mgr = call.Env.Globals.Get<NX.Engine.Files.ManagerClass>();
+            ManagerClass c_Mgr = call.Env.Globals.Get<ManagerClass>();
 
-            // And upload
-            using (DocumentClass c_Doc = new DocumentClass(c_Mgr, sPath))
+            // And make
+            using (FolderClass c_Folder = new FolderClass(c_Mgr, sPath))
             {
-                using (HTMLDocumentClass c_HTML = c_Doc.HTML())
+                // Make the list
+                JArray c_List = new JArray();
+
+                // Loop thru
+                foreach (DocumentClass c_Doc in c_Folder.Files)
                 {
-                    // Assure backup
-                    //c_Doc.AssureBackup();
-                    // Get
-                    c_Mgr.UploadRaw(call, c_HTML.Document);
-                    // And back
-                    c_HTML.Synchronize();
+                    // Make object
+                    JObject c_Entry = new JObject();
+
+                    c_Entry.Set("url", call.Env.ReachableURL.CombinePath("f", c_Doc.Path));
+                    c_Entry.Set("alt", c_Doc.Name);
+                    c_Entry.Set("title", c_Doc.Name);
+                    c_Entry.Set("type", "file");
+                    c_Entry.Set("extension", c_Doc.Extension);
+
+                    // Add
+                    c_List.Add(c_Entry);
                 }
+
+                // And deliver
+                call.RespondWithJSON(c_List);
             }
         }
     }

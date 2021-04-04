@@ -55,6 +55,7 @@ namespace Proc.Communication
             string sSubj = store["subject"];
             string sMsg = store["message"];
             string sAtt = store["attachments"];
+            string sTemplate = store["template"];
 
             // Handle to
             JArray c_To = sTo.ToJArrayOptional();
@@ -68,12 +69,15 @@ namespace Proc.Communication
                 case "voice":
                     eType = eAddressClass.AddressTypes.Voice;
                     break;
+
                 case "sms":
                     eType = eAddressClass.AddressTypes.SMS;
                     break;
+
                 case "email":
                     eType = eAddressClass.AddressTypes.EMail;
                     break;
+
                 case "fedex":
                     eType = eAddressClass.AddressTypes.FedEx;
                     break;
@@ -85,6 +89,10 @@ namespace Proc.Communication
                // Make the message
                 using(eMessageClass c_Msg = new eMessageClass(c_Ctx))
                 {
+                    // Set the template
+                    c_Msg.EMailTemplate = sTemplate;
+
+                    // Process recipients
                     for (int i = 0; i < c_To.Count; i++)
                     {
                         string sWkg = c_To.Get(i);

@@ -324,6 +324,19 @@ namespace Proc.AO
         }
         #endregion
 
+        #region Telemetry
+        /// <summary>
+        /// 
+        /// Is telemetry enabled?
+        /// 
+        /// </summary>
+        public bool TelemetryEnabled
+        {
+            get { return this.SynchObject["teleenabled"].FromDBBoolean(); }
+            set { this.SynchObject["teleenabled"] = value.ToDBBoolean(); }
+        }
+        #endregion
+
         #region Twilio
         /// <summary>
         /// 
@@ -438,7 +451,37 @@ namespace Proc.AO
         }
         #endregion
 
-        #region Twitter
+        #region Social media
+        public string FacebookURL
+        {
+            get { return this.SynchObject["fburl"]; }
+            set { this.SynchObject["fburl"] = value; }
+        }
+
+        public string GooglePURL
+        {
+            get { return this.SynchObject["gpurl"]; }
+            set { this.SynchObject["gpurl"] = value; }
+        }
+
+        public string LinkedInURL
+        {
+            get { return this.SynchObject["liurl"]; }
+            set { this.SynchObject["liurl"] = value; }
+        }
+
+        public string InstagramURL
+        {
+            get { return this.SynchObject["igurl"]; }
+            set { this.SynchObject["igurl"] = value; }
+        }
+
+        public string TwitterURL
+        {
+            get { return this.SynchObject["twitterurl"]; }
+            set { this.SynchObject["twitterurl"] = value; }
+        }
+
         public string TwitterConsumerKey
         {
             get { return this.SynchObject["twitterck"]; }

@@ -67,6 +67,7 @@ namespace Proc.AO.BuiltIn
                     ds.Define_Cron();
                     break;
 
+
                 case DatabaseClass.DatasetIOTAgent:
                     ds.Define_IOT("Agent", "user");
                     break;
@@ -86,6 +87,14 @@ namespace Proc.AO.BuiltIn
                     ds.Define_IOT("Macro", "script");
                     break;
 
+
+                case DatabaseClass.DatasetTelemetry:
+                    ds.Define_Telemetry();
+                    break;
+
+                case DatabaseClass.DatasetTelemetryData:
+                    ds.Define_TelemetryData();
+                    break;
 
 
                 case DatabaseClass.DatasetBillAccount:
@@ -145,7 +154,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.31a"))
+            if (ds.Definition.ReleaseChanged("2021.04.04a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -324,6 +333,30 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Lower;
                 c_Field.Label = "Datasets/Fields";
 
+                c_Field = ds.Definition["fburl"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Facebook";
+
+                c_Field = ds.Definition["gpurl"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Google+";
+
+                c_Field = ds.Definition["liurl"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "LinkedIn";
+
+                c_Field = ds.Definition["igurl"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Instagram";
+
+                c_Field = ds.Definition["twitterurl"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Twitter";
+
+                c_Field = ds.Definition["teleenabled"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "Telemetry";
+
                 c_Field.SaveParent();
             }
 
@@ -357,7 +390,8 @@ namespace Proc.AO.BuiltIn
                 c_CInfo.UseFields(
                     "acctenabled", "acctdefallowed",
                     "billenabled",
-                    "ttenabled", 
+                    "ttenabled",
+                    "teleenabled",
                     "quorumenabled", 
                     "iotenabled",  
                     "helproot",
@@ -440,6 +474,21 @@ namespace Proc.AO.BuiltIn
                 c_VTwitter.UseFields("twitterck", "twittersk", "twitterat", "twitterats");
 
                 c_VTwitter.Save();
+            }
+
+            Definitions.ViewClass c_VSocial = ds.View("social");
+            if (c_VSocial.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VSocial.Caption = "Social Media";
+
+                // Clear
+                c_VSocial.ClearFields();
+
+                // Map
+                c_VSocial.UseFields("fburl", "twitterurl", "gpurl", "liurl", "igurl");
+
+                c_VSocial.Save();
             }
 
             Definitions.ViewClass c_VPS = ds.View("ps");
@@ -562,7 +611,7 @@ namespace Proc.AO.BuiltIn
                 // Make the tabs
                 Definitions.ViewFieldClass c_Field = c_VTP.AsTabs("sysve");
                 c_Field.Height = "14";
-                c_Field.Views = "twilio sendgrid ps stripe ahk vebye twitter";
+                c_Field.Views = "twilio sendgrid ps stripe ahk vebye social twitter";
 
                 c_VTP.Save();
             }
@@ -688,7 +737,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_EMailTemplate(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.03b"))
+            if (ds.Definition.ReleaseChanged("2021.04.03c"))
             {
                 //
                 ds.Definition.Caption = "EMail Templates";
@@ -704,7 +753,7 @@ namespace Proc.AO.BuiltIn
 
                 //  
                 Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.AutoCaps;
 
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
@@ -1088,6 +1137,128 @@ namespace Proc.AO.BuiltIn
                 c_Field.SaveParent();
 
                 ds.Definition.Save();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_Telemetry(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.04.04a"))
+            {
+                //
+                ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Telemetry");
+                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Privileges = "v";
+                ds.Definition.Icon = ds.Definition.Icon.IfEmpty("asterisk_yellow");
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "700";
+                ds.Definition.Selector = "TELEMETRY";
+
+                // Restart
+                ds.Definition.ClearFields();
+
+                // 
+                Definitions.DatasetFieldClass c_Field = ds.Definition["s"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Source";
+
+                c_Field = ds.Definition["t"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Type";
+
+                c_Field = ds.Definition["c"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Campaign";
+
+                c_Field = ds.Definition["e"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Created On";
+
+                c_Field = ds.Definition["x"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Target";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_TelemetryData(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.04.04a"))
+            {
+                //
+                ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Telemetry Data");
+                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Privileges = "v";
+                ds.Definition.Icon = ds.Definition.Icon.IfEmpty("asterisk_orange");
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "701";
+                ds.Definition.Selector = "TELEMETRY";
+
+                // Restart
+                ds.Definition.ClearFields();
+
+                // 
+                Definitions.DatasetFieldClass c_Field = ds.Definition["s"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Source";
+
+                c_Field = ds.Definition["t"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Type";
+
+                c_Field = ds.Definition["c"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Campaign";
+
+                c_Field = ds.Definition["e"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Created On";
+
+                c_Field = ds.Definition["x"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Target";
+
+                c_Field = ds.Definition["r"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Route";
+
+                c_Field = ds.Definition["d"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "On";
+
+                c_Field = ds.Definition["i"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "IP";
+
+                c_Field.SaveParent();
             }
 
             // Add the view
