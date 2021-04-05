@@ -41,7 +41,7 @@ An account can be used to create invoices.  You need to enable billing in the [S
 
 ### As a contactable entity
 
-You can EMail, SMS or call an account, which triggers ***outbound telemetry*** information.  When an account SMS, calls or clicks on any ***inbound telemetry*** link, the contact is added into the ***inbound telemetry*** fields.
+You can EMail, SMS or call an account, which triggers ***outbound telemetry*** information.  When an account SMS, calls or clicks on any ***inbound telemetry*** link, the contact is added into the ***inbound telemetry*** fields.  You need to enable telemetry in the [Site Settings](README_SITE.md) tool, ***System*** tab.
 
 ## Allowed
 
