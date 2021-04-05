@@ -183,4 +183,12 @@ If you only wish to display the date portion, you can use:
 Thes functions plus the ***Sort Order*** dataset definition value provide a method to properly handle date fields in
 a placeholder.  If the timezone parameter if onitted, the UTC datetime will be shown.
 
+## System datasets
+
+The system has a variety of datasets that hold system information.  These dataset names atrart with an undescrore ***_***.
+
+You can modify all system datasets however you should not delete any fields that were previously defined as this may lead to unexpected behaviors.
+
+Note that updates may modify the dataset definitions, which will undo any user changes.
+
 [Home](../README.md)
