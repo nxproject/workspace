@@ -1,6 +1,6 @@
-# Users and Accounts
+# Users
 
-Access to the site is controlled by the User dataset and the Accounts entries.  Both are similar in that the 
+Access to the site is controlled by the User dataset entries.  Both are similar in that the 
 site manager decides on which datasets and tools are available, but users hold more personal information
 that is available for processes.
 
@@ -188,13 +188,7 @@ You can then make use of the extension by entering:
 As the ***allowed*** entry for any user.  If you change the extension, all changes will be applied to the
 user when he/she logs in.
 
-## Accounts
-
-An account is a login that uses an email address as the name of the person:
-
-![image](images/Acct1.png)
-
-## Getting an explanation
+## Getting an explanation of what is allowed
 
 You can right mouse click on an ***allowed*** field and select ***Explain*** to get a breakdown on what the
 rules given will provide.
