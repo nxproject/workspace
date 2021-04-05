@@ -79,7 +79,7 @@ namespace Proc.Telemetry
         /// <param name="text"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public string Process(string text, string to=null)
+        public string Process(string text, string to = null)
         {
             // Set
             this.Values.Set("x", to.IfEmpty());

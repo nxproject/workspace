@@ -74,7 +74,7 @@ namespace Proc.Communication
             this.Site = this.Parent.Database.SiteInfo.Name;
             this.URL = this.Parent.Parent.LoopbackURL;
             this.Footer = this.Parent.User.CommFooter;
-            
+
         }
         #endregion
 
@@ -212,7 +212,7 @@ namespace Proc.Communication
         {
             get
             {
-                if(this.IEMailHTML == null)
+                if (this.IEMailHTML == null)
                 {
                     this.IEMailHTML = this.FormatEMail(this.EMailTemplate);
                 }
@@ -321,7 +321,7 @@ namespace Proc.Communication
             if (this.Subject.HasValue()) c_Pieces.Add(this.Subject);
             if (this.Message.HasValue()) c_Pieces.Add(this.Message);
 
-            this.Parent.SendNotification(to.To,c_Pieces.Join(" - "), this.Attachments.AsDocuments);
+            this.Parent.SendNotification(to.To, c_Pieces.Join(" - "), this.Attachments.AsDocuments);
 
             result.Log(to);
         }
@@ -377,6 +377,9 @@ namespace Proc.Communication
                     else
                     {
                         result.Log(to);
+
+                        // Update contact out
+                        this.UpdateLstOut(to.To, "EMail");
                     }
                 }
             }
@@ -418,6 +421,9 @@ namespace Proc.Communication
                 else
                 {
                     result.Log(to);
+
+                    // Update contact out
+                    this.UpdateLstOut(to.To, "SMS");
                 }
             }
         }
@@ -448,6 +454,9 @@ namespace Proc.Communication
                 else
                 {
                     result.Log(to);
+
+                    // Update contact out
+                    this.UpdateLstOut(to.To, "Voice");
                 }
             }
         }
@@ -499,6 +508,24 @@ namespace Proc.Communication
 
             return bAns;
         }
+
+        /// <summary>
+        /// 
+        /// Updates the account last out info
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="via"></param>
+        private void UpdateLstOut(string user, string via)
+        {
+            // Get the manage
+            AO.ManagerClass c_Mgr = this.Parent.Parent.Globals.Get<AO.ManagerClass>();
+            // And update
+            using(AO.AccessClass c_AE = new AO.AccessClass(c_Mgr, user ))
+            {
+                c_AE.UpdateContactOut(via);
+            }
+        }
         #endregion
 
         #region Formatters
@@ -516,15 +543,15 @@ namespace Proc.Communication
             // Start with nothing
             string sTemplate = null;
             // Did we get a template name?
-            if(template.HasValue())
+            if (template.HasValue())
             {
                 // Fetch
-                using(AO.ObjectClass c_Template = this.Parent.DBManager.DefaultDatabase[AO.DatabaseClass.DatasetEMailTemplates][template])
+                using (AO.ObjectClass c_Template = this.Parent.DBManager.DefaultDatabase[AO.DatabaseClass.DatasetEMailTemplates][template])
                 {
                     // Get the text
                     string sText = c_Template["text"];
                     // Any?
-                    if(sText.HasValue())
+                    if (sText.HasValue())
                     {
                         // Format
                         sTemplate = this.GetResource("EMailHolder.html").FromBytes().Replace("{0}", sText);
@@ -542,7 +569,7 @@ namespace Proc.Communication
             if (this.Attachments != null && this.Attachments.Count > 0)
             {
                 JArray c_Attachments = new JArray();
-                
+
                 // Loop thru
                 foreach (eAttachmenClass c_File in this.Attachments.Documents)
                 {
@@ -560,7 +587,7 @@ namespace Proc.Communication
             }
 
             // Build actions list
-            if(this.Actions != null && this.Actions.Count > 0)
+            if (this.Actions != null && this.Actions.Count > 0)
             {
                 JArray c_Actions = new JArray();
 
@@ -585,7 +612,7 @@ namespace Proc.Communication
             this.Values.Set("user", this.Parent.User.SynchObject);
 
             // Data
-            if(this.Object != null)
+            if (this.Object != null)
             {
                 // Get
                 JObject c_Data = this.Object.AsJObject;
@@ -633,12 +660,12 @@ namespace Proc.Communication
         private void FillLinks(JObject obj)
         {
             // Loop thru
-            foreach(string sKey in obj.Keys())
+            foreach (string sKey in obj.Keys())
             {
                 // Get the value
                 string sValue = obj.Get(sKey);
                 // Is it a link?
-                if(AO.UUIDClass.IsValid(sValue))
+                if (AO.UUIDClass.IsValid(sValue))
                 {
                     // Make UUID
                     using (AO.UUIDClass c_UUID = new AO.UUIDClass(this.Parent.Database, sValue))

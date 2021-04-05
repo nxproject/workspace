@@ -97,10 +97,6 @@ namespace Proc.AO.BuiltIn
                     break;
 
 
-                case DatabaseClass.DatasetBillAccount:
-                    ds.Define_BillAccount();
-                    break;
-
                 case DatabaseClass.DatasetBillAccess:
                     ds.Define_BillAccess();
                     break;
@@ -1211,7 +1207,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_TelemetryData(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.04a"))
+            if (ds.Definition.ReleaseChanged("2021.04.05b"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Telemetry Data");
@@ -1229,6 +1225,7 @@ namespace Proc.AO.BuiltIn
                 Definitions.DatasetFieldClass c_Field = ds.Definition["s"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Source";
+                c_Field.UseIndex = true;
 
                 c_Field = ds.Definition["t"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
@@ -1237,6 +1234,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["c"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Campaign";
+                c_Field.UseIndex = true;
 
                 c_Field = ds.Definition["e"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
@@ -1245,6 +1243,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["x"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Target";
+                c_Field.UseIndex = true;
 
                 c_Field = ds.Definition["r"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
@@ -1257,6 +1256,10 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["i"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "IP";
+
+                // Must be done last
+                ds.Definition.AnalyzerAllow = true;
+                ds.Definition.AnalyzerBy = ds.Definition.FieldNames.JoinSpaces();
 
                 c_Field.SaveParent();
             }
@@ -1316,16 +1319,13 @@ namespace Proc.AO.BuiltIn
         #endregion
 
         #region Billing
-        private static void Define_BillAccount(this DatasetClass ds)
-        { }
-
         private static void Define_BillAccess(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.18a"))
+            if (ds.Definition.ReleaseChanged("2021.04.05c"))
             {
                 //
-                ds.Definition.Caption = "Access";
+                ds.Definition.Caption = "Account";
                 ds.Definition.Placeholder = "[name] '-' [allowed] / #linkdscaption([actual])#:#linkdesc([actual])#";
                 ds.Definition.Privileges = "av";
                 ds.Definition.Icon = "group";
@@ -1362,9 +1362,29 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Actual Obj";
 
-                c_Field = ds.Definition["acct"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
-                c_Field.Label = "Account";
+                c_Field = ds.Definition["lastin"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Last login";
+
+                c_Field = ds.Definition["subscribedon"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Subscribed On";
+
+                c_Field = ds.Definition["lastctcout"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Last ctc out";
+
+                c_Field = ds.Definition["lastctcoutvia"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.AutoCaps;
+                c_Field.Label = "Ctc out via";
+
+                c_Field = ds.Definition["lastctcin"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Last ctc in";
+
+                c_Field = ds.Definition["lastctcinvia"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.AutoCaps;
+                c_Field.Label = "Ctc in via";
 
                 c_Field.SaveParent();
             }
@@ -1377,7 +1397,9 @@ namespace Proc.AO.BuiltIn
                 c_VDefault.ClearFields();
 
                 // And from definition
-                c_VDefault.UseFields("name", "pwd", "allowed", "childof", "acct");
+                c_VDefault.UseFields("name", "pwd", "allowed", 
+                    "subscribedon", "lastin", "lastctcout", "lastctcoutvia", "lastctcin", "lastctcinvia",
+                    "childof");
 
                 c_VDefault.Save();
             }
@@ -1470,7 +1492,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Account";
-                c_Field.LinkDS = DatabaseClass.DatasetBillAccount;
+                c_Field.LinkDS = DatabaseClass.DatasetBillAccess;
 
                 c_Field = ds.Definition["units"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
@@ -1545,7 +1567,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Account";
-                c_Field.LinkDS = DatabaseClass.DatasetBillAccount;
+                c_Field.LinkDS = DatabaseClass.DatasetBillAccess;
 
                 c_Field = ds.Definition["units"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
@@ -1628,7 +1650,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Account";
-                c_Field.LinkDS = DatabaseClass.DatasetBillAccount;
+                c_Field.LinkDS = DatabaseClass.DatasetBillAccess;
 
                 c_Field = ds.Definition["billed"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;

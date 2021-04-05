@@ -1097,7 +1097,10 @@
                     });
                 },
                 change: function () {
-                    t.d.img.src = $AEE.d.config.imageUploadApiUrl + '/' + this.val();
+                    var url = this.val();                                               // ECANDIDUS 2021-04-05
+                    if (url && url.indexOf('http') !== 0) url = $AEE.d.config.imageUploadApiUrl + '/' + url;
+                    t.d.img.src = url;                                      
+                    //t.d.img.src = this.val();                                         // END ECANDIDUS
                     t.d.$previewImage.attr('src', t.d.img.src).show();
                 }
             });

@@ -644,7 +644,7 @@ namespace Proc.AO
                                                     break;
 
                                                 case Definitions.DatasetFieldClass.FieldTypes.Account:
-                                                    this.UpdateAccount(orig.Get(sField), c_CData.Get(sField));
+                                                    this.UpdateAccount(sField, orig.Get(sField), c_CData.Get(sField));
                                                     break;
 
                                                 case Definitions.DatasetFieldClass.FieldTypes.TwilioPhone:
@@ -817,7 +817,7 @@ namespace Proc.AO
         /// </summary>
         /// <param name="orig"></param>
         /// <param name="newvalue"></param>
-        private void UpdateAccount(string orig, string newvalue)
+        private void UpdateAccount(string field, string orig, string newvalue)
         {
             // Get the UUID of ourselves
             string sOUUID = this.UUID.ToString();
@@ -845,8 +845,6 @@ namespace Proc.AO
                 // Set
                 c_New["name"] = newvalue;
                 c_New["actual"] = sOUUID;
-                // Do we have an account?
-                if (!c_New["acct"].HasValue()) c_New["acct"] = UUIDClass.MakeString(DatabaseClass.DatasetBillAccount, this.UUID.ID);
                 c_New.Save();
             }
             else
@@ -867,8 +865,6 @@ namespace Proc.AO
                         // Set
                         c_New["name"] = newvalue;
                         c_New["actual"] = sOUUID;
-                        // Do we have an account?
-                        if (!c_New["acct"].HasValue()) c_New["acct"] = UUIDClass.MakeString(DatabaseClass.DatasetBillAccount, this.UUID.ID);
                         // save
                         c_New.Save();
                     }

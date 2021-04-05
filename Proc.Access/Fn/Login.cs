@@ -96,6 +96,10 @@ namespace Proc.Access
                             {
                                 sName = sUser.ToLower();
                                 sAllowed = c_PO["allowed"];
+
+                                // Update last login
+                                c_PO["lastin"] = DateTime.Now.ToDBDate();
+                                c_PO.Save();
                                 break;
                             }
                         }

@@ -32,7 +32,34 @@ qx.Class.define('t.xmdeditor', {
 
         click: function (widget) {
 
-            alert('ok');
+            var self = this;
+
+            // Get stuff
+            var win = nx.bucket.getWin(widget);
+            var params = nx.bucket.getParams(win);
+
+            // Get the data
+            var data = win.getFormData();
+            // Get the id
+            var id = data.code || params.id;
+            // And the captiob
+            var caption = data.code || win.getCaption();
+
+            // Save
+            win.save(function () {
+
+                // Call editor
+                nx.fs.editMD({
+                    ds: params.ds,
+                    id: id,
+                    caption: caption
+                });
+
+                // Close
+                win.safeClose();
+
+            });
+
 
         }
     }

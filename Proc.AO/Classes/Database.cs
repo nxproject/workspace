@@ -51,7 +51,6 @@ namespace Proc.AO
         public const string DatasetTelemetry = "_telemetry";
         public const string DatasetTelemetryData = "_telemetrydata";
 
-        public const string DatasetBillAccount = "_billaccount";
         public const string DatasetBillAccess = "_billaccess";
         public const string DatasetBiilCharge = "_billcharge";
         public const string DatasetBiilInvoice = "_billinvoice";
@@ -497,7 +496,6 @@ namespace Proc.AO
                 // Assure billing
                 if (c_SI.BillingEnabled)
                 {
-                    this.AssureDataset(DatabaseClass.DatasetBillAccount);
                     this.AssureDataset(DatabaseClass.DatasetBiilRate);
                     this.AssureDataset(DatabaseClass.DatasetBiilSubscription);
                     this.AssureDataset(DatabaseClass.DatasetBiilInvoice);

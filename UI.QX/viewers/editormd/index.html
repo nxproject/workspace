@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="/viewers/editormd/css/editormd.min.css" />
+
+
+</head>
+<body style="font-family:Arial">
+
+    <div id="editor">
+        <textarea style="display:none;"></textarea>
+    </div>
+
+    <script src="https://unpkg.com/jquery@3/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+    <script src="/viewers/editormd/editormd.js"></script>
+    <script src="/viewers/editormd/languages/en.js"></script>
+    <script type="text/javascript">
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const ds = urlParams.get('ds');
+        const id = urlParams.get('id');
+        const url = urlParams.get('url');
+        const winid = urlParams.get('winid');
+        const up = urlParams.get('up');
+        const dn = urlParams.get('dn');
+        const ex = urlParams.get('ex');
+        const list = urlParams.get('list');
+
+        $(function () {
+
+            parent.nx.util.serviceCall('AO.ObjectGet', {
+                ds: ds,
+                id: id
+            }, function (result) {
+
+                // Cancel the busy
+                parent.nx.util.notifyLoadingEnd();
+
+                var html = '';
+                if (result && result.text) html = result.text;
+                //
+                html = parent.nx.web.cleanIn(html, ds, id, url);
+
+                // Open
+                    var editor = editormd("editor", {
+                        mode: 'markdown',
+                        width: '99%',
+                        height: '100%',
+                        markdown: html,
+                        path: '/viewers/editormd/lib/',
+                        toolbarIcons: 'nx',
+                        lang: {
+                            name: 'en'
+                        },
+                        imageUploadURL: url + up + '/ao/' + ds + '/' + id + ex,
+                        imageUpload: true,
+                        imageDefaultURL: url + dn + '/ao/' + ds + '/' + id + ex,
+                        onSave: function () {
+                                // Get the text
+                            var code = editor.getMarkdown();
+                            // Save
+                            parent.nx.util.serviceCall('AO.ObjectSet', {
+                                ds: ds,
+                                id: id,
+                                data: {
+                                    text: parent.nx.web.cleanOut(code, ds, id, url)
+                                }
+                            }, function () {
+                                var win = parent.nx.desktop.findWindow(winid);
+                                if (win) {
+                                    win.safeClose();;
+                                }
+                            });
+                        }
+                });
+
+                // Show
+                editor.show();
+            });
+        });
+    </script>
+</body>
+</html>

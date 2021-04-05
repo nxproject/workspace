@@ -18,19 +18,6 @@
         const ex = urlParams.get('ex');
         const list = urlParams.get('list');
 
-        const cleanOut = function (text) {
-            text = text || '';
-            text = text.replaceAll('http://developers.automizy.com/automizyemaileditor', '{{publicurl}}/viewers/automizy');
-            text = text.replaceAll(url, '{{publicurl}}');
-            return text;
-        };
-
-        const cleanIn = function (text) {
-            text = text || '';
-            text = text.replace(/{{publicurl}}/g, url);
-            return text;
-        };
-
         $AEE.d.config.url = url + '/viewers/automizy';
 
         $AEE.init().open().layoutReady(function () {
@@ -57,7 +44,7 @@
                         ds: ds,
                         id: id,
                         data: {
-                            text: cleanOut(code)
+                            text: parent.nx.web.cleanOut(code, ds, id, url)
                         }
                     }, function () { });
                 });
@@ -69,7 +56,7 @@
                         ds: ds,
                         id: id,
                         data: {
-                            text: cleanOut(code)
+                            text: parent.nx.web.cleanOut(code, ds, id, url)
                         }
                     }, function () {
                         var win = parent.nx.desktop.findWindow(winid);
@@ -83,7 +70,7 @@
                 var html = '';
                     if (result && result.text) html = result.text;
                     //
-                    html = cleanIn(html);
+                    html = parent.nx.web.cleanIn(html, ds, id, url);
                 // Load it
                 $AEE.setEditorCode(html);
             });

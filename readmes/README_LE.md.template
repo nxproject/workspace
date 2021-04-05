@@ -88,7 +88,7 @@ Statements are evaluated using a set of operations and functions:
 
 Directives are macro-like operations.  They are defined with the following format:
 
-[[definition]]
+{{definition}}
 
 There are two types of definitions:
 

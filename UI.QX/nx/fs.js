@@ -661,6 +661,43 @@ nx.fs = {
         });
     },
 
+    editMD: function (req) {
+
+        var self = this;
+
+        //
+        var path = '/ao/' + req.ds + '/' + req.id;
+        var winid = 'email_' + req.ds + '_' + req.id;
+
+        //
+        var urlParams = nx.web.urlStart('images', nx.util.loopbackURL() + '/f' + path + '/Upload');
+        var urlParams = nx.web.urlStart('winid', winid);
+        urlParams = nx.web.urlAdd('ds', req.ds, urlParams);
+        urlParams = nx.web.urlAdd('id', req.id, urlParams);
+        urlParams = nx.web.urlAdd('url', nx.util.loopbackURL(), urlParams);
+        urlParams = nx.web.urlAdd('up', '/fat', urlParams);
+        urlParams = nx.web.urlAdd('dn', '/f', urlParams);
+        urlParams = nx.web.urlAdd('list', '/fx/augallery', urlParams);
+        urlParams = nx.web.urlAdd('ex', '/Upload', urlParams);
+
+        // Show loader
+        nx.util.notifyLoadingStart();
+
+        //
+        nx.util.runTool('Webview', {
+            nxid: winid,
+            caption: req.caption,
+            icon: 'docx',
+            value: nx.util.loopbackURL() + '/viewers/editormd/index.html' + urlParams,
+            caller: req.caller,
+            chat: false,
+            adjustWidth: req.adjustWidth,
+            noCenter: req.noCenter,
+            topToolbar: req.topToolbar,
+            bottomToolbar: req.bottomToolbar
+        });
+    },
+
 };
 
 nx.web = {
@@ -682,7 +719,25 @@ nx.web = {
         // 
         return (prev || '') + delim + key + '=' + encodeURIComponent(value);
 
+    },
+
+    cleanIn: function (text, ds, id, url) {
+        text = text || '';
+        text = text.replaceAll('[[', '{{');
+        text = text.replaceAll(']]', '}}');
+        text = text.replace(/{{_documents}}/g, '{{publicurl}}/f/ao/' + ds + '/' + id);
+        text = text.replace(/{{publicurl}}/g, url);
+        return text;
+    },
+
+    cleanOut: function (text, ds, id, url) {
+        text = text || '';
+        text = text.replaceAll('http://developers.automizy.com/automizyemaileditor', '{{publicurl}}/viewers/automizy');
+        //text = text.replaceAll('{{publicurl}}/f/ao/' + ds + '/' + id, '{{_documents}}');
+        text = text.replaceAll(url, '{{publicurl}}');
+        return text;
     }
+
 };
 
 nx.SIO = {

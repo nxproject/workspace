@@ -79,6 +79,17 @@ namespace Proc.Docs
                         // Write
                         c_Coll.AddDirect(c_Values.ToSimpleString());
 
+                        // Get the to
+                        string sTo = c_Values.Get("x");
+                        // Do we have one?
+                        if (sTo.HasValue())
+                        {
+                            using (AO.AccessClass c_AE = new AccessClass(c_DBMgr, sTo))
+                            {
+                                c_AE.UpdateContactIn(c_Values.Get("t"));
+                            }
+                        }
+
                         // Get path
                         List<string> c_Path = store.GetAsJArray("path").ToList();
                         // Find the route
