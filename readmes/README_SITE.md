@@ -41,6 +41,7 @@ The Site Settings allow you to set the information that is global to the site:
 |Acct.Def.Alwd|The default allowed for accounts|
 |Billing Enabled|Is billing available|
 |Time Track|Is the time track option available|
+|Telemetry|Is the telemetry option available|
 |Quorum|Is the quorum option available|
 |IOT Enabled|Is the IOT option available|
 |Help root|The starting page for user defined help|
