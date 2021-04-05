@@ -150,7 +150,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.04a"))
+            if (ds.Definition.ReleaseChanged("2021.04.05a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -333,17 +333,9 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Facebook";
 
-                c_Field = ds.Definition["gpurl"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Google+";
-
                 c_Field = ds.Definition["liurl"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "LinkedIn";
-
-                c_Field = ds.Definition["igurl"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Instagram";
 
                 c_Field = ds.Definition["twitterurl"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
@@ -482,7 +474,7 @@ namespace Proc.AO.BuiltIn
                 c_VSocial.ClearFields();
 
                 // Map
-                c_VSocial.UseFields("fburl", "twitterurl", "gpurl", "liurl", "igurl");
+                c_VSocial.UseFields("fburl", "twitterurl", "liurl");
 
                 c_VSocial.Save();
             }

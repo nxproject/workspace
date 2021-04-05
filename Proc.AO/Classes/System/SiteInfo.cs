@@ -458,22 +458,10 @@ namespace Proc.AO
             set { this.SynchObject["fburl"] = value; }
         }
 
-        public string GooglePURL
-        {
-            get { return this.SynchObject["gpurl"]; }
-            set { this.SynchObject["gpurl"] = value; }
-        }
-
         public string LinkedInURL
         {
             get { return this.SynchObject["liurl"]; }
             set { this.SynchObject["liurl"] = value; }
-        }
-
-        public string InstagramURL
-        {
-            get { return this.SynchObject["igurl"]; }
-            set { this.SynchObject["igurl"] = value; }
         }
 
         public string TwitterURL

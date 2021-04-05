@@ -25,21 +25,35 @@ https://templatemo.com/tm-521-get-ready
      TYPOGRAPHY              
   -----------------------------------------*/
 
-  h1,h2,h3,h4,h5,h6 {
-    font-weight: 300;
-    line-height: inherit;
-  }
-
-h1 {
-    color: #608bcd;
-    font-size: 2em;
+h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
+    line-height: inherit;
+    color: #000000;
 }
 
-  h2 {
-    color: #353535;
-    font-size: 2em;
-  }
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 21px;
+}
+
+h3 {
+    font-size: 16px;
+}
+
+h4 {
+    font-size: 14px;
+}
+
+h5 {
+    font-size: 12px;
+}
+
+h6 {
+    font-size: 11px;
+}
 
   p {
     color: #757575;
@@ -51,29 +65,33 @@ h1 {
  /*---------------------------------------
        ECANDIDUS             
   -----------------------------------------*/
-  
-table { 
-	background-color:#FFFFE0;
-	border-collapse:collapse;
-	color:#000; 
-	font-size: 14px;
-    font-weight: normal;
-	width: 100%;
+
+table {
+    display: block;
+    width: 100%;
+    overflow: auto;
+    word-break: normal;
+    word-break: keep-all;
 }
-	
-th { 
-	background-color:#BDB76B;
-	color:white;
-}
-	
-td, th { 
-	padding:5px;
-	border:0; 
-}
-	
-td { 
-	border-bottom:1px dotted #BDB76B; 
-}
+
+    table th {
+        font-weight: bold;
+    }
+
+    table th,
+    table td {
+        padding: 6px 13px;
+        border: 1px solid #ddd;
+    }
+
+    table tr {
+        background-color: #fff;
+        border-top: 1px solid #ccc;
+    }
+
+        table tr:nth-child(2n) {
+            background-color: #f8f8f8;
+        }
 	
 pre {
 		background-color: #c0d46433;

@@ -1509,6 +1509,130 @@
     });
 })();
 
+// ECANDIDUS 2021-04-05
+(function () {
+    $AEE.ready(function () {
+
+        $AEE.blocks.push({
+            icon: 'telemetry.gif',
+            name: 'telemetry',
+            category: 'content',
+            title: $A.translate('Telemetry'),
+            drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
+                $block.addClass('aee-text-block-item');
+                var html = '<img src="{{publicurl}}" style="display: none;" />';
+                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
+
+                $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
+                $content.tinymce($AEE.settings.tinymceBlock);
+            }
+        });
+
+        $AEE.blocks.push({
+            icon: 'subject.gif',
+            name: 'subject',
+            category: 'content',
+            title: $A.translate('Subject'),
+            drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
+                $block.addClass('aee-text-block-item');
+                var html = '';
+                var text = $A.translate('{{subject}}');
+                for (var i = 0; i < 1; i++) {
+                    html += text;
+                }
+                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 16pt;"><b>' + html + '</b></span></div>';
+                var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
+
+                $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
+                $content.tinymce($AEE.settings.tinymceBlock);
+            }
+        });
+
+        $AEE.blocks.push({
+            icon: 'message.gif',
+            name: 'message',
+            category: 'content',
+            title: $A.translate('Message'),
+            drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
+                $block.addClass('aee-text-block-item');
+                var html = '';
+                var text = $A.translate('{{message}}');
+                for (var i = 0; i < 1; i++) {
+                    html += text;
+                }
+                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
+
+                $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
+                $content.tinymce($AEE.settings.tinymceBlock);
+            }
+        });
+
+        $AEE.blocks.push({
+            icon: 'attachments.gif',
+            name: 'attachments',
+            category: 'content',
+            title: $A.translate('Attachments'),
+            drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
+                $block.addClass('aee-text-block-item');
+                var html = '';
+                var text = $A.translate('<br />{{#if attachments}}<br />Attachments<br />{{ #each attachments }}<br />{{ this.caption }}: {{ this.href }}<br />{{/each}}<br />\{{/if}}<br />');
+                for (var i = 0; i < 1; i++) {
+                    html += text;
+                }
+                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
+
+                $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
+                $content.tinymce($AEE.settings.tinymceBlock);
+            }
+        });
+
+        $AEE.blocks.push({
+            icon: 'actions.gif',
+            name: 'actions',
+            category: 'content',
+            title: $A.translate('Actions'),
+            drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
+                $block.addClass('aee-text-block-item');
+                var html = '';
+                var text = $A.translate('<br />{{#if actions}}<br />{{#each actions}}<br />{{this.caption}} -- {{this.href}}<br />{{/each}}<br />{{/if}}<br />');
+                for (var i = 0; i < 1; i++) {
+                    html += text;
+                }
+                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
+
+                $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
+                $content.tinymce($AEE.settings.tinymceBlock);
+            }
+        });
+
+        $AEE.blocks.push({
+            icon: 'privacy.gif',
+            name: 'privacy',
+            category: 'content',
+            title: $A.translate('Privacy'),
+            drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
+                $block.addClass('aee-text-block-item');
+                var html = '';
+                var text = $A.translate('The content of this email is confidential and intended for the recipient specified in message only. It is strictly forbidden to share any part of this message with any third party, without a written consent of the sender. If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.');
+                for (var i = 0; i < 1; i++) {
+                    html += text;
+                }
+                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
+
+                $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
+                $content.tinymce($AEE.settings.tinymceBlock);
+            }
+        });
+
+    });
+})();
+// END ECANDIDUS
+
 (function () {
     $AEE.ready(function () {
 
@@ -2033,7 +2157,7 @@
 
                 $AEE.inputs.blockSettingsShareFacebook.check();
                 $AEE.inputs.blockSettingsShareTwitter.check();
-                $AEE.inputs.blockSettingsShareGoogleplus.check();
+                $AEE.inputs.blockSettingsSharInstagram.check();
                 $AEE.inputs.blockSettingsShareLinkedin.check();
                 $AEE.inputs.blockSettingsShareDistanceBetween.val(6);
                 $AEE.rebuildIcons();
@@ -2051,7 +2175,7 @@
 
         $AEE.elements.$shareFacebookIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-facebook.gif" />');
         $AEE.elements.$shareTwitterIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-twitter.gif" />');
-        $AEE.elements.$shareGoogleplusIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-googleplus.gif" />');
+        $AEE.elements.$sharInstagramIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-instagram.gif" />');
         $AEE.elements.$shareLinkedinIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-linkedin.gif" />');
 
         $AEE.rebuildIcons = function ($block, options) {
@@ -2069,8 +2193,8 @@
             if (options.twitter || $AEE.inputs.blockSettingsShareTwitter.checked()) {
                 icons.push('<a href="[{share_twitter}]" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-twitter.gif" class="aee-share-block-icons-twitter" /></a>');
             }
-            if (options.googleplus || $AEE.inputs.blockSettingsShareGoogleplus.checked()) {
-                icons.push('<a href="[{share_gplus}]" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-googleplus.gif" class="aee-share-block-icons-googleplus" /></a>');
+            if (options.instagram || $AEE.inputs.blockSettingsSharInstagram.checked()) {
+                icons.push('<a href="[{share_gplus}]" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-instagram.gif" class="aee-share-block-icons-instagram" /></a>');
             }
             if (options.linkedin || $AEE.inputs.blockSettingsShareLinkedin.checked()) {
                 icons.push('<a href="[{share_linkedin}]" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-linkedin.gif" class="aee-share-block-icons-linkedin" /></a>');
@@ -2102,9 +2226,9 @@
                 this.widget().css('padding', 0);
             }
         });
-        $AEE.inputs.blockSettingsShareGoogleplus = $A.newInput2({
+        $AEE.inputs.blockSettingsSharInstagram = $A.newInput2({
             type: 'checkbox',
-            labelBefore: $AEE.elements.$shareGoogleplusIcon,
+            labelBefore: $AEE.elements.$sharInstagramIcon,
             change: function () {
                 $AEE.rebuildIcons();
             },
@@ -2144,7 +2268,7 @@
         $AEE.forms.blockSettingsShare = $A.newForm().addInputs([
             $AEE.inputs.blockSettingsShareFacebook,
             $AEE.inputs.blockSettingsShareTwitter,
-            $AEE.inputs.blockSettingsShareGoogleplus,
+            $AEE.inputs.blockSettingsSharInstagram,
             $AEE.inputs.blockSettingsShareLinkedin,
             $AEE.inputs.blockSettingsShareDistanceBetween
         ]).drawTo($AEE.elements.$blockSettingsShareBox);
@@ -2843,6 +2967,12 @@
 
     $AEE.buildBlockList = function () {
         var blocksInSort = [
+            'subject',
+            'message',
+            'attachments',
+            'actions',
+            'privacy',
+            'telemetry',
             'image',
             'text',
             'title',
@@ -3123,7 +3253,7 @@
             var $iconsCell = $block.find('.aee-share-block-content-cell-icons:first');
             $AEE.inputs.blockSettingsShareFacebook.checked(($iconsCell.find('.aee-share-block-icons-facebook').length > 0));
             $AEE.inputs.blockSettingsShareTwitter.checked(($iconsCell.find('.aee-share-block-icons-twitter').length > 0));
-            $AEE.inputs.blockSettingsShareGoogleplus.checked(($iconsCell.find('.aee-share-block-icons-googleplus').length > 0));
+            $AEE.inputs.blockSettingsSharInstagram.checked(($iconsCell.find('.aee-share-block-icons-instagram').length > 0));
             $AEE.inputs.blockSettingsShareLinkedin.checked(($iconsCell.find('.aee-share-block-icons-linkedin').length > 0));
             $AEE.inputs.blockSettingsShareDistanceBetween.val($block.attr('data-space') || 6);
         } else if ($block.hasClass('aee-gallery-block-item')) {
