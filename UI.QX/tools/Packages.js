@@ -38,82 +38,100 @@ qx.Class.define('tools.Packages', {
                 icon: 'box',
 
                 items: [
-
                     {
-                        nxtype: 'string',
+                        nxtype: 'tabs',
                         top: 1,
                         left: 1,
-                        width: 'default.fieldWidth',
-                        label: 'Name'
-                    }, {
-                        nxtype: 'string',
-                        top: 2,
-                        left: 1,
-                        width: 'default.fieldWidth',
-                        label: 'Datasets'
-                    }, {
-                        nxtype: 'label',
-                        top: 3,
-                        left: 1,
-                        width: 'default.fieldWidth',
-                        label: 'Include'
-                    }, {
-                        nxtype: 'boolean',
-                        top: 4,
-                        left: 1,
-                        width: 'default.fieldWidth',
-                        label: 'Time Track Enabled'
-                    }, {
-                        nxtype: 'boolean',
-                        top: 5,
-                        left: 1,
-                        width: 'default.fieldWidth',
-                        label: 'IOT Enabled'
-                    }, {
-                        nxtype: 'keyword',
-                        top: 6,
-                        left: 1,
-                        width: 'default.fieldWidth',
-                        label: 'Help Root'
-                    }, {
-                        nxtype: 'button',
-                        top: 7,
-                        left: 1,
-                        width: 'default.fieldWidth',
-                        label: '',
-                        value:'Create',
-                        click: function (e) {
+                        width: 'default.tabWidth',
+                        height: 11,
+                        items: [
+                            {
+                                caption: 'Creation',
+                                items: [
+                                    {
+                                        nxtype: 'string',
+                                        top: 1,
+                                        left: 1,
+                                        width: 'default.fieldWidth',
+                                        label: 'Name'
+                                    }, {
+                                        nxtype: 'string',
+                                        top: 2,
+                                        left: 1,
+                                        width: 'default.fieldWidth',
+                                        label: 'Datasets'
+                                    }, {
+                                        nxtype: 'label',
+                                        top: 3,
+                                        left: 1,
+                                        width: 'default.fieldWidth',
+                                        label: 'Include'
+                                    }, {
+                                        nxtype: 'boolean',
+                                        top: 4,
+                                        left: 1,
+                                        width: 'default.fieldWidth',
+                                        label: 'Time Track Enabled'
+                                    }, {
+                                        nxtype: 'boolean',
+                                        top: 5,
+                                        left: 1,
+                                        width: 'default.fieldWidth',
+                                        label: 'IOT Enabled'
+                                    }, {
+                                        nxtype: 'keyword',
+                                        top: 6,
+                                        left: 1,
+                                        width: 'default.fieldWidth',
+                                        label: 'Help Root'
+                                    }, {
+                                        nxtype: 'button',
+                                        top: 7,
+                                        left: 1,
+                                        width: 'default.fieldWidth',
+                                        label: '',
+                                        value: 'Create',
+                                        click: function (e) {
 
-                            // Get the button
-                            var widget = nx.util.eventGetWidget(e);
+                                            // Get the button
+                                            var widget = nx.util.eventGetWidget(e);
 
-                            // Map window
-                            var win = nx.bucket.getWin(widget);
+                                            // Map window
+                                            var win = nx.bucket.getWin(widget);
 
-                            // Get values
-                            var name = win.getValue('Name');
-                            var dss = win.getValue('Datasets');
+                                            // Get values
+                                            var name = win.getValue('Name');
+                                            var dss = win.getValue('Datasets');
 
-                            if (win.getValue('Time Track Enabled') === 'y') dss += ' ^ttenabled-' + nx.desktop.user.getSIField('ttenabled');
-                            if (win.getValue('IOT Enabled') === 'y') dss += ' ^iotenabled-' + nx.desktop.user.getSIField('iotenabled');
-                            if (win.getValue('Help Root')) dss += ' ^helproot-' + nx.desktop.user.getSIField('helproot');
+                                            if (win.getValue('Time Track Enabled') === 'y') dss += ' ^ttenabled-' + nx.desktop.user.getSIField('ttenabled');
+                                            if (win.getValue('IOT Enabled') === 'y') dss += ' ^iotenabled-' + nx.desktop.user.getSIField('iotenabled');
+                                            if (win.getValue('Help Root')) dss += ' ^helproot-' + nx.desktop.user.getSIField('helproot');
 
-                            // Verify
-                            if (name && dss) {
-                                //
-                                nx.fs.download('/package/' + name + '/' + dss);
+                                            // Verify
+                                            if (name && dss) {
+                                                //
+                                                nx.fs.download('/package/' + name + '/' + dss);
 
-                                // Close
-                                win.safeClose();
+                                                // Close
+                                                win.safeClose();
+                                            }
+                                        }
+                                    }
+                                ]
+                            }, {
+                                caption: 'Use',
+                                items: [
+                                    {
+                                        nxtype: 'upload',
+                                        top: 1,
+                                        left: 1,
+                                        width: 'default.fieldWidth',
+                                        label: '',
+                                        path: '/package/ao/_pkgs'
+                                    }
+                                ]
                             }
-                        }
-                    }, {
-                        nxtype: 'upload',
-                        top: 9,
-                        left: 1,
-                        width: 'default.fieldWidth',
-                        label: '',
-                        path: '/package/ao/_pkgs'
+                        ]
                     }
                 ]
 

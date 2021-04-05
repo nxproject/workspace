@@ -1745,7 +1745,6 @@
     <Content Include="tools\Comm.js" />
     <Content Include="tools\Confirm.js" />
     <Content Include="tools\Datasets.js" />
-    <Content Include="tools\MakeSite.js" />
     <Content Include="tools\Object.js" />
     <Content Include="tools\Packages.js" />
     <Content Include="tools\TPTool.js" />

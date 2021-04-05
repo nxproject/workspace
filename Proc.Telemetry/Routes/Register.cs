@@ -74,10 +74,21 @@ namespace Proc.Docs
 
                         // Make the _id
                         c_Values.Set("_id", c_Values.ToSimpleString().MD5HashString());
-                        // Get the collection
-                        Proc.AO.CollectionClass c_Coll = c_DBMgr.DefaultDatabase[Proc.AO.DatabaseClass.DatasetTelemetryData].DataCollection;
-                        // Write
-                        c_Coll.AddDirect(c_Values.ToSimpleString());
+
+                        // Get the type
+                        string sType = c_Values.Get("t");
+
+                        // Get path
+                        List<string> c_Path = store.GetAsJArray("path").ToList();
+                        // Find the route
+                        RouteClass c_Route = call.Env.Router.Get(store, call.Request.HttpMethod, c_Path);
+                        if (c_Route != null)
+                        {
+                            // Update type
+                            sType = c_Route.Telemetry.IfEmpty(sType);
+                            // And to data
+                            c_Values.Set("t", sType);
+                        }
 
                         // Get the to
                         string sTo = c_Values.Get("x");
@@ -86,14 +97,16 @@ namespace Proc.Docs
                         {
                             using (AO.AccessClass c_AE = new AccessClass(c_DBMgr, sTo))
                             {
-                                c_AE.UpdateContactIn(c_Values.Get("t"));
+                                c_AE.UpdateContactIn(sType);
                             }
                         }
 
-                        // Get path
-                        List<string> c_Path = store.GetAsJArray("path").ToList();
-                        // Find the route
-                        RouteClass c_Route = call.Env.Router.Get(store, call.Request.HttpMethod, c_Path);
+                        // Get the collection
+                        Proc.AO.CollectionClass c_Coll = c_DBMgr.DefaultDatabase[Proc.AO.DatabaseClass.DatasetTelemetryData].DataCollection;
+                        // Write
+                        c_Coll.AddDirect(c_Values.ToSimpleString());
+
+                        // Do we have a new route?
                         if (c_Route != null)
                         {
                             // Reset the tree

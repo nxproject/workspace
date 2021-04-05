@@ -59,6 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		readmes\README_INFRA.md = readmes\README_INFRA.md
 		readmes\README_LE.md = readmes\README_LE.md
 		readmes\README_LE.md.template = readmes\README_LE.md.template
+		readmes\README_PKG.md = readmes\README_PKG.md
 		readmes\README_SETUP.md = readmes\README_SETUP.md
 		readmes\README_SITE.md = readmes\README_SITE.md
 		readmes\README_SVCS.md = readmes\README_SVCS.md
@@ -88,7 +89,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proc.Updater", "Proc.Update
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proc.Web", "Proc.Web\Proc.Web.csproj", "{B0CE0819-5F25-43FF-A056-26134192A41D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proc.Telemetry", "Proc.Telemetry\Proc.Telemetry.csproj", "{B5B61AA8-4B05-4887-8F09-B77EC576A52A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proc.Telemetry", "Proc.Telemetry\Proc.Telemetry.csproj", "{B5B61AA8-4B05-4887-8F09-B77EC576A52A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
