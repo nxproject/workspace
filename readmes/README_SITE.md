@@ -16,7 +16,7 @@ The Site Settings allow you to set the information that is global to the site:
 |Addr2|Extra address|
 |City|City|
 |State|State|
-|Zip|SIP code|
+|Zip|ZIP code|
 |Phone|Main phone number|
 |Fax|Main Fax number|
 |Tax ID|EIN|
