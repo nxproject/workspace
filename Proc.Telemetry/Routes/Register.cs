@@ -41,13 +41,14 @@ namespace Proc.Docs
     /// </summary>
     public class Register : RouteClass
     {
-        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "z", ":id", "?path?" };
+        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "z", ":id", ":target", "?path?" };
         public override void Call(HTTPCallClass call, StoreClass store)
         {
             call.Env.Debug();
 
             // Get
             string sID = store["id"];
+            string sUser = store["target"];
 
             // Must have an ID
             if (sID.HasValue())
@@ -71,6 +72,9 @@ namespace Proc.Docs
                         c_Values.Set("r", store.PathFromEntry("", "path"));
                         c_Values.Set("d", DateTime.Now.ToDBDate());
                         c_Values.Set("i", call.Request.RemoteEndPoint.Address.ToString());
+
+                        // Decode user
+                        c_Values.Set("x", sUser.FromBase64URL());
 
                         // Make the _id
                         c_Values.Set("_id", c_Values.ToSimpleString().MD5HashString());
@@ -97,7 +101,7 @@ namespace Proc.Docs
                         {
                             using (AO.AccessClass c_AE = new AccessClass(c_DBMgr, sTo))
                             {
-                                c_AE.UpdateContactIn(sType);
+                                c_AE.UpdateContactIn(c_Values.Get("s"), sType, c_Values.Get("c").IfEmpty());
                             }
                         }
 

@@ -56,6 +56,7 @@ namespace Proc.Communication
             string sMsg = store["message"];
             string sAtt = store["attachments"];
             string sTemplate = store["template"];
+            string sCampaign = store["campaign"];
 
             // Handle to
             JArray c_To = sTo.ToJArrayOptional();
@@ -91,6 +92,8 @@ namespace Proc.Communication
                 {
                     // Set the template
                     c_Msg.EMailTemplate = sTemplate;
+                    // And the campaign
+                    c_Msg.Campaign = sCampaign;
 
                     // Process recipients
                     for (int i = 0; i < c_To.Count; i++)

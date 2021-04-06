@@ -2152,12 +2152,11 @@
                 var $textCell = $('<td style="width:50%" class="aee-share-block-content-cell-text"></td>').appendTo($tr);
                 var $iconsCell = $('<td style="width:50%; padding:0 12px 0 12px; text-align:left" class="aee-share-block-content-cell-icons"></td>').appendTo($tr);
 
-                var html = '<div style="text-align: right;"><b><span style="font-family: arial, helvetica, sans-serif; font-size: 16pt;">' + $A.translate('Share this email!') + '</span></b></div>';
+                var html = '<div style="text-align: right;"><b><span style="font-family: arial, helvetica, sans-serif; font-size: 16pt;">' + $A.translate('Follow us! ') + '</span></b></div>';
                 var $content = $('<div contenteditable class="aee-text-block-content"></div>').html(html).appendTo($textCell);
 
                 $AEE.inputs.blockSettingsShareFacebook.check();
                 $AEE.inputs.blockSettingsShareTwitter.check();
-                $AEE.inputs.blockSettingsSharInstagram.check();
                 $AEE.inputs.blockSettingsShareLinkedin.check();
                 $AEE.inputs.blockSettingsShareDistanceBetween.val(6);
                 $AEE.rebuildIcons();
@@ -2175,7 +2174,6 @@
 
         $AEE.elements.$shareFacebookIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-facebook.gif" />');
         $AEE.elements.$shareTwitterIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-twitter.gif" />');
-        $AEE.elements.$sharInstagramIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-instagram.gif" />');
         $AEE.elements.$shareLinkedinIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-linkedin.gif" />');
 
         $AEE.rebuildIcons = function ($block, options) {
@@ -2187,17 +2185,17 @@
             var icons = [];
             var distance = $AEE.inputs.blockSettingsShareDistanceBetween.val();
 
-            if (options.facebook || $AEE.inputs.blockSettingsShareFacebook.checked()) {
-                icons.push('<a href="[{share_facebook}]" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-facebook.gif" class="aee-share-block-icons-facebook" /></a>');
+            if ($AEE.d.config.socialFacebook && $AEE.inputs.blockSettingsShareFacebook.checked()) {
+                var link = 'https://www.facebook.com/' + $AEE.d.config.socialFacebook;
+                icons.push('<a href="' + link + '" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-facebook.gif" class="aee-share-block-icons-facebook" /></a>');
             }
-            if (options.twitter || $AEE.inputs.blockSettingsShareTwitter.checked()) {
-                icons.push('<a href="[{share_twitter}]" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-twitter.gif" class="aee-share-block-icons-twitter" /></a>');
+            if ($AEE.d.config.socialTwitter && $AEE.inputs.blockSettingsShareTwitter.checked()) {
+                var link = 'http://twitter.com/' + $AEE.d.config.socialTwitter;
+                icons.push('<a href="' + link + '" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-twitter.gif" class="aee-share-block-icons-twitter" /></a>');
             }
-            if (options.instagram || $AEE.inputs.blockSettingsSharInstagram.checked()) {
-                icons.push('<a href="[{share_gplus}]" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-instagram.gif" class="aee-share-block-icons-instagram" /></a>');
-            }
-            if (options.linkedin || $AEE.inputs.blockSettingsShareLinkedin.checked()) {
-                icons.push('<a href="[{share_linkedin}]" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-linkedin.gif" class="aee-share-block-icons-linkedin" /></a>');
+            if ($AEE.d.config.socialLinkedIn && $AEE.inputs.blockSettingsShareLinkedin.checked()) {
+                var link = 'http://www.linkedin.com/' + $AEE.d.config.socialLinkedIn;
+                icons.push('<a href="' + link + '" onclick="return false;" style="text-decoration:none"><img src="' + $AEE.d.config.url + '/images/social-linkedin.gif" class="aee-share-block-icons-linkedin" /></a>');
             }
 
             $block.attr('data-space', distance);
@@ -2219,16 +2217,6 @@
         $AEE.inputs.blockSettingsShareTwitter = $A.newInput2({
             type: 'checkbox',
             labelBefore: $AEE.elements.$shareTwitterIcon,
-            change: function () {
-                $AEE.rebuildIcons();
-            },
-            create: function () {
-                this.widget().css('padding', 0);
-            }
-        });
-        $AEE.inputs.blockSettingsSharInstagram = $A.newInput2({
-            type: 'checkbox',
-            labelBefore: $AEE.elements.$sharInstagramIcon,
             change: function () {
                 $AEE.rebuildIcons();
             },
@@ -2268,7 +2256,6 @@
         $AEE.forms.blockSettingsShare = $A.newForm().addInputs([
             $AEE.inputs.blockSettingsShareFacebook,
             $AEE.inputs.blockSettingsShareTwitter,
-            $AEE.inputs.blockSettingsSharInstagram,
             $AEE.inputs.blockSettingsShareLinkedin,
             $AEE.inputs.blockSettingsShareDistanceBetween
         ]).drawTo($AEE.elements.$blockSettingsShareBox);
@@ -3253,7 +3240,6 @@
             var $iconsCell = $block.find('.aee-share-block-content-cell-icons:first');
             $AEE.inputs.blockSettingsShareFacebook.checked(($iconsCell.find('.aee-share-block-icons-facebook').length > 0));
             $AEE.inputs.blockSettingsShareTwitter.checked(($iconsCell.find('.aee-share-block-icons-twitter').length > 0));
-            $AEE.inputs.blockSettingsSharInstagram.checked(($iconsCell.find('.aee-share-block-icons-instagram').length > 0));
             $AEE.inputs.blockSettingsShareLinkedin.checked(($iconsCell.find('.aee-share-block-icons-linkedin').length > 0));
             $AEE.inputs.blockSettingsShareDistanceBetween.val($block.attr('data-space') || 6);
         } else if ($block.hasClass('aee-gallery-block-item')) {

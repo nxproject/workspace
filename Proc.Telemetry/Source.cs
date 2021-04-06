@@ -39,38 +39,40 @@ namespace Proc.Telemetry
     public class SourceClass : ChildOfClass<Proc.AO.ManagerClass>
     {
         #region Constructor
-        public SourceClass(Proc.AO.ManagerClass dbmgr)
+        public SourceClass(Proc.AO.ManagerClass dbmgr, string source, string sourcetype, string campaign = null)
             : base(dbmgr)
-        { }
+        {
+            // Set
+            JObject c_Values = new JObject();
+
+            c_Values.Set("s", source.IfEmpty());
+            c_Values.Set("t", sourcetype.IfEmpty());
+            c_Values.Set("c", campaign.IfEmpty());
+            c_Values.Set("e", DateTime.Now.ToDBDate());
+
+            // ID
+            this.ID = c_Values.ToSimpleString().MD5HashString();
+
+            // Fill
+            c_Values.Set("_id", this.ID);
+
+            // Dataset
+            AO.DatasetClass c_DS = this.Parent.DefaultDatabase[AO.DatabaseClass.DatasetTelemetry];
+            // Save
+            c_DS.DataCollection.AddDirect(c_Values.ToSimpleString());
+        }
         #endregion
 
         #region Properties
         /// <summary>
         /// 
-        /// The link values
+        /// Th telemetry ID
         /// 
         /// </summary>
-        private JObject Values { get; set; } = new JObject();
+        private string ID { get; set; }
         #endregion
 
         #region Methods
-        /// <summary>
-        /// 
-        /// Sets the base links
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="sourcetype"></param>
-        /// <param name="campaign"></param>
-        public void SetBase(string source, string sourcetype, string campaign = null)
-        {
-            // Set
-            this.Values.Set("s", source.IfEmpty());
-            this.Values.Set("t", sourcetype.IfEmpty());
-            this.Values.Set("c", campaign.IfEmpty());
-            this.Values.Set("e", DateTime.Now.ToDBDate());
-        }
-
         /// <summary>
         /// 
         /// Process the HTML/SMS
@@ -79,21 +81,13 @@ namespace Proc.Telemetry
         /// <param name="text"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public string Process(string text, string to = null)
+        public string FormatURL(string url, string to = null)
         {
-            // Set
-            this.Values.Set("x", to.IfEmpty());
-
-            // Create ID
-            string sID = this.Values.ToSimpleString().MD5HashString();
+            // UserID
+            string sUser = to.IfEmpty("broadcast").ToBase64URL();
 
             // Replace
-            text = text.Replace("{{publicurl}}", "{{publicurl}}/z/{0}".FormatString(sID));
-
-            // Write out
-            // TBD
-
-            return text;
+            return url.Replace("{{publicurl}}", "{{publicurl}}/z/{0}/{1}".FormatString(this.ID, sUser));
         }
         #endregion
     }

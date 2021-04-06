@@ -33,7 +33,12 @@
 
                 // Set the paths
                 $AEE.d.config.imageUploadApiUrl = url + up + '/ao/' + ds + '/' + id + ex;
-                $AEE.d.config.imageGalleryApiUrl = url + list + '/ao/' + ds + '/' + id + ex;
+                    $AEE.d.config.imageGalleryApiUrl = url + list + '/ao/' + ds + '/' + id + ex;
+
+                    // Social
+                    $AEE.d.config.socialFacebook = urlParams.get('sifb');
+                    $AEE.d.config.socialLinkedIn = urlParams.get('sili');
+                    $AEE.d.config.socialTwitter = urlParams.get('sitw');
 
                 // And the callbacks
                 $AEE.save(function () {

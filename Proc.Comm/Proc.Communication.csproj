@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Proc.AO\Proc.AO.csproj" />
+    <ProjectReference Include="..\Proc.Telemetry\Proc.Telemetry.csproj" />
   </ItemGroup>
 
   <ItemGroup>

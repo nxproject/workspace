@@ -67,6 +67,9 @@ namespace Proc.Communication
 
         private void Initialize()
         {
+            //
+            this.ID = "".GUID();
+
             // 
             this.Subject = "A message for you";
             this.Message = "";
@@ -87,6 +90,13 @@ namespace Proc.Communication
         #endregion
 
         #region Properties
+        /// <summary>
+        /// 
+        /// The message ID
+        /// 
+        /// </summary>
+        private string ID { get; set; }
+
         /// <summary>
         /// 
         /// The working values
@@ -207,20 +217,6 @@ namespace Proc.Communication
         /// </summary>
         public string EMailTemplate { get; set; }
 
-        private string IEMailHTML { get; set; }
-        public string EMailHTML
-        {
-            get
-            {
-                if (this.IEMailHTML == null)
-                {
-                    this.IEMailHTML = this.FormatEMail(this.EMailTemplate);
-                }
-
-                return this.IEMailHTML;
-            }
-        }
-
         /// <summary>
         /// 
         /// The template to use for SMS
@@ -228,22 +224,19 @@ namespace Proc.Communication
         /// </summary>
         public string SMSTemplate { get; set; }
 
-        private string ISMSHTML { get; set; }
-        public string SMSHTML
-        {
-            get
-            {
-                if (this.ISMSHTML == null)
-                {
-                    this.ISMSHTML = this.FormatSMS(this.SMSTemplate);
-                }
-
-                return this.ISMSHTML;
-            }
-        }
-
         // Callbacks
         public Action<eAddressClass, eReturnClass> UserCB { get; set; }
+
+        /// <summary>
+        /// 
+        /// The campaign
+        /// 
+        /// </summary>
+        public string Campaign { get; set; }
+
+        // Telemetry
+        private Proc.Telemetry.SourceClass EMailTelemetry { get; set; }
+        private Proc.Telemetry.SourceClass SMSTelemetry { get; set; }
         #endregion
 
         #region Methods
@@ -258,6 +251,30 @@ namespace Proc.Communication
             return this.Values.ToString();
         }
 
+        private Proc.Telemetry.SourceClass GetEMailTelemetry()
+        {
+            // New?
+            if(this.EMailTelemetry == null)
+            {
+                // TBD
+                this.EMailTelemetry = new Telemetry.SourceClass(this.Parent.DBManager, this.ID, "EMail", this.Campaign);
+            }
+
+            return this.EMailTelemetry;
+        }
+
+        private Proc.Telemetry.SourceClass GetSMSTelemetry()
+        {
+            // New?
+            if (this.SMSTelemetry == null)
+            {
+                // TBD
+                this.SMSTelemetry = new Telemetry.SourceClass(this.Parent.DBManager, this.ID, "SMS", this.Campaign);
+            }
+
+            return this.SMSTelemetry;
+        }
+
         /// <summary>
         /// 
         /// Generic send
@@ -268,10 +285,7 @@ namespace Proc.Communication
         {
             eReturnClass c_Ans = new eReturnClass();
 
-            // Rset messages
-            this.IEMailHTML = null;
-            this.ISMSHTML = null;
-
+            // Loop thru
             foreach (eAddressClass sTo in this.To.Users.Values)
             {
                 if (this.UserCB != null)
@@ -343,7 +357,7 @@ namespace Proc.Communication
                 string sFriendly = this.Parent.User.Displayable;
 
                 // Format
-                string sHTML = this.EMailHTML;
+                string sHTML = this.FormatMessage(to.To, this.EMailTemplate, "EMailHolder.html");
 
                 //Validate
                 if (sEMailLogin.HasValue() && sEMailPwd.HasValue())
@@ -405,7 +419,7 @@ namespace Proc.Communication
                 string sUserPhone = this.Parent.User.TwilioPhone;
 
                 // Format
-                string sHTML = this.SMSHTML;
+                string sHTML = this.FormatMessage(to.To, this.SMSTemplate, "SMSTemplate.html");
 
                 //
                 string sResp = c_Client.SendSMS(
@@ -523,7 +537,7 @@ namespace Proc.Communication
             // And update
             using(AO.AccessClass c_AE = new AO.AccessClass(c_Mgr, user ))
             {
-                c_AE.UpdateContactOut(via);
+                c_AE.UpdateContactOut(this.ID, via, this.Campaign.IfEmpty());
             }
         }
         #endregion
@@ -536,7 +550,7 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="template"></param>
         /// <returns></returns>
-        private string FormatEMail(string template)
+        private string FormatMessage(string to, string template, string defaulttemplate)
         {
             this.Parent.Parent.Debug();
 
@@ -554,7 +568,7 @@ namespace Proc.Communication
                     if (sText.HasValue())
                     {
                         // Format
-                        sTemplate = this.GetResource("EMailHolder.html").FromBytes().Replace("{0}", sText);
+                        sTemplate = this.GetResource(defaulttemplate).FromBytes().Replace("{0}", sText);
                     }
                 }
             }
@@ -573,11 +587,21 @@ namespace Proc.Communication
                 // Loop thru
                 foreach (eAttachmenClass c_File in this.Attachments.Documents)
                 {
+                    // Get the URL
+                    string sURL = c_File.Document.URL;
+
+                    // Do we do telemetry?
+                    if (this.Parent.SiteInfo.TelemetryEnabled)
+                    {
+                        // Convert
+                        sURL = this.GetEMailTelemetry().FormatURL(sURL, to);
+                    }
+
                     //
                     JObject c_Entry = new JObject();
 
                     c_Entry.Set("color", "#3498db");
-                    c_Entry.Set("href", c_File.Document.URL);
+                    c_Entry.Set("href", sURL);
                     c_Entry.Set("caption", c_File.Label.IfEmpty(c_File.Document.Name).ToUpper());
 
                     c_Attachments.Add(c_Entry);
@@ -594,11 +618,21 @@ namespace Proc.Communication
                 // Loop thru
                 foreach (eActionClass c_Action in this.Actions.Actions)
                 {
+                    // Get the URL
+                    string sURL = c_Action.URL;
+
+                    // Do we do telemetry?
+                    if (this.Parent.SiteInfo.TelemetryEnabled)
+                    {
+                        // Convert
+                        sURL = this.GetSMSTelemetry().FormatURL(sURL, to);
+                    }
+                    
                     //
                     JObject c_Entry = new JObject();
 
                     c_Entry.Set("color", c_Action.Color);
-                    c_Entry.Set("href", c_Action.URL);
+                    c_Entry.Set("href", sURL);
                     c_Entry.Set("caption", c_Action.Caption.ToUpper());
 
                     c_Actions.Add(c_Entry);
@@ -634,21 +668,6 @@ namespace Proc.Communication
                     return Expression.Eval(c_Ctx, value).Value;
                 }
             });
-        }
-
-        /// <summary>
-        /// 
-        /// Formats the message in HTML format
-        /// 
-        /// </summary>
-        /// <param name="template"></param>
-        /// <returns></returns>
-        private string FormatSMS(string template)
-        {
-            string sTemplate = template;
-            if (!sTemplate.HasValue()) sTemplate = this.GetResource("SMSTemplate.html").FromBytes();
-
-            return this.FormatEMail(sTemplate);
         }
 
         /// <summary>

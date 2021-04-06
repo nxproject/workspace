@@ -1175,10 +1175,6 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
                 c_Field.Label = "Created On";
 
-                c_Field = ds.Definition["x"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Target";
-
                 c_Field.SaveParent();
             }
 
@@ -1314,7 +1310,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillAccess(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.05c"))
+            if (ds.Definition.ReleaseChanged("2021.04.06b"))
             {
                 //
                 ds.Definition.Caption = "Account";
@@ -1378,7 +1374,60 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.AutoCaps;
                 c_Field.Label = "Ctc in via";
 
+                c_Field = ds.Definition["lastctcinsource"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Ctc in source";
+
+                c_Field = ds.Definition["lastctcincmp"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Ctc in cmp";
+
+                c_Field = ds.Definition["lastctcoutsource"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Ctc out source";
+
+                c_Field = ds.Definition["lastctcoutcmp"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Ctc out cmp";
+
                 c_Field.SaveParent();
+            }
+
+            // Pages
+            Definitions.ViewClass c_VInfo = ds.View("info");
+            if (c_VInfo.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VInfo.Caption = "Info";
+
+                //
+                c_VInfo.UseFields("name", "pwd", "allowed", "lastin", "subscribedon", "childof");
+
+                c_VInfo.Save();
+            }
+
+            Definitions.ViewClass c_VOut = ds.View("out");
+            if (c_VOut.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VOut.Caption = "Outbound";
+
+                //
+                c_VOut.UseFields("lastctcout", "lastctcoutsource", "lastctcoutvia", "lastctcoutcmp");
+
+                c_VOut.Save();
+            }
+
+            Definitions.ViewClass c_VIn = ds.View("in");
+            if (c_VIn.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VIn.Caption = "Inbound";
+
+                //
+                c_VIn.UseFields("lastctcin", "lastctcinsource", "lastctcinvia", "lastctcincmp");
+
+                c_VIn.Save();
             }
 
             // Add the view
@@ -1388,10 +1437,10 @@ namespace Proc.AO.BuiltIn
                 // Clear
                 c_VDefault.ClearFields();
 
-                // And from definition
-                c_VDefault.UseFields("name", "pwd", "allowed", 
-                    "subscribedon", "lastin", "lastctcout", "lastctcoutvia", "lastctcin", "lastctcinvia",
-                    "childof");
+                // Make the tabs
+                Definitions.ViewFieldClass c_Field = c_VDefault.AsTabs("tabs");
+                c_Field.Height = "10";
+                c_Field.Views = "info out in";
 
                 c_VDefault.Save();
             }

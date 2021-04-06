@@ -643,6 +643,11 @@ nx.fs = {
         urlParams = nx.web.urlAdd('list', '/fx/augallery', urlParams);
         urlParams = nx.web.urlAdd('ex', '/Upload', urlParams);
 
+        // From SI
+        urlParams = nx.web.urlAdd('sifb', nx.desktop.user.getSIField('fburl'), urlParams);
+        urlParams = nx.web.urlAdd('sili', nx.desktop.user.getSIField('liurl'), urlParams);
+        urlParams = nx.web.urlAdd('sitw', nx.desktop.user.getSIField('twitterurl'), urlParams);
+
         // Show loader
         nx.util.notifyLoadingStart();
 

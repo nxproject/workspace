@@ -54,7 +54,7 @@ namespace Proc.AO
         #endregion
 
         #region Methods
-        public void UpdateContactIn(string method)
+        public void UpdateContactIn(string source, string type, string campaign)
         {
             // Query access
             using (AO.QueryClass c_Qry = new AO.QueryClass(this.Parent.DefaultDatabase[AO.DatabaseClass.DatasetBillAccess].DataCollection))
@@ -68,13 +68,16 @@ namespace Proc.AO
                 {
                     // Update last contact out
                     c_PO["lastctcin"] = DateTime.Now.ToDBDate();
-                    c_PO["lastctcinvia"] = method;
+                    c_PO["lastctcinsource"] = source;
+                    c_PO["lastctcinvia"] = type;
+                    c_PO["lastctcincmp"] = campaign;
+
                     c_PO.Save();
                 }
             }
         }
 
-        public void UpdateContactOut(string method)
+        public void UpdateContactOut(string source, string type, string campaign)
         {
             // Query access
             using (AO.QueryClass c_Qry = new AO.QueryClass(this.Parent.DefaultDatabase[AO.DatabaseClass.DatasetBillAccess].DataCollection))
@@ -88,7 +91,9 @@ namespace Proc.AO
                 {
                     // Update last contact out
                     c_PO["lastctcout"] = DateTime.Now.ToDBDate();
-                    c_PO["lastctcoutvia"] = method;
+                    c_PO["lastctcoutsource"] = source;
+                    c_PO["lastctcoutvia"] = type;
+                    c_PO["lastctcoutcmp"] = campaign;
                     c_PO.Save();
                 }
             }
