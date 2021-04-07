@@ -1577,11 +1577,12 @@
             drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
                 $block.addClass('aee-text-block-item');
                 var html = '';
-                var text = $A.translate('<br />{{#if attachments}}<br />Attachments<br />{{ #each attachments }}<br />{{ this.caption }}: {{ this.href }}<br />{{/each}}<br />\{{/if}}<br />');
+                //var text = $A.translate('<br />{{#if attachments}}<br /><b>Attachments</b><br />{{ #each attachments }}<br />{{ this.caption }}: {{ this.href }}<br />{{/each}}<br />\{{/if}}<br />');
+                var text = $A.translate('{{#if attachments}}<br /><b>Attachments</b><br />{{#each attachments}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize;">{{this.caption}}</a><br />{{/each}}{{/if}}<br />');
                 for (var i = 0; i < 1; i++) {
                     html += text;
                 }
-                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                html = '<div style="text-align: center;"><span style="width: 100%; font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
                 var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
 
                 $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
@@ -1597,7 +1598,7 @@
             drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
                 $block.addClass('aee-text-block-item');
                 var html = '';
-                var text = $A.translate('<br />{{#if actions}}<br />{{#each actions}}<br />{{this.caption}} -- {{this.href}}<br />{{/each}}<br />{{/if}}<br />');
+                var text = $A.translate('{{#if actions}}<br />{{#each actions}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};">{{this.caption}}</a>{{/each}}{{/if}}<br />');
                 for (var i = 0; i < 1; i++) {
                     html += text;
                 }

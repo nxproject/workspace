@@ -110,6 +110,12 @@ namespace Proc.AO.Definitions
             set { this.Document.SetField("label", value); }
         }
 
+        public string LabelWidth
+        {
+            get { return this.Document.GetField("labelWidth"); }
+            set { this.Document.SetField("labelWidth", value); }
+        }
+
         public bool ReadOnly
         {
             get { return this.Document.GetField("ro").FromDBBoolean(); }
@@ -238,6 +244,12 @@ namespace Proc.AO.Definitions
             this.Parent.Save();
         }
 
+        /// <summary>
+        /// 
+        /// copies the field to another one
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
         public void CopyTo(ViewFieldClass target)
         {
             // Loop thru
@@ -245,6 +257,18 @@ namespace Proc.AO.Definitions
             {
                 target.Document.Set(sField, this.Document.GetValue(sField));
             }
+        }
+
+        /// <summary>
+        /// 
+        /// Sets a property
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void Set(string key, string value)
+        {
+            this.Document.SetField(key, value);
         }
         #endregion
     }

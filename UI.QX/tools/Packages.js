@@ -61,32 +61,14 @@ qx.Class.define('tools.Packages', {
                                         width: 'default.fieldWidth',
                                         label: 'Datasets'
                                     }, {
-                                        nxtype: 'label',
+                                        nxtype: 'boolean',
                                         top: 3,
                                         left: 1,
                                         width: 'default.fieldWidth',
-                                        label: 'Include'
-                                    }, {
-                                        nxtype: 'boolean',
-                                        top: 4,
-                                        left: 1,
-                                        width: 'default.fieldWidth',
-                                        label: 'Time Track Enabled'
-                                    }, {
-                                        nxtype: 'boolean',
-                                        top: 5,
-                                        left: 1,
-                                        width: 'default.fieldWidth',
-                                        label: 'IOT Enabled'
-                                    }, {
-                                        nxtype: 'keyword',
-                                        top: 6,
-                                        left: 1,
-                                        width: 'default.fieldWidth',
-                                        label: 'Help Root'
+                                        label: 'Include Site Settings'
                                     }, {
                                         nxtype: 'button',
-                                        top: 7,
+                                        top: 6,
                                         left: 1,
                                         width: 'default.fieldWidth',
                                         label: '',
@@ -103,9 +85,7 @@ qx.Class.define('tools.Packages', {
                                             var name = win.getValue('Name');
                                             var dss = win.getValue('Datasets');
 
-                                            if (win.getValue('Time Track Enabled') === 'y') dss += ' ^ttenabled-' + nx.desktop.user.getSIField('ttenabled');
-                                            if (win.getValue('IOT Enabled') === 'y') dss += ' ^iotenabled-' + nx.desktop.user.getSIField('iotenabled');
-                                            if (win.getValue('Help Root')) dss += ' ^helproot-' + nx.desktop.user.getSIField('helproot');
+                                            if (win.getValue('Include Site Settings') === 'y') dss += ' ^^';
 
                                             // Verify
                                             if (name && dss) {

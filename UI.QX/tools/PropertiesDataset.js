@@ -121,8 +121,16 @@ qx.Class.define('tools.PropertiesDataset', {
                                             aoFld: 'childdss',
                                             value: dsdef.childdss
                                         }, {
-                                            nxtype: 'keyword',
+                                            nxtype: 'string',
                                             top: 9,
+                                            left: 1,
+                                            width: 'default.fieldWidth',
+                                            label: 'Related DSS/field',
+                                            aoFld: 'relateddss',
+                                            value: dsdef.relateddss
+                                        }, {
+                                            nxtype: 'keyword',
+                                            top: 10,
                                             left: 1,
                                             width: 'default.fieldWidth',
                                             label: 'Task@Save',

@@ -94,17 +94,35 @@ namespace Proc.AO
                         // Settings
                         if (sDSRaw.StartsWith("^"))
                         {
-                            // Split
-                            string sValue = "";
-                            string sKey = sDSRaw;
-                            int iPos = sKey.IndexOf("-");
-                            if (iPos != -1)
+                            // All?
+                            if (sDSRaw.IsSameValue("^^"))
                             {
-                                sValue = sKey.Substring(iPos + 1);
-                                sKey = sKey.Substring(0, iPos);
+                                // Make list
+                                List<string> c_TBD = "ttenabled helproot acctenabled billenabled quorumenabled acctdefallowed teleenabled".SplitSpaces();
+                                // Loop thru
+                                foreach(string sKey in c_TBD)
+                                {
+                                    // Get the value
+                                    string sValue = this.Parent.SiteInfo[sKey];
+
+                                    // Add
+                                    this.AddEntry(c_Pkg, "^" + sKey, sValue);
+                                }
                             }
-                            // Add
-                            this.AddEntry(c_Pkg, sKey, sValue);
+                            else
+                            {
+                                // Split
+                                string sValue = "";
+                                string sKey = sDSRaw;
+                                int iPos = sKey.IndexOf("-");
+                                if (iPos != -1)
+                                {
+                                    sValue = sKey.Substring(iPos + 1);
+                                    sKey = sKey.Substring(0, iPos);
+                                }
+                                // Add
+                                this.AddEntry(c_Pkg, sKey, sValue);
+                            }
                         }
                         else
                         {

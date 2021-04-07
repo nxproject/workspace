@@ -10,9 +10,14 @@ Packages is a tool that allows for the import and export of information:
 |-|-|
 |Name|The name of the package|
 |Datasets|The list of datasets to include in the package.  If a dataset is prefixed with a plus sign ***+***, the data and documents are included in the package|
-|Time track|Is the time tack enabled flag to be included|
-|IOT enabled|Is the IOT enabled flag to be included|
-|Help root|The name of the starting help screen|
+|Include Site Settings|Includes the following sits settings:|
+||Time track|
+||Hep root|
+||Accounts|
+||Account default allowed|
+||Billing|
+||Quorums|
+||Telemetry|
 |Create|Creates the package|
 
 ## Importing

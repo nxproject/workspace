@@ -254,7 +254,7 @@ namespace Proc.Communication
         private Proc.Telemetry.SourceClass GetEMailTelemetry()
         {
             // New?
-            if(this.EMailTelemetry == null)
+            if (this.EMailTelemetry == null)
             {
                 // TBD
                 this.EMailTelemetry = new Telemetry.SourceClass(this.Parent.DBManager, this.ID, "EMail", this.Campaign);
@@ -535,7 +535,7 @@ namespace Proc.Communication
             // Get the manage
             AO.ManagerClass c_Mgr = this.Parent.Parent.Globals.Get<AO.ManagerClass>();
             // And update
-            using(AO.AccessClass c_AE = new AO.AccessClass(c_Mgr, user ))
+            using (AO.AccessClass c_AE = new AO.AccessClass(c_Mgr, user))
             {
                 c_AE.UpdateContactOut(this.ID, via, this.Campaign.IfEmpty());
             }
@@ -563,20 +563,14 @@ namespace Proc.Communication
                 using (AO.ObjectClass c_Template = this.Parent.DBManager.DefaultDatabase[AO.DatabaseClass.DatasetEMailTemplates][template])
                 {
                     // Get the text
-                    string sText = c_Template["text"];
-                    // Any?
-                    if (sText.HasValue())
-                    {
-                        // Format
-                        sTemplate = this.GetResource(defaulttemplate).FromBytes().Replace("{0}", sText);
-                    }
+                    sTemplate = c_Template["text"];
                 }
             }
 
             // Handle missing
-            if (!template.HasValue())
+            if (!sTemplate.HasValue())
             {
-                sTemplate = this.GetResource("EMailTemplate.html").FromBytes();
+                sTemplate = this.GetResource(defaulttemplate).FromBytes();
             }
 
             // Build attachment list
@@ -627,7 +621,7 @@ namespace Proc.Communication
                         // Convert
                         sURL = this.GetSMSTelemetry().FormatURL(sURL, to);
                     }
-                    
+
                     //
                     JObject c_Entry = new JObject();
 
@@ -642,8 +636,10 @@ namespace Proc.Communication
             }
 
             // Predined
+            this.Values.Set("publicurl", this.Parent.Parent.ReachableURL);
             this.Values.Set("sys", this.Parent.Database.SiteInfo.AsJObject);
             this.Values.Set("user", this.Parent.User.SynchObject);
+            this.Values.Set("env", this.Parent.Parent.AsParameters);
 
             // Data
             if (this.Object != null)
@@ -659,11 +655,11 @@ namespace Proc.Communication
 
             return sTemplate.Handlebars(this.Values, delegate (string value, object thisvalue)
             {
-                // Save this
-                this.Values.Set("this", thisvalue);
+                    // Save this
+                    this.Values.Set("this", thisvalue);
 
-                // Eval
-                using (Context c_Ctx = new Context(this.Parent.Parent, vars: this.Values))
+                    // Eval
+                    using (Context c_Ctx = new Context(this.Parent.Parent, vars: this.Values))
                 {
                     return Expression.Eval(c_Ctx, value).Value;
                 }

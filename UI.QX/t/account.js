@@ -24,9 +24,9 @@ qx.Class.define('t.account', {
 
     members: {
 
-        caption: 'Set Password',
+        caption: 'Display',
 
-        icon: 'key',
+        icon: 'monitor',
 
         setup: function (widget, button) { },
 
@@ -41,12 +41,22 @@ qx.Class.define('t.account', {
                 //
                 var win = nx.bucket.getWin(widget);
                 // Save
-                win.save();
+                win.save(function () {
 
-                // Get the params
-                var params = nx.bucket.getParams(widget);
+                    // Get values
+                    var ds = win.getObjValue("_ds");
+                    var id = win.getObjValue("_id");
 
-                var a = 1;
+                    // Make the account id
+                    var aid = md5(nx.util.makeID(ds, id) + '/' + value).toUpperCase();
+
+                    // View
+                    nx.fs.viewObject({
+                        ds: '_billaccess',
+                        id: aid
+                    });
+
+                });
             }
 
         }

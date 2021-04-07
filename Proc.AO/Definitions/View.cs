@@ -191,18 +191,6 @@ namespace Proc.AO.Definitions
 
         /// <summary>
         /// 
-        /// Copies to a different view
-        /// 
-        /// </summary>
-        /// <param name="view"></param>
-        //public void CopyTo(ViewClass view)
-        //{
-        //    // Copy document
-        //    this.Document.CopyTo(view.Document, null, "_"];
-        //}
-
-        /// <summary>
-        /// 
         /// Removes a field
         /// 
         /// </summary>
@@ -451,6 +439,33 @@ namespace Proc.AO.Definitions
             //
             this.Object.LoadFrom(data);
             this.Fields = this.Object.GetAsBObject("fields");
+        }
+        #endregion
+
+        #region File list
+        /// <summary>
+        /// 
+        /// Sets a property for multiple fields
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="fields"></param>
+        public void Set(string key, string value, params string[] fields)
+        {
+            //
+            List<string> c_Fields = new List<string>(fields);
+            // If none, use all
+            if(c_Fields.Count == 0)
+            {
+                c_Fields = new List<string>(this.Cache.Keys);
+            }
+
+            // Loop thru
+            foreach(string sField in c_Fields)
+            {
+                this[sField].Set(key, value);
+            }
         }
         #endregion
     }

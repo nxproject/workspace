@@ -701,13 +701,24 @@ namespace Proc.AO.Definitions
 
         /// <summary>
         /// 
+        /// The related DS/field map
+        /// 
+        /// </summary>
+        public string RelatedDSs
+        {
+            get { return this.Object["relateddss"]; }
+            set { this.Object["relateddss"] = value; }
+        }
+
+        /// <summary>
+        /// 
         /// The child DS map
         /// 
         /// </summary>
         public string ChildDSs
         {
-            get { return this.Object["childdss"]; }
-            set { this.Object["childdss"] = value; }
+            get { return this.Object["relateddss"]; }
+            set { this.Object["relateddss"] = value; }
         }
 
         /// <summary>

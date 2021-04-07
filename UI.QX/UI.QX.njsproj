@@ -98,6 +98,7 @@
     <Content Include="c\_tree.js" />
     <Content Include="c\_window.js" />
     <Content Include="c\zip.js" />
+    <Content Include="t\account.js" />
     <Content Include="t\xemaileditor.js" />
     <Content Include="viewers\automizy\automizy-email-editor.css" />
     <Content Include="viewers\automizy\automizy-email-editor.js" />
@@ -1769,7 +1770,6 @@
     <Content Include="tools\SystemSettings.js" />
     <Content Include="tools\UserSettings.js" />
     <Content Include="tools\Webview.js" />
-    <Content Include="t\account.js" />
     <Content Include="t\addressvalid.js" />
     <Content Include="t\addressweb.js" />
     <Content Include="t\addresseeweb.js" />

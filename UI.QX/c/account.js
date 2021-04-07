@@ -26,13 +26,25 @@ qx.Class.define('c.account', {
 
         // Call base
         if (nx.desktop.user.getIsSelector('EMAIL') && nx.desktop.user.getIsSelector('TWILIO')) {
-            this.base(arguments, new t.account(), new f.emailphone(), new t.phoneweb(), new t.smsweb(), new t.email(), new t.emailweb(), new c._textfield());
+            this.base(arguments, new f.emailphone(), new t.account(), 
+                new t.email(), new t.emailweb(),
+                new t.phonesms(), new t.smsweb(), new t.phonecall(), new t.phoneweb(), 
+                new c._textfield()); 
         } else if (nx.desktop.user.getIsSelector('EMAIL')) {
-            this.base(arguments, new t.account(), new f.emailphone(), new t.phoneweb(), new t.smsweb(), new t.email(), new t.emailweb(), new c._textfield());
+            this.base(arguments, new f.emailphone(), new t.account(), 
+                new t.email(), new t.emailweb(),
+                new t.phonesms(), new t.smsweb(), new t.phoneweb(), 
+                new c._textfield());
         } else if (nx.desktop.user.getIsSelector('TWILIO')) {
-            this.base(arguments, new t.account(), new f.emailphone(), new t.phonecall(), new t.phoneweb(), new t.phonesms(), new t.smsweb(), new t.emailweb(), new c._textfield());
+            this.base(arguments, new f.emailphone(), new t.account(), 
+                new t.emailweb(),
+                new t.phonesms(), new t.smsweb(), new t.phonecall(), new t.phoneweb(), 
+                new c._textfield());
         } else {
-            this.base(arguments, new t.account(), new f.emailphone(), new t.phoneweb(), new t.smsweb(), new t.emailweb(), new c._textfield());
+            this.base(arguments, new f.emailphone(), new t.account(), 
+                new t.emailweb(),
+                new t.smsweb(), new t.phoneweb(),
+                new c._textfield());
         }
 
     },

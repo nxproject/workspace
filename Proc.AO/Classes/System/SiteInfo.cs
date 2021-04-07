@@ -300,6 +300,13 @@ namespace Proc.AO
         }
         #endregion
 
+        #region Indexer
+        public string this[string key]
+        {
+            get { return this.SynchObject[key]; }
+        }
+        #endregion
+
         #region Internal
         /// <summary>
         /// 

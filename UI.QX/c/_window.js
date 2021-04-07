@@ -1459,6 +1459,25 @@ qx.Class.define('c._window', {
 
         },
 
+        /**
+         * 
+         * Getsthe value from the object
+         * 
+         * @param {any} field
+         */
+        getObjValue: function (field) {
+
+            var self = this;
+
+            var ans;
+
+            if (self._aoobject) {
+                ans = self._aoobject.values[field];
+            }
+
+            return ans;
+        },
+
         // ---------------------------------------------------------
         //
         // FORMS
