@@ -67,9 +67,6 @@ namespace Proc.Communication
 
         private void Initialize()
         {
-            //
-            this.ID = "".GUID();
-
             // 
             this.Subject = "A message for you";
             this.Message = "";
@@ -95,7 +92,7 @@ namespace Proc.Communication
         /// The message ID
         /// 
         /// </summary>
-        private string ID { get; set; }
+        //private string ID { get; set; }
 
         /// <summary>
         /// 
@@ -251,25 +248,25 @@ namespace Proc.Communication
             return this.Values.ToString();
         }
 
-        private Proc.Telemetry.SourceClass GetEMailTelemetry()
+        private Proc.Telemetry.SourceClass GetEMailTelemetry(string source)
         {
             // New?
             if (this.EMailTelemetry == null)
             {
                 // TBD
-                this.EMailTelemetry = new Telemetry.SourceClass(this.Parent.DBManager, this.ID, "EMail", this.Campaign);
+                this.EMailTelemetry = new Telemetry.SourceClass(this.Parent.DBManager, source, "EMail", this.Campaign);
             }
 
             return this.EMailTelemetry;
         }
 
-        private Proc.Telemetry.SourceClass GetSMSTelemetry()
+        private Proc.Telemetry.SourceClass GetSMSTelemetry(string source)
         {
             // New?
             if (this.SMSTelemetry == null)
             {
                 // TBD
-                this.SMSTelemetry = new Telemetry.SourceClass(this.Parent.DBManager, this.ID, "SMS", this.Campaign);
+                this.SMSTelemetry = new Telemetry.SourceClass(this.Parent.DBManager, source, "SMS", this.Campaign);
             }
 
             return this.SMSTelemetry;
@@ -393,7 +390,7 @@ namespace Proc.Communication
                         result.Log(to);
 
                         // Update contact out
-                        this.UpdateLstOut(to.To, "EMail");
+                        this.UpdateLstOut(this.EMailTemplate, to.To, "EMail");
                     }
                 }
             }
@@ -437,7 +434,7 @@ namespace Proc.Communication
                     result.Log(to);
 
                     // Update contact out
-                    this.UpdateLstOut(to.To, "SMS");
+                    this.UpdateLstOut(this.SMSTemplate, to.To, "SMS");
                 }
             }
         }
@@ -470,7 +467,7 @@ namespace Proc.Communication
                     result.Log(to);
 
                     // Update contact out
-                    this.UpdateLstOut(to.To, "Voice");
+                    this.UpdateLstOut("", to.To, "Voice");
                 }
             }
         }
@@ -530,14 +527,14 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="user"></param>
         /// <param name="via"></param>
-        private void UpdateLstOut(string user, string via)
+        private void UpdateLstOut(string user, string via, string template)
         {
             // Get the manage
             AO.ManagerClass c_Mgr = this.Parent.Parent.Globals.Get<AO.ManagerClass>();
             // And update
             using (AO.AccessClass c_AE = new AO.AccessClass(c_Mgr, user))
             {
-                c_AE.UpdateContactOut(this.ID, via, this.Campaign.IfEmpty());
+                c_AE.UpdateContactOut(template, via, this.Campaign.IfEmpty());
             }
         }
         #endregion
@@ -588,7 +585,7 @@ namespace Proc.Communication
                     if (this.Parent.SiteInfo.TelemetryEnabled)
                     {
                         // Convert
-                        sURL = this.GetEMailTelemetry().FormatURL(sURL, to);
+                        sURL = this.GetEMailTelemetry(template).FormatURL(sURL, to);
                     }
 
                     //
@@ -619,7 +616,7 @@ namespace Proc.Communication
                     if (this.Parent.SiteInfo.TelemetryEnabled)
                     {
                         // Convert
-                        sURL = this.GetSMSTelemetry().FormatURL(sURL, to);
+                        sURL = this.GetSMSTelemetry(template).FormatURL(sURL, to);
                     }
 
                     //

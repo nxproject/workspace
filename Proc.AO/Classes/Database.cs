@@ -48,8 +48,10 @@ namespace Proc.AO
         public const string DatasetGroup = "_group";
         public const string DatasetTagged = "_tagged";
         public const string DatasetTaggedDetail = "_taggeddet";
+
         public const string DatasetTelemetry = "_telemetry";
         public const string DatasetTelemetryData = "_telemetrydata";
+        public const string DatasetTelemetryCampaign = "_telemetrycampaign";
 
         public const string DatasetBillAccess = "_billaccess";
         public const string DatasetBiilCharge = "_billcharge";
@@ -517,6 +519,7 @@ namespace Proc.AO
                 {
                     this.AssureDataset(DatabaseClass.DatasetTelemetry);
                     this.AssureDataset(DatabaseClass.DatasetTelemetryData);
+                    this.AssureDataset(DatabaseClass.DatasetTelemetryCampaign);
                 }
             }
         }

@@ -28,6 +28,10 @@ qx.Class.define('t.xmdeditor', {
 
         icon: 'pencil',
 
+        allowed: function (widget, cb) {
+            cb(true);
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {

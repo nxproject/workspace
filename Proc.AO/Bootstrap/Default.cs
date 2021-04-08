@@ -96,6 +96,10 @@ namespace Proc.AO.BuiltIn
                     ds.Define_TelemetryData();
                     break;
 
+                case DatabaseClass.DatasetTelemetryCampaign:
+                    ds.Define_TelemetryCampaign();
+                    break;
+
 
                 case DatabaseClass.DatasetBillAccess:
                     ds.Define_BillAccess();
@@ -1198,11 +1202,11 @@ namespace Proc.AO.BuiltIn
         private static void Define_TelemetryData(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.07a"))
+            if (ds.Definition.ReleaseChanged("2021.04.07b"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Telemetry Data");
-                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Placeholder = "#datesortable([d])# [t]:[x] [r]";
                 ds.Definition.Privileges = "v";
                 ds.Definition.Icon = ds.Definition.Icon.IfEmpty("asterisk_orange");
                 ds.Definition.StartGroup = "System";
@@ -1250,7 +1254,12 @@ namespace Proc.AO.BuiltIn
 
                 // Must be done last
                 ds.Definition.AnalyzerAllow = true;
-                ds.Definition.AnalyzerBy = ds.Definition.FieldNames.JoinSpaces();
+                // Get the fields
+                List<string> c_Fields = ds.Definition.FieldNames;
+                // Remove source
+                c_Fields.RemoveAt(0);
+                // Save
+                ds.Definition.AnalyzerBy = c_Fields.JoinSpaces();
 
                 c_Field.SaveParent();
             }
@@ -1266,6 +1275,54 @@ namespace Proc.AO.BuiltIn
                 c_VDefault.FromFields();
                 // They are all read only
                 c_VDefault.Set("ro", true.ToDBBoolean());
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_TelemetryCampaign(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.04.07b"))
+            {
+                //
+                ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Telemetry Campaign");
+                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "code";
+                ds.Definition.Icon = ds.Definition.Icon.IfEmpty("music");
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "702";
+                ds.Definition.Selector = "TELEMETRY";
+
+                // Restart
+                ds.Definition.ClearFields();
+
+                // 
+                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.AutoCaps;
+                c_Field.Label = "Name";
+
+                c_Field = ds.Definition["desc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+                c_Field.Label = "Description";
+
+                c_Field = ds.Definition["active"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "Active";
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
 
                 c_VDefault.Save();
             }

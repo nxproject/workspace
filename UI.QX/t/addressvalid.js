@@ -28,6 +28,10 @@ qx.Class.define('t.addressvalid', {
 
         icon: 'pin',
 
+        allowed: function (widget, cb) {
+            cb(nx.desktop.user.getSIField('psapi'));
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {

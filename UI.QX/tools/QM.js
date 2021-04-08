@@ -44,15 +44,16 @@ qx.Class.define('tools.QM', {
                         nxtype: virt ? 'string' : 'user',
                         top: 1,
                         left: 1,
-                        width: 10,
+                        width: 'default.fieldWidth',
                         label: 'To',
                         value: req.to,
                         ro: virt ? 'y' : 'n'
                     }, {
-                        nxtype: 'string',
+                        nxtype: 'textarea',
                         top: 2,
                         left: 1,
-                        width: 20,
+                        width: 'default.fieldWidth',
+                        height: 'default.textareaHeight',
                         label: 'Message'
                     }
                 ],

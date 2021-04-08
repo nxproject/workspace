@@ -29,7 +29,7 @@ qx.Class.define('tools.Comm', {
         // This is what you override
         do: function (req) {
 
-        // Set the template
+            // Set the template
             switch (req.fsfn) {
                 case 'email':
                     req.template = '_emailtemplates';
@@ -44,7 +44,7 @@ qx.Class.define('tools.Comm', {
                     cols: 'code'
                 }, function (result) {
                     // Any?
-                        if (result && result.data && result.data.length) {
+                    if (result && result.data && result.data.length) {
                         // Empty
                         var choices = [];
                         // Loop thru
@@ -53,20 +53,31 @@ qx.Class.define('tools.Comm', {
                             choices.push(entry.code);
                         });
                         // Call
-                        tools.Comm.display(req, choices);
+                        tools.Comm.campaign(req, choices);
                     } else {
-                        // Plain
-                        tools.Comm.display(req);
+                        // No choices
+                        tools.Comm.campaign(req);
                     }
                 });
             } else {
-                // Plain
-                tools.Comm.display(req);
+                // No choices allowed
+                tools.Comm.campaign(req);
             }
 
         },
 
-        display: function (req, choices) {
+        campaign: function (req, choices) {
+
+            if (nx.desktop.user.getSIField('teleenabled') === 'y') {
+                // TBD
+                // _telemetrycampaign
+            } else {
+                // No campaihgns allowed
+                tools.Comm.display(req, choices);
+            }
+        },
+
+        display: function (req, choices, campaigns) {
 
             var row = 1;
             var items = [];
@@ -89,16 +100,18 @@ qx.Class.define('tools.Comm', {
                 label: 'Subject'
             });
             row++;
+            var h = nx.default.get('default.textareaHeight');;
             items.push({
-                nxtype: 'string',
+                nxtype: 'textarea',
                 top: row,
                 left: 1,
                 width: 'default.fieldWidth',
+                height: h,
                 label: 'Message'
             });
+            row += h;
 
             if (choices && choices.length) {
-                row++;
                 items.push({
                     nxtype: 'combobox',
                     top: row,
@@ -107,6 +120,19 @@ qx.Class.define('tools.Comm', {
                     label: 'Template',
                     choices: choices
                 });
+                row++;
+            }
+
+            if (campaigns && campaigns.length) {
+                items.push({
+                    nxtype: 'combobox',
+                    top: row,
+                    left: 1,
+                    width: 'default.fieldWidth',
+                    label: 'Campaign',
+                    choices: campaigns
+                });
+                row++;
             }
 
             nx.desktop.addWindow({
@@ -148,7 +174,7 @@ qx.Class.define('tools.Comm', {
                                     subject: subj,
                                     message: msg,
                                     attachments: req.attachments,
-                                    template: template ||''
+                                    template: template || ''
                                 });
 
                                 // Close

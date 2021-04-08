@@ -28,11 +28,11 @@ qx.Class.define('t.allowed', {
 
         icon: 'cursor',
 
-        setup: function (widget, button) {
-
-            var self = this;
-
+        allowed: function (widget, cb) {
+            cb(true);
         },
+
+        setup: function (widget, button) { },
 
         click: function (widget) {
 

@@ -654,6 +654,7 @@ nx.default = {
 
     _defaults: {
         fieldWidth: 20,
+        textareaHeight: 5,
         pickWidth: 25,
         pickHeight: 20,
         signatureHeight: 10,

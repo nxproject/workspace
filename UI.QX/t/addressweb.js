@@ -28,6 +28,10 @@ qx.Class.define('t.addressweb', {
 
         icon: nx.setup.viaWebIcon,
 
+        allowed: function (widget, cb) {
+            cb(nx.desktop.user.getSIField('psapi'));
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {

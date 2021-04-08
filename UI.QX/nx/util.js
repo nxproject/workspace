@@ -294,23 +294,39 @@ nx.util = {
 
                                     // Add any tools
                                     if (entry.tools && entry.tools.length) {
-                                        // Add separator
-                                        subMenu.addSeparator();
+                                    // Flag sep needed
+                                        var sep = true;
                                         // Loop
                                         entry.tools.forEach(function (tool) {
                                             // Sub menu?
                                             if (tool.items) {
-                                                // Add the child button
-                                                var fnbutton = new qx.ui.menu.Button(tool.label, nx.util.getIcon(tool.icon));
-                                                // Sub-menu
-                                                var subMenuX = new c._menu();
-                                                // Link in
-                                                self.createMenu(subMenuX, tool.items, widget);
-                                                // Map
-                                                fnbutton.setMenu(subMenuX);
-                                                // And add
-                                                subMenu.add(button);
+                                            // Any?
+                                                if (tool.items.length) {
+                                                    if (sep) {
+                                                        // Flag
+                                                        sep = false;
+                                                        // Add separator
+                                                        subMenu.addSeparator();
+                                                    }
+                                                    // Add the child button
+                                                    var fnbutton = new qx.ui.menu.Button(tool.label, nx.util.getIcon(tool.icon));
+                                                    // Sub-menu
+                                                    var subMenuX = new c._menu();
+                                                    // Link in
+                                                    self.createMenu(subMenuX, tool.items, widget);
+                                                    // Map
+                                                    fnbutton.setMenu(subMenuX);
+                                                    // And add
+                                                    subMenu.add(button);
+                                                }
                                             } else {
+                                            // Separator?
+                                                if (sep) {
+                                                // Flag
+                                                    sep = false;
+                                                    // Add separator
+                                                    subMenu.addSeparator();
+                                                }
                                                 // Must have a label
                                                 if (nx.util.hasValue(tool.label)) {
                                                     // Add the button
@@ -1191,30 +1207,50 @@ nx.util = {
         //
         var defs = [];
 
-        // Create holder
-        var menu = new c._menu();
-        // Loop thru
-        tools.forEach(function (def) {
-            // Make the button
-            var button = new qx.ui.menu.Button(def.caption);
-            // Add it
-            menu.add(button);
-            // Link
-            nx.bucket.setWidget(button, widget);
-            // Setup
-            def.setup(widget, button);
-            // Configure
-            nx.setup.__component(button, {
-                icon: def.icon || '',
-                listeners: {
-                    click: function (e) {
-                        def.click(nx.util.eventGetWidget(e));
+        // Any?
+        if (tools && tools.length) {
+            // Create holder
+            var menu = new c._menu();
+            // Loop thru
+            for (var i = 0; i < tools.length; i++) {
+                // Get
+                var def = tools[i];
+                // Can we use it?
+                def.allowed(widget, function (ok) {
+                    if (ok) {
+                        // Make the button
+                        var button = new qx.ui.menu.Button(def.caption);
+                        // Save the callback
+                        nx.bucket.setItem(button, 'cb', def.click);
+                        // Add it
+                        menu.add(button);
+                        // Link
+                        nx.bucket.setWidget(button, widget);
+                        // Setup
+                        def.setup(widget, button);
+                        // Configure
+                        nx.setup.__component(button, {
+                            icon: def.icon || '',
+                            listeners: {
+                                click: function (e) {
+                                    var cb = nx.bucket.getItem(e.getTarget(), 'cb');
+                                    if (cb) {
+                                        cb(nx.util.eventGetWidget(e));
+                                    }
+                                }
+                            }
+                        });
                     }
-                }
-            });
-        });
-        // Set
-        nx.util.setContextMenu(widget, menu);
+
+                    // Last?
+                    if (i == (tools.length - 1)) {
+                        // Set
+                        nx.util.setContextMenu(widget, menu);
+                    }
+                });
+            };
+
+        }
 
     },
 

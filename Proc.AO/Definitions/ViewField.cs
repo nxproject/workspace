@@ -53,6 +53,12 @@ namespace Proc.AO.Definitions
                 if (c_Field != null)
                 {
                     if (c_Field.Label.HasValue()) this.Label = c_Field.Label;
+                    switch(c_Field.Type)
+                    {
+                        case DatasetFieldClass.FieldTypes.TextArea:
+                            if (this.Height.IsSameValue("1")) this.Height = "default.textareaHeight";
+                            break;
+                    }
                 }
 
                 // Mark as new

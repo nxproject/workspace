@@ -16,7 +16,7 @@
 
 ************************************************************************ */
 
-qx.Class.define('t.smsweb', {
+qx.Class.define('t.quickmessage', {
 
     extend: qx.core.Object,
 
@@ -24,28 +24,19 @@ qx.Class.define('t.smsweb', {
 
     members: {
 
-        caption: nx.setup.viaWeb + 'SMS',
+        caption: 'Quick Message',
 
-        icon: nx.setup.viaWebIcon,
+        icon: 'lightning',
 
         allowed: function (widget, cb) {
-            cb(true);
+            cb(false);
         },
 
         setup: function (widget, button) { },
 
         click: function (widget) {
 
-            var value = widget.getValue();
-            if (nx.util.hasValue(value) && nx.util.isPhone(value)) {
-
-                var data = 'sms:' + value;
-
-                nx.util.runTool('QR', {
-                    data: data,
-                    caption: nx.setup.viaWeb + 'SMS'
-                });
-            }
+            alert('ok');
 
         }
     }

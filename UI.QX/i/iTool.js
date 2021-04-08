@@ -24,6 +24,8 @@ qx.Interface.define('i.iTool', {
 
         icon: null,
 
+        allowed: function (widget, cb) { },
+
         setup: function (widget, button) { },
 
         click: function (widget) { }

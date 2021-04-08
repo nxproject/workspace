@@ -28,6 +28,10 @@ qx.Class.define('t.link', {
 
         icon: 'cursor',
 
+        allowed: function (widget, cb) {
+            cb(true);
+        },
+
         setup: function (widget, button) {
 
             var self = this;

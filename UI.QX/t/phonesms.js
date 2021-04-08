@@ -28,6 +28,10 @@ qx.Class.define('t.phonesms', {
 
         icon: 'phone',
 
+        allowed: function (widget, cb) {
+            cb(nx.desktop.user.getIsSelector('TWILIO'));
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {

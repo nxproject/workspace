@@ -28,6 +28,10 @@ qx.Class.define('t.email', {
 
         icon: 'email',
 
+        allowed: function (widget, cb) {
+            cb(nx.desktop.user.getIsSelector('EMAIL'));
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {
