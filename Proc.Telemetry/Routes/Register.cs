@@ -41,87 +41,129 @@ namespace Proc.Docs
     /// </summary>
     public class Register : RouteClass
     {
-        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "z", ":id", ":target", "?path?" };
+        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "zd", ":id", ":target", "?path?" };
         public override void Call(HTTPCallClass call, StoreClass store)
         {
-            call.Env.Debug();
+            // Get path
+            List<string> c_Path = store.GetAsJArray("path").ToList();
+            // Find the route
+            RouteClass c_Route = call.Env.Router.Get(store, call.Request.HttpMethod, c_Path);
 
-            // Get
-            string sID = store["id"];
-            string sUser = store["target"];
-
-            // Must have an ID
-            if (sID.HasValue())
+            try
             {
-                // Get database manager
-                Proc.AO.ManagerClass c_DBMgr = call.Env.Globals.Get<Proc.AO.ManagerClass>();
+                // Get
+                string sID = store["id"];
+                string sUser = store["target"];
 
-                // Make query
-                using (QueryClass c_Qry = new QueryClass(c_DBMgr.DefaultDatabase[Proc.AO.DatabaseClass.DatasetTelemetry].DataCollection))
+                // Must have an ID
+                if (sID.HasValue())
                 {
-                    // By ID
-                    c_Qry.AddByID(sID);
-                    // Get
-                    List<AO.ObjectClass> c_Poss = c_Qry.FindObjects(1);
-                    // Any?
-                    if (c_Poss.Count == 1)
+                    // Get database manager
+                    Proc.AO.ManagerClass c_DBMgr = call.Env.Globals.Get<Proc.AO.ManagerClass>();
+
+                    // Make data block
+                    Proc.Telemetry.DataClass c_Data = new Telemetry.DataClass(c_DBMgr.DefaultDatabase, sID);
+
+                    // Get the type
+                    string sType = c_Data.Via;
+
+                    if (c_Route != null)
                     {
-                        // Get values
-                        JObject c_Values = c_Poss[0].AsJObject;
-                        // Add
-                        c_Values.Set("r", store.PathFromEntry("", "path"));
-                        c_Values.Set("d", DateTime.Now.ToDBDate());
-                        c_Values.Set("i", call.Request.RemoteEndPoint.Address.ToString());
+                        // Update type
+                        sType = c_Route.Telemetry.IfEmpty(sType);
+                        // And to data
+                        c_Data.Via = sType;
+                    }
 
-                        // Decode user
-                        c_Values.Set("x", sUser.FromBase64URL());
+                    // Add
+                    c_Data.AddTransaction(sUser, true,
+                                            store.PathFromEntry("", "path"),
+                                            call.Request.RemoteEndPoint.Address.ToString());
 
-                        // Make the _id
-                        c_Values.Set("_id", c_Values.ToSimpleString().MD5HashString());
-
-                        // Get the type
-                        string sType = c_Values.Get("t");
-
-                        // Get path
-                        List<string> c_Path = store.GetAsJArray("path").ToList();
-                        // Find the route
-                        RouteClass c_Route = call.Env.Router.Get(store, call.Request.HttpMethod, c_Path);
-                        if (c_Route != null)
+                    // Do we have one?
+                    if (!c_Data.IsBroadcast)
+                    {
+                        using (AO.AccessClass c_AE = new AccessClass(c_DBMgr, c_Data.To))
                         {
-                            // Update type
-                            sType = c_Route.Telemetry.IfEmpty(sType);
-                            // And to data
-                            c_Values.Set("t", sType);
-                        }
-
-                        // Get the to
-                        string sTo = c_Values.Get("x");
-                        // Do we have one?
-                        if (sTo.HasValue())
-                        {
-                            using (AO.AccessClass c_AE = new AccessClass(c_DBMgr, sTo))
-                            {
-                                c_AE.UpdateContactIn(c_Values.Get("s"), sType, c_Values.Get("c").IfEmpty());
-                            }
-                        }
-
-                        // Get the collection
-                        Proc.AO.CollectionClass c_Coll = c_DBMgr.DefaultDatabase[Proc.AO.DatabaseClass.DatasetTelemetryData].DataCollection;
-                        // Write
-                        c_Coll.AddDirect(c_Values.ToSimpleString());
-
-                        // Do we have a new route?
-                        if (c_Route != null)
-                        {
-                            // Reset the tree
-                            call.RouteTree = c_Path;
-                            // Call the route
-                            c_Route.Call(call, store);
+                            c_AE.UpdateContactIn(c_Data.Template.IfEmpty(), sType.IfEmpty(), c_Data.Campaign.IfEmpty());
                         }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                call.Env.LogException("At Register", e);
+            }
 
+            // Do we have a new route?
+            if (c_Route != null)
+            {
+                // Reset the tree
+                call.RouteTree = c_Path;
+                // Call the route
+                c_Route.Call(call, store);
+            }
+
+        }
+    }
+
+    public class RegisterTelemetry : RouteClass
+    {
+
+        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "zt", ":id", ":target", "?path?" };
+        public override void Call(HTTPCallClass call, StoreClass store)
+        {
+            call.Env.Debug();
+
+            // Make the folder path
+            string sPath = "".WorkingDirectory().CombinePath("ui." + call.Env.UI.Replace("+", "").ToLower(), "viewers", "automizy", "images").AdjustPathToOS();
+
+            // Get the full path
+            sPath = store.PathFromEntry(sPath, "path");
+            string sFile = sPath.GetFileNameFromPath();
+
+            try
+            {
+                // Get
+                string sID = store["id"];
+                string sUser = store["target"];
+
+                // Must have an ID
+                if (sID.HasValue())
+                {
+                    // Get database manager
+                    Proc.AO.ManagerClass c_DBMgr = call.Env.Globals.Get<Proc.AO.ManagerClass>();
+
+                    // Make data block
+                    Proc.Telemetry.DataClass c_Data = new Telemetry.DataClass(c_DBMgr.DefaultDatabase, sID);
+
+                    // Get the type
+                    string sType = (sFile.Contains("nxproject") ? "Telemetry" : "Social");
+                    // And to data
+                    c_Data.Via = sType;
+
+                    // Add
+                    c_Data.AddTransaction(sUser, true,
+                                            sPath.GetFileNameFromPath(),
+                                            call.Request.RemoteEndPoint.Address.ToString());
+
+                    // Do we have one?
+                    if (!c_Data.IsBroadcast)
+                    {
+                        using (AO.AccessClass c_AE = new AccessClass(c_DBMgr, c_Data.To))
+                        {
+                            c_AE.UpdateContactIn(c_Data.Template.IfEmpty(), sType.IfEmpty(), c_Data.Campaign.IfEmpty());
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                call.Env.LogException("At RegisterTelemetry", e);
+            }
+
+            // Always deliver
+            call.RespondWithUIFile(sPath);
         }
     }
 }

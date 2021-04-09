@@ -32,6 +32,11 @@ qx.Class.define('t.vin', {
             cb(true);
         },
 
+        when: function (widget, button) {
+            //
+            nx.contextMenu.ifHasValue(widget, button);
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {

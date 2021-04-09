@@ -32,6 +32,11 @@ qx.Class.define('t.phonecall', {
             cb(nx.desktop.user.getIsSelector('TWILIO'));
         },
 
+        when: function (widget, button) {
+            //
+            nx.contextMenu.isPhone(widget, button);
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {
@@ -39,9 +44,17 @@ qx.Class.define('t.phonecall', {
             var value = widget.getValue();
             if (nx.util.hasValue(value) && nx.util.isPhone(value)) {
 
-                nx.util.serviceCall('Communication.Process', {
-                    cmd: 'voice',
-                    to: value
+                var win = nx.bucket.getWin(widget);
+                var params = nx.bucket.getParams(win);
+
+                // Save
+                win.save(function () {
+                    // Call
+
+                    nx.util.serviceCall('Communication.Process', {
+                        cmd: 'voice',
+                        to: value
+                    });
                 });
 
             }

@@ -38,7 +38,6 @@ namespace Proc.AO
         public const string DatasetSys = "_sys";
         public const string DatasetHelp = "_help";
         public const string DatasetWeb = "_web";
-        public const string DatasetEMailTemplates = "_emailtemplates";
         public const string DatasetUser = "_user";
         public const string DatasetAllowed = "_allowed";
         public const string DatasetCookies = "_cookies";
@@ -46,10 +45,13 @@ namespace Proc.AO
         public const string DatasetWallet = "_wallet";
         public const string DatasetCron = "_cron";
         public const string DatasetGroup = "_group";
+
+        public const string DatasetEMailTemplates = "_emailtemplates";
+        public const string DatasetQuickMessages = "_quickmessages";
+
         public const string DatasetTagged = "_tagged";
         public const string DatasetTaggedDetail = "_taggeddet";
 
-        public const string DatasetTelemetry = "_telemetry";
         public const string DatasetTelemetryData = "_telemetrydata";
         public const string DatasetTelemetryCampaign = "_telemetrycampaign";
 
@@ -491,6 +493,7 @@ namespace Proc.AO
                 this.AssureDataset(DatabaseClass.DatasetHelp);
                 this.AssureDataset(DatabaseClass.DatasetWeb);
                 this.AssureDataset(DatabaseClass.DatasetEMailTemplates);
+                this.AssureDataset(DatabaseClass.DatasetQuickMessages);
 
                 //
                 SiteInfoClass c_SI = this.SiteInfo;
@@ -517,7 +520,6 @@ namespace Proc.AO
                 // Telemetry
                 if(c_SI.TelemetryEnabled)
                 {
-                    this.AssureDataset(DatabaseClass.DatasetTelemetry);
                     this.AssureDataset(DatabaseClass.DatasetTelemetryData);
                     this.AssureDataset(DatabaseClass.DatasetTelemetryCampaign);
                 }

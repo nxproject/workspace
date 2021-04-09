@@ -88,6 +88,17 @@ namespace Proc.AO.Definitions
             set { this.Object["icon"] = value; }
         }
 
+        /// <summary>
+        /// 
+        /// Selected at start
+        /// 
+        /// </summary>
+        public bool Selected
+        {
+            get { return this.Object["selected"].FromDBBoolean(); }
+            set { this.Object["selected"] = value.ToDBBoolean(); }
+        }
+
         /// 
         /// The All/Any
         /// 

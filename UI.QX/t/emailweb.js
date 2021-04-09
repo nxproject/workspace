@@ -32,6 +32,11 @@ qx.Class.define('t.emailweb', {
             cb(true);
         },
 
+        when: function (widget, button) {
+            //
+            nx.contextMenu.isEMail(widget, button);
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {

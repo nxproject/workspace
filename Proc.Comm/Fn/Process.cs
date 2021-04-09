@@ -65,7 +65,7 @@ namespace Proc.Communication
 
             // Create preference
             eAddressClass.AddressTypes eType = eAddressClass.AddressTypes.User;
-            switch(sFn)
+            switch (sFn)
             {
                 case "voice":
                     eType = eAddressClass.AddressTypes.Voice;
@@ -87,8 +87,8 @@ namespace Proc.Communication
             // Make the context
             using (AO.ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, null, null, call.UserInfo.Name))
             {
-               // Make the message
-                using(eMessageClass c_Msg = new eMessageClass(c_Ctx))
+                // Make the message
+                using (eMessageClass c_Msg = new eMessageClass(c_Ctx))
                 {
                     // Set the template
                     c_Msg.EMailTemplate = sTemplate;
@@ -99,7 +99,7 @@ namespace Proc.Communication
                     for (int i = 0; i < c_To.Count; i++)
                     {
                         string sWkg = c_To.Get(i);
-                        if(sWkg.HasValue()) c_Msg.To.Add(sWkg, eType);
+                        if (sWkg.HasValue()) c_Msg.To.Add(sWkg, eType);
                     }
 
                     // Fill

@@ -26,10 +26,12 @@ qx.Interface.define('i.iTool', {
 
         allowed: function (widget, cb) { },
 
+        when: function (widget, button) { },
+
         setup: function (widget, button) { },
 
         click: function (widget) { }
-
+       
     }
 
 });

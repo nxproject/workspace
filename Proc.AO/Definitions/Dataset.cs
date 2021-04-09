@@ -717,8 +717,8 @@ namespace Proc.AO.Definitions
         /// </summary>
         public string ChildDSs
         {
-            get { return this.Object["relateddss"]; }
-            set { this.Object["relateddss"] = value; }
+            get { return this.Object["childdss"]; }
+            set { this.Object["childdss"] = value; }
         }
 
         /// <summary>
@@ -893,8 +893,12 @@ namespace Proc.AO.Definitions
                 AO.DatasetClass c_DS = this.Parent.Parent[this.Parent.Name];
                 // Save
                 c_DS.Definition.Save();
+                // Get the views
+                List<string> c_Views = c_DS.Views;
+                // Assure default
+                c_Views.Add("default");
                 // All the views
-                foreach (string sView in c_DS.Views)
+                foreach (string sView in c_Views)
                 {
                     c_DS.View(sView).Save();
                 }

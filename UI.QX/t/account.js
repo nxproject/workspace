@@ -32,6 +32,9 @@ qx.Class.define('t.account', {
             cb(true);
         },
 
+        when: function (widget, button) {
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {

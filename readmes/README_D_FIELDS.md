@@ -172,6 +172,18 @@ them on the screen.
 ou can delete a field from the view by viewing the ***Field Definition*** and clicking on the ***Delete*** 
 button.
 
+## Reserved names
+
+The following are names used by the system, so refrain from using them:
+
+|Name|
+|-|
+|subject|
+|message|
+|tos|
+|att|
+|publicurl|
+
 ## Dates
 
 Date fields are designed to handle most date/time format and extract information from any given text:

@@ -331,11 +331,11 @@ namespace Proc.AO
                                 switch (element.Operator)
                                 {
                                     case QueryElementClass.QueryOps.Eq:
-                                        c_Ans = Builders<BsonDocument>.Filter.Eq<bool>(element.Field, element.Value.ToBoolean());
+                                        c_Ans = Builders<BsonDocument>.Filter.Eq<string>(element.Field, element.Value.ToBoolean().ToDBBoolean());
                                         break;
 
                                     case QueryElementClass.QueryOps.Ne:
-                                        c_Ans = Builders<BsonDocument>.Filter.Ne<bool>(element.Field, element.Value.ToBoolean());
+                                        c_Ans = Builders<BsonDocument>.Filter.Ne<string>(element.Field, element.Value.ToBoolean().ToDBBoolean());
                                         break;
                                 }
                                 break;

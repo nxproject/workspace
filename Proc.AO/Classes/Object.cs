@@ -1227,6 +1227,22 @@ namespace Proc.AO
 
         /// <summary>
         /// 
+        /// Loads an object
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        public void CopyFrom(JObject values)
+        {
+            // Loop thru
+            foreach(string sField in values.Keys())
+            {
+                // Set
+                this[sField] = values.Get(sField);
+            }
+        }
+
+        /// <summary>
+        /// 
         /// Are we autoupdating?
         /// 
         /// </summary>

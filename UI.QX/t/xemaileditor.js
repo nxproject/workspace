@@ -32,6 +32,9 @@ qx.Class.define('t.xemaileditor', {
             cb(true);
         },
 
+        when: function (widget, button) {
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {

@@ -69,8 +69,33 @@ qx.Class.define('tools.Comm', {
         campaign: function (req, choices) {
 
             if (nx.desktop.user.getSIField('teleenabled') === 'y') {
-                // TBD
-                // _telemetrycampaign
+            // Fetch
+                nx.util.serviceCall('AO.QueryGet', {
+                    ds: '_telemetrycampaign',
+                    cols: 'code',
+                    query: [
+                        {
+                            field: 'active',
+                            op: 'Eq',
+                            value: 'y'
+                        }
+                    ]
+                }, function (result) {
+                    // Any?
+                        if (result && result.data && result.data.length) {
+                            var campaigns = [];
+                            // Loop thru
+                            result.data.forEach(function (entry) {
+                                // Add
+                                campaigns.push(entry.code);
+                            });
+                            // Call
+                            tools.Comm.display(req, choices, campaigns);
+                        } else {
+                            // No campaihgns found
+                            tools.Comm.display(req, choices);
+                        }
+                });
             } else {
                 // No campaihgns allowed
                 tools.Comm.display(req, choices);
@@ -166,6 +191,7 @@ qx.Class.define('tools.Comm', {
                                     req.value = win.getValue('To');
                                 }
                                 var template = win.getValue('Template');
+                                var campaign = win.getValue('Campaign');
 
                                 // 
                                 nx.util.serviceCall('Communication.Process', {
@@ -174,7 +200,8 @@ qx.Class.define('tools.Comm', {
                                     subject: subj,
                                     message: msg,
                                     attachments: req.attachments,
-                                    template: template || ''
+                                    template: template || '',
+                                    campaign: campaign
                                 });
 
                                 // Close

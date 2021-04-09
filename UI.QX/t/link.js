@@ -32,6 +32,9 @@ qx.Class.define('t.link', {
             cb(true);
         },
 
+        when: function (widget, button) {
+        },
+
         setup: function (widget, button) {
 
             var self = this;

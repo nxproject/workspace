@@ -1211,6 +1211,8 @@ nx.util = {
         if (tools && tools.length) {
             // Create holder
             var menu = new c._menu();
+            // Local
+            var local = [];
             // Loop thru
             for (var i = 0; i < tools.length; i++) {
                 // Get
@@ -1220,8 +1222,12 @@ nx.util = {
                     if (ok) {
                         // Make the button
                         var button = new qx.ui.menu.Button(def.caption);
+                        // Save
+                        local.push(button);
+
                         // Save the callback
                         nx.bucket.setItem(button, 'cb', def.click);
+                        nx.bucket.setItem(button, 'when', def.when);
                         // Add it
                         menu.add(button);
                         // Link
@@ -1246,6 +1252,21 @@ nx.util = {
                     if (i == (tools.length - 1)) {
                         // Set
                         nx.util.setContextMenu(widget, menu);
+                        // Handle selective
+                        nx.setup.listeners(widget, {
+                            listeners: {
+                                beforeContextmenuOpen: function () {
+                                    // Loop thru
+                                    local.forEach(function (button) {
+                                        // 
+                                        var when = nx.bucket.getItem(button, 'when');
+                                        if (when) {
+                                            when(widget, button);
+                                        }
+                                    });
+                                }
+                            }
+                        });
                     }
                 });
             };
@@ -1577,7 +1598,7 @@ nx.util = {
     },
 
     hasValue: function (value) {
-        return value && !!value.length;
+        return !!(value && value.length);
     },
 
     startsWith: function (value, prefix) {
@@ -1824,7 +1845,7 @@ nx.util = {
             ans = value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
         }
 
-        return ans;
+        return !!ans;
     },
 
     isPhone: function (value) {
@@ -1837,7 +1858,7 @@ nx.util = {
             ans = value.match(/\(\d{3}\)\s*\d{3}-\d{4}/);
         }
 
-        return ans;
+        return !!ans;
     },
 
     // ---------------------------------------------------------
@@ -3187,4 +3208,29 @@ nx.ahk = {
             });
         }
     }
-}
+};
+
+nx.contextMenu = {
+
+    ifHasValue: function (widget, button) {
+        // Get the value
+        var value = widget.getValue();
+        // Anything?
+        button.setEnabled(nx.util.hasValue(value));
+    },
+
+    isPhone: function (widget, button) {
+        // Get the value
+        var value = widget.getValue();
+        // Anything?
+        button.setEnabled(nx.util.hasValue(value) && nx.util.isPhone(value));
+    },
+
+    isEMail: function (widget, button) {
+        // Get the value
+        var value = widget.getValue();
+        // Anything?
+        button.setEnabled(nx.util.hasValue(value) && nx.util.isEMail(value));
+    }
+
+};

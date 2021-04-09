@@ -32,6 +32,11 @@ qx.Class.define('t.phonesms', {
             cb(nx.desktop.user.getIsSelector('TWILIO'));
         },
 
+        when: function (widget, button) {
+            //
+            nx.contextMenu.isPhone(widget, button);
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {
@@ -41,15 +46,20 @@ qx.Class.define('t.phonesms', {
 
                 var win = nx.bucket.getWin(widget);
                 var params = nx.bucket.getParams(win);
-                nx.util.runTool('Documents', {
-                    fsfn: 'sms',
-                    fslabel: 'SMS',
-                    fsicon: 'phone',
-                    ds: params.ds,
-                    id: params.id,
-                    caller: win,
-                    fullcaption: 'Select documents to SMS',
-                    value: value
+
+                // Save
+                win.save(function () {
+                    // Call
+                    nx.util.runTool('Documents', {
+                        fsfn: 'sms',
+                        fslabel: 'SMS',
+                        fsicon: 'phone',
+                        ds: params.ds,
+                        id: params.id,
+                        caller: win,
+                        fullcaption: 'Select documents to SMS',
+                        value: value
+                    });
                 });
 
             }

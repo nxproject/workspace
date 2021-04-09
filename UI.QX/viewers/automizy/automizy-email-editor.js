@@ -1520,8 +1520,8 @@
             title: $A.translate('Telemetry'),
             drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
                 $block.addClass('aee-text-block-item');
-                var html = '<img src="{{publicurl}}" style="display: none;" />';
-                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                var html = '<img src="' + $AEE.d.config.dir + '/images/social-nxproject.gif" style="vertical-align: middle;" /> <b>Delivered by NX.Project</b>';
+                html = '<div style="text-align: center;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
                 var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
 
                 $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };

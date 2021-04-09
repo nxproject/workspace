@@ -67,6 +67,10 @@ namespace Proc.AO.BuiltIn
                     ds.Define_Cron();
                     break;
 
+                case DatabaseClass.DatasetQuickMessages:
+                    ds.Define_QuickMessages();
+                    break;
+
 
                 case DatabaseClass.DatasetIOTAgent:
                     ds.Define_IOT("Agent", "user");
@@ -87,10 +91,6 @@ namespace Proc.AO.BuiltIn
                     ds.Define_IOT("Macro", "script");
                     break;
 
-
-                case DatabaseClass.DatasetTelemetry:
-                    ds.Define_Telemetry();
-                    break;
 
                 case DatabaseClass.DatasetTelemetryData:
                     ds.Define_TelemetryData();
@@ -632,14 +632,14 @@ namespace Proc.AO.BuiltIn
         private static void Define_Help(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.29a"))
+            if (ds.Definition.ReleaseChanged("2021.04.08a"))
             {
                 //
                 ds.Definition.Caption = "Help";
                 ds.Definition.Placeholder = "[_id] '-' [desc]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
-                ds.Definition.Icon = "key";
+                ds.Definition.Icon = "help";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "110";
                 ds.Definition.Selector = "HELP";
@@ -682,14 +682,14 @@ namespace Proc.AO.BuiltIn
         private static void Define_Web(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.29c"))
+            if (ds.Definition.ReleaseChanged("2021.04.08a"))
             {
                 //
                 ds.Definition.Caption = "Web";
                 ds.Definition.Placeholder = "[_id] '-' [desc]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
-                ds.Definition.Icon = "key";
+                ds.Definition.Icon = "world";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "150";
                 ds.Definition.Selector = "WEB";
@@ -732,14 +732,14 @@ namespace Proc.AO.BuiltIn
         private static void Define_EMailTemplate(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.03c"))
+            if (ds.Definition.ReleaseChanged("2021.04.08a"))
             {
                 //
                 ds.Definition.Caption = "EMail Templates";
                 ds.Definition.Placeholder = "[_id] '-' [desc]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
-                ds.Definition.Icon = "key";
+                ds.Definition.Icon = "email_edit";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "150";
                 ds.Definition.Selector = "EMAIL";
@@ -1148,65 +1148,15 @@ namespace Proc.AO.BuiltIn
             }
         }
 
-        private static void Define_Telemetry(this DatasetClass ds)
-        {
-            // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.04a"))
-            {
-                //
-                ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Telemetry");
-                ds.Definition.Placeholder = "[_id]";
-                ds.Definition.Privileges = "v";
-                ds.Definition.Icon = ds.Definition.Icon.IfEmpty("asterisk_yellow");
-                ds.Definition.StartGroup = "System";
-                ds.Definition.StartIndex = "700";
-                ds.Definition.Selector = "TELEMETRY";
-
-                // Restart
-                ds.Definition.ClearFields();
-
-                // 
-                Definitions.DatasetFieldClass c_Field = ds.Definition["s"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Source";
-
-                c_Field = ds.Definition["t"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Type";
-
-                c_Field = ds.Definition["c"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Campaign";
-
-                c_Field = ds.Definition["e"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
-                c_Field.Label = "Created On";
-
-                c_Field.SaveParent();
-            }
-
-            // Add the view
-            Definitions.ViewClass c_VDefault = ds.View("default");
-            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
-            {
-                // Clear
-                c_VDefault.ClearFields();
-
-                // And from definition
-                c_VDefault.FromFields();
-
-                c_VDefault.Save();
-            }
-        }
-
         private static void Define_TelemetryData(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.07b"))
+            if (ds.Definition.ReleaseChanged("2021.04.08c"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Telemetry Data");
-                ds.Definition.Placeholder = "#datesortable([d])# [t]:[x] [r]";
+                ds.Definition.Placeholder = "#datesortable([d])# [t] // [x]";
+                ds.Definition.SortOrder = "desc";
                 ds.Definition.Privileges = "v";
                 ds.Definition.Icon = ds.Definition.Icon.IfEmpty("asterisk_orange");
                 ds.Definition.StartGroup = "System";
@@ -1256,8 +1206,6 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.AnalyzerAllow = true;
                 // Get the fields
                 List<string> c_Fields = ds.Definition.FieldNames;
-                // Remove source
-                c_Fields.RemoveAt(0);
                 // Save
                 ds.Definition.AnalyzerBy = c_Fields.JoinSpaces();
 
@@ -1283,14 +1231,14 @@ namespace Proc.AO.BuiltIn
         private static void Define_TelemetryCampaign(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.07b"))
+            if (ds.Definition.ReleaseChanged("2021.04.08c"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Telemetry Campaign");
                 ds.Definition.Placeholder = "[_id]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
-                ds.Definition.Icon = ds.Definition.Icon.IfEmpty("music");
+                ds.Definition.Icon = "asterisk_yellow";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "702";
                 ds.Definition.Selector = "TELEMETRY";
@@ -1310,6 +1258,68 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["active"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Active";
+
+                c_Field.SaveParent();
+
+                // Pick
+                Definitions.PickListClass c_PL = ds.PickList("active");
+
+                c_PL.Field1 = "active";
+                c_PL.Op1 = "Eq";
+                c_PL.Value1 = "y";
+                c_PL.Label = "Active";
+                c_PL.Selected = true;
+
+                c_PL.Save();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
+        private static void Define_QuickMessages(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.04.08e"))
+            {
+                //
+                ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Quick Messages");
+                ds.Definition.Placeholder = "[code]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.Icon = "feed";
+                ds.Definition.IDAlias = "code";
+                ds.Definition.StartGroup = "System";
+                ds.Definition.StartIndex = "600";
+                ds.Definition.Selector = "EMAIL";
+
+                // Restart
+                ds.Definition.ClearFields();
+
+                // 
+                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.AutoCaps;
+
+                c_Field = ds.Definition["subj"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Subject";
+
+                c_Field = ds.Definition["msg"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+                c_Field.Label = "Message";
+
+                c_Field = ds.Definition["temp"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "EMail Template";
 
                 c_Field.SaveParent();
             }
@@ -1372,7 +1382,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillAccess(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.07d"))
+            if (ds.Definition.ReleaseChanged("2021.04.08a"))
             {
                 //
                 ds.Definition.Caption = "Account";

@@ -32,6 +32,11 @@ qx.Class.define('t.smsweb', {
             cb(true);
         },
 
+        when: function (widget, button) {
+            //
+            nx.contextMenu.isPhone(widget, button);
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {

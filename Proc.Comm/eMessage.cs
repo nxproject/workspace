@@ -230,10 +230,6 @@ namespace Proc.Communication
         /// 
         /// </summary>
         public string Campaign { get; set; }
-
-        // Telemetry
-        private Proc.Telemetry.SourceClass EMailTelemetry { get; set; }
-        private Proc.Telemetry.SourceClass SMSTelemetry { get; set; }
         #endregion
 
         #region Methods
@@ -248,28 +244,18 @@ namespace Proc.Communication
             return this.Values.ToString();
         }
 
-        private Proc.Telemetry.SourceClass GetEMailTelemetry(string source)
+        /// <summary>
+        /// 
+        /// Returns a telemetry object
+        /// 
+        /// </summary>
+        /// <param name="template"></param>
+        /// <param name="via"></param>
+        /// <returns></returns>
+        private Proc.Telemetry.DataClass GetTelemetry(string template, string via)
         {
-            // New?
-            if (this.EMailTelemetry == null)
-            {
-                // TBD
-                this.EMailTelemetry = new Telemetry.SourceClass(this.Parent.DBManager, source, "EMail", this.Campaign);
-            }
-
-            return this.EMailTelemetry;
-        }
-
-        private Proc.Telemetry.SourceClass GetSMSTelemetry(string source)
-        {
-            // New?
-            if (this.SMSTelemetry == null)
-            {
-                // TBD
-                this.SMSTelemetry = new Telemetry.SourceClass(this.Parent.DBManager, source, "SMS", this.Campaign);
-            }
-
-            return this.SMSTelemetry;
+            //
+            return new Telemetry.DataClass(this.Parent.DBManager.DefaultDatabase, template, via, this.Campaign);
         }
 
         /// <summary>
@@ -354,7 +340,9 @@ namespace Proc.Communication
                 string sFriendly = this.Parent.User.Displayable;
 
                 // Format
-                string sHTML = this.FormatMessage(to.To, this.EMailTemplate, "EMailHolder.html");
+                string sHTML = this.FormatMessage(to.To, this.EMailTemplate, "EMailHolder.html", "EMail");
+
+                this.Parent.Parent.LogInfo("EMAIL\\r\n" + sHTML + "\r\n");
 
                 //Validate
                 if (sEMailLogin.HasValue() && sEMailPwd.HasValue())
@@ -390,7 +378,7 @@ namespace Proc.Communication
                         result.Log(to);
 
                         // Update contact out
-                        this.UpdateLstOut(this.EMailTemplate, to.To, "EMail");
+                        this.UpdateLstOut(this.GetTelemetry(this.EMailTemplate, "EMail"), to.To);
                     }
                 }
             }
@@ -416,7 +404,7 @@ namespace Proc.Communication
                 string sUserPhone = this.Parent.User.TwilioPhone;
 
                 // Format
-                string sHTML = this.FormatMessage(to.To, this.SMSTemplate, "SMSTemplate.html");
+                string sHTML = this.FormatMessage(to.To, this.SMSTemplate, "SMSTemplate.html", "SMS");
 
                 //
                 string sResp = c_Client.SendSMS(
@@ -434,7 +422,7 @@ namespace Proc.Communication
                     result.Log(to);
 
                     // Update contact out
-                    this.UpdateLstOut(this.SMSTemplate, to.To, "SMS");
+                    this.UpdateLstOut(this.GetTelemetry(this.SMSTemplate, "SMS"), to.To);
                 }
             }
         }
@@ -467,7 +455,7 @@ namespace Proc.Communication
                     result.Log(to);
 
                     // Update contact out
-                    this.UpdateLstOut("", to.To, "Voice");
+                    this.UpdateLstOut(this.GetTelemetry("", "Voice"), to.To);
                 }
             }
         }
@@ -527,15 +515,21 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="user"></param>
         /// <param name="via"></param>
-        private void UpdateLstOut(string user, string via, string template)
+        private void UpdateLstOut(Proc.Telemetry.DataClass data, string user)
         {
             // Get the manage
             AO.ManagerClass c_Mgr = this.Parent.Parent.Globals.Get<AO.ManagerClass>();
             // And update
             using (AO.AccessClass c_AE = new AO.AccessClass(c_Mgr, user))
             {
-                c_AE.UpdateContactOut(template, via, this.Campaign.IfEmpty());
+                c_AE.UpdateContactOut(data.Template.IfEmpty(), data.Via, data.Campaign.IfEmpty());
             }
+
+            // Change the via
+            if (!data.Via.EndsWith(" Sent")) data.Via = data.Via + " Sent";
+
+            // Set the to
+            data.AddTransaction(user, false);
         }
         #endregion
 
@@ -547,9 +541,11 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="template"></param>
         /// <returns></returns>
-        private string FormatMessage(string to, string template, string defaulttemplate)
+        private string FormatMessage(string to, string template, string defaulttemplate, string via)
         {
-            this.Parent.Parent.Debug();
+            // Setup for telemetry
+            bool bTelemetry = this.Parent.SiteInfo.TelemetryEnabled;
+            Proc.Telemetry.DataClass c_Tele = this.GetTelemetry(template, via);
 
             // Start with nothing
             string sTemplate = null;
@@ -582,10 +578,10 @@ namespace Proc.Communication
                     string sURL = c_File.Document.URL;
 
                     // Do we do telemetry?
-                    if (this.Parent.SiteInfo.TelemetryEnabled)
+                    if (bTelemetry)
                     {
                         // Convert
-                        sURL = this.GetEMailTelemetry(template).FormatURL(sURL, to);
+                        sURL = c_Tele.AddTelemetry("zd", sURL, to);
                     }
 
                     //
@@ -613,10 +609,10 @@ namespace Proc.Communication
                     string sURL = c_Action.URL;
 
                     // Do we do telemetry?
-                    if (this.Parent.SiteInfo.TelemetryEnabled)
+                    if (bTelemetry)
                     {
                         // Convert
-                        sURL = this.GetSMSTelemetry(template).FormatURL(sURL, to);
+                        sURL = c_Tele.AddTelemetry("zd", sURL, to);
                     }
 
                     //
@@ -650,13 +646,20 @@ namespace Proc.Communication
                 this.Values.Set("data", c_Data);
             }
 
+            // Preprocess telemetry
+            if (bTelemetry)
+            {
+                sTemplate = c_Tele.Shorten(sTemplate, "zt", @"{{publicurl}}/viewers/automizy/images", to);
+                sTemplate = c_Tele.Replace(sTemplate, "./images/social-nxproject.gif", "zt", @"{{publicurl}}/social-nxproject.gif", to);
+            }
+
             return sTemplate.Handlebars(this.Values, delegate (string value, object thisvalue)
             {
-                    // Save this
-                    this.Values.Set("this", thisvalue);
+                // Save this
+                this.Values.Set("this", thisvalue);
 
-                    // Eval
-                    using (Context c_Ctx = new Context(this.Parent.Parent, vars: this.Values))
+                // Eval
+                using (Context c_Ctx = new Context(this.Parent.Parent, vars: this.Values))
                 {
                     return Expression.Eval(c_Ctx, value).Value;
                 }

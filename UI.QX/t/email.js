@@ -32,6 +32,11 @@ qx.Class.define('t.email', {
             cb(nx.desktop.user.getIsSelector('EMAIL'));
         },
 
+        when: function (widget, button) {
+            //
+            nx.contextMenu.isEMail(widget, button);
+        },
+
         setup: function (widget, button) { },
 
         click: function (widget) {
@@ -41,15 +46,20 @@ qx.Class.define('t.email', {
 
                 var win = nx.bucket.getWin(widget);
                 var params = nx.bucket.getParams(win);
-                nx.util.runTool('Documents', {
-                    fsfn: 'email',
-                    fslabel: 'EMail',
-                    fsicon: 'email',
-                    ds: params.ds,
-                    id: params.id,
-                    caller: win,
-                    fullcaption: 'Select documents to EMail',
-                    value: value
+
+                // Save
+                win.save(function () {
+                    // Call
+                    nx.util.runTool('Documents', {
+                        fsfn: 'email',
+                        fslabel: 'EMail',
+                        fsicon: 'email',
+                        ds: params.ds,
+                        id: params.id,
+                        caller: win,
+                        fullcaption: 'Select documents to EMail',
+                        value: value
+                    });
                 });
 
             }
