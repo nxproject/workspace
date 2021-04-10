@@ -16,7 +16,7 @@
 
 ************************************************************************ */
 
-qx.Class.define('t.phonesms', {
+qx.Class.define('t.emailTelemetry', {
 
     extend: qx.core.Object,
 
@@ -24,17 +24,17 @@ qx.Class.define('t.phonesms', {
 
     members: {
 
-        caption: 'Send text',
+        caption: 'Send email',
 
-        icon: 'phone',
+        icon: 'email',
 
         allowed: function (widget, cb) {
-            cb(nx.desktop.user.getIsSelector('TWILIO'));
+            cb(nx.desktop.user.getIsSelector('EMAIL'));
         },
 
         when: function (widget, button) {
             //
-            nx.contextMenu.isPhone(widget, button);
+            nx.contextMenu.isEMail(widget, button);
         },
 
         setup: function (widget, button) { },
@@ -44,7 +44,7 @@ qx.Class.define('t.phonesms', {
             var self = this;
 
             var value = widget.getValue();
-            if (nx.util.hasValue(value) && nx.util.isPhone(value)) {
+            if (nx.util.hasValue(value) && nx.util.isEMail(value)) {
 
                 var win = nx.bucket.getWin(widget);
                 var params = nx.bucket.getParams(win);
@@ -53,19 +53,20 @@ qx.Class.define('t.phonesms', {
                 win.save(function () {
                     // Call
                     nx.util.runTool('Documents', {
-                        fsfn: 'sms',
-                        fslabel: 'SMS',
-                        fsicon: 'phone',
+                        fsfn: 'email',
+                        fslabel: 'EMail',
+                        fsicon: 'email',
                         ds: params.ds,
                         id: params.id,
                         caller: win,
-                        fullcaption: 'Select documents to SMS',
+                        fullcaption: 'Select documents to EMail',
                         value: value,
-                        useTelemetry: 'n'
+                        useTelemetry: 'y'
                     });
                 });
 
             }
+
         }
     }
 

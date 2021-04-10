@@ -98,6 +98,8 @@
     <Content Include="c\_tree.js" />
     <Content Include="c\_window.js" />
     <Content Include="c\zip.js" />
+    <Content Include="t\emailTelemetry.js" />
+    <Content Include="t\phonesmsTelemetry.js" />
     <Content Include="t\account.js" />
     <Content Include="t\quickmessage.js" />
     <Content Include="t\xemaileditor.js" />

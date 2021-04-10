@@ -33,6 +33,7 @@ using Newtonsoft.Json.Linq;
 
 using NX.Shared;
 using NX.Engine;
+using Proc.Web;
 
 namespace Proc.Telemetry
 {
@@ -68,7 +69,7 @@ namespace Proc.Telemetry
         /// Th telemetry ID
         /// 
         /// </summary>
-        private string ID { get; set; }
+        public string ID { get; private set; }
 
         /// <summary>
         ///  
@@ -145,19 +146,40 @@ namespace Proc.Telemetry
         /// <param name="text"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public string AddTelemetry(string route, string url, string to = null)
+        public string AddTelemetry(string route, string url, bool usebitly, string to = null)
         {
             // UserID
             string sTo = to.IfEmpty("broadcast").Compress();
 
+            // Handle absolute url
+            url = url.ToPublicURL(this.Parent.Parent.Parent);
+
             // Replace
-            return url.Replace("{{publicurl}}", "{{publicurl}}/{2}/{0}/{1}".Replace("{0}", this.ID).Replace("{1}", sTo).Replace("{2}", route));
+            string sURL = url.Replace("".PublicURL(), "/{2}/{0}/{1}".Replace("{0}", this.ID).Replace("{1}", sTo).Replace("{2}", route)).PublicURL();
+
+            // Shorten?
+            if (usebitly)
+            {
+                sURL = sURL.Bitly(this.Parent.Parent.Parent);
+            }
+
+            return sURL;
         }
 
-        public string Shorten(string text, string route, string url, string to = null)
+        /// <summary>
+        /// 
+        /// Shortens a URL referecnce with a redirect
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="route"></param>
+        /// <param name="url"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public string Shorten(string text, string route, string url, bool usebitly, string to = null)
         {
             // Format
-            string sTo = this.AddTelemetry(route, "{{publicurl}}", to);
+            string sTo = this.AddTelemetry(route, "".PublicURL(), usebitly, to);
 
             // Replace
             return text.Replace(url, sTo);
@@ -173,10 +195,10 @@ namespace Proc.Telemetry
         /// <param name="url"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public string Replace(string text, string patt, string route, string url, string to = null)
+        public string Replace(string text, string patt, string route, string url, bool usebitly, string to = null)
         {
             // Format
-            string sTo = this.AddTelemetry(route, url, to);
+            string sTo = this.AddTelemetry(route, url, usebitly, to);
 
             // Replace
             return text.Replace(patt, sTo);

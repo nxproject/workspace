@@ -25,7 +25,9 @@ qx.Class.define('c.email', {
     construct: function () {
 
         // Call base
-        this.base(arguments, new f.email(), new t.quickmessage(), new t.email(), new t.emailweb(), new c._textfield());
+        this.base(arguments, new f.email(), new t.quickmessage(),
+            new t.email(), new t.emailweb(),
+            new c._textfield());
 
     },
 

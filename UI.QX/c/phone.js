@@ -25,7 +25,9 @@ qx.Class.define('c.phone', {
     construct: function () {
 
         // Call base
-        this.base(arguments, new f.phone(), new t.quickmessage(), new t.phonesms(), new t.smsweb(), new t.phonecall(), new t.phoneweb(), new c._textfield());
+        this.base(arguments, new f.phone(), new t.quickmessage(),
+            new t.phonesms(), new t.smsweb(), new t.phonecall(), new t.phoneweb(),
+            new c._textfield());
 
     },
 

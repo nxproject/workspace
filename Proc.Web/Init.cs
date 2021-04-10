@@ -17,48 +17,26 @@
 /// 
 ///--------------------------------------------------------------------------------
 
-/// Packet Manager Requirements
-/// 
-/// Install-Package Newtonsoft.Json -Version 12.0.3
-/// Install-Package MongoDb.Driver -Version 2.11.0
-/// Install-Package MongoDb.Bson -Version 2.11.0
-/// 
-
-using System.Collections.Generic;
-
 using Newtonsoft.Json.Linq;
-
-using MongoDB.Driver;
-using MongoDB.Bson;
 
 using NX.Engine;
 using NX.Shared;
-using Proc.AO;
 
-namespace Proc.Communication
+namespace Proc.Web
 {
     /// <summary>
     /// 
-    /// Gets an object
+    /// Default setup
     /// 
     /// </summary>
-    public class Process : FNClass
+    public class Init : FNClass
     {
-        public override StoreClass Do(HTTPCallClass call, StoreClass store)
+        public override void Initialize(EnvironmentClass env)
         {
-            // Set the return
-            StoreClass c_Ans = new StoreClass();
+            base.Initialize(env);
 
-            // Push back
-            store["user"] = call.UserInfo.Name;
-
-            // Make message
-            using (eMessageClass c_Msg = eMessageClass.FromStore(call.Env, store))
-            {
-                c_Msg.Send(true);                
-            }
-
-            return c_Ans;
+            // Load manager
+            ManagerClass c_Mgr = env.Globals.Get<ManagerClass>();
         }
     }
 }

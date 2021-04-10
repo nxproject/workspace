@@ -45,6 +45,7 @@ namespace Proc.AO
         public const string DatasetWallet = "_wallet";
         public const string DatasetCron = "_cron";
         public const string DatasetGroup = "_group";
+        public const string DatasetBitly = "_bitly";
 
         public const string DatasetEMailTemplates = "_emailtemplates";
         public const string DatasetQuickMessages = "_quickmessages";

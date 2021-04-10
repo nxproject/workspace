@@ -32,6 +32,7 @@ qx.Class.define('tools.Comm', {
             // Set the template
             switch (req.fsfn) {
                 case 'email':
+                case 'sms':
                     req.template = '_emailtemplates';
                     break;
             }
@@ -148,7 +149,7 @@ qx.Class.define('tools.Comm', {
                 row++;
             }
 
-            if (campaigns && campaigns.length) {
+            if (campaigns && campaigns.length && req.useTelemetry == 'y') {
                 items.push({
                     nxtype: 'combobox',
                     top: row,
@@ -156,6 +157,17 @@ qx.Class.define('tools.Comm', {
                     width: 'default.fieldWidth',
                     label: 'Campaign',
                     choices: campaigns
+                });
+                row++;
+            }
+
+            if (req.fsfn === 'sms' && req.useTelemetry == 'y') {
+                items.push({
+                    nxtype: 'string',
+                    top: row,
+                    left: 1,
+                    width: 'default.fieldWidth',
+                    label: 'Message Link'
                 });
                 row++;
             }
@@ -192,6 +204,7 @@ qx.Class.define('tools.Comm', {
                                 }
                                 var template = win.getValue('Template');
                                 var campaign = win.getValue('Campaign');
+                                var mlink = win.getValue('Message Link');
 
                                 // 
                                 nx.util.serviceCall('Communication.Process', {
@@ -199,9 +212,11 @@ qx.Class.define('tools.Comm', {
                                     to: req.value,
                                     subject: subj,
                                     message: msg,
-                                    attachments: req.attachments,
+                                    att: req.attachments,
                                     template: template || '',
-                                    campaign: campaign
+                                    campaign: campaign,
+                                    telemetry: req.useTelemetry,
+                                    mlink: mlink
                                 });
 
                                 // Close

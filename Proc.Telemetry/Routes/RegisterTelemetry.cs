@@ -32,81 +32,13 @@ using NX.Engine.Files;
 using NX.Shared;
 using Proc.AO;
 
-namespace Proc.Docs
+namespace Proc.Telemetry
 {
     /// <summary>
     /// 
-    /// Registers a call
+    /// Registers a telemetry call
     /// 
     /// </summary>
-    public class Register : RouteClass
-    {
-        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "zd", ":id", ":target", "?path?" };
-        public override void Call(HTTPCallClass call, StoreClass store)
-        {
-            // Get path
-            List<string> c_Path = store.GetAsJArray("path").ToList();
-            // Find the route
-            RouteClass c_Route = call.Env.Router.Get(store, call.Request.HttpMethod, c_Path);
-
-            try
-            {
-                // Get
-                string sID = store["id"];
-                string sUser = store["target"];
-
-                // Must have an ID
-                if (sID.HasValue())
-                {
-                    // Get database manager
-                    Proc.AO.ManagerClass c_DBMgr = call.Env.Globals.Get<Proc.AO.ManagerClass>();
-
-                    // Make data block
-                    Proc.Telemetry.DataClass c_Data = new Telemetry.DataClass(c_DBMgr.DefaultDatabase, sID);
-
-                    // Get the type
-                    string sType = c_Data.Via;
-
-                    if (c_Route != null)
-                    {
-                        // Update type
-                        sType = c_Route.Telemetry.IfEmpty(sType);
-                        // And to data
-                        c_Data.Via = sType;
-                    }
-
-                    // Add
-                    c_Data.AddTransaction(sUser, true,
-                                            store.PathFromEntry("", "path"),
-                                            call.Request.RemoteEndPoint.Address.ToString());
-
-                    // Do we have one?
-                    if (!c_Data.IsBroadcast)
-                    {
-                        using (AO.AccessClass c_AE = new AccessClass(c_DBMgr, c_Data.To))
-                        {
-                            c_AE.UpdateContactIn(c_Data.Template.IfEmpty(), sType.IfEmpty(), c_Data.Campaign.IfEmpty());
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                call.Env.LogException("At Register", e);
-            }
-
-            // Do we have a new route?
-            if (c_Route != null)
-            {
-                // Reset the tree
-                call.RouteTree = c_Path;
-                // Call the route
-                c_Route.Call(call, store);
-            }
-
-        }
-    }
-
     public class RegisterTelemetry : RouteClass
     {
 

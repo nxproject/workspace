@@ -587,15 +587,20 @@ namespace Proc.AO
             // Assume none
             long iAns = 0;
 
-            // According
-            if (!many)
+            // Protext
+            try
             {
-                iAns = this.Parent.Documents.DeleteOne(this.Filter).DeletedCount;
+                // According
+                if (!many)
+                {
+                    iAns = this.Parent.Documents.DeleteOne(this.Filter).DeletedCount;
+                }
+                else
+                {
+                    iAns = this.Parent.Documents.DeleteMany(this.Filter).DeletedCount;
+                }
             }
-            else
-            {
-                iAns = this.Parent.Documents.DeleteMany(this.Filter).DeletedCount;
-            }
+            catch { }
 
             return iAns;
         }

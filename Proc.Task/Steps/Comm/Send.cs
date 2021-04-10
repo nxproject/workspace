@@ -76,12 +76,7 @@ namespace Proc.Task
             eMessageClass c_Msg = ctx.Messages[sMsg];
             if(c_Msg != null)
             {
-                var c_Ret = c_Msg.Send();
-
-                if (c_Ret.Errors.HasValue())
-                {
-                    eAns = ReturnClass.Failure(c_Ret.Errors);
-                }
+                c_Msg.Send(false);
             }
 
             return eAns;

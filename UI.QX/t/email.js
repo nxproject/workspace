@@ -41,6 +41,8 @@ qx.Class.define('t.email', {
 
         click: function (widget) {
 
+            var self = this;
+
             var value = widget.getValue();
             if (nx.util.hasValue(value) && nx.util.isEMail(value)) {
 
@@ -58,7 +60,8 @@ qx.Class.define('t.email', {
                         id: params.id,
                         caller: win,
                         fullcaption: 'Select documents to EMail',
-                        value: value
+                        value: value,
+                        useTelemetry: 'n'
                     });
                 });
 

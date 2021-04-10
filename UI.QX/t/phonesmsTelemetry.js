@@ -16,7 +16,7 @@
 
 ************************************************************************ */
 
-qx.Class.define('t.phonesms', {
+qx.Class.define('t.phonesmsTelemetry', {
 
     extend: qx.core.Object,
 
@@ -61,7 +61,7 @@ qx.Class.define('t.phonesms', {
                         caller: win,
                         fullcaption: 'Select documents to SMS',
                         value: value,
-                        useTelemetry: 'n'
+                        useTelemetry: 'y'
                     });
                 });
 

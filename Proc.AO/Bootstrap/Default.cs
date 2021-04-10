@@ -67,6 +67,10 @@ namespace Proc.AO.BuiltIn
                     ds.Define_Cron();
                     break;
 
+                case DatabaseClass.DatasetBitly:
+                    ds.Define_Bitly();
+                    break;
+
                 case DatabaseClass.DatasetQuickMessages:
                     ds.Define_QuickMessages();
                     break;
@@ -1104,6 +1108,46 @@ namespace Proc.AO.BuiltIn
             }
         }
 
+        private static void Define_Bitly(this DatasetClass ds)
+        {
+            // dataset into
+            if (ds.Definition.ReleaseChanged("2021.04.10a"))
+            {
+                //
+                ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Bitly");
+                ds.Definition.Placeholder = "[_id]";
+                ds.Definition.Privileges = "av";
+                ds.Definition.Icon = ds.Definition.Icon.IfEmpty("user");
+                ds.Definition.StartGroup = "hidden";
+
+                // Restart
+                ds.Definition.ClearFields();
+
+                // 
+                Definitions.DatasetFieldClass c_Field = ds.Definition["value"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+
+                c_Field = ds.Definition["exp"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.UseIndex = true;
+
+                c_Field.SaveParent();
+            }
+
+            // Add the view
+            Definitions.ViewClass c_VDefault = ds.View("default");
+            if (c_VDefault.ReleaseChanged(ds.Definition.Release))
+            {
+                // Clear
+                c_VDefault.ClearFields();
+
+                // And from definition
+                c_VDefault.FromFields();
+
+                c_VDefault.Save();
+            }
+        }
+
         private static void Define_IOT(this DatasetClass ds, string caption, string icon)
         {
             // dataset into
@@ -1151,7 +1195,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_TelemetryData(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.08c"))
+            if (ds.Definition.ReleaseChanged("2021.04.10a"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Telemetry Data");
@@ -1210,6 +1254,19 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.AnalyzerBy = c_Fields.JoinSpaces();
 
                 c_Field.SaveParent();
+
+                // Pick
+                Definitions.PickListClass c_PL = ds.PickList("lastthirty");
+                if (c_PL.Object.IsNew)
+                {
+                    c_PL.Field1 = "_desc";
+                    c_PL.Op1 = "Gte";
+                    c_PL.Value1 = "#datesortable(dateadd(today(),-30,'d'))#";
+                    c_PL.Label = "Last 30 days";
+                    c_PL.Selected = true;
+
+                    c_PL.Save();
+                }
             }
 
             // Add the view
@@ -1263,14 +1320,16 @@ namespace Proc.AO.BuiltIn
 
                 // Pick
                 Definitions.PickListClass c_PL = ds.PickList("active");
+                if (c_PL.Object.IsNew)
+                {
+                    c_PL.Field1 = "active";
+                    c_PL.Op1 = "Eq";
+                    c_PL.Value1 = "y";
+                    c_PL.Label = "Active";
+                    c_PL.Selected = true;
 
-                c_PL.Field1 = "active";
-                c_PL.Op1 = "Eq";
-                c_PL.Value1 = "y";
-                c_PL.Label = "Active";
-                c_PL.Selected = true;
-
-                c_PL.Save();
+                    c_PL.Save();
+                }
             }
 
             // Add the view

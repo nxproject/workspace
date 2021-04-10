@@ -33,6 +33,8 @@ using SendGrid.Helpers.Mail;
 using NX.Shared;
 using NX.Engine;
 using NX.Engine.Files;
+using Proc.Telemetry;
+using Proc.Web;
 
 namespace Proc.Communication
 {
@@ -43,8 +45,16 @@ namespace Proc.Communication
         private const string KeyMsg = "message";
         private const string KeyPost = "post";
         private const string KeyFooter = "footer";
-        private const string KeySite = "site";
-        private const string KeyURL = "url";
+
+        private const string KeyTo = "to";
+        private const string KeyTelemetry = "telemetry";
+        private const string KeyCampaign = "campaign";
+        private const string KeyEMailTemplate = "template";
+        private const string KeySMSTemplate = "smstemplate";
+        private const string KeyCommand = "cmd";
+        private const string KeyUser = "user";
+        private const string KeyAttachments = "att";
+        private const string KeyMessageLink = "mlink";
         #endregion
 
         #region Constructor
@@ -71,8 +81,6 @@ namespace Proc.Communication
             this.Subject = "A message for you";
             this.Message = "";
             this.Post = "";
-            this.Site = this.Parent.Database.SiteInfo.Name;
-            this.URL = this.Parent.Parent.LoopbackURL;
             this.Footer = this.Parent.User.CommFooter;
 
         }
@@ -131,17 +139,24 @@ namespace Proc.Communication
 
         /// <summary>
         /// 
-        /// The site name
+        /// The pre message link text
         /// 
         /// </summary>
-        public string Site { get { return this.Values.GetAsString(KeySite); } set { this.Values.Set(KeySite, value); } }
+        public string MessageLink { get { return this.Values.GetAsString(KeyMessageLink); } set { this.Values.Set(KeyMessageLink, value); } }
 
         /// <summary>
         /// 
-        /// The site URL
+        /// Is telemetry allowed?
         /// 
         /// </summary>
-        public string URL { get { return this.Values.GetAsString(KeyURL); } set { this.Values.Set(KeyURL, value); } }
+        public bool Telemetry { get { return this.Values.GetAsString(KeyTelemetry).FromDBBoolean(); } set { this.Values.Set(KeyTelemetry, value.ToDBBoolean()); } }
+
+        /// <summary>
+        /// 
+        /// The user
+        /// 
+        /// </summary>
+        public string User { get { return this.Values.GetAsString(KeyUser); } set { this.Values.Set(KeyUser, value); } }
 
         /// <summary>
         /// 
@@ -212,24 +227,31 @@ namespace Proc.Communication
         /// The template to use for emails
         /// 
         /// </summary>
-        public string EMailTemplate { get; set; }
+        public string EMailTemplate { get { return this.Values.GetAsString(KeyEMailTemplate); } set { this.Values.Set(KeyEMailTemplate, value); } }
 
         /// <summary>
         /// 
         /// The template to use for SMS
         /// 
         /// </summary>
-        public string SMSTemplate { get; set; }
+        public string SMSTemplate { get { return this.Values.GetAsString(KeySMSTemplate); } set { this.Values.Set(KeySMSTemplate, value); } }
 
-        // Callbacks
-        public Action<eAddressClass, eReturnClass> UserCB { get; set; }
+        /// <summary>
+        /// 
+        /// The command
+        /// 
+        /// </summary>
+        public string Command { get { return this.Values.GetAsString(KeyCommand).IfEmpty("email"); } set { this.Values.Set(KeyCommand, value); } }
 
         /// <summary>
         /// 
         /// The campaign
         /// 
         /// </summary>
-        public string Campaign { get; set; }
+        public string Campaign { get { return this.Values.GetAsString(KeyCampaign); } set { this.Values.Set(KeyCampaign, value); } }
+
+        // Callbacks
+        public Action<eAddressClass, bool> UserCB { get; set; }
         #endregion
 
         #region Methods
@@ -252,7 +274,7 @@ namespace Proc.Communication
         /// <param name="template"></param>
         /// <param name="via"></param>
         /// <returns></returns>
-        private Proc.Telemetry.DataClass GetTelemetry(string template, string via)
+        private Telemetry.DataClass GetTelemetry(string template, string via)
         {
             //
             return new Telemetry.DataClass(this.Parent.DBManager.DefaultDatabase, template, via, this.Campaign);
@@ -260,48 +282,127 @@ namespace Proc.Communication
 
         /// <summary>
         /// 
+        /// Handles notification of result to user
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
+        private void HandleNotify(eAddressClass.AddressTypes type, eReturnClass result)
+        {
+            if (result.ToString().HasValue())
+            {
+                string sQM = "Result of {0} request: {1}".FormatString(type, result.ToString());
+                this.Parent.SendNotification(this.Parent.User.Name, sQM, null);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// Returns a save value
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string ToSave()
+        {
+            // Clone the values
+            JObject c_Wkg = this.Values.ToString().ToJObject();
+
+            // Fix
+            c_Wkg.Set(KeyTo, c_Wkg.Get(KeyTo).SplitSpaces().ToJArray());
+            c_Wkg.Set(KeyAttachments, c_Wkg.Get(KeyAttachments).SplitSpaces().ToJArray());
+
+            return c_Wkg.ToSimpleString().Compress();
+        }
+        #endregion
+
+        #region Senders
+        /// <summary>
+        /// 
         /// Generic send
         /// 
         /// </summary>
         /// <returns></returns>
-        public eReturnClass Send()
+        public void Send(bool notify)
         {
-            eReturnClass c_Ans = new eReturnClass();
+            //
+            List<string> c_To = new List<string>();
+
+            // Loop thru
+            foreach (eAddressClass sTo in this.To.Users.Values)
+            {
+                c_To.Add(sTo.ToString());
+            }
+
+            foreach (eAddressClass sTo in this.To.EMail.Values)
+            {
+                c_To.Add(sTo.ToString());
+            }
+
+            foreach (eAddressClass sTo in this.To.SMS.Values)
+            {
+                c_To.Add(sTo.ToString());
+            }
+
+            foreach (eAddressClass sTo in this.To.Voice.Values)
+            {
+                c_To.Add(sTo.ToString());
+            }
+
+            foreach (eAddressClass sTo in this.To.FedEx.Values)
+            {
+                c_To.Add(sTo.ToString());
+            }
+
+            // Save the to list
+            this.Values.Set(KeyTo, c_To.JoinSpaces());
+
+            // Attachments
+            List<string> c_Att = new List<string>();
+
+            // Build attachment list
+            if (this.Attachments != null && this.Attachments.Count > 0)
+            {
+                // Loop thru
+                foreach (eAttachmenClass c_File in this.Attachments.Documents)
+                {
+                    // Save
+                    c_Att.Add(c_File.Document.Path);
+                }
+            }
+
+            this.Values.Set(KeyAttachments, c_Att.JoinSpaces());
 
             // Loop thru
             foreach (eAddressClass sTo in this.To.Users.Values)
             {
                 if (this.UserCB != null)
                 {
-                    this.UserCB(sTo, c_Ans);
+                    this.UserCB(sTo, notify);
                 }
                 else
                 {
-                    this.SendNotification(sTo, c_Ans);
+                    this.SendNotification(sTo);
                 }
             }
 
             foreach (eAddressClass sTo in this.To.EMail.Values)
             {
-                this.SendEMail(sTo, c_Ans);
+                this.SendEMail(sTo, notify);
             }
 
             foreach (eAddressClass sTo in this.To.SMS.Values)
             {
-                this.SendSMS(sTo, c_Ans);
+                this.SendSMS(sTo, notify);
             }
 
             foreach (eAddressClass sTo in this.To.Voice.Values)
             {
-                this.MakeCall(sTo, c_Ans);
+                this.MakeCall(sTo, notify);
             }
 
             foreach (eAddressClass sTo in this.To.FedEx.Values)
             {
-                this.SendFedEx(sTo, c_Ans);
+                this.SendFedEx(sTo, notify);
             }
-
-            return c_Ans;
         }
 
         /// <summary>
@@ -311,7 +412,7 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="to"></param>
         /// <param name="result"></param>
-        private void SendNotification(eAddressClass to, eReturnClass result)
+        private void SendNotification(eAddressClass to)
         {
             List<string> c_Pieces = new List<string>();
 
@@ -319,8 +420,6 @@ namespace Proc.Communication
             if (this.Message.HasValue()) c_Pieces.Add(this.Message);
 
             this.Parent.SendNotification(to.To, c_Pieces.Join(" - "), this.Attachments.AsDocuments);
-
-            result.Log(to);
         }
 
         /// <summary>
@@ -330,8 +429,10 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="to"></param>
         /// <param name="result"></param>
-        private void SendEMail(eAddressClass to, eReturnClass result)
+        private void SendEMail(eAddressClass to, bool notify)
         {
+            eReturnClass c_Result = new eReturnClass();
+
             try
             {
                 string sEMailLogin = this.Parent.User.EMailName;
@@ -340,9 +441,9 @@ namespace Proc.Communication
                 string sFriendly = this.Parent.User.Displayable;
 
                 // Format
-                string sHTML = this.FormatMessage(to.To, this.EMailTemplate, "EMailHolder.html", "EMail");
+                string sHTML = this.FormatMessage(to.To, this.EMailTemplate, "EMailHolder.html", "EMail", false);
 
-                this.Parent.Parent.LogInfo("EMAIL\\r\n" + sHTML + "\r\n");
+                this.Parent.Parent.LogInfo("EMAIL\r\n" + sHTML + "\r\n");
 
                 //Validate
                 if (sEMailLogin.HasValue() && sEMailPwd.HasValue())
@@ -359,23 +460,23 @@ namespace Proc.Communication
 
                         if (sResp.HasValue())
                         {
-                            result.Log(to, sResp);
+                            c_Result.Log(to, sResp);
                         }
                         else
                         {
-                            result.Log(to);
+                            c_Result.Log(to);
                         }
                     }
                 }
                 else
                 {
-                    if (!this.SendViaSendGrid(to, result, sHTML))
+                    if (!this.SendViaSendGrid(to, sHTML, notify))
                     {
-                        result.Log(to, "EMail has not been setup");
+                        c_Result.Log(to, "EMail has not been setup");
                     }
                     else
                     {
-                        result.Log(to);
+                        c_Result.Log(to);
 
                         // Update contact out
                         this.UpdateLstOut(this.GetTelemetry(this.EMailTemplate, "EMail"), to.To);
@@ -384,8 +485,10 @@ namespace Proc.Communication
             }
             catch (Exception e)
             {
-                result.Log(to, "Error while sending email", e);
+                c_Result.Log(to, "Error while sending email", e);
             }
+
+            if (notify) this.HandleNotify(eAddressClass.AddressTypes.EMail, c_Result);
         }
 
         /// <summary>
@@ -395,8 +498,10 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="to"></param>
         /// <param name="result"></param>
-        private void SendSMS(eAddressClass to, eReturnClass result)
+        private void SendSMS(eAddressClass to, bool notify)
         {
+            eReturnClass c_Result = new eReturnClass();
+
             //
             using (Communication.TwilioClientClass c_Client = new Communication.TwilioClientClass(this.Parent))
             {
@@ -404,7 +509,20 @@ namespace Proc.Communication
                 string sUserPhone = this.Parent.User.TwilioPhone;
 
                 // Format
-                string sHTML = this.FormatMessage(to.To, this.SMSTemplate, "SMSTemplate.html", "SMS");
+                string sHTML = this.FormatMessage(to.To, this.SMSTemplate, "SMSTemplate.html", "SMS", true);
+
+                // Telemetry?
+                if(this.Telemetry)
+                {
+                    // Get
+                    Proc.Telemetry.DataClass c_Tele = this.GetTelemetry("SMS", "SMS");
+                    // Make URL
+                    string sURL = this.Parent.Parent.ReachableURL.CombinePath("zm", this.ToSave(), to.To.Compress());
+                    // Bitly
+                    sURL = sURL.Bitly(this.Parent.Parent);
+                    // Add
+                    sHTML += "\r\n\r\n{0}: ".FormatString(this.MessageLink.IfEmpty("To see the message")) + sURL;
+                }
 
                 //
                 string sResp = c_Client.SendSMS(
@@ -415,16 +533,18 @@ namespace Proc.Communication
 
                 if (sResp.HasValue())
                 {
-                    result.Log(to, sResp);
+                    c_Result.Log(to, sResp);
                 }
                 else
                 {
-                    result.Log(to);
+                    c_Result.Log(to);
 
                     // Update contact out
                     this.UpdateLstOut(this.GetTelemetry(this.SMSTemplate, "SMS"), to.To);
                 }
             }
+
+            if (notify) this.HandleNotify(eAddressClass.AddressTypes.SMS, c_Result);
         }
 
         /// <summary>
@@ -434,8 +554,10 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="to"></param>
         /// <param name="result"></param>
-        private void MakeCall(eAddressClass to, eReturnClass result)
+        private void MakeCall(eAddressClass to, bool notify)
         {
+            eReturnClass c_Result = new eReturnClass();
+
             //
             using (Communication.TwilioClientClass c_Client = new Communication.TwilioClientClass(this.Parent))
             {
@@ -448,16 +570,18 @@ namespace Proc.Communication
 
                 if (sResp.HasValue())
                 {
-                    result.Log(to, sResp);
+                    c_Result.Log(to, sResp);
                 }
                 else
                 {
-                    result.Log(to);
+                    c_Result.Log(to);
 
                     // Update contact out
                     this.UpdateLstOut(this.GetTelemetry("", "Voice"), to.To);
                 }
             }
+
+            if (notify) this.HandleNotify(eAddressClass.AddressTypes.Voice, c_Result);
         }
 
         /// <summary>
@@ -467,9 +591,9 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="to"></param>
         /// <param name="result"></param>
-        private void SendFedEx(eAddressClass to, eReturnClass result)
+        private void SendFedEx(eAddressClass to, bool notify)
         {
-            this.SendEMail(new eAddressClass("printandgo@fedex.com", eAddressClass.AddressTypes.EMail), result);
+            this.SendEMail(new eAddressClass("printandgo@fedex.com", eAddressClass.AddressTypes.EMail), notify);
         }
 
         /// <summary>
@@ -481,10 +605,12 @@ namespace Proc.Communication
         /// <param name="result"></param>
         /// <param name="html"></param>
         /// <returns></returns>
-        private bool SendViaSendGrid(eAddressClass to, eReturnClass result, string html)
+        private bool SendViaSendGrid(eAddressClass to, string html, bool notify)
         {
             // Assume failure
             bool bAns = false;
+
+            eReturnClass c_Result = new eReturnClass();
 
             // Get site info
             AO.SiteInfoClass c_SI = this.Parent.Database.SiteInfo;
@@ -502,8 +628,10 @@ namespace Proc.Communication
                 //
                 bAns = c_Resp.IsSuccessStatusCode;
 
-                result.Log(to, bAns ? "" : "Error while sending via SendGrid: {0}".FormatString(c_Resp.StatusCode));
+                c_Result.Log(to, bAns ? "" : "Error while sending via SendGrid: {0}".FormatString(c_Resp.StatusCode));
             }
+
+            if (notify) this.HandleNotify(eAddressClass.AddressTypes.EMail, c_Result);
 
             return bAns;
         }
@@ -515,7 +643,7 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="user"></param>
         /// <param name="via"></param>
-        private void UpdateLstOut(Proc.Telemetry.DataClass data, string user)
+        private void UpdateLstOut(Telemetry.DataClass data, string user)
         {
             // Get the manage
             AO.ManagerClass c_Mgr = this.Parent.Parent.Globals.Get<AO.ManagerClass>();
@@ -541,11 +669,11 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="template"></param>
         /// <returns></returns>
-        private string FormatMessage(string to, string template, string defaulttemplate, string via)
+        public string FormatMessage(string to, string template, string defaulttemplate, string via, bool usebitly)
         {
             // Setup for telemetry
-            bool bTelemetry = this.Parent.SiteInfo.TelemetryEnabled;
-            Proc.Telemetry.DataClass c_Tele = this.GetTelemetry(template, via);
+            bool bTelemetry = this.Telemetry && this.Parent.SiteInfo.TelemetryEnabled;
+            Telemetry.DataClass c_Tele = this.GetTelemetry(template, via);
 
             // Start with nothing
             string sTemplate = null;
@@ -557,6 +685,14 @@ namespace Proc.Communication
                 {
                     // Get the text
                     sTemplate = c_Template["text"];
+                    // Full?
+                    if (sTemplate.HasValue() && !sTemplate.StartsWith("<!DOCTYPE html>"))
+                    {
+                        // Get holder
+                        string sHolder = this.GetResource("EMailHolder.html").FromBytes();
+                        // Fill
+                        sTemplate = sHolder.Replace("{0}", sTemplate);
+                    }
                 }
             }
 
@@ -581,7 +717,7 @@ namespace Proc.Communication
                     if (bTelemetry)
                     {
                         // Convert
-                        sURL = c_Tele.AddTelemetry("zd", sURL, to);
+                        sURL = c_Tele.AddTelemetry("zd", sURL, usebitly, to);
                     }
 
                     //
@@ -612,7 +748,7 @@ namespace Proc.Communication
                     if (bTelemetry)
                     {
                         // Convert
-                        sURL = c_Tele.AddTelemetry("zd", sURL, to);
+                        sURL = c_Tele.AddTelemetry("zr", sURL, usebitly, to);
                     }
 
                     //
@@ -649,8 +785,12 @@ namespace Proc.Communication
             // Preprocess telemetry
             if (bTelemetry)
             {
-                sTemplate = c_Tele.Shorten(sTemplate, "zt", @"{{publicurl}}/viewers/automizy/images", to);
-                sTemplate = c_Tele.Replace(sTemplate, "./images/social-nxproject.gif", "zt", @"{{publicurl}}/social-nxproject.gif", to);
+                //Handle links
+                sTemplate = sTemplate.Replace("href=\"http", "href=\"{0}/zl/{1}/http".FormatString("".PublicURL(), c_Tele.ID));
+                // And the social media icons
+                sTemplate = c_Tele.Shorten(sTemplate, "zt", @"/viewers/automizy/images".PublicURL(), usebitly, to);
+                // And the telemetry link
+                sTemplate = c_Tele.Replace(sTemplate, "./images/social-nxproject.gif", "zt", @"/social-nxproject.gif".PublicURL(), usebitly, to);
             }
 
             return sTemplate.Handlebars(this.Values, delegate (string value, object thisvalue)
@@ -663,7 +803,7 @@ namespace Proc.Communication
                 {
                     return Expression.Eval(c_Ctx, value).Value;
                 }
-            });
+            }).Replace("".PublicURL(), this.Parent.Parent.ReachableURL);
         }
 
         /// <summary>
@@ -698,6 +838,109 @@ namespace Proc.Communication
                     }
                 }
             }
+        }
+        #endregion
+
+        #region Statics
+        /// <summary>
+        /// 
+        /// Creates a message from a store
+        /// 
+        /// </summary>
+        /// <param name="env"></param>
+        /// <param name="store"></param>
+        /// <returns></returns>
+        public static eMessageClass FromStore(EnvironmentClass env, StoreClass store)
+        {
+            // Get the params
+            string sTo = store[KeyTo];
+            string sFn = store[KeyCommand];
+            string sSubj = store[KeySubj];
+            string sMsg = store[KeyMsg];
+            string sAtt = store[KeyAttachments];
+            string sTemplate = store[KeyEMailTemplate];
+            string sCampaign = store[KeyCampaign];
+            string sTelemetry = store[KeyTelemetry];
+            string sUser = store[KeyUser];
+            string sPost = store[KeyPost];
+            string sFooter = store[KeyFooter];
+
+            // Handle to
+            JArray c_To = sTo.ToJArrayOptional();
+            // Handle attachments
+            JArray c_Att = sAtt.ToJArrayOptional();
+
+            // Create preference
+            eAddressClass.AddressTypes eType = eAddressClass.AddressTypes.User;
+            switch (sFn)
+            {
+                case "voice":
+                    eType = eAddressClass.AddressTypes.Voice;
+                    break;
+
+                case "sms":
+                    eType = eAddressClass.AddressTypes.SMS;
+                    break;
+
+                case "email":
+                    eType = eAddressClass.AddressTypes.EMail;
+                    break;
+
+                case "fedex":
+                    eType = eAddressClass.AddressTypes.FedEx;
+                    break;
+            }
+
+            // Make the context
+            AO.ExtendedContextClass c_Ctx = new AO.ExtendedContextClass(env, null, null, sUser);
+
+            // Make the message
+            eMessageClass c_Msg = new eMessageClass(c_Ctx);
+
+            c_Msg.Telemetry = !sTelemetry.IsSameValue("n");
+            c_Msg.Post = sPost;
+            c_Msg.Footer = sFooter;
+            c_Msg.Command = sFn;
+            c_Msg.User = sUser;
+            c_Msg.MessageLink = store[KeyMessageLink];
+
+            // Set the template
+            c_Msg.EMailTemplate = sTemplate;
+            // And the campaign
+            c_Msg.Campaign = sCampaign;
+
+            // Process recipients
+            for (int i = 0; i < c_To.Count; i++)
+            {
+                string sWkg = c_To.Get(i);
+                if (sWkg.HasValue()) c_Msg.To.Add(sWkg, eType);
+            }
+
+            // Fill
+            c_Msg.Subject = sSubj;
+            c_Msg.Message = sMsg;
+
+            for (int i = 0; i < c_Att.Count; i++)
+            {
+                string sWkg = c_Att.Get(i);
+                if (sWkg.HasValue()) c_Msg.Attachments.Add(sWkg);
+            }
+
+            return c_Msg;
+        }
+
+        /// <summary>
+        /// 
+        /// Creates message from saved value
+        /// 
+        /// </summary>
+        /// <param name="env"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static eMessageClass FromSave(EnvironmentClass env, string value)
+        {
+            // Do
+            return eMessageClass.FromStore(env, new StoreClass(value.Decompress().ToJObject()));
         }
         #endregion
     }
