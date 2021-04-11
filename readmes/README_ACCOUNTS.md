@@ -38,11 +38,18 @@ An account is a login that uses an email address or phone number as the identifi
 |Ctc in via|Method in which the account was contacted|
 |Ctc in cmp|Cmpaign in which the account was contacted|
 
-
-
 ## Enabling accounts
 
 Accounts are enabled via the [Site Settings](README_SITE.md) tool, ***System*** tab.
+
+## Automatic accoutn creation
+
+Accounts are automatically created and maintained when an ***account*** field is included in a dataset, for example:
+
+![image](images/Acct10.png)
+
+Account field allow for the display of the account dataset by using the ***Display*** entry in the options menu, accessible by
+right-mouse click on the field.
 
 ## Uses
 
