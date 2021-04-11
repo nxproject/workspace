@@ -734,7 +734,7 @@ nx.fmts = {
             return [
                 {
                     label: '>> EMail',
-                    selector: 'TELE',
+                    selector: 'EMAIL',
                     cb: function (ele) {
 
                         // 
@@ -749,7 +749,7 @@ nx.fmts = {
                     }
                 }, {
                     label: '>> Quick EMail',
-                    selector: 'TELE',
+                    selector: 'QEMAIL',
                     cb: function (ele) {
 
                         // 
@@ -802,7 +802,7 @@ nx.fmts = {
                     }
                 }, {
                     label: '>> Quick SMS',
-                    selector: 'TELE',
+                    selector: 'QTELE',
                     cb: function (ele) {
 
                         // 
@@ -915,7 +915,7 @@ nx.fmts = {
                     }
                 }, {
                     label: '>> Quick SMS',
-                    selector: 'TELE',
+                    selector: 'QTELE',
                     cb: function (ele) {
 
                         // 
@@ -945,7 +945,7 @@ nx.fmts = {
                     }
                 }, {
                     label: '>> Quick EMail',
-                    selector: 'TELE',
+                    selector: 'QEMAIL',
                     cb: function (ele) {
 
                         // 
