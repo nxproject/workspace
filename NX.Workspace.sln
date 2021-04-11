@@ -56,6 +56,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		readmes\README_D_WF.md = readmes\README_D_WF.md
 		readmes\README_D_WF.md.template = readmes\README_D_WF.md.template
 		readmes\README_EMPTY.md = readmes\README_EMPTY.md
+		readmes\README_EMT.md = readmes\README_EMT.md
 		readmes\README_FNS.md = readmes\README_FNS.md
 		readmes\README_FNS.md.template = readmes\README_FNS.md.template
 		readmes\README_HELP.md = readmes\README_HELP.md

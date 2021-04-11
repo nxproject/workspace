@@ -13,6 +13,7 @@ An account is a login that uses an email address or phone number as the identifi
 |Allowed|Dtasets allowed for the user (see below)|
 |Last login|Date and time that the account logged in|
 |Subscribed On|Date and time that the account subscribed|
+|Opt Out On|Date and time that the account opted out|
 |Child of|User that is related to the account|
 
 ---
