@@ -47,12 +47,9 @@ namespace Proc.Web
             // Get the ID
             string sID = store["id"];
 
-            call.Env.LogInfo("1");
-
             // Must have
             if(sID.HasValue())
             {
-                call.Env.LogInfo("2");
                 // Get the manager
                 AO.ManagerClass c_Mgr = call.Env.Globals.Get<AO.ManagerClass>();
                 // Get the object
@@ -60,13 +57,11 @@ namespace Proc.Web
                 // Any?
                 if(c_Obj != null)
                 {
-                    call.Env.LogInfo("3");
                     // Get the path
                     string sPath = c_Obj["value"];
                     // Any?
                     if(sPath.HasValue())
                     {
-                        call.Env.LogInfo("4");
                         // Process
                         call.Env.HTTP.Process(call.Context, sPath);
                         List<string> c_Path = new List<string>(sPath.Split('/', StringSplitOptions.RemoveEmptyEntries));
@@ -76,7 +71,6 @@ namespace Proc.Web
                         // Do we have a new route?
                         if (c_Route != null)
                         {
-                            call.Env.LogInfo("5");
                             // Reset the tree
                             call.RouteTree = c_Path;
                             // Call the route

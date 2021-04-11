@@ -298,6 +298,17 @@ namespace Proc.AO
             get { return this.SynchObject["taxid"]; }
             set { this.SynchObject["taxid"] = value; }
         }
+
+        /// <summary>
+        /// 
+        /// The number of days of bitly retention
+        /// 
+        /// </summary>
+        public int BitlyDays
+        {
+            get { return this.SynchObject["bitly"].ToInteger(0); }
+            set { this.SynchObject["bitly"] = value.ToString(); }
+        }
         #endregion
 
         #region Indexer

@@ -70,13 +70,18 @@ qx.Class.define('tools.Pick', {
 
                                     // Open all selected
                                     data.forEach(function (row) {
-                                        nx.desktop.addWindowDS({
-                                            ds: req.ds,
-                                            id: row._id,
-                                            view: req.view,
-                                            sysmode: req.sysmode,
-                                            caller: nx.util.eventGetWindow(e)
-                                        });
+                                    //
+                                        if (req.onSelect) {
+                                            req.onSelect(row);
+                                        } else {
+                                            nx.desktop.addWindowDS({
+                                                ds: req.ds,
+                                                id: row._id,
+                                                view: req.view,
+                                                sysmode: req.sysmode,
+                                                caller: nx.util.eventGetWindow(e)
+                                            });
+                                        }
                                     });
                                 }
                             }

@@ -218,6 +218,31 @@ nx.fs = {
                 node.removeNode(true);
             }
         }
+    },
+
+    quickMessage: function (to, id) {
+
+        // Parse
+        var parsed = nx.db.parseID(id);
+
+        // Get the qm
+        nx.db.getObj(parsed.ds, parsed.id, function (data) {
+
+            var fn = (nx.util.isPhone(to) ? 'sms' : 'email');
+
+            // 
+            nx.util.serviceCall('Communication.Process', {
+                cmd: fn,
+                to: to,
+                subject: data.subj,
+                message: data.msg,
+                att: [],
+                template: data.temp || '',
+                campaign: '',
+                telemetry: 'n',
+                mlink: ''
+            });
+        });
     }
 
 };

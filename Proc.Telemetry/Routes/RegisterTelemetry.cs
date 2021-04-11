@@ -72,7 +72,7 @@ namespace Proc.Telemetry
                     // Get the type
                     string sType = (sFile.Contains("nxproject") ? "Telemetry" : "Social");
                     // And to data
-                    c_Data.Via = sType;
+                    if (sType.HasValue()) c_Data.Via = sType;
 
                     // Add
                     c_Data.AddTransaction(sUser, true,

@@ -733,8 +733,8 @@ nx.fmts = {
 
             return [
                 {
-                    label: '>> EMail',
-                    selector: 'EMAIL',
+                    label: '>> Quick',
+                    selector: 'QUICK',
                     cb: function (ele) {
 
                         // 
@@ -743,13 +743,20 @@ nx.fmts = {
                         var value = widget.val();
                         // Call
                         if (value) {
-                            window.open('mailto:' + value);
+                        //
+                            nx.calls.pick({
+                                ds: '_quickmessages',
+                                onSelect: function (id) {
+                                    nx.office.goBack();
+                                    nx.fs.quickMessage(value, id);
+                                }
+                            });
                         }
 
                     }
-                }, {
-                    label: '>> Quick EMail',
-                    selector: 'QEMAIL',
+                },{
+                    label: '>> EMail',
+                    selector: 'EMAIL',
                     cb: function (ele) {
 
                         // 
@@ -786,8 +793,8 @@ nx.fmts = {
 
             return [
                 {
-                    label: '>> SMS',
-                    selector: 'TELE',
+                    label: '>> Quick',
+                    selector: 'QUICK',
                     cb: function (ele) {
 
                         // 
@@ -795,14 +802,21 @@ nx.fmts = {
                         // Get the value
                         var value = widget.val();
                         // Call
-                        if (value && nx.util.isPhone()) {
-                            window.open('tel:+1' + nx.util.numbersOnly(value));
+                        if (value) {
+                            //
+                            nx.calls.pick({
+                                ds: '_quickmessages',
+                                onSelect: function (id) {
+                                    nx.office.goBack();
+                                    nx.fs.quickMessage(value, id);
+                                }
+                            });
                         }
 
                     }
                 }, {
-                    label: '>> Quick SMS',
-                    selector: 'QTELE',
+                    label: '>> SMS',
+                    selector: 'TELE',
                     cb: function (ele) {
 
                         // 
@@ -899,8 +913,8 @@ nx.fmts = {
 
             return [
                 {
-                    label: '>> SMS',
-                    selector: 'TELE',
+                    label: '>> Quick',
+                    selector: 'QUICK',
                     cb: function (ele) {
 
                         // 
@@ -908,14 +922,21 @@ nx.fmts = {
                         // Get the value
                         var value = widget.val();
                         // Call
-                        if (value && nx.util.isPhone()) {
-                            window.open('tel:+1' + nx.util.numbersOnly(value));
+                        if (value) {
+                            //
+                            nx.calls.pick({
+                                ds: '_quickmessages',
+                                onSelect: function (id) {
+                                    nx.office.goBack();
+                                    nx.fs.quickMessage(value, id);
+                                }
+                            });
                         }
 
                     }
-                }, {
-                    label: '>> Quick SMS',
-                    selector: 'QTELE',
+                },{
+                    label: '>> SMS',
+                    selector: 'TELE',
                     cb: function (ele) {
 
                         // 
@@ -939,21 +960,6 @@ nx.fmts = {
                         var value = widget.val();
                         // Call
                         if (value && nx.util.isEMail()) {
-                            window.open('mailto:' + value);
-                        }
-
-                    }
-                }, {
-                    label: '>> Quick EMail',
-                    selector: 'QEMAIL',
-                    cb: function (ele) {
-
-                        // 
-                        var widget = nx.cm.get(ele);
-                        // Get the value
-                        var value = widget.val();
-                        // Call
-                        if (value) {
                             window.open('mailto:' + value);
                         }
 

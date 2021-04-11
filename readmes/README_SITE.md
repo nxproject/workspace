@@ -175,9 +175,4 @@ Clicking on any container shows the log for the container:
 
 The log can be copied to the clipbord and then pasted elsewhere for debugging purposes.
 
-## Packages
-
-
-
-
 [Home](../README.md)

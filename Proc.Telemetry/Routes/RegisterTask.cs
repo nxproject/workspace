@@ -46,6 +46,8 @@ namespace Proc.Telemetry
         {
             // Get path
             List<string> c_Path = store.GetAsJArray("path").ToList();
+            // As a string 
+            string sRoute = "/" + c_Path.Join("/");
             // Find the route
             RouteClass c_Route = call.Env.Router.Get(store, call.Request.HttpMethod, c_Path);
 
@@ -77,7 +79,7 @@ namespace Proc.Telemetry
 
                     // Add
                     c_Data.AddTransaction(sUser, true,
-                                            store.PathFromEntry("", "path"),
+                                            sRoute,
                                             call.Request.RemoteEndPoint.Address.ToString());
 
                     // Do we have one?

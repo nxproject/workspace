@@ -481,6 +481,9 @@ namespace Proc.Communication
                         // Update contact out
                         this.UpdateLstOut(this.GetTelemetry(this.EMailTemplate, "EMail"), to.To);
                     }
+
+                    // Only once
+                    notify = false;
                 }
             }
             catch (Exception e)
@@ -669,7 +672,7 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="template"></param>
         /// <returns></returns>
-        public string FormatMessage(string to, string template, string defaulttemplate, string via, bool usebitly)
+        public string FormatMessage(string to, string template, string defaulttemplate, string via, bool usebitly, bool webformat = false)
         {
             // Setup for telemetry
             bool bTelemetry = this.Telemetry && this.Parent.SiteInfo.TelemetryEnabled;
@@ -686,12 +689,12 @@ namespace Proc.Communication
                     // Get the text
                     sTemplate = c_Template["text"];
                     // Full?
-                    if (sTemplate.HasValue() && !sTemplate.StartsWith("<!DOCTYPE html>"))
+                    if (webformat && sTemplate.HasValue() && !sTemplate.StartsWith("<!DOCTYPE html>"))
                     {
                         // Get holder
                         string sHolder = this.GetResource("EMailHolder.html").FromBytes();
                         // Fill
-                        sTemplate = sHolder.Replace("{0}", sTemplate);
+                        sTemplate = sHolder.Replace("{message}", sTemplate);
                     }
                 }
             }

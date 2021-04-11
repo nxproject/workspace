@@ -158,7 +158,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.07a"))
+            if (ds.Definition.ReleaseChanged("2021.04.11a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -353,6 +353,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Telemetry";
 
+                c_Field = ds.Definition["bitly"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
+                c_Field.Label = "# Days Ret.";
+
                 c_Field.SaveParent();
             }
 
@@ -391,7 +395,8 @@ namespace Proc.AO.BuiltIn
                     "quorumenabled", 
                     "iotenabled",  
                     "helproot",
-                    "proccount"
+                    "proccount",
+                    "bitly"
                     );
 
                 c_CInfo.Save();
@@ -1111,7 +1116,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Bitly(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.10a"))
+            if (ds.Definition.ReleaseChanged("2021.04.11a"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("Bitly");
@@ -1127,7 +1132,7 @@ namespace Proc.AO.BuiltIn
                 Definitions.DatasetFieldClass c_Field = ds.Definition["value"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
 
-                c_Field = ds.Definition["exp"];
+                c_Field = ds.Definition["creon"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
                 c_Field.UseIndex = true;
 
@@ -1441,7 +1446,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillAccess(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.08a"))
+            if (ds.Definition.ReleaseChanged("2021.04.11a"))
             {
                 //
                 ds.Definition.Caption = "Account";
@@ -1491,6 +1496,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
                 c_Field.Label = "Subscribed On";
 
+                c_Field = ds.Definition["optouton"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "OptOut On";
+
                 c_Field = ds.Definition["lastctcout"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
                 c_Field.Label = "Last ctc out";
@@ -1534,7 +1543,7 @@ namespace Proc.AO.BuiltIn
                 c_VInfo.Caption = "Info";
 
                 //
-                c_VInfo.UseFields("name", "pwd", "allowed", "lastin", "subscribedon", "childof");
+                c_VInfo.UseFields("name", "pwd", "allowed", "lastin", "subscribedon", "optouton", "childof");
                 c_VInfo.Set("ro", true.ToDBBoolean(), "lastin", "subscribedon");
 
                 c_VInfo.Save();

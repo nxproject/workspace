@@ -46,7 +46,7 @@ namespace Proc.Communication
         public override void Call(HTTPCallClass call, StoreClass store)
         {
             // Get path
-            string SPath = store.GetAsJArray("path").ToList().Join("/");
+            string SPath = "/" + store.GetAsJArray("path").ToList().Join("/");
 
             try
             {
@@ -75,7 +75,7 @@ namespace Proc.Communication
 
                     // Add
                     c_Data.AddTransaction(sUser, true,
-                                            SPath,
+                                            SPath.GetFileNameFromPath(),
                                             call.Request.RemoteEndPoint.Address.ToString());
 
                     // Do we have one?
@@ -88,7 +88,7 @@ namespace Proc.Communication
                     }
 
                     // Format
-                    string sHTML = c_Msg.FormatMessage(sUser.Decompress(), c_Msg.EMailTemplate, "EMailTemplate.html", "EMail", false);
+                    string sHTML = c_Msg.FormatMessage(sUser.Decompress(), c_Msg.EMailTemplate, "EMailTemplate.html", "EMail", false, true);
 
                     using (MemoryStream c_Stream = new MemoryStream(sHTML.ToBytes()))
                     {

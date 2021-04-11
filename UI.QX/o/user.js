@@ -491,6 +491,8 @@ qx.Class.define('o.user', {
 
                             // Create null user
                             nx.desktop.resetUser();
+                            // No more remember me
+                            nx.env.setRM();
                             //
                             nx.util.notifyInfo('You logged on elsewhere...');
 

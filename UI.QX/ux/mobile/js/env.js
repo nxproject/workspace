@@ -433,7 +433,7 @@ nx.env = {
         var self = this;
 
         // Save
-        self.setStore('rm', value);
+        self.setStore('rm', value || '');
     },
 
     /**

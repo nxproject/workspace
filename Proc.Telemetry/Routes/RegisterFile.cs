@@ -46,6 +46,8 @@ namespace Proc.Telemetry
         {
             // Get path
             List<string> c_Path = store.GetAsJArray("path").ToList();
+            // As a string 
+            string sRoute = "/" + c_Path.Join("/");
             // Find the route
             RouteClass c_Route = call.Env.Router.Get(store, call.Request.HttpMethod, c_Path);
 
@@ -72,12 +74,12 @@ namespace Proc.Telemetry
                         // Update type
                         sType = c_Route.Telemetry.IfEmpty(sType);
                         // And to data
-                        c_Data.Via = sType;
+                        if (sType.HasValue()) c_Data.Via = sType;
                     }
 
                     // Add
                     c_Data.AddTransaction(sUser, true,
-                                            store.PathFromEntry("", "path"),
+                                            sRoute.GetFileNameFromPath(),
                                             call.Request.RemoteEndPoint.Address.ToString());
 
                     // Do we have one?
@@ -99,7 +101,7 @@ namespace Proc.Telemetry
             if (c_Route != null)
             {
                 // Process
-                call.Env.HTTP.Process(call.Context, "/" + c_Path.Join("/"));
+                call.Env.HTTP.Process(call.Context, sRoute);
             }
 
         }

@@ -1611,6 +1611,26 @@
         });
 
         $AEE.blocks.push({
+            icon: 'siteinfo.gif',
+            name: 'siteinfo',
+            category: 'content',
+            title: $A.translate('Site Information'),
+            drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
+                $block.addClass('aee-text-block-item');
+                var html = '';
+                var text = '<span style="font-size: 12pt; "><b>{{sys.name}}</b></span><br>{{sys.addr1}}<br>{{sys.city}}, {{sys.state}}&nbsp;<br>{{sys.phone}}<br></span>';
+                for (var i = 0; i < 1; i++) {
+                    html += text;
+                }
+                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
+
+                $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
+                $content.tinymce($AEE.settings.tinymceBlock);
+            }
+        });
+
+        $AEE.blocks.push({
             icon: 'privacy.gif',
             name: 'privacy',
             category: 'content',
@@ -2959,6 +2979,7 @@
             'message',
             'attachments',
             'actions',
+            'siteinfo',
             'privacy',
             'telemetry',
             'image',

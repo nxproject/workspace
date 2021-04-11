@@ -96,8 +96,11 @@ namespace Proc.Web
                 // Make a query
                 using (AO.QueryClass c_Query = new QueryClass(c_Mgr.DefaultDatabase[AO.DatabaseClass.DatasetBitly].DataCollection))
                 {
+                    // Days old
+                    int iDays = c_Mgr.DefaultDatabase.SiteInfo.BitlyDays;
+                    if (iDays <= 0) iDays = 7;
                     // Set the filter
-                    c_Query.Add("exp", QueryElementClass.QueryOps.Lt, DateTime.Now.ToDBDate());
+                    c_Query.Add("creon", QueryElementClass.QueryOps.Lt, DateTime.Now.AddDays(iDays-iDays).ToDBDate());
                     // Delete
                     c_Query.Delete(true);
                 }

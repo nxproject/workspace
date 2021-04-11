@@ -29,7 +29,7 @@ qx.Class.define('t.quickmessage', {
         icon: 'lightning',
 
         allowed: function (widget, cb) {
-            cb(false);
+            cb(nx.desktop.user.getIsSelector('QUICK'));
         },
 
         when: function (widget, button) {
@@ -39,7 +39,30 @@ qx.Class.define('t.quickmessage', {
 
         click: function (widget) {
 
-            alert('ok');
+            var value = widget.getValue();
+            if (nx.util.hasValue(value)) {
+                // Select
+                nx.util.runTool('View', {
+                    ds: '_quickmessages',
+                    onSelect: function (e, data) {
+                        var fn = (nx.util.isPhone(value) ? 'sms' : 'email');
+                        data.forEach(function (row) {
+                            // 
+                            nx.util.serviceCall('Communication.Process', {
+                                cmd: fn,
+                                to: value,
+                                subject: row.subj,
+                                message: row.msg,
+                                att: [],
+                                template: row.temp || '',
+                                campaign: '',
+                                telemetry: 'n',
+                                mlink: ''
+                            });
+                        });
+                    }
+                });
+            }
 
         }
     }

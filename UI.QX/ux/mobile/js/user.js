@@ -89,7 +89,7 @@ nx.user = {
                     });
                     self.SIO.on('reconnect', async (socket) => {
                         var name = self.getField('sioid');
-                        if (name && sockert && socket.join) {
+                        if (name && socket && socket.join) {
                             socket.join(name);
                         }
                     });
@@ -456,6 +456,8 @@ nx.user = {
 
                         // Create null user
                         nx.env.reset();
+                        // No more remember me
+                        nx.env.setRM();
                         //
                         nx.util.notifyInfo('You logged on elsewhere...');
 
