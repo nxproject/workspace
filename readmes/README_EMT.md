@@ -10,7 +10,7 @@ An EMail template is used to generate outbound emails.
 |Description|Desciption of template|
 |Text|HTML that makes the template|
 
-You can enter the HTML for the template or ruse the ***EMail Template Editor*** by right clicking on the ***text*** field:
+You can enter the HTML for the template or ruse the ***EMail Template Editor*** by right clicking on the ***text*** field and selecting the ***Edit*** option:
 
 ![image](images/EMT2.png)
 
