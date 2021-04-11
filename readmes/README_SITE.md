@@ -45,7 +45,9 @@ The Site Settings allow you to set the information that is global to the site:
 |Quorum|Is the quorum option available|
 |IOT Enabled|Is the IOT option available|
 |Help root|The starting page for user defined help|
-|Proc. Count|Number of processor instances allowed|
+|Proc. Count|Number of processor instances allowed.  Default 1|
+|# Days Ret|Number of days that shortened URLs are retained.  Default 7|
+
 ---
 
 ![image](images/Site6.png)
