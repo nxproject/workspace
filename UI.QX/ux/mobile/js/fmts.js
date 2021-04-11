@@ -199,9 +199,9 @@ nx.fmts = {
                     value: '%' + value
                 }]
             };
-                // Get the dataset
+            // Get the dataset
             nx.db._loadDataset(ds, function (dsdef) {
-            // Get the link ds
+                // Get the link ds
                 var fdef = dsdef.fields[widget.attr('name')];
                 if (fdef && fdef.linkds) {
                     // Call view
@@ -733,9 +733,8 @@ nx.fmts = {
 
             return [
                 {
-                    label: 'Send email',
-                    mobile: true,
-                    icon: '+email',
+                    label: '>> EMail',
+                    selector: 'TELE',
                     cb: function (ele) {
 
                         // 
@@ -748,28 +747,106 @@ nx.fmts = {
                         }
 
                     }
-                }];
+                }, {
+                    label: '>> Quick EMail',
+                    selector: 'TELE',
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value) {
+                            window.open('mailto:' + value);
+                        }
+
+                    }
+                }, {
+                    label: 'EMail',
+                    mobile: true,
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value) {
+                            window.open('mailto:' + value);
+                        }
+
+                    }
+                }
+            ];
 
         },
 
         phone: function () {
 
-            return [{
-                label: 'Call',
-                mobile: true,
-                cb: function (ele) {
+            return [
+                {
+                    label: '>> SMS',
+                    selector: 'TELE',
+                    cb: function (ele) {
 
-                    // 
-                    var widget = nx.cm.get(ele);
-                    // Get the value
-                    var value = widget.val();
-                    // Call
-                    if (value) {
-                        window.open('tel:+1' + nx.util.numbersOnly(value));
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value && nx.util.isPhone()) {
+                            window.open('tel:+1' + nx.util.numbersOnly(value));
+                        }
+
                     }
+                }, {
+                    label: '>> Quick SMS',
+                    selector: 'TELE',
+                    cb: function (ele) {
 
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value && nx.util.isPhone()) {
+                            window.open('tel:+1' + nx.util.numbersOnly(value));
+                        }
+
+                    }
+                }, {
+                    label: 'SMS',
+                    mobile: true,
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value) {
+                            window.open('sms:+1' + nx.util.numbersOnly(value));
+                        }
+
+                    }
+                }, {
+                    label: 'Call',
+                    mobile: true,
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value) {
+                            window.open('tel:+1' + nx.util.numbersOnly(value));
+                        }
+
+                    }
                 }
-            }];
+            ];
         },
 
         vin: function () {
@@ -816,6 +893,73 @@ nx.fmts = {
             }
 
             return ans;
+        },
+
+        account: function () {
+
+            return [
+                {
+                    label: '>> SMS',
+                    selector: 'TELE',
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value && nx.util.isPhone()) {
+                            window.open('tel:+1' + nx.util.numbersOnly(value));
+                        }
+
+                    }
+                }, {
+                    label: '>> Quick SMS',
+                    selector: 'TELE',
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value && nx.util.isPhone()) {
+                            window.open('tel:+1' + nx.util.numbersOnly(value));
+                        }
+
+                    }
+                }, {
+                    label: '>> EMail',
+                    selector: 'EMAIL',
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value && nx.util.isEMail()) {
+                            window.open('mailto:' + value);
+                        }
+
+                    }
+                }, {
+                    label: '>> Quick EMail',
+                    selector: 'TELE',
+                    cb: function (ele) {
+
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value) {
+                            window.open('mailto:' + value);
+                        }
+
+                    }
+                }
+            ];
         }
     }
 

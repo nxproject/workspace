@@ -967,7 +967,7 @@ namespace Proc.AO.BuiltIn
             {
                 //
                 c_Twilio.Caption = "Twilio";
-                c_Twilio.Selector = "TWILIO";
+                c_Twilio.Selector = "TELE";
 
                 //
                 c_Twilio.UseFields("twiliophone");

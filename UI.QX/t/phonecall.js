@@ -29,7 +29,7 @@ qx.Class.define('t.phonecall', {
         icon: 'user_comment',
 
         allowed: function (widget, cb) {
-            cb(nx.desktop.user.getIsSelector('TWILIO'));
+            cb(nx.desktop.user.getIsSelector('TELE'));
         },
 
         when: function (widget, button) {

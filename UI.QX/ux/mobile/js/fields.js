@@ -250,9 +250,10 @@ nx.fields = {
                 extras.forEach(function (entry) {
                     // Assume ok
                     var valid = nx.util.hasValue(entry.label);
-                    //if (entry.mobile && !nx.util.isMobile()) valid = false;
-                    //if (entry.secure && !nx.util.isSecure()) valid = false;
-                    //if (entry.camera && !nx.util.hasCamera()) valid = false;
+                    if (entry.mobile && !nx.util.isMobile()) valid = false;
+                    if (entry.secure && !nx.util.isSecure()) valid = false;
+                    if (entry.camera && !nx.util.hasCamera()) valid = false;
+                    if (entry.selector && !nx.user.getIsSelector(entry.selector)) valid = false;
 
                     if (valid) {
                         list.push(nx.builder.chip(entry.label, 'primary', entry.cb));

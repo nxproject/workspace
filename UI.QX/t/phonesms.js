@@ -24,12 +24,12 @@ qx.Class.define('t.phonesms', {
 
     members: {
 
-        caption: 'Send text',
+        caption: '>> SMS',
 
         icon: 'phone',
 
         allowed: function (widget, cb) {
-            cb(nx.desktop.user.getIsSelector('TWILIO'));
+            cb(nx.desktop.user.getIsSelector('TELE'));
         },
 
         when: function (widget, button) {

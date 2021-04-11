@@ -740,7 +740,7 @@ qx.Class.define('tools.Documents', {
                     });
                 }
 
-                if (nx.util.hasValue(nx.desktop.user.getTwilioPhone()) && nx.desktop.user.getIsSelector('TWILIO')) {
+                if (nx.util.hasValue(nx.desktop.user.getTwilioPhone()) && nx.desktop.user.getIsSelector('TELE')) {
                     // Make room
                     if (del) {
                         cm.push('-');

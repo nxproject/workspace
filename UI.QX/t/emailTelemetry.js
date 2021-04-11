@@ -24,7 +24,7 @@ qx.Class.define('t.emailTelemetry', {
 
     members: {
 
-        caption: 'Send email',
+        caption: '>> EMail',
 
         icon: 'email',
 

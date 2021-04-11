@@ -24,7 +24,7 @@ qx.Class.define('t.email', {
 
     members: {
 
-        caption: 'Send email',
+        caption: '>> EMail',
 
         icon: 'email',
 
