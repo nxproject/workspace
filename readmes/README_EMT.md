@@ -19,6 +19,6 @@ These are the block definitions:
 
 |Image|Name|Use|
 |-|-|-|
-
+|![image](../UI.QX/viewers/automizy/images/blocks/subject.gif)|Subject|Include the subject value|
 
 [Home](../README.md)
