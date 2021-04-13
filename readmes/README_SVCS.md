@@ -32,7 +32,7 @@ Next click on the ***Add*** button and enter the following:
 
 ![image](images/SampleAllowed.png)
 
-The key value is ```?TELE``` which tells the system that the user can use the telephony options, which include Twilio.
+The key value is ```?TELE``` which tells the system that the user can use the telephony options, which include Twilio.  The rest of the field should contain the values appropriate for your site.
 
 ## PositionStack
 
