@@ -760,7 +760,8 @@ nx.user = {
             nx.util.serviceCall('Access.Login', {
                 user: name,
                 pwd: pwd,
-                rm: rm
+                rm: rm,
+                location: 'm'
             }, function (result) {
 
                 self.processLogin(name, pwd, result);
@@ -889,7 +890,8 @@ nx.user = {
         nx.util.serviceCall('Office.GetStartMenu', {
             name: self.getField('name'),
             allowed: self.getField('allowed'),
-            reload: 'y'
+            reload: 'y',
+            location: 'm'
         }, function (result) {
             self.loadField('commands', result.commands);
             self.loadField('datasets', result.datasets);

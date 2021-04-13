@@ -52,6 +52,7 @@ namespace Proc.Office
             // Get the passed
             string sName = store["name"];
             string sAllowed = store["allowed"];
+            string sLocation = store["location"];
 
             // Do we need to reload?
             if (store["reload"].FromDBBoolean())
@@ -129,7 +130,7 @@ namespace Proc.Office
                             if (c_ME != null)
                             {
                                 //
-                                bool bHidden = this.ComputeHidden(c_Wkg, c_ME);
+                                bool bHidden = this.ComputeHidden(c_Wkg, c_ME, sLocation);
 
                                 // Add to menu
                                 if (!bHidden) c_AllEntries.Add(c_ME);
@@ -249,7 +250,7 @@ namespace Proc.Office
                                 if (c_ME != null)
                                 {
                                     // Compute hidden
-                                    bool bHidden = this.ComputeHidden(c_Wkg, c_ME);
+                                    bool bHidden = this.ComputeHidden(c_Wkg, c_ME, sLocation);
 
                                     // Loop thru
                                     foreach (string sFile in c_Files)
@@ -517,25 +518,45 @@ namespace Proc.Office
             if (c_Btn != null) list.Add(c_Btn);
         }
 
-        private bool ComputeHidden(AO.Definitions.DatasetClass ds, MenuEntryClass me)
+        private bool ComputeHidden(AO.Definitions.DatasetClass ds, MenuEntryClass me, string location)
         {
             //
             bool bAns = false;
 
             // Check to see "s" privileges
-            if(me.Privileges.Contains("s"))
+            if (me.Privileges.Contains("s"))
             {
                 bAns = false;
             }
             // Now "e"
-            else if(me.Privileges.Contains("e"))
+            else if (me.Privileges.Contains("e"))
             {
                 bAns = true;
             }
             else
             {
-                // The dataset dictates
-                bAns = (ds.AtStart == AO.Definitions.DatasetClass.AtStartOptions.Yes) || ds.StartIndex.IsSameValue("hidden");
+                // Use the start index
+                bAns = ds.StartIndex.IsSameValue("hidden");
+                // Visible?
+                if (!bAns)
+                {
+                    switch (ds.AtStart)
+                    {
+                        case AO.Definitions.DatasetClass.AtStartOptions.No:
+                            bAns = true;
+                            break;
+
+                        case AO.Definitions.DatasetClass.AtStartOptions.AtMobile:
+                        case AO.Definitions.DatasetClass.AtStartOptions.AtMobileViewOnly:
+                            bAns = !location.IsSameValue("m");
+                            break;
+
+                        case AO.Definitions.DatasetClass.AtStartOptions.AtWebtop:
+                        case AO.Definitions.DatasetClass.AtStartOptions.AtWebtopViewOnly:
+                            bAns = !location.IsSameValue("w");
+                            break;
+                    }
+                }
             }
 
             return bAns;

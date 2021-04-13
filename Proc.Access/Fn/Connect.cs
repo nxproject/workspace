@@ -85,7 +85,8 @@ namespace Proc.Access
                             // Call
                             StoreClass c_Partial = call.FN("Office.GetStartMenu",
                                                             new StoreClass("name", c_Stored["name"],
-                                                                            "allowed", c_Stored["allowed"]));
+                                                                            "allowed", c_Stored["allowed"],
+                                                                            "location", c_Stored["location"]));
 
                             // And save passed
                             c_Ans.Set("commands", c_Partial["commands"]);

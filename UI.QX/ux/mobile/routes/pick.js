@@ -132,7 +132,7 @@ nx._routes.push({
                             nx.builder.searchbar(nx.env.getBucketItem('_search', routeTo.url)),
                             nx.builder.picklist(ds, data, nx.env.getBucketID(routeTo.url), nx.env.getBucketItem('onSelect', routeTo.url))
                         ],
-                        ((nx.user.opAllowed(ds, 'a') && (dsdef.hidden != 'v' || chain)) ?
+                        ((nx.user.opAllowed(ds, 'a') && ((dsdef.hidden || '').indexOf('v') === -1 || chain)) ?
                             {
                                 label: 'Add',
                                 icon: 'add_circle_outline',

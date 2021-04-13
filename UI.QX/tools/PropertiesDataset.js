@@ -95,7 +95,7 @@ qx.Class.define('tools.PropertiesDataset', {
                                             label: 'Hide in Start',
                                             aoFld: 'hidden',
                                             value: dsdef.hidden,
-                                            choices: ['y', 'n', 'v']
+                                            choices: ['y', 'n', 'v', 'w', 'wv', 'm', 'mv']
                                         }, {
                                             nxtype: 'string',
                                             top: 6,

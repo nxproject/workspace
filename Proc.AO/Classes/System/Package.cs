@@ -53,16 +53,6 @@ namespace Proc.AO
         }
         #endregion
 
-        #region IDisposable
-        public void Dispose()
-        { }
-        #endregion
-
-        #region Constants
-        private const long BUFFER_SIZE = 4096;
-        private const string Prefix = ".\\";
-        #endregion
-
         #region Properties
         /// <summary>
         /// 
@@ -207,7 +197,7 @@ namespace Proc.AO
                     // Make the payload
                     JObject c_Info = new JObject();
                     c_Info.Set("path", c_Doc.Path);
-                    c_Info.Set("contents", c_Doc.ValueAsBytes.ToBase64());
+                    c_Info.Set("content", c_Doc.ValueAsBytes.ToBase64());
                     // Save
                     this.AddEntry(pkg, sID, c_Info.ToSimpleString());
                 }

@@ -51,7 +51,11 @@ namespace Proc.AO.Definitions
             Undefined,
             Yes,
             No,
-            ViewOnly            
+            ViewOnly,
+            AtWebtop,
+            AtMobile,
+            AtWebtopViewOnly,
+            AtMobileViewOnly
         }
         #endregion
 
@@ -170,6 +174,22 @@ namespace Proc.AO.Definitions
                     case "v":
                         eAns = AtStartOptions.ViewOnly;
                         break;
+
+                    case "w":
+                        eAns = AtStartOptions.AtWebtop;
+                        break;
+
+                    case "m":
+                        eAns = AtStartOptions.AtMobile;
+                            break;
+
+                    case "wv":
+                        eAns = AtStartOptions.AtWebtopViewOnly;
+                        break;
+
+                    case "mv":
+                        eAns = AtStartOptions.AtMobileViewOnly;
+                        break;
                 }
                 return eAns; 
             }
@@ -189,6 +209,22 @@ namespace Proc.AO.Definitions
 
                     case AtStartOptions.ViewOnly:
                         sValue = "v";
+                        break;
+
+                    case AtStartOptions.AtMobile:
+                        sValue = "m";
+                        break;
+
+                    case AtStartOptions.AtMobileViewOnly:
+                        sValue = "mv";
+                        break;
+
+                    case AtStartOptions.AtWebtop:
+                        sValue = "w";
+                        break;
+
+                    case AtStartOptions.AtWebtopViewOnly:
+                        sValue = "Wv";
                         break;
                 }
                 this.Object["hidden"] = sValue; 

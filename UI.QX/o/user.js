@@ -693,7 +693,8 @@ qx.Class.define('o.user', {
                 nx.util.serviceCall('Access.Login', {
                     user: name,
                     pwd: pwd,
-                    rm: rm
+                    rm: rm,
+                    location: 'w'
                 }, function (result) {
 
                     // Save remember me token
@@ -823,7 +824,8 @@ qx.Class.define('o.user', {
             nx.util.serviceCall('Office.GetStartMenu', {
                 name: self.getField('name'),
                 allowed: self.getField('allowed'),
-                reload: 'y'
+                reload: 'y',
+                location: 'w'
             }, function (result) {
                 self.loadField('commands', result.commands);
                 self.loadField('datasets', result.datasets);

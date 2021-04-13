@@ -43,6 +43,7 @@ namespace Proc.Access
             string sUser = values["user"];
             string sPwd = values["pwd"];
             bool bRM = values["rm"].FromDBBoolean();
+            string sLocation = values["location"];
 
             // Is it a remembeer me token?
             if (bRM)
@@ -183,7 +184,8 @@ namespace Proc.Access
                     // Call
                     StoreClass c_Partial = call.FN("Office.GetStartMenu",
                                                     new StoreClass("name", sName,
-                                                                    "allowed", sAllowed));
+                                                                    "allowed", sAllowed,
+                                                                    "location", sLocation));
 
                     // And save passed
                     c_Ans.Set("commands", c_Partial["commands"]);

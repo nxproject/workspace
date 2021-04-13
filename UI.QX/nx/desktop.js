@@ -170,7 +170,8 @@ nx.desktop = {
                 var id = urlParams.get('id');
                 if (id) {
                     nx.util.serviceCall('Access.Connect', {
-                        item: id
+                        item: id,
+                        location: 'w'
                     }, function (result) {
 
                         if (result.pwd) {
