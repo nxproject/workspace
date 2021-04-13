@@ -397,7 +397,7 @@ nx.office = {
             // Get the url
             url = history[pos];
             // Get the object
-            var obj = nx.bucket.getBucketItem('_obj');
+            var obj = nx.env.getBucketItem('_obj');
             // Any?
             if (obj) {
                 // Clear

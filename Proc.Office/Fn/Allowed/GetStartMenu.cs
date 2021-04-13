@@ -542,7 +542,7 @@ namespace Proc.Office
                 {
                     switch (ds.AtStart)
                     {
-                        case AO.Definitions.DatasetClass.AtStartOptions.No:
+                        case AO.Definitions.DatasetClass.AtStartOptions.Yes:
                             bAns = true;
                             break;
 
