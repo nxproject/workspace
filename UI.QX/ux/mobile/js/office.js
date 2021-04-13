@@ -80,6 +80,7 @@ nx.office = {
             'routes/organizer',
             'routes/merge',
             'routes/delete',
+            'routes/comm',
             'routes/atend'
 
         ], function () {
@@ -105,6 +106,9 @@ nx.office = {
                         // History
                         routeChanged: function (newRoute, previousRoute, router) {
 
+                            // Set the default
+                            nx.env.setDefaultBucket(newRoute.url);
+
                             // Do the setup
                             var fn = nx.env.getBucketItem('_onSetup', newRoute.url);
                             if (fn) {
@@ -119,6 +123,30 @@ nx.office = {
                                 var added = false;
                                 //
                                 var drops = nx.office.history();
+                                // Make active list
+                                var active = [];
+                                // Loop thru
+                                drops.forEach(function (url) {
+                                    // The bucket id
+                                    active.push(nx.env.getBucketID(url));
+                                });
+                                // Loop thru buckets
+                                Object.keys(nx.env._buckets).forEach(function (id) {
+                                    // In the stack?
+                                    if (active.indexOf(id) === -1) {
+                                        // Get the bucket(
+                                        var bucket = nx.env._buckets[id];
+                                        // Get the object
+                                        var obj = bucket._obj;
+                                        if (obj) {
+                                            nx.db.clearObj(obj, null, nx.util.noOp);
+                                        }
+                                        delete nx.env._buckets[id];
+                                        // TBD
+                                        //nx.user.removeTP(xurl);
+                                        //nx.user.removeSIO(xurl);
+                                    }
+                                });
                                 for (var i = drops.length - 2; i >= 0; i--) {
                                     // 
                                     var url = drops[i];
@@ -299,17 +327,22 @@ nx.office = {
             if (pu) pu.close();
         }
 
-        // Save
-        req = req || {};
-        req._bucket = nx.env.createBucket(req);
-
         // Assure request
         req = req || {};
         // Addure winid
         if (!req.winid) req.winid = name;
+        // And a bucket
+        if (!req._bucket) req._bucket = nx.util.localUUID('bucket');
 
         // The page comes first
         var url = '/' + name + '/?_bucket=' + req._bucket;
+
+        // Get the bucket
+        var bucket = nx.env.getBucket(url);
+        // Merge the request
+        Object.keys(req).forEach(function (key) {
+            bucket[key] = req[key];
+        });
 
         // 
         if (!nx._view) {
@@ -340,34 +373,25 @@ nx.office = {
         self.panelRightClose();
         self.panelLeftClose();
 
+        // Get history
+        var history = self.history();
+        //
+        var pos = history.length - 2;
         // Single go back?
         if (url) {
-            // Get history
-            var history = self.history();
             // Find target
-            var pos = history.indexOf(url);
-            // Loop thru
-            for (var i = pos + 1; i < history.length; i++) {
-                //
-                var xurl = history[i];
-                // Clear
-                nx.env.clearBucket(xurl, true);
-                nx.user.removeTP(xurl);
-                nx.user.removeSIO(xurl);
-            }
+            pos = history.indexOf(url);
         } else {
-            //
-            var xurl = nx._sys.views.current.router.url;
-            // Clear
-            nx.env.clearBucket(xurl, true);
-            nx.user.removeTP(xurl);
-            nx.user.removeSIO(xurl);
+            // Never before menu
+            if (pos < 0) pos = 0;
+            // Get the url
+            url = history[pos];
         }
 
         // Fill
         self.retValue = retvalue;
 
-        // And go
+        // And one more
         nx._sys.views.main.router.back(url, {
             force: true
         });

@@ -22,7 +22,7 @@ nx._routes.push({
     path: '/settings/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.builder.setCallbackBucket(routeTo.url);
+        nx.env.setDefaultBucket(routeTo.url);
 
         var body = $('body');
         var app = $('#app');

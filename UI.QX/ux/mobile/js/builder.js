@@ -590,56 +590,6 @@ nx.builder = {
 
     /**
      * 
-     * Sets the holder for the callbacks for the route
-     * 
-     * @param {any} url
-     */
-    setCallbackBucket: function (url, value) {
-
-        var self = this;
-
-        // Make the holder
-        nx.env.setBucketItem('_callbacks', (value || {}), url);
-    },
-
-    /**
-     * 
-     * Gets the holder for the callbacks for the route
-     * 
-     * @param {any} url
-     */
-    getCallbackBucket: function (url) {
-
-        var self = this;
-
-        // Make the holder
-        var ans = nx.env.getBucketItem('_callbacks', url);
-        // New?
-        if (!ans) {
-            // New
-            ans = {};
-            // SAve
-            self.setCallbackBucket(url, ans);
-        }
-        return ans;
-    },
-
-    /**
-     * 
-     * The callback bucket reference
-     * 
-     * @param {any} url
-     */
-    getCallbackBucketRef: function (url) {
-
-        var self = this;
-
-    //
-        return 'nx.env._buckets.' + nx.env.getBucketID(url) + '._callbacks.';
-    },
-
-    /**
-     * 
      * Creates a callback link
      * 
      * @param {string} name
@@ -655,11 +605,20 @@ nx.builder = {
             // Make name
             var name = nx.util.localUUID('cb_');
             // Get holder
-            var holder = self.getCallbackBucket();
+            var bucket = nx.env.getBucket();
+            // 
+            var holder = bucket._cbx;
+            // None?
+            if (!holder) {
+                // Make
+                holder = {};
+                // Save
+                bucket._cbx = holder;
+            }
             // Save
             holder[name] = cb;
-
-            ans = self.getCallbackBucketRef() + name + '(this)';
+            // Get the reference
+            ans = 'nx.env._buckets.' + bucket._bucket + '._cbx.' + name + '(this)';
         }
 
         return ans;
@@ -1135,7 +1094,7 @@ nx.builder = {
      * @param {any} data
      * @param {any} bucketid
      */
-    documents: function (ds, data, bucketid) {
+    documents: function (ds, data, bucketid, onselect) {
 
         var self = this;
 
@@ -1145,18 +1104,17 @@ nx.builder = {
         // Loop thru
         data.forEach(function (entry) {
             //
-            var node = self.documentNode(entry);
+            var node = self.documentNode(entry, 0, onselect);
             if (node) {
                 tree.push(node);
             }
         });
 
-
         return self.tag('div', tree, ['class', 'treeview', 'id', self.pickListID(ds, bucketid)]);
 
     },
 
-    documentNode: function (entry, level) {
+    documentNode: function (entry, level, onselect) {
 
         var self = this;
 
@@ -1168,7 +1126,7 @@ nx.builder = {
         var icon = '+download';
         var attr = ['class'];
         var attrc = ['class', 'treeview-item-content'];
-        var children;
+        var children, cb;
 
         // Handle folders
         if (entry.items) {
@@ -1179,7 +1137,7 @@ nx.builder = {
             children = [];
             entry.items.forEach(function (child) {
                 // Add
-                children.push(self.documentNode(child, level));
+                children.push(self.documentNode(child, level, onselect));
             });
             // Add list
             children = self.tag('div', children, ['class', 'treeview-item-children', 'style', 'margin-left:' + (level * 22) + 'px;']);
@@ -1197,11 +1155,13 @@ nx.builder = {
             switch (ext.toLowerCase()) {
                 case 'pdf':
                     icon = '+pdf';
-                    attrc.push("nx.fs.viewpdf('" + entry.path + "');");
+                    cb = onselect || 'nx.fs.viewpdf';
+                    attrc.push(cb + "('" + entry.path + "');");
                     break;
-                case 'docx':
-                    icon = '+docx';
-                    attrc.push("nx.fs.download('" + entry.path + "');");
+                case 'odt':
+                    icon = '+docx'
+                    cb = onselect || 'nx.fs.viewaspdf';
+                    attrc.push(cb + "('" + entry.path + "');");
                     break;
                 case 'jpeg':
                 case 'jpg':
@@ -1209,7 +1169,8 @@ nx.builder = {
                 case 'gif':
                 case 'svg':
                     icon = '+photo';
-                    attrc.push("nx.fs.viewimage('" + entry.path + "');");
+                    cb = onselect || 'nx.fs.viewimage';
+                    attrc.push(cb + "('" + entry.path + "');");
                     break;
                 case 'mp4':
                 case 'webm':
@@ -1223,10 +1184,12 @@ nx.builder = {
                 case '3gp':
                 case '3g2':
                     icon = '+drive_web';
-                    attrc.push("nx.fs.viewvideo('" + entry.path + "','" + ext + "');");
+                    cb = onselect || 'nx.fs.viewvideo';
+                    attrc.push(cb + "('" + entry.path + "','" + ext + "');");
                     break;
                 default:
-                    attrc.push("nx.fs.download('" + entry.path + "');");
+                    cb = onselect || 'nx.fs.download';
+                    attrc.push(cb + "('/f/" + entry.path + "');");
 
             }
         }

@@ -98,7 +98,7 @@ namespace Proc.Docx
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The document reference")));
 
             // Conversion
-            NX.Engine.Files.ManagerClass.Conversion = delegate (DocumentClass docin)
+            NX.Engine.Files.ManagerClass.Converter = delegate (DocumentClass docin)
             {
                 // Assume no change
                 DocumentClass c_Out = docin;

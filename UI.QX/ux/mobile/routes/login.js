@@ -22,7 +22,7 @@ nx._routes.push({
     path: '/login/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.builder.setCallbackBucket(routeTo.url);
+        nx.env.setDefaultBucket(routeTo.url);
 
         var page = nx.builder.page('Login', false, null,
             [

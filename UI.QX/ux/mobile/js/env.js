@@ -47,59 +47,71 @@ nx.env = {
 
     /**
      * 
+     * Gets the bucket ID
+     * 
+     * @param {any} url
+     */
+    getBucketID: function (url) {
+
+        var self = this;
+
+        var ans;
+
+        // Do we have an url?
+        if (url) {
+            ans = nx._sys.utils.parseUrlQuery(url)._bucket;
+        } else {
+            ans = self.getBucketItem('_bucket', url);
+        }
+
+        return ans;
+    },
+
+    /**
+     * 
      * The storage area for the current view or the view passed
      * 
      * @param {any} url
      */
-    getBucket: function (url, raw) {
+    getBucket: function (url) {
 
         var self = this;
 
         var data = {};
-        
+
         if (url) {
+            // From url
             data = nx._sys.utils.parseUrlQuery(url);
+            // Get the bucket ID
+            var id = data._bucket;
+            // Do we have it?
+            if (id && self._buckets[id]) {
+                // Merge
+                data = self._buckets[id];
+            }
         } else {
-            var history = nx.office.history();
-            var i = history.length - 1;
-            while (!data._bucket && i >= 0) {
-                // Parse
-                data = nx._sys.utils.parseUrlQuery(history[i]);
-                i--;
-            }
+            // Get the default
+            data = self._defaultBucket;
         }
 
-        // If none, make one
-        if (!data._bucket) {
-            // Use default
-            data._bucket = self._defaultBucket;
-            // None?
-            if (!data._bucket) {
-                // Make the id
-                data._bucket = nx.util.localUUID('Bucket');
-                // Create
-                self._buckets[data._bucket] = {};
-                // Save
-                self._defaultBucket = data._bucket;
-            }
-        }
-
-        // Do we have a passed?
-        if (data._bucket) {
-            // Grab it
-            var wkg = self._buckets[data._bucket];
-            // Raw?
-            if (raw) {
-                data = wkg;
-            } else {
-                // Any?
-                if (wkg) {
-                    data = nx.util.merge(data, wkg);
-                }
-            }
-        }
+        // Save
+        self._buckets[data._bucket] = data;
 
         return data;
+    },
+
+    /**
+     * 
+     * Sets the default bucket and assures callbacks
+     * 
+     * @param {any} url
+     */
+    setDefaultBucket: function (url) {
+
+        var self = this;
+
+        // Save
+        self._defaultBucket = self.getBucket(url);
     },
 
     /**
@@ -117,15 +129,26 @@ nx.env = {
 
     /**
      * 
-     * Gets the bucket ID
+     * Gets the bucket route
      * 
      * @param {any} url
      */
-    getBucketID: function (url) {
+    getBucketRoute: function (url) {
 
         var self = this;
 
-        return self.getBucketItem('_bucket', url);
+        var ans;
+
+        // Get the id
+        var id = self.getBucketID(url);
+        // List the routes
+        nx.office.history().forEach(function (route) {
+            // Matches?
+            if (id === self.getBucketID(route)) {
+                ans = route;
+            }
+        })
+        return ans;
     },
 
     /**
@@ -155,63 +178,8 @@ nx.env = {
         var self = this;
 
         // get bucket
-        var bucket = self.getBucket(url, true);
+        var bucket = self.getBucket(url);
         if (bucket) bucket[key] = value;
-    },
-
-    /**
-     * 
-     * Clears a bucket
-     * 
-     */
-    clearBucket: function (url, nosave) {
-
-        var self = this;
-
-        // Parse
-        var data = nx._sys.utils.parseUrlQuery(url || nx.office.history()[0]);
-
-        // Do we have a passed?
-        if (data._bucket) {
-
-            // Get the bucket
-            var bucket = self._buckets[data._bucket];
-            // Any?
-            if (bucket) {
-                // Get the object
-                var obj = bucket._obj;
-                if (obj) {
-                    if (nosave) {
-                        nx.db.clearObj(obj, null, nx.util.noOp);
-                    } else {
-                        nx.db.setObj(obj, null, nx.util.noOp);
-                    }
-                }
-
-                // Delete bucket
-                delete self._buckets[data._bucket];
-            }
-        }
-
-    },
-
-    /**
-     * 
-     * Creates a bucket
-     * 
-     * @param {any} data
-     */
-    createBucket: function (data) {
-
-        var self = this;
-
-        // Make id
-        var id = nx.util.localUUID('bucket');
-
-        // Save
-        self._buckets[id] = data || {};
-
-        return id;
     },
 
     // ---------------------------------------------------------
@@ -433,7 +401,7 @@ nx.env = {
         var self = this;
 
         // Save
-        self.setStore('rm', value || '');
+        self.setStore('rm', value);
     },
 
     /**

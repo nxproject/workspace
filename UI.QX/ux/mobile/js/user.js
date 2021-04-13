@@ -456,8 +456,6 @@ nx.user = {
 
                         // Create null user
                         nx.env.reset();
-                        // No more remember me
-                        nx.env.setRM();
                         //
                         nx.util.notifyInfo('You logged on elsewhere...');
 

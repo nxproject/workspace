@@ -243,6 +243,47 @@ nx.fs = {
                 mlink: ''
             });
         });
+    },
+
+    comm: function (widget, fn) {
+
+        var self = this;
+
+        // Get the value
+        var value = widget.val();
+        // Do we have a value?
+        if (value) {
+            // Get the object
+            var bucket = nx.env.getBucket();
+            // Valid?
+            if (bucket && bucket._obj) {
+                // Make the request
+                var req = {
+                    ds: bucket._obj._ds,
+                    id: bucket._obj._id,
+                    desc: bucket._obj._desc,
+                    fn: fn,
+                    route: nx.env.getBucketRoute(),
+                    onSelect: 'nx.fs.commDo',
+                    skip: nx.fs.commDo
+                };
+                nx.calls.documents(req);
+            }
+        }
+    },
+
+    commDo: function (path) {
+
+        var self = this;
+
+        // Get the bucket
+        var req = nx.env.getBucket();
+        // Do we have a path?
+        if (path) {
+            req.att = [path];
+        }
+        // Call the tool
+        nx.calls.comm(req);
     }
 
 };

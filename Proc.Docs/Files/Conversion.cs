@@ -73,7 +73,7 @@ namespace Proc.Docs.Files
         public static DocumentClass Convert(DocumentClass doc, DocumentClass to)
         {
             // Make the URL
-            string sURL = doc.Parent.Parent.LoopbackURL.URLCombine("libreoffice", "convert",  doc.Path.ToBase64URL(), to.Path.ToBase64URL());
+            string sURL = doc.Parent.Parent.ReachableURL.URLCombine("libreoffice", "convert",  doc.Path.ToBase64URL(), to.Path.ToBase64URL());
 
             // Call
             JObject c_Resp = sURL.URLGet().FromBytes().ToJObject();

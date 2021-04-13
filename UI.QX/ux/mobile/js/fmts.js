@@ -747,8 +747,8 @@ nx.fmts = {
                             nx.calls.pick({
                                 ds: '_quickmessages',
                                 onSelect: function (id) {
-                                    nx.office.goBack();
                                     nx.fs.quickMessage(value, id);
+                                    nx.office.goBack();
                                 }
                             });
                         }
@@ -761,12 +761,8 @@ nx.fmts = {
 
                         // 
                         var widget = nx.cm.get(ele);
-                        // Get the value
-                        var value = widget.val();
                         // Call
-                        if (value) {
-                            window.open('mailto:' + value);
-                        }
+                        nx.fs.comm(widget, 'email');
 
                     }
                 }, {
@@ -807,8 +803,8 @@ nx.fmts = {
                             nx.calls.pick({
                                 ds: '_quickmessages',
                                 onSelect: function (id) {
-                                    nx.office.goBack();
                                     nx.fs.quickMessage(value, id);
+                                    nx.office.goBack();
                                 }
                             });
                         }
@@ -821,12 +817,8 @@ nx.fmts = {
 
                         // 
                         var widget = nx.cm.get(ele);
-                        // Get the value
-                        var value = widget.val();
                         // Call
-                        if (value && nx.util.isPhone()) {
-                            window.open('tel:+1' + nx.util.numbersOnly(value));
-                        }
+                        nx.fs.comm(widget, 'sms');
 
                     }
                 }, {
@@ -927,8 +919,8 @@ nx.fmts = {
                             nx.calls.pick({
                                 ds: '_quickmessages',
                                 onSelect: function (id) {
-                                    nx.office.goBack();
                                     nx.fs.quickMessage(value, id);
+                                    nx.office.goBack();
                                 }
                             });
                         }
@@ -941,12 +933,8 @@ nx.fmts = {
 
                         // 
                         var widget = nx.cm.get(ele);
-                        // Get the value
-                        var value = widget.val();
                         // Call
-                        if (value && nx.util.isPhone()) {
-                            window.open('tel:+1' + nx.util.numbersOnly(value));
-                        }
+                        nx.fs.comm(widget, 'sms');
 
                     }
                 }, {
@@ -956,12 +944,8 @@ nx.fmts = {
 
                         // 
                         var widget = nx.cm.get(ele);
-                        // Get the value
-                        var value = widget.val();
                         // Call
-                        if (value && nx.util.isEMail()) {
-                            window.open('mailto:' + value);
-                        }
+                        nx.fs.comm(widget, 'email');
 
                     }
                 }

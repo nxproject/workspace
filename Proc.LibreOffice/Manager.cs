@@ -53,5 +53,10 @@ namespace Proc.LibreOffice
             this.CheckForAvailability();
         }
         #endregion
+
+        #region Methods
+        public void Convert()
+        { }
+        #endregion
     }
 }

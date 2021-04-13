@@ -18,8 +18,8 @@
 
 // Set the Framework7 route
 nx._routes.push({
-    name: 'chat',
-    path: '/chat/',
+    name: 'comm',
+    path: '/comm/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
         nx.env.setDefaultBucket(routeTo.url);
@@ -27,10 +27,10 @@ nx._routes.push({
         var page, data = nx.env.getBucket(routeTo.url);
 
         //
-        var title = 'Chat - ' + data.desc
-        nx.office.storeHistory(routeTo.url, title, '+user_comment', nx.builder.badge('Chat', 'orange'), '');
+        var title = data.desc;
+        nx.office.storeHistory(routeTo.url, title, '+folder', nx.builder.badge('Merge', 'pink') + ' ');
 
-            // TBD
+        // TBD
 
         resolve({
             template: page
@@ -41,16 +41,7 @@ nx._routes.push({
 });
 
 // Set the call
-nx.calls.chat = function (req) {
-    // Get the object
-    var obj = nx.env.getBucketItem('_obj');
-
-    // Assure
-    req = nx.util.merge((req || {}), {
-        ds: obj._ds,
-        id: obj._id,
-        desc: obj.desc
-    });;
+nx.calls.comm = function (req) {
     // 
-    nx.office.goTo('merge', req);
+    nx.office.goTo('comm', req);
 };

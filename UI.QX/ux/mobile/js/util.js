@@ -168,7 +168,7 @@ nx.util = {
         if (typeof self._ua._camera === 'undefined') {
 
             // Secure?
-            if (!self.isSecure()) {
+            if (!self.isSecure() && !self.isMobile()) {
                 // Nope
                 self._ua._camera = false;
             } else {
@@ -782,6 +782,22 @@ nx.util = {
         }, {
             allow: true
         });
+    },
+
+    notifyLoadingStart: function (msg) {
+
+        var self = this;
+
+        Notiflix.Loading.Pulse(msg);
+
+    },
+
+    notifyLoadingEnd: function () {
+
+        var self = this;
+
+        Notiflix.Loading.Remove();
+
     },
 
     // ---------------------------------------------------------

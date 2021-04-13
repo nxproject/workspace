@@ -103,6 +103,7 @@
     <Content Include="t\account.js" />
     <Content Include="t\quickmessage.js" />
     <Content Include="t\xemaileditor.js" />
+    <Content Include="ux\mobile\routes\comm.js" />
     <Content Include="viewers\automizy\automizy-email-editor.css" />
     <Content Include="viewers\automizy\automizy-email-editor.js" />
     <Content Include="viewers\automizy\images\automizy-logo-100x100.jpg" />

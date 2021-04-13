@@ -22,7 +22,7 @@ nx._routes.push({
     path: '/documents/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.builder.setCallbackBucket(routeTo.url);
+        nx.env.setDefaultBucket(routeTo.url);
 
         var page, data = nx.env.getBucket(routeTo.url);
 
@@ -39,49 +39,63 @@ nx._routes.push({
             id: id
         }, function (result) {
 
+            var fn;
+            if (data.skip) {
+                fn = {
+                    label: 'Skip',
+                    icon: '+cancel',
+                    cb: function () {
+                        data.skip();
+                    }
+                };
+            } else if (nx.user.opAllowed(ds, 'a')) {
+                fn = {
+                    label: 'Upload',
+                    icon: '+logo',
+                    cb: function () {
+
+                        //
+                        var uploader = $('#upload');
+
+                        // Indirect
+                        uploader.change(function () {
+
+                            var fd = new FormData();
+                            var files = uploader[0].files[0];
+                            fd.append('file', files);
+
+                            nx.util.notifyOK('Starting upload...');
+
+                            $.ajax({
+                                url: nx.util.loopbackURL() + '/f/ao/' + ds + '/' + id + '/Upload/' + files.name,
+                                data: fd,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                method: 'POST',
+                                type: 'POST',
+                                success: function (data) {
+                                    nx.util.notifyOK('Done');
+                                },
+                                failure: function () {
+                                    nx.util.notifyError('Unable to upload');
+                                }
+                            });
+
+                        }).click();
+
+                    }
+                };
+            }
+
             page = nx.builder.page(title,
                 true,
                 null,
                 [
-                    nx.builder.documents(ds, result.list, nx.env.getBucketID(routeTo.url)),
+                    nx.builder.documents(ds, result.list, nx.env.getBucketID(routeTo.url), data.onSelect),
                     nx.builder.upload()
                 ],
-                (nx.user.opAllowed(ds, 'a') ?
-                    {
-                        label: 'Upload',
-                        icon: '+logo',
-                        cb: function () {
-
-                            //
-                            var uploader = $('#upload');
-
-                            // Indirect
-                            uploader.change(function () {
-
-                                var fd = new FormData();
-                                var files = uploader[0].files[0];
-                                fd.append('file', files);
-
-                                nx.util.notifyOK('Starting upload...');
-
-                                //
-                                var url = nx.util.loopbackURL() + '/fload/ao/' + ds + '/' + id + '/Upload/' + files.name;
-                                files.text().then((contents) => {
-
-                                    $.post(url, { content: contents }, function (response) {
-                                        if (response && response.done ==='y') {
-                                            nx.util.notifyOK('Done');
-                                        }
-                                        else {
-                                            nx.util.notifyError('Unable to upload');
-                                        }
-                                    }, 'json');
-                                });
-
-                            }).click();
-
-                        }
-                    } : null),
+                fn,
                 'nx.office.goBack()'
             );
             resolve({
