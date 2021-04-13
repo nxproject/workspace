@@ -905,6 +905,34 @@ nx.fmts = {
 
             return [
                 {
+                    label: 'Display',
+                    cb: function (ele) {
+                        // 
+                        var widget = nx.cm.get(ele);
+                        // Get the value
+                        var value = widget.val();
+                        // Call
+                        if (value) {
+                            // Get the object
+                            var obj = nx.env.getBucketItem('_obj');
+                            // Save
+                            nx.db.setObj(obj, null, function () {
+                                // Get values
+                                var ds = obj._ds;
+                                var id = obj._id;
+
+                                // Make the account id
+                                var aid = md5(nx.db.makeID(ds, id) + '/' + value).toUpperCase();
+
+                                // View
+                                nx.calls.view({
+                                    ds: '_billaccess',
+                                    id: aid
+                                });
+                            }, true);
+                        }
+                    }
+                }, {
                     label: '>> Quick',
                     selector: 'QUICK',
                     cb: function (ele) {

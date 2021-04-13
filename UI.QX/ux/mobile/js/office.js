@@ -139,7 +139,7 @@ nx.office = {
                                         // Get the object
                                         var obj = bucket._obj;
                                         if (obj) {
-                                            nx.db.clearObj(obj, null, nx.util.noOp);
+                                            nx.db.setObj(obj, null, nx.util.noOp);
                                         }
                                         delete nx.env._buckets[id];
                                         // TBD
@@ -396,6 +396,13 @@ nx.office = {
             if (pos < 0) pos = 0;
             // Get the url
             url = history[pos];
+            // Get the object
+            var obj = nx.bucket.getBucketItem('_obj');
+            // Any?
+            if (obj) {
+                // Clear
+                nx.db.clearObj(obj, null, nx.util.noOp);
+            }
         }
 
         // Fill
