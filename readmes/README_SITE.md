@@ -3,6 +3,12 @@
 Each site has a set of information of global nature.  They are the ***Site Settings*** and ***Site Management***.
 They are found in the ***System*** entry of the ***Start*** menu.
 
+## System menu
+
+![image](images/SysMenu1.png)
+
+The system menu displays all of the system defined datasets and operations.  The contents vary according to the site settings.
+
 ## Site Settings
 
 The Site Settings allow you to set the information that is global to the site:
