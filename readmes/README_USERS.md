@@ -148,17 +148,17 @@ as well a excluging any dataset that may have been deleted.
 Selectors are part of the allowed settings but they are defined in a global basis.  For example:
 
 ```
-?QM
+?HELP
 ```
 
-Tells the system that the Quick MEssage selector is set.  Each selector controls a particual area or operation
+Tells the system that the user can access the help sub-system.  Each selector controls a particual area or operation
 in the system.  The following are defined:
 
 * ```HELP``` - Allow access to online help
 * ```EMAIL``` - Allow access to email operations
 * ```QUICK``` - Allow for Quick Messages
 * ```TELE``` = Allow access to SMS and Voice
-* ```8X8``` - Allow access to video conferencing
+* ```VCONF``` - Allow access to video conferencing (future)
 
 And a special ones:
 
