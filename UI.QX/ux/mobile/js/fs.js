@@ -262,17 +262,42 @@ nx.fs = {
                     ds: bucket._obj._ds,
                     id: bucket._obj._id,
                     desc: bucket._obj._desc,
-                    fn: fn,
+                    fsfn: fn,
                     route: nx.env.getBucketRoute(),
-                    onSelect: 'nx.fs.commDo',
-                    skip: nx.fs.commDo
+                    onSelect: 'nx.fs.commCampaign',
+                    skip: nx.fs.commCampaign,
+                    to: value,
+                    useTelemetry: nx.user.getSIField('teleenabled')
                 };
-                nx.calls.documents(req);
+
+                // Get the choices
+                nx.util.serviceCall('AO.QueryGet', {
+                    ds: '_emailtemplates',
+                    cols: 'code'
+                }, function (result) {
+                    // Any?
+                    if (result && result.data && result.data.length) {
+                        // Empty
+                        var choices = [''];
+                        // Loop thru
+                        result.data.forEach(function (entry) {
+                            // Add
+                            choices.push(entry.code);
+                        });
+                        // Save
+                        req.choices = choices;
+                        // Call
+                        nx.calls.documents(req);
+                    } else {
+                        // No choices
+                        nx.calls.documents(req);
+                    }
+                });
             }
         }
     },
 
-    commDo: function (path) {
+    commCampaign: function (path) {
 
         var self = this;
 
@@ -282,8 +307,40 @@ nx.fs = {
         if (path) {
             req.att = [path];
         }
-        // Call the tool
-        nx.calls.comm(req);
+
+        if (nx.user.getSIField('teleenabled') === 'y') {
+            // Fetch
+            nx.util.serviceCall('AO.QueryGet', {
+                ds: '_telemetrycampaign',
+                cols: 'code',
+                query: [
+                    {
+                        field: 'active',
+                        op: 'Eq',
+                        value: 'y'
+                    }
+                ]
+            }, function (result) {
+                // Any?
+                if (result && result.data && result.data.length) {
+                    var campaigns = [''];
+                    // Loop thru
+                    result.data.forEach(function (entry) {
+                        // Add
+                        campaigns.push(entry.code);
+                    });
+                    req.campaigns = campaigns;
+                    // Call
+                    nx.calls.comm(req);
+                } else {
+                    // No campaihgns found
+                    nx.calls.comm(req);
+                }
+            });
+        } else {
+            // No campaihgns allowed
+            nx.calls.comm(req);
+        }
     }
 
 };

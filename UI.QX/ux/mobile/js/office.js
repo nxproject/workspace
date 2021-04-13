@@ -379,8 +379,18 @@ nx.office = {
         var pos = history.length - 2;
         // Single go back?
         if (url) {
-            // Find target
-            pos = history.indexOf(url);
+            // Could be an offset
+            if (!isNaN(url)) {
+                // Use as offset
+                pos = history.length - (url + 1);
+                // Assure
+                if (pos < 0) pos = 0;
+                // Get the url
+                url = history[pos];
+            } else {
+                // Find target
+                pos = history.indexOf(url);
+            }
         } else {
             // Never before menu
             if (pos < 0) pos = 0;

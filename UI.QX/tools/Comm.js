@@ -126,7 +126,7 @@ qx.Class.define('tools.Comm', {
                 label: 'Subject'
             });
             row++;
-            var h = nx.default.get('default.textareaHeight');;
+            var h = nx.default.get('default.textareaHeight');
             items.push({
                 nxtype: 'textarea',
                 top: row,
