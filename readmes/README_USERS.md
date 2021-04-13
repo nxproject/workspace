@@ -195,7 +195,7 @@ rules given will provide.
 
 ## GMail
 
-If you use Google Mail (GMail) as your email service, you need to allow NX.Offie to access it.
+If you use Google Mail (GMail) as your email service, you need to allow NX.Worksace to access it.
 
 * Sign in to Gmail
 * Click [here](https://www.google.com/settings/security/lesssecureapps) to access Less Secure App Access in My Account.
