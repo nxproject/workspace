@@ -157,8 +157,8 @@ in the system.  The following are defined:
 * ```HELP``` - Allow access to online help
 * ```EMAIL``` - Allow access to email operations
 * ```QUICK``` - Allow for Quick Messages
-* ```TELE``` = Allow access to Twilio SMS and Voice
-* ```8X8``` - Allow access to 8x8 Jitsi
+* ```TELE``` = Allow access to SMS and Voice
+* ```8X8``` - Allow access to video conferencing
 
 And a special ones:
 
