@@ -51,7 +51,7 @@ qx.Class.define('tools.View', {
                             top: 1,
                             left: 1,
                             width: 'default.pickWidth',
-                            height: 'default.pickHeight',
+                            height: 'default.pickHeight@0.7',
                             label: '',
                             ds: req.ds,
                             idprefix: req.idprefix,

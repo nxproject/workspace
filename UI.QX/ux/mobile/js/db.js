@@ -266,7 +266,7 @@ nx.db = {
      * @param {any} id
      * @param {any} cb
      */
-    getObj: function (ds, id, cb) {
+    getObj: function (ds, id, cb, floataccount) {
 
         var self = this;
 
@@ -282,18 +282,12 @@ nx.db = {
                 // Call
                 cb(self._objs[oid]);
             } else {
-                // Piggyback
-                self.get(ds, [{
-                    field: '_id',
-                    op: 'Eq',
-                    value: id
-                }], 0, 1, '', '', '', function (result) {
-                    // Get
-                    var data = {};
-                    if (result && result.length) {
-                        data = result[0];
-                        data._ds = ds;
-                    }
+                // Call
+                nx.util.serviceCall('AO.ObjectGet', {
+                    ds: ds,
+                    id: id,
+                    floataccount: nx.util.asBoolean(floataccount)
+                }, function (data) {
                     // Assure
                     data._changes = data._changes || [];
                     if (typeof data._changes === 'string') data._changes = JSON.parse(data._changes);

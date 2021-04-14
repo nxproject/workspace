@@ -43,7 +43,16 @@ qx.Class.define('t.phonesmsTelemetry', {
 
             var self = this;
 
-            var value = widget.getValue();
+            var value;
+
+            // Handle event
+            if (widget.getValue) {
+                value = widget.getValue();
+            } else {
+                widget = nx.util.eventGetWidget(widget);
+                value = widget.getLabel();
+            }
+
             if (nx.util.hasValue(value) && nx.util.isPhone(value)) {
 
                 var win = nx.bucket.getWin(widget);

@@ -665,75 +665,10 @@ nx.user = {
                     self.updateDocuments(msg.message);
                     break;
             }
-
-            // And callbacks
-            self.processSIO(msg);
         }
-    },
-
-    processSIO: function (event) {
-
-        var self = this;
-
-        // Do we still have a message?
-        if (event) {
-            // And callbacks
-            Object.keys(self.callbacksSIO).forEach(function (name) {
-                self.callbacksSIO[name](name, event);
-            });
-        }
-
-    },
-
-    callbacksSIO: {},
-
-    addSIO: function (name, cb) {
-
-        var self = this;
-
-        self.callbacksSIO[name] = cb;
-
-    },
-
-    removeSIO: function (name) {
-
-        var self = this;
-
-        delete self.callbacksSIO[name];
     },
 
     SIOUsers: [],
-
-    // ---------------------------------------------------------
-    //
-    // TP SUPPORT
-    // 
-    // ---------------------------------------------------------
-
-    storageTP: {},
-
-    addTP: function (name, obj) {
-
-        var self = this;
-
-        self.storageTP[name] = obj;
-
-    },
-
-    removeTP: function (name) {
-
-        var self = this;
-
-        delete self.storageTP[name];
-    },
-
-    getTP: function (name) {
-
-        var self = this;
-
-        return self.storageTP[name];
-    },
-
 
     // ---------------------------------------------------------
     //
@@ -1132,6 +1067,8 @@ nx.user = {
 
         var self = this;
 
+        nx.env.setDefaultBucket();
+
         // Do
         var win = nx.env.getBucketItem('winid', url);
         var ds = nx.env.getBucketItem('ds', url);
@@ -1207,6 +1144,8 @@ nx.user = {
     refreshDocuments: function (url, msg) {
 
         var self = this;
+
+        nx.env.setDefaultBucket();
 
         // Do
         var win = nx.env.getBucketItem('winid', url);

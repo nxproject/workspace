@@ -239,22 +239,22 @@ nx.fmts = {
 
     lu: function (widget, value, cb) {
 
-        // Must have a dataset
-        var ds = nx.env.getBucketItem('ds');
-        if (ds && value) {
-
-            // Phony a chain
-            var chain = {
-                queries: [{
-                    field: '_desc',
-                    value: '%' + value
-                }]
-            };
-            // Get the dataset
-            nx.db._loadDataset(ds, function (dsdef) {
-                // Get the field definiion
+        // Must have value
+        if (value) {
+            // Get the object
+            var obj = nx.env.getBucketItem('_obj');
+            // And the dataset
+            nx.db._loadDataset(obj._ds, function (dsdef) {
+                // Get the field definition
                 var fdef = dsdef.fields[widget.attr('name')];
                 if (fdef && fdef.linkds) {
+                    // Phony a chain
+                    var chain = {
+                        queries: [{
+                            field: '_desc',
+                            value: '%' + value
+                        }]
+                    };
                     // Call view
                     nx.calls.pick({
                         ds: fdef.linkds,
@@ -288,7 +288,6 @@ nx.fmts = {
                     });
                 }
             });
-
         }
     },
 
@@ -743,7 +742,7 @@ nx.fmts = {
                         var value = widget.val();
                         // Call
                         if (value) {
-                        //
+                            //
                             nx.calls.pick({
                                 ds: '_quickmessages',
                                 onSelect: function (id) {
@@ -754,7 +753,7 @@ nx.fmts = {
                         }
 
                     }
-                },{
+                }, {
                     label: '>> EMail',
                     selector: 'EMAIL',
                     cb: function (ele) {
@@ -954,7 +953,7 @@ nx.fmts = {
                         }
 
                     }
-                },{
+                }, {
                     label: '>> SMS',
                     selector: 'TELE',
                     cb: function (ele) {

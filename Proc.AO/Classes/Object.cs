@@ -52,9 +52,11 @@ namespace Proc.AO
         public const string FieldCalendarSubject = "_calsubj";
         public const string FieldParent = "_parent";
         public const string FieldGeo = "_geo";
+        public const string FieldComputed = "_computed";
 
         public const string FieldToken = "_token";
         public const string FieldSIO = "_sio";
+        public const string FieldAccount = "_account";
 
         private const string SIOSaved = "$$object.saved";
         private const string SIOData = "$$object.data";
@@ -517,6 +519,7 @@ namespace Proc.AO
             c_Changes.Remove(FieldChanges);
             c_Changes.Remove(FieldToken);
             c_Changes.Remove(FieldSIO);
+            if (this.IsData) c_Changes.Remove(FieldAccount);
 
             // Prepare
             if (orig == null) orig = this.AsJObject;
@@ -1234,7 +1237,7 @@ namespace Proc.AO
         public void CopyFrom(JObject values)
         {
             // Loop thru
-            foreach(string sField in values.Keys())
+            foreach (string sField in values.Keys())
             {
                 // Set
                 this[sField] = values.Get(sField);
@@ -1373,6 +1376,78 @@ namespace Proc.AO
         public void ToStore(StoreClass store)
         {
             this.Document.ToStore(store);
+        }
+
+        /// <summary>
+        /// 
+        /// Get the account field from parent
+        /// 
+        /// </summary>
+        public void FloatAccount()
+        {
+            // Data?
+            if (this.IsData)
+            {
+                // Do we have an account?
+                if (this.Dataset.Definition.AccountFields.Count == 0)
+                {
+                    // Get 
+                    string sAcct = this.GetAccount();
+                    // Any?
+                    if (sAcct.HasValue())
+                    {
+                        this.Document.SetField(FieldAccount, sAcct);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// Returns the account
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string GetAccount()
+        {
+            // Assume none
+            string sAns = null;
+
+            //this.Parent.Parent.Parent.Parent.LogInfo();
+
+            // Do we have an account field?
+            List<string> c_AF = this.Dataset.Definition.AccountFields;
+            // Any?
+            if (c_AF.Count == 0)
+            {
+                this.Parent.Parent.Parent.Parent.LogInfo("NO ACCT FIELDS");
+                // Get parent
+                string sParent = this[FieldParent];
+                if (sParent.HasValue())
+                {
+                    this.Parent.Parent.Parent.Parent.LogInfo("MOVING TO PARENT");
+                    //
+                    using (UUIDClass c_UUID = new UUIDClass(this.Parent.Parent, sParent))
+                    {
+                        using (ObjectClass c_Parent = c_UUID.AsObject)
+                        {
+                            // Get
+                            sAns = c_Parent.GetAccount();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (string sFld in c_AF)
+                {
+                    this.Parent.Parent.Parent.Parent.LogInfo("CHEKING " + sFld);
+                    sAns = this[sFld];
+                    if (sAns.HasValue()) break;
+                }
+            }
+
+            return sAns;
         }
         #endregion
 

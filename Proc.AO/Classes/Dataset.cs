@@ -43,11 +43,6 @@ namespace Proc.AO
             //
             this.Name = name;
 
-            if (this.Name.IsSameValue("sys"))
-            {
-                this.Parent.Parent.Parent.Debug();
-            }
-
             // Default
             this.Define();
 

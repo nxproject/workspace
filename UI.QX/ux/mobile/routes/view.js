@@ -74,7 +74,7 @@ nx._routes.push({
                         // Make page
                         nx.builder.view(ds, nx.user.getDSInfo(ds).view, obj, function (rows) {
 
-                        //
+                            //
                             var rbl;
                             var rb = [];
                             var sep = true;   
@@ -100,8 +100,42 @@ nx._routes.push({
                                 }
                             }
 
+                            //
+                            if (obj._account) {
+                                // TBD
+                            }
+
+                            // Localize
+                            var childdss = dsdef.childdss;
+                            var relateddss = dsdef.relateddss;
+
                             // Make list
-                            var list = nx.util.splitSpace(dsdef.childdss, true);
+                            var list = nx.util.splitSpace(relateddss, true);
+                            //
+                            if (list.length) {
+                                // Loop thru
+                                for (var i = 0; i < list.length; i += 2) {
+                                    //
+                                    var cds = list[i];
+                                    var cfld = list[i + 1];
+                                    //
+                                    if (cds) {
+                                        // Get
+                                        var cdsdef = nx.user.getDSInfo(cds);
+                                        if (cdsdef) {
+                                            rb.push({
+                                                childds: cds + ':' + cfld,
+                                                label: cdsdef.caption,
+                                                icon: cdsdef.icon
+                                            });
+                                        }
+                                        sep = false;
+                                    }
+                                }
+                            }
+
+                            // Make list
+                            var list = nx.util.splitSpace(childdss, true);
                             //
                             if (list.length) {
                                 // Loop thru
@@ -235,7 +269,7 @@ nx._routes.push({
 
                         });
 
-                    });
+                    }, nx.user.getIsSelector('TELE') || nx.user.getIsSelector('EMAIL'));
 
                 } else {
 

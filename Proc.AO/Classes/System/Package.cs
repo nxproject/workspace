@@ -158,7 +158,7 @@ namespace Proc.AO
             using (QueryClass c_Qry = new QueryClass(coll))
             {
                 // Loop thru
-                foreach (BsonDocument c_Obj in c_Qry.Find())
+                foreach (BsonDocument c_Obj in c_Qry.Find(sort:"_id"))
                 {
                     //
                     string sTarget = UUIDClass.MakeString(coll.Parent.Name, c_Obj.GetField("_id"));
@@ -315,6 +315,20 @@ namespace Proc.AO
 
                                         // Get body
                                         string sDoc = c_Target.ToArray().FromBytes();
+                                        // Convert to JSON
+                                        JObject c_Orig = sDoc.ToJObject();
+                                        // 
+                                        if(c_Orig.Get("_id").IsSameValue("#def"))
+                                        {
+                                            // Get the fields
+                                            JObject c_Fields = c_Orig.GetJObject("fields");
+                                            // Remove empty field
+                                            c_Fields.Remove("");
+                                            // Set
+                                            c_Orig.Set("fields", c_Fields);
+                                            // And back
+                                            sDoc = c_Orig.ToSimpleString();
+                                        }
 
                                         // Is it a setting?
                                         if (c_UUID.ID.StartsWith("#"))

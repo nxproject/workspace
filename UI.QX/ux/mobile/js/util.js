@@ -437,6 +437,10 @@ nx.util = {
         return ans;
     },
 
+    asBoolean: function (value) {
+        return ((!!value) ? 'y' : 'n');
+    },
+
     // ---------------------------------------------------------
     //
     // Expression evaluator

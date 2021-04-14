@@ -203,33 +203,46 @@ nx.calls.pick = function (req) {
 // Set the call
 nx.calls.pickchild = function (req) {
 
+    // Force to latest bucket
+    nx.env.setDefaultBucket();
+
     // Get the object
     var obj = nx.env.getBucketItem('_obj');
 
-    // Save but keep
-    nx.db.setObj(obj, null, nx.util.noOp, true);
+    // Must have one
+    if (obj) {
+        // Save but keep
+        nx.db.setObj(obj, null, nx.util.noOp, true);
 
-    //
-    req = req || {};
-    if (typeof req === 'string') {
-        req = {
-            ds: req
+        var cfld, cid;
+
+        //
+        req = req || {};
+        if (typeof req === 'string') {
+            var pos = req.indexOf(':');
+            if (pos !== -1) {
+                cfld = req.substr(1 + pos);
+                req = req.substr(0, req.indexOf(':'));
+            }
+            req = {
+                ds: req
+            }
         }
+
+        // Add chain
+        req.chain = {
+            sop: 'Any',
+            queries: [{
+                field: cfld || '_parent',
+                op: '=',
+                value: nx.db.makeID(obj._ds, obj._id)
+            }],
+            _cooked: true
+        };
+
+        // Call
+        nx.office.goTo('pick', req);
     }
-
-    // Add chain
-    req.chain = {
-        sop: 'Any',
-        queries: [{
-            field: '_parent',
-            op: '=',
-            value: nx.db.makeID(obj._ds, obj._id)
-        }],
-        _cooked: true
-    };
-
-    // Call
-    nx.office.goTo('pick', req);
 };
 
 nx.calls.pickselect = function (req) {

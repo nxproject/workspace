@@ -110,6 +110,14 @@ nx.env = {
 
         var self = this;
 
+        // Missing url?
+        if (!url) {
+            // Get history
+            var history = nx.office.history();
+            // And use last
+            url = history[history.length - 1];
+        }
+
         // Save
         self._defaultBucket = self.getBucket(url);
     },

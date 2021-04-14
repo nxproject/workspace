@@ -294,13 +294,13 @@ nx.util = {
 
                                     // Add any tools
                                     if (entry.tools && entry.tools.length) {
-                                    // Flag sep needed
+                                        // Flag sep needed
                                         var sep = true;
                                         // Loop
                                         entry.tools.forEach(function (tool) {
                                             // Sub menu?
                                             if (tool.items) {
-                                            // Any?
+                                                // Any?
                                                 if (tool.items.length) {
                                                     if (sep) {
                                                         // Flag
@@ -320,9 +320,9 @@ nx.util = {
                                                     subMenu.add(button);
                                                 }
                                             } else {
-                                            // Separator?
+                                                // Separator?
                                                 if (sep) {
-                                                // Flag
+                                                    // Flag
                                                     sep = false;
                                                     // Add separator
                                                     subMenu.addSeparator();
@@ -402,7 +402,7 @@ nx.util = {
         var self = this;
 
         // Make button
-        var button = new qx.ui.menu.Button(def.label, self.getIcon(def.icon));
+        var button = new qx.ui.menu.Button(def.label || def.caption, self.getIcon(def.icon));
 
         // Set the info
         nx.bucket.setParams(button, def);
@@ -1859,6 +1859,10 @@ nx.util = {
         }
 
         return !!ans;
+    },
+
+    asBoolean: function (value) {
+        return ((!!value) ? 'y' : 'n');
     },
 
     // ---------------------------------------------------------

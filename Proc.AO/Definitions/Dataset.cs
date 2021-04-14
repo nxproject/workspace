@@ -324,7 +324,7 @@ namespace Proc.AO.Definitions
         /// List of access fields
         /// 
         /// </summary>
-        public List<string> AccountFields {  get { return this.Object.GetAsJArray("_account").ToList(); } }
+        public List<string> AccountFields {  get  { return this.Object.GetAsJArray(ObjectClass.FieldAccount).ToList(); } }
 
         /// <summary>
         /// 
@@ -868,9 +868,9 @@ namespace Proc.AO.Definitions
             }
 
             // Save list of access fields
-            this.Object.SetAsJArray("_account", c_Account.ToJArray());
+            this.Object.SetAsJArray(ObjectClass.FieldAccount, c_Account.ToJArray());
             // Save list of computed
-            this.Object.SetAsJArray("_computed", c_Computed.ToJArray());
+            this.Object.SetAsJArray(ObjectClass.FieldComputed, c_Computed.ToJArray());
 
             // Save
             this.Object.Save(force: true);

@@ -56,25 +56,31 @@ qx.Class.define('f.lu', {
                             var fdef = dsdef.fields[fld];
                             // Any?
                             if (fdef && fdef.lumap) {
-                                // Get the map
-                                var map = nx.util.splitSpace(fdef.lumap);
-                                // Loop up the value
-                                var value = data[map[0]];
-                                //
-                                var newvalue = {};
-                                // Loop thtu rest
-                                for (var i = 1; i < map.length; i += 2) {
-                                    // Get the field name
-                                    var fname = map[i];
-                                    // And the value
-                                    var fvalue = data[map[i + 1]];
-                                    // Save
-                                    newvalue[fname] = fvalue;
-                                }
-                                // Set
-                                form.setFormData(newvalue);
+                                // Get the source object
+                                nx.desktop._loadData(ds, data._id, function (source) {
+                                    // Get the map
+                                    var map = nx.util.splitSpace(fdef.lumap);
+                                    // Loop up the value
+                                    value = source.values[map[0]];
+                                    //
+                                    var newvalue = {};
+                                    // Loop thtu rest
+                                    for (var i = 1; i < map.length; i += 2) {
+                                        // Get the field name
+                                        var fname = map[i];
+                                        // And the value
+                                        var fvalue = source.values[map[i + 1]];
+                                        // Save
+                                        newvalue[fname] = fvalue;
+                                    }
+                                    // Set
+                                    form.setFormData(newvalue);
+                                    //
+                                    cb(value);
+                                });
+                            } else {
+                                cb(value);
                             }
-                            cb(value);
                         } else {
                             cb(null);
                         }

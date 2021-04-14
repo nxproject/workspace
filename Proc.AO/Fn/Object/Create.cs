@@ -38,6 +38,7 @@ namespace Proc.AO
 
             // Get the params
             string sDS = store["ds"].AsDatasetName();
+            bool bFloatAccount = store["floataccount"].FromDBBoolean();
 
             // Valid?
             if (sDS.HasValue())
@@ -54,6 +55,9 @@ namespace Proc.AO
                     // Get the object
                     using (Proc.AO.ObjectClass c_Obj = c_DS.New(null, c_Ctx))
                     {
+                        // Hadle the account bit
+                        if (bFloatAccount) c_Obj.FloatAccount();
+
                         // Copy all fields
                         c_Obj.ToStore(c_Ans);
                     }

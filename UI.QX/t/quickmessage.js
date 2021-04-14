@@ -39,7 +39,16 @@ qx.Class.define('t.quickmessage', {
 
         click: function (widget) {
 
-            var value = widget.getValue();
+            var value;
+
+            // Handle event
+            if (widget.getValue) {
+                value = widget.getValue();
+            } else {
+                widget = nx.util.eventGetWidget(widget);
+                value = widget.getLabel();
+            }
+
             if (nx.util.hasValue(value)) {
                 // Select
                 nx.util.runTool('View', {

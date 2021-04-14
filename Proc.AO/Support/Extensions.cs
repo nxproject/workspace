@@ -169,7 +169,14 @@ namespace Proc.AO
         /// <returns>A JSON object</returns>
         public static JArray ToJArray(this BsonArray doc)
         {
-            return doc.ToString().ToJArray();
+            JArray c_Ans = new JArray();
+
+            // Loop thru
+            foreach (var c_Wkg in doc)
+            {
+                c_Ans.Add(c_Wkg.AsString);
+            }
+            return c_Ans;
         }
 
         /// <summary>

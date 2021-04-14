@@ -123,8 +123,8 @@ nx.office = {
                                 var added = false;
                                 //
                                 var drops = nx.office.history();
-                                // Make active list
-                                var active = [];
+                                // Make active list, always keep the base bucket
+                                var active = ['bucket0'];
                                 // Loop thru
                                 drops.forEach(function (url) {
                                     // The bucket id
@@ -142,9 +142,6 @@ nx.office = {
                                             nx.db.setObj(obj, null, nx.util.noOp);
                                         }
                                         delete nx.env._buckets[id];
-                                        // TBD
-                                        //nx.user.removeTP(xurl);
-                                        //nx.user.removeSIO(xurl);
                                     }
                                 });
                                 for (var i = drops.length - 2; i >= 0; i--) {
@@ -246,7 +243,7 @@ nx.office = {
                                     // Get the value
                                     var value = poss.attr('_value');
                                     // Must have value
-                                    if (value && nx.util.is) {
+                                    if (value) {
                                         // Parse
                                         var wkg = nx.db.parseID(value);
                                         if (wkg) {

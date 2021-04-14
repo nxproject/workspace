@@ -45,9 +45,7 @@ namespace Proc.Telemetry
         public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "zt", ":id", ":target", "?path?" };
         public override void Call(HTTPCallClass call, StoreClass store)
         {
-            call.Env.Debug();
-
-            // Make the folder path
+           // Make the folder path
             string sPath = "".WorkingDirectory().CombinePath("ui." + call.Env.UI.Replace("+", "").ToLower(), "viewers", "automizy", "images").AdjustPathToOS();
 
             // Get the full path
