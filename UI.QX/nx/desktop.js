@@ -563,23 +563,35 @@ nx.desktop = {
                                 // Do we have an account?
                                 var acct = data.values._account;
                                 if (acct) {
-                                    var items = [
-                                        new t.quickmessage()
-                                    ];
 
-                                    if (nx.util.isEMail(acct)) {
-                                        items.push(new t.emailTelemetry());
+                                    // Billing?
+                                    if (nx.desktop.user.getIsSelector('BILLING')) {
+                                        // TBD
                                     }
 
-                                    if (nx.util.isPhone(acct)) {
-                                        items.push(new t.phonesmsTelemetry());
+                                    // Extended?
+                                    if (nx.desktop.user.getIsSelector('TELE') || nx.desktop.user.getIsSelector('EMAIL')) {
+
+
+                                        var items = [
+                                            new t.quickmessage()
+                                        ];
+
+                                        if (nx.util.isEMail(acct)) {
+                                            items.push(new t.emailTelemetry());
+                                        }
+
+                                        if (nx.util.isPhone(acct)) {
+                                            items.push(new t.phonesmsTelemetry());
+                                        }
+
+                                        tt.items.push({
+                                            label: acct,
+                                            icon: 'lightning',
+                                            choices: items
+                                        });
                                     }
 
-                                    tt.items.push({
-                                        label: acct,
-                                        icon: 'lightning',
-                                        choices: items
-                                    });
                                 }
 
                                 // Add documents
@@ -1316,7 +1328,9 @@ nx.desktop = {
                                     }
                                 }
 
-                            }, nx.desktop.user.getIsSelector('TELE') || nx.desktop.user.getIsSelector('EMAIL'));
+                            }, nx.desktop.user.getIsSelector('TELE') ||
+                            nx.desktop.user.getIsSelector('EMAIL') ||
+                            nx.desktop.user.getIsSelector('BILLING'));
                         });
                     });
                 }

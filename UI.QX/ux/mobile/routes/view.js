@@ -61,7 +61,7 @@ nx._routes.push({
                         if (chain) {
                             // Loop thru
                             chain.queries.forEach(function (qry) {
-                            // Set
+                                // Set
                                 nx.db.objSetField(obj, qry.field, qry.value);
                             });
                         }
@@ -77,7 +77,7 @@ nx._routes.push({
                             //
                             var rbl;
                             var rb = [];
-                            var sep = true;   
+                            var sep = true;
 
                             //
                             if (obj._parent) {
@@ -102,7 +102,16 @@ nx._routes.push({
 
                             //
                             if (obj._account) {
-                                // TBD
+
+                                // Billing?
+                                if (nx.user.getIsSelector('EMAIL')) {
+                                    // TBD
+                                }
+
+                                // Extended?
+                                if (nx.user.getIsSelector('TELE') || nx.user.getIsSelector('EMAIL')) {
+                                    // TBD
+                                }
                             }
 
                             // Localize
@@ -269,7 +278,9 @@ nx._routes.push({
 
                         });
 
-                    }, nx.user.getIsSelector('TELE') || nx.user.getIsSelector('EMAIL'));
+                    }, nx.user.getIsSelector('TELE') ||
+                    nx.user.getIsSelector('EMAIL') ||
+                    nx.user.getIsSelector('BILLING'));
 
                 } else {
 
