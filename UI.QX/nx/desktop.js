@@ -521,6 +521,14 @@ nx.desktop = {
                                         var value = req.data[fld];
                                         data.setField(fld, value);
                                     });
+                                } else if (req.chain && req.chain.queries) {
+                                    // 
+                                    req.chain.queries.forEach(function (row) {
+                                        // The op must be =
+                                        if (row.op === '=') {
+                                            data.setField(row.field, row.value);
+                                        }
+                                    });
                                 }
 
                                 // Update the data
@@ -566,7 +574,20 @@ nx.desktop = {
 
                                     // Billing?
                                     if (nx.desktop.user.getIsSelector('BILLING')) {
-                                        // TBD
+                                        // Can we do it?
+                                        if (dsdef.isBillable === 'y' && data.values._billat) {
+                                            var chain = nx.util.makeChain('All', 'acct', '=', data.values._billto, 'at', '=', data.values._billat);
+                                            tt.items.push({
+                                                label: '>> Bill',
+                                                icon: 'money',
+                                                click: function (e) {
+                                                    nx.util.runTool('View', {
+                                                        ds: '_billcharge',
+                                                        chain: chain
+                                                    }, nx.util.noOp);
+                                                }
+                                            });
+                                        }
                                     }
 
                                     // Extended?
@@ -616,563 +637,287 @@ nx.desktop = {
 
                                 // Make list
                                 var list = nx.util.splitSpace(relateddss);
-                                // Assure end
-                                list.push(null);
-                                // Loop thru
-                                while (list.length) {
-                                    // Get
-                                    var cds = list.shift();
-                                    var cfld = list.shift();
-                                    // Add button
-                                    if (cds && cfld) {
+                                //
+                                self._assureDatasets(list, 2, function (list) {
+                                    // Assure end
+                                    list.push(null);
+                                    // Loop thru
+                                    while (list.length) {
+                                        // Get
+                                        var cds = list.shift();
+                                        var cfld = list.shift();
+                                        // Add button
+                                        if (cds && cfld) {
 
-                                        //
-                                        if (nx.desktop.user.opAllowed(cds, 'a') || nx.desktop.user.opAllowed(cds, 'v')) {
-                                            // Get
-                                            nx.desktop._loadDataset(cds, function (cdsdef) {
+                                            //
+                                            if (nx.desktop.user.opAllowed(cds, 'a') || nx.desktop.user.opAllowed(cds, 'v')) {
+                                                // Get
+                                                nx.desktop._loadDataset(cds, function (cdsdef) {
 
-                                                tt.items.push({
-                                                    label: cdsdef.caption,
-                                                    icon: cdsdef.icon,
-                                                    passed: {
-                                                        ds: cds,
-                                                        fld: cfld
-                                                    },
-                                                    click: function (e) {
-                                                        // Get the widget
-                                                        var widget = nx.util.eventGetWidget(e);
-                                                        // And the form
-                                                        var win = nx.bucket.getWin(widget);
-                                                        // Get the passed
-                                                        var passed = nx.bucket.getPassed(widget);
-                                                        // And the target
-                                                        var targetds = passed.ds;
-                                                        // Get the data source
-                                                        var data = win._aoobject.values;
-                                                        // And make the id
-                                                        var id = nx.util.objectToUUID(data);
-                                                        // Make the chain
-                                                        var chain = {
-                                                            sop: 'Any',
-                                                            queries: [{
-                                                                field: passed.fld,
-                                                                op: '=',
-                                                                value: id
-                                                            }],
-                                                            _cooked: true
-                                                        }
-                                                        // Call picker
-                                                        nx.util.runTool('View', {
-                                                            ds: targetds,
-                                                            caller: win,
-                                                            chain: chain
-                                                        });
-                                                    }
-                                                });
-                                            });
-                                        }
-
-                                    } else {
-
-                                        // Make list
-                                        var list = nx.util.splitSpace(childdss);
-                                        // Assure end
-                                        list.push(null);
-                                        // Loop thru
-                                        while (list.length) {
-                                            // Get
-                                            var cds = list.shift();
-                                            // Add button
-                                            if (cds) {
-
-                                                //
-                                                if (nx.desktop.user.opAllowed(cds, 'a') || nx.desktop.user.opAllowed(cds, 'v')) {
-                                                    // Get
-                                                    nx.desktop._loadDataset(cds, function (cdsdef) {
-
-                                                        tt.items.push({
-                                                            label: cdsdef.caption,
-                                                            icon: cdsdef.icon,
-                                                            passed: {
-                                                                ds: cds
-                                                            },
-                                                            click: function (e) {
-                                                                // Get the widget
-                                                                var widget = nx.util.eventGetWidget(e);
-                                                                // And the form
-                                                                var win = nx.bucket.getWin(widget);
-                                                                // And the params
-                                                                var params = nx.bucket.getParams(win);
-                                                                // Get the dataset
-                                                                var ds = params.ds;
-                                                                // And the target
-                                                                var targetds = nx.bucket.getPassed(widget).ds;
-                                                                // Get the data source
-                                                                var data = win._aoobject.values;
-                                                                // And make the id
-                                                                var id = nx.util.objectToUUID(data);
-                                                                // Save the object
-                                                                win.save(function () {
-                                                                    // Make the chain
-                                                                    var chain = {
-                                                                        sop: 'Any',
-                                                                        queries: [{
-                                                                            field: '_parent',
-                                                                            op: '=',
-                                                                            value: id
-                                                                        }],
-                                                                        _cooked: true
-                                                                    }
-                                                                    // Call picker
-                                                                    nx.util.runTool('View', {
-                                                                        ds: targetds,
-                                                                        caller: win,
-                                                                        chain: chain
-                                                                    });
-                                                                });
-                                                            }
-                                                        });
-                                                    });
-                                                }
-
-                                            } else {
-
-                                                // Do we have a chain?
-                                                if (req.chain && req.chain._cooked) {
-                                                    // Get the queries
-                                                    var xlist = req.chain.queries;
-                                                    // Do we use just first
-                                                    if (req.chain.sop != - 'All') {
-                                                        xlist = [xlist[0]];
-                                                    }
-                                                    // Loop thru
-                                                    xlist.forEach(function (entry) {
-                                                        // Set the value
-                                                        data.forceField(entry.field, entry.value);
-                                                    });
-                                                }
-
-                                                // Add tools
-                                                var tdefs = [];
-
-                                                if (nx.desktop.user.opAllowed(req.ds, 'v', (dsdef.chatAllow || ''))) {
-                                                    tdefs.push({
-                                                        label: 'Chat',
-                                                        icon: 'user_comment',
-                                                        click: function (e) {
-                                                            var widget = nx.util.eventGetWidget(e);
-                                                            var form = nx.bucket.getWin(widget);
-                                                            var win = nx.bucket.getWin(widget);
-
-                                                            //
-                                                            nx.util.runTool('Chat', {
-                                                                desc: win.getCaption(),
-                                                                win: nx.bucket.getParams(form).nxid,
-                                                                caller: win
-                                                            });
-                                                        }
-                                                    });
-                                                }
-
-                                                if (nx.desktop.user.opAllowed(req.ds, 'v', (dsdef.ttAllow || ''))) {
-
-                                                    ttitems = [
-                                                        {
-                                                            label: 'Start',
-                                                            icon: 'flag_green',
-                                                            click: function (e) {
-                                                                nx.tt.tagWidget(e, 'start');
-                                                            }
-                                                        }, {
-                                                            label: 'Start Frozen',
-                                                            icon: 'flag_yellow',
-                                                            click: function (e) {
-                                                                nx.tt.tagWidget(e, 'startf');
-                                                            }
-                                                        }, {
-                                                            label: 'Continue',
-                                                            icon: 'flag_yellow',
-                                                            click: function (e) {
-                                                                nx.tt.tagWidget(e, 'continue');
-                                                            }
-                                                        }, {
-                                                            label: 'Show',
-                                                            icon: 'date',
-                                                            click: function (e) {
-                                                                nx.tt.tagWidget(e, 'show', function (result) {
-                                                                    // Tell user
-                                                                    nx.util.runTool('Message', {
-                                                                        caption: 'Time tracking',
-                                                                        msg: result.value,
-                                                                        caller: win
-                                                                    });
-                                                                });
-                                                            }
-                                                        }
-                                                    ];
-
-                                                    tdefs.push({
-                                                        label: 'Time track',
-                                                        icon: 'star',
-                                                        items: ttitems
-                                                    });
-                                                }
-
-
-                                                var sep = !!tdefs.length;
-
-                                                if (nx.desktop.user.opAllowed(req.ds, 'o', (dsdef.orgAllow || ''))) {
-                                                    if (!sep) {
-                                                        sep = true;
-                                                        tdefs.push('-');
-                                                    }
-                                                    tdefs.push({
-                                                        label: 'Organizer',
-                                                        icon: 'org',
-                                                        click: function (e) {
-                                                            var widget = nx.util.eventGetWidget(e);
-                                                            var form = nx.bucket.getWin(widget);
-                                                            var params = nx.bucket.getParams(form);
-                                                            var ds = params.ds;
-                                                            var view = params.view;
-                                                            var id = params.id;
-
-                                                            //
-                                                            nx.util.serviceCall('Docs.Organizer', {
-                                                                ds: ds,
-                                                                id: id,
-                                                                data: form.getFormData()
-                                                            }, function (result) {
-                                                                // Show
-                                                                if (result && result.path) {
-                                                                    nx.fs.viewPDF(result);
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                                }
-
-                                                if (tdefs.length && !nx.desktop.user.getIsAccount()) {
                                                     tt.items.push({
-                                                        label: 'Options',
-                                                        icon: 'wrench',
-                                                        choices: tdefs
+                                                        label: cdsdef.caption,
+                                                        icon: cdsdef.icon,
+                                                        passed: {
+                                                            ds: cds,
+                                                            fld: cfld
+                                                        },
+                                                        click: function (e) {
+                                                            // Get the widget
+                                                            var widget = nx.util.eventGetWidget(e);
+                                                            // And the form
+                                                            var win = nx.bucket.getWin(widget);
+                                                            // Get the passed
+                                                            var passed = nx.bucket.getPassed(widget);
+                                                            // And the target
+                                                            var targetds = passed.ds;
+                                                            // Get the data source
+                                                            var data = win._aoobject.values;
+                                                            // And make the id
+                                                            var id = nx.util.objectToUUID(data);
+                                                            // Make the chain
+                                                            var chain = nx.util.makeChain('Any', passed.fld, '=', id);
+                                                            // Call picker
+                                                            nx.util.runTool('View', {
+                                                                ds: targetds,
+                                                                caller: win,
+                                                                chain: chain
+                                                            });
+                                                        }
                                                     });
-                                                }
+                                                });
+                                            }
 
-                                                // Make the wrapper
-                                                var windef = {
+                                        } else {
 
-                                                    nxid: req.nxid,
-                                                    obj: data,
-                                                    ds: ds,
-                                                    id: id,
-                                                    icon: dsdef.icon || 'application',
-                                                    allowClose: false,
-                                                    atSave: req.atSave,
-                                                    sysmode: req.sysmode,
-                                                    _dsfields: nx.util.removeSystemKeys(Object.keys(dsdef.fields)),
+                                            // Make list
+                                            var list = nx.util.splitSpace(childdss);
+                                            //
+                                            self._assureDatasets(list, 1, function (list) {
+                                                // Assure end
+                                                list.push(null);
+                                                // Loop thru
+                                                while (list.length) {
+                                                    // Get
+                                                    var cds = list.shift();
+                                                    // Add button
+                                                    if (cds) {
 
-                                                    topToolbar: tt,
-                                                    bottomToolbar: req.bottomToolbar,
-                                                    caller: caller,
-                                                    chain: req.chain
-                                                };
+                                                        //
+                                                        if (nx.desktop.user.opAllowed(cds, 'a') || nx.desktop.user.opAllowed(cds, 'v')) {
+                                                            // Get
+                                                            nx.desktop._loadDataset(cds, function (cdsdef) {
 
-                                                nx.bucket.setDataset(windef, dsdef);
-                                                nx.bucket.setView(windef, viewdef);
-
-                                                var commands = [];
-
-                                                commands.push({
-                                                    label: 'Close',
-                                                    icon: 'cancel',
-                                                    click: function (e) {
-
-                                                        // Only if active
-                                                        if (!req.sysmode) {
-                                                            var self = this;
-
-                                                            // Map window
-                                                            var win = nx.bucket.getWin(self);
-
-                                                            // Close
-                                                            win.safeClose();
+                                                                tt.items.push({
+                                                                    label: cdsdef.caption,
+                                                                    icon: cdsdef.icon,
+                                                                    passed: {
+                                                                        ds: cds
+                                                                    },
+                                                                    click: function (e) {
+                                                                        // Get the widget
+                                                                        var widget = nx.util.eventGetWidget(e);
+                                                                        // And the form
+                                                                        var win = nx.bucket.getWin(widget);
+                                                                        // And the params
+                                                                        var params = nx.bucket.getParams(win);
+                                                                        // Get the dataset
+                                                                        var ds = params.ds;
+                                                                        // And the target
+                                                                        var targetds = nx.bucket.getPassed(widget).ds;
+                                                                        // Get the data source
+                                                                        var data = win._aoobject.values;
+                                                                        // And make the id
+                                                                        var id = nx.util.objectToUUID(data);
+                                                                        // Save the object
+                                                                        win.save(function () {
+                                                                            // Make the chain
+                                                                            var chain = nx.util.makeChain('Any', '_parent', '=', id);
+                                                                            // Call picker
+                                                                            nx.util.runTool('View', {
+                                                                                ds: targetds,
+                                                                                caller: win,
+                                                                                chain: chain
+                                                                            });
+                                                                        });
+                                                                    }
+                                                                });
+                                                            });
                                                         }
 
-                                                    }
-                                                });
+                                                    } else {
 
-                                                // Can we delete?
-                                                if (nx.desktop.user.opAllowed(ds, 'x') && data.getField('_desc')) {
-                                                    commands.push('>');
-                                                    commands.push({
-                                                        label: 'Delete',
-                                                        icon: 'application_delete',
-                                                        click: function (e) {
+                                                        // Do we have a chain?
+                                                        if (req.chain && req.chain._cooked) {
+                                                            // Get the queries
+                                                            var xlist = req.chain.queries;
+                                                            // Do we use just first
+                                                            if (req.chain.sop != - 'All') {
+                                                                xlist = [xlist[0]];
+                                                            }
+                                                            // Loop thru
+                                                            xlist.forEach(function (entry) {
+                                                                // Set the value
+                                                                data.forceField(entry.field, entry.value);
+                                                            });
+                                                        }
 
-                                                            var self = this;
+                                                        // Add tools
+                                                        var tdefs = [];
 
-                                                            // Map window
-                                                            var win = nx.bucket.getWin(self);
-
-                                                            nx.util.confirm('Are you sure?', 'Delete ' + nx.util.localizeDesc(data.getField('_desc')) + '...', function (ok) {
-
-                                                                if (ok) {
+                                                        if (nx.desktop.user.opAllowed(req.ds, 'v', (dsdef.chatAllow || ''))) {
+                                                            tdefs.push({
+                                                                label: 'Chat',
+                                                                icon: 'user_comment',
+                                                                click: function (e) {
+                                                                    var widget = nx.util.eventGetWidget(e);
+                                                                    var form = nx.bucket.getWin(widget);
+                                                                    var win = nx.bucket.getWin(widget);
 
                                                                     //
-                                                                    var ds = req.ds;
-
-                                                                    // Fix ds name
-                                                                    ds = nx.util.toDatasetName(ds);
-
-                                                                    // Delete
-                                                                    nx.util.serviceCall('AO.ObjectDelete', {
-                                                                        ds: ds,
-                                                                        id: id
-                                                                    }, nx.util.noOp);
-
-                                                                    // Close
-                                                                    win.safeClose();
-
-                                                                }
-
-                                                            });
-                                                        }
-                                                    });
-                                                }
-
-                                                // Can we merge?
-                                                if (nx.desktop.user.opAllowed(ds, 'm')) {
-                                                    commands.push('>');
-                                                    commands.push({
-                                                        label: 'Merge',
-                                                        icon: 'arrow_merge',
-                                                        choices: []
-                                                    });
-                                                }
-
-                                                // Can we run a task?
-                                                if (nx.desktop.user.opAllowed(ds, 't')) {
-                                                    commands.push('>');
-                                                    commands.push({
-                                                        label: 'Task',
-                                                        icon: 'cog',
-                                                        choices: []
-                                                    });
-                                                }
-
-                                                commands.push('>');
-                                                commands.push({
-                                                    label: 'Ok',
-                                                    icon: 'database_save',
-                                                    click: function (e) {
-
-                                                        var self = this;
-
-                                                        // Map window
-                                                        var win = nx.bucket.getWin(self);
-
-                                                        // Get params
-                                                        var params = nx.bucket.getParams(nx.bucket.getForm(win));
-
-                                                        if (!params.sysmode) {
-
-                                                            // Save
-                                                            win.save(function (ok) {
-                                                                // Close
-                                                                if (ok) win.safeClose();
-                                                            });
-                                                        }
-                                                    }
-                                                });
-
-                                                windef.commands = {
-                                                    items: commands
-                                                };
-
-                                                windef.processSIO = function (win, event) {
-
-                                                    //
-                                                    switch (event.fn) {
-                                                        case '$$object.init':
-                                                            if (event.message.winid === req.nxid) {
-                                                                var changes = win.getFormDataChanges();
-                                                                Object.keys(changes).forEach(function (fld) {
-                                                                    nx.desktop.user.SIOSend('$$object.data', {
-                                                                        aofld: fld,
-                                                                        winid: req.nxid,
-                                                                        value: changes[fld]
+                                                                    nx.util.runTool('Chat', {
+                                                                        desc: win.getCaption(),
+                                                                        win: nx.bucket.getParams(form).nxid,
+                                                                        caller: win
                                                                     });
-                                                                });
-                                                            }
-                                                            break;
-
-                                                        case '$$object.data':
-                                                            // Get the params
-                                                            var params = nx.bucket.getParams(win);
-
-                                                            // Get the message
-                                                            var msg = event.message;
-                                                            // Must have one
-                                                            if (msg) {
-                                                                // Check to see if it is our event
-                                                                if (params.nxid === msg.winid) {
-                                                                    // Set the value
-                                                                    win.setValue(msg.aofld, msg.value);
                                                                 }
-                                                            }
-                                                            break;
+                                                            });
+                                                        }
 
-                                                        case '$$changed.dataset':
-                                                        case '$$changed.picklist':
-                                                        case '$$changed.view':
-                                                            if (event.message && event.message.deleted !== 'y') {
-                                                                if (req.sysmode) {
-                                                                    // Get the params
-                                                                    var params = nx.bucket.getParams(nx.bucket.getForm(win));
-                                                                    // Fetch the dataset
-                                                                    nx.desktop._loadDataset(params.ds, function (result) {
-                                                                        // Save
-                                                                        params._dsfields = Object.keys(result.fields);
-                                                                        // Get the button
-                                                                        var button = win.getButtonWithLabel(win.sysToolbar, 'Fields');
-                                                                        // Set the menu
-                                                                        if (button) {
-                                                                            button.setMenu(nx.util.getFieldsContextMenu(win));
-                                                                        }
-                                                                    }, !!event.message);
+                                                        if (nx.desktop.user.opAllowed(req.ds, 'v', (dsdef.ttAllow || ''))) {
 
-                                                                    // Do we refresh ourselves?
-                                                                    if (event.fn === '$$changed.view' &&
-                                                                        event.message.ds === params.ds &&
-                                                                        !win.getChildWindows().length) {
-                                                                        // Close
-                                                                        win.safeClose();
-                                                                        // And reopen
-                                                                        nx.util.runTool('object', {
-                                                                            ds: params.ds,
-                                                                            view: nx.bucket.getView(params)._id.substr(6),
-                                                                            sysmode: true,
-                                                                            caller: params.caller
+                                                            ttitems = [
+                                                                {
+                                                                    label: 'Start',
+                                                                    icon: 'flag_green',
+                                                                    click: function (e) {
+                                                                        nx.tt.tagWidget(e, 'start');
+                                                                    }
+                                                                }, {
+                                                                    label: 'Start Frozen',
+                                                                    icon: 'flag_yellow',
+                                                                    click: function (e) {
+                                                                        nx.tt.tagWidget(e, 'startf');
+                                                                    }
+                                                                }, {
+                                                                    label: 'Continue',
+                                                                    icon: 'flag_yellow',
+                                                                    click: function (e) {
+                                                                        nx.tt.tagWidget(e, 'continue');
+                                                                    }
+                                                                }, {
+                                                                    label: 'Show',
+                                                                    icon: 'date',
+                                                                    click: function (e) {
+                                                                        nx.tt.tagWidget(e, 'show', function (result) {
+                                                                            // Tell user
+                                                                            nx.util.runTool('Message', {
+                                                                                caption: 'Time tracking',
+                                                                                msg: result.value,
+                                                                                caller: win
+                                                                            });
                                                                         });
                                                                     }
                                                                 }
-                                                            }
-                                                            break;
+                                                            ];
 
-                                                        case '$$changed.document':
-                                                            var ds = req.ds;
-                                                            var id = nx.setup.templatesID;
-                                                            // Is this the droid I am lookig for?
-                                                            if (ds === event.message.ds && id === event.message.id) {
-
-                                                                // Get datasets
-                                                                nx.util.serviceCall('Docs.DocumentPickList', {
-                                                                    ds: ds,
-                                                                    id: id
-                                                                }, function (result) {
-                                                                    // Extend
-                                                                    result.list.forEach(function (entry) {
-                                                                        entry.click = function (e) {
-                                                                            var widget = nx.util.eventGetWidget(e);
-                                                                            var data = widget.getFormData();
-                                                                            var params = nx.bucket.getParams(nx.util.eventGetWidget(e));
-                                                                            var ds = params.ds;
-                                                                            var id = params.id;
-                                                                            var path = nx.bucket.getParams(e.getTarget()).path;
-                                                                            nx.util.serviceCall('Docs.Merge', {
-                                                                                ds: ds,
-                                                                                id: id,
-                                                                                path: path,
-                                                                                data: data
-                                                                            }, function (result) {
-                                                                                if (result && result.path) {
-                                                                                    result.path.forEach(function (path) {
-                                                                                        nx.fs.editDOCX({
-                                                                                            path: path
-                                                                                        });
-                                                                                    });
-                                                                                }
-                                                                            });
-                                                                        };
-                                                                    });
-                                                                    // Make menu
-                                                                    var menu = new c._menu();
-                                                                    nx.util.createMenu(menu, result.list, win);
-
-                                                                    // 
-                                                                    var btn = win.getButtonWithLabel(win.commandToolbar, 'Merge');
-                                                                    if (btn) {
-                                                                        btn.setMenu(menu);
-                                                                    }
-                                                                });
-                                                            }
-                                                            break
-                                                    }
-                                                };
-
-                                                windef.listeners = {
-
-                                                    appear: function (e) {
-
-                                                        //
-                                                        if (req.sysmode) {
-                                                            nx.desktop._enterDSEdit(ds, view);
-                                                        }
-
-                                                        // Get window
-                                                        var win = nx.util.eventGetWidgetOfClass(e, 'c._window');
-
-                                                        // Call
-                                                        nx.desktop.sendSIO('$$object.init', {
-                                                            winid: req.nxid
-                                                        });
-
-                                                        // Call
-                                                        if (req.sysmode) {
-                                                            win.processSIO(win, {
-                                                                fn: '$$changed.dataset'
+                                                            tdefs.push({
+                                                                label: 'Time track',
+                                                                icon: 'star',
+                                                                items: ttitems
                                                             });
                                                         }
 
-                                                        // Call
-                                                        win.processSIO(win, {
-                                                            fn: '$$changed.document',
-                                                            message: {
-                                                                ds: req.ds,
-                                                                id: nx.setup.templatesID
+
+                                                        var sep = !!tdefs.length;
+
+                                                        if (nx.desktop.user.opAllowed(req.ds, 'o', (dsdef.orgAllow || ''))) {
+                                                            if (!sep) {
+                                                                sep = true;
+                                                                tdefs.push('-');
                                                             }
-                                                        });
-                                                    }
-
-                                                };
-
-                                                if (req.sysmode) {
-
-                                                    windef.syscommands = {
-
-                                                        items: [
-                                                            {
-                                                                label: 'Close',
-                                                                icon: 'cancel',
+                                                            tdefs.push({
+                                                                label: 'Organizer',
+                                                                icon: 'org',
                                                                 click: function (e) {
+                                                                    var widget = nx.util.eventGetWidget(e);
+                                                                    var form = nx.bucket.getWin(widget);
+                                                                    var params = nx.bucket.getParams(form);
+                                                                    var ds = params.ds;
+                                                                    var view = params.view;
+                                                                    var id = params.id;
 
+                                                                    //
+                                                                    nx.util.serviceCall('Docs.Organizer', {
+                                                                        ds: ds,
+                                                                        id: id,
+                                                                        data: form.getFormData()
+                                                                    }, function (result) {
+                                                                        // Show
+                                                                        if (result && result.path) {
+                                                                            nx.fs.viewPDF(result);
+                                                                        }
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+
+                                                        if (tdefs.length && !nx.desktop.user.getIsAccount()) {
+                                                            tt.items.push({
+                                                                label: 'Options',
+                                                                icon: 'wrench',
+                                                                choices: tdefs
+                                                            });
+                                                        }
+
+                                                        // Make the wrapper
+                                                        var windef = {
+
+                                                            nxid: req.nxid,
+                                                            obj: data,
+                                                            ds: ds,
+                                                            id: id,
+                                                            icon: dsdef.icon || 'application',
+                                                            allowClose: false,
+                                                            atSave: req.atSave,
+                                                            sysmode: req.sysmode,
+                                                            _dsfields: nx.util.removeSystemKeys(Object.keys(dsdef.fields)),
+
+                                                            topToolbar: tt,
+                                                            bottomToolbar: req.bottomToolbar,
+                                                            caller: caller,
+                                                            chain: req.chain
+                                                        };
+
+                                                        nx.bucket.setDataset(windef, dsdef);
+                                                        nx.bucket.setView(windef, viewdef);
+
+                                                        var commands = [];
+
+                                                        commands.push({
+                                                            label: 'Close',
+                                                            icon: 'cancel',
+                                                            click: function (e) {
+
+                                                                // Only if active
+                                                                if (!req.sysmode) {
                                                                     var self = this;
 
                                                                     // Map window
                                                                     var win = nx.bucket.getWin(self);
-
-                                                                    nx.desktop._leaveDSEdit(ds, view);
 
                                                                     // Close
                                                                     win.safeClose();
-
                                                                 }
 
-                                                            }, '>', {
+                                                            }
+                                                        });
+
+                                                        // Can we delete?
+                                                        if (nx.desktop.user.opAllowed(ds, 'x') && data.getField('_desc')) {
+                                                            commands.push('>');
+                                                            commands.push({
                                                                 label: 'Delete',
-                                                                icon: 'database_delete',
+                                                                icon: 'application_delete',
                                                                 click: function (e) {
 
                                                                     var self = this;
@@ -1180,23 +925,252 @@ nx.desktop = {
                                                                     // Map window
                                                                     var win = nx.bucket.getWin(self);
 
-                                                                    nx.util.confirm('Are you sure?', 'Delete ' + req.ds + '/' + req.view + '...', function (ok) {
+                                                                    nx.util.confirm('Are you sure?', 'Delete ' + nx.util.localizeDesc(data.getField('_desc')) + '...', function (ok) {
 
                                                                         if (ok) {
 
                                                                             //
                                                                             var ds = req.ds;
-                                                                            var view = req.view;
 
-                                                                            // Fix 
+                                                                            // Fix ds name
                                                                             ds = nx.util.toDatasetName(ds);
-                                                                            view = nx.util.toViewName(view);
 
                                                                             // Delete
-                                                                            nx.util.serviceCall('AO.ViewDelete', {
+                                                                            nx.util.serviceCall('AO.ObjectDelete', {
                                                                                 ds: ds,
-                                                                                view: view
+                                                                                id: id
                                                                             }, nx.util.noOp);
+
+                                                                            // Close
+                                                                            win.safeClose();
+
+                                                                        }
+
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+
+                                                        // Can we merge?
+                                                        if (nx.desktop.user.opAllowed(ds, 'm')) {
+                                                            commands.push('>');
+                                                            commands.push({
+                                                                label: 'Merge',
+                                                                icon: 'arrow_merge',
+                                                                choices: []
+                                                            });
+                                                        }
+
+                                                        // Can we run a task?
+                                                        if (nx.desktop.user.opAllowed(ds, 't')) {
+                                                            commands.push('>');
+                                                            commands.push({
+                                                                label: 'Task',
+                                                                icon: 'cog',
+                                                                choices: []
+                                                            });
+                                                        }
+
+                                                        commands.push('>');
+                                                        commands.push({
+                                                            label: 'Ok',
+                                                            icon: 'database_save',
+                                                            click: function (e) {
+
+                                                                var self = this;
+
+                                                                // Map window
+                                                                var win = nx.bucket.getWin(self);
+
+                                                                // Get params
+                                                                var params = nx.bucket.getParams(nx.bucket.getForm(win));
+
+                                                                if (!params.sysmode) {
+
+                                                                    // Save
+                                                                    win.save(function (ok) {
+                                                                        // Close
+                                                                        if (ok) win.safeClose();
+                                                                    });
+                                                                }
+                                                            }
+                                                        });
+
+                                                        windef.commands = {
+                                                            items: commands
+                                                        };
+
+                                                        windef.processSIO = function (win, event) {
+
+                                                            //
+                                                            switch (event.fn) {
+                                                                case '$$object.init':
+                                                                    if (event.message.winid === req.nxid) {
+                                                                        var changes = win.getFormDataChanges();
+                                                                        Object.keys(changes).forEach(function (fld) {
+                                                                            nx.desktop.user.SIOSend('$$object.data', {
+                                                                                aofld: fld,
+                                                                                winid: req.nxid,
+                                                                                value: changes[fld]
+                                                                            });
+                                                                        });
+                                                                    }
+                                                                    break;
+
+                                                                case '$$object.data':
+                                                                    // Get the params
+                                                                    var params = nx.bucket.getParams(win);
+
+                                                                    // Get the message
+                                                                    var msg = event.message;
+                                                                    // Must have one
+                                                                    if (msg) {
+                                                                        // Check to see if it is our event
+                                                                        if (params.nxid === msg.winid) {
+                                                                            // Set the value
+                                                                            win.setValue(msg.aofld, msg.value);
+                                                                        }
+                                                                    }
+                                                                    break;
+
+                                                                case '$$changed.dataset':
+                                                                case '$$changed.picklist':
+                                                                case '$$changed.view':
+                                                                    if (event.message && event.message.deleted !== 'y') {
+                                                                        if (req.sysmode) {
+                                                                            // Get the params
+                                                                            var params = nx.bucket.getParams(nx.bucket.getForm(win));
+                                                                            // Fetch the dataset
+                                                                            nx.desktop._loadDataset(params.ds, function (result) {
+                                                                                // Save
+                                                                                params._dsfields = Object.keys(result.fields);
+                                                                                // Get the button
+                                                                                var button = win.getButtonWithLabel(win.sysToolbar, 'Fields');
+                                                                                // Set the menu
+                                                                                if (button) {
+                                                                                    button.setMenu(nx.util.getFieldsContextMenu(win));
+                                                                                }
+                                                                            }, !!event.message);
+
+                                                                            // Do we refresh ourselves?
+                                                                            if (event.fn === '$$changed.view' &&
+                                                                                event.message.ds === params.ds &&
+                                                                                !win.getChildWindows().length) {
+                                                                                // Close
+                                                                                win.safeClose();
+                                                                                // And reopen
+                                                                                nx.util.runTool('object', {
+                                                                                    ds: params.ds,
+                                                                                    view: nx.bucket.getView(params)._id.substr(6),
+                                                                                    sysmode: true,
+                                                                                    caller: params.caller
+                                                                                });
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    break;
+
+                                                                case '$$changed.document':
+                                                                    var ds = req.ds;
+                                                                    var id = nx.setup.templatesID;
+                                                                    // Is this the droid I am lookig for?
+                                                                    if (ds === event.message.ds && id === event.message.id) {
+
+                                                                        // Get datasets
+                                                                        nx.util.serviceCall('Docs.DocumentPickList', {
+                                                                            ds: ds,
+                                                                            id: id
+                                                                        }, function (result) {
+                                                                            // Extend
+                                                                            result.list.forEach(function (entry) {
+                                                                                entry.click = function (e) {
+                                                                                    var widget = nx.util.eventGetWidget(e);
+                                                                                    var data = widget.getFormData();
+                                                                                    var params = nx.bucket.getParams(nx.util.eventGetWidget(e));
+                                                                                    var ds = params.ds;
+                                                                                    var id = params.id;
+                                                                                    var path = nx.bucket.getParams(e.getTarget()).path;
+                                                                                    nx.util.serviceCall('Docs.Merge', {
+                                                                                        ds: ds,
+                                                                                        id: id,
+                                                                                        path: path,
+                                                                                        data: data
+                                                                                    }, function (result) {
+                                                                                        if (result && result.path) {
+                                                                                            result.path.forEach(function (path) {
+                                                                                                nx.fs.editDOCX({
+                                                                                                    path: path
+                                                                                                });
+                                                                                            });
+                                                                                        }
+                                                                                    });
+                                                                                };
+                                                                            });
+                                                                            // Make menu
+                                                                            var menu = new c._menu();
+                                                                            nx.util.createMenu(menu, result.list, win);
+
+                                                                            // 
+                                                                            var btn = win.getButtonWithLabel(win.commandToolbar, 'Merge');
+                                                                            if (btn) {
+                                                                                btn.setMenu(menu);
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                    break
+                                                            }
+                                                        };
+
+                                                        windef.listeners = {
+
+                                                            appear: function (e) {
+
+                                                                //
+                                                                if (req.sysmode) {
+                                                                    nx.desktop._enterDSEdit(ds, view);
+                                                                }
+
+                                                                // Get window
+                                                                var win = nx.util.eventGetWidgetOfClass(e, 'c._window');
+
+                                                                // Call
+                                                                nx.desktop.sendSIO('$$object.init', {
+                                                                    winid: req.nxid
+                                                                });
+
+                                                                // Call
+                                                                if (req.sysmode) {
+                                                                    win.processSIO(win, {
+                                                                        fn: '$$changed.dataset'
+                                                                    });
+                                                                }
+
+                                                                // Call
+                                                                win.processSIO(win, {
+                                                                    fn: '$$changed.document',
+                                                                    message: {
+                                                                        ds: req.ds,
+                                                                        id: nx.setup.templatesID
+                                                                    }
+                                                                });
+                                                            }
+
+                                                        };
+
+                                                        if (req.sysmode) {
+
+                                                            windef.syscommands = {
+
+                                                                items: [
+                                                                    {
+                                                                        label: 'Close',
+                                                                        icon: 'cancel',
+                                                                        click: function (e) {
+
+                                                                            var self = this;
+
+                                                                            // Map window
+                                                                            var win = nx.bucket.getWin(self);
 
                                                                             nx.desktop._leaveDSEdit(ds, view);
 
@@ -1205,128 +1179,165 @@ nx.desktop = {
 
                                                                         }
 
-                                                                    });
+                                                                    }, '>', {
+                                                                        label: 'Delete',
+                                                                        icon: 'database_delete',
+                                                                        click: function (e) {
 
-                                                                }
-                                                            }, '>', {
-                                                                label: 'Add Fields',
-                                                                icon: 'application_add',
-                                                                click: function (e) {
-                                                                    // Get the button
-                                                                    var win = nx.util.eventGetWindow(e);
+                                                                            var self = this;
 
-                                                                    // Get list
-                                                                    nx.util.runTool('Input', {
-                                                                        label: 'Field names',
-                                                                        atOk: function (list) {
-                                                                            // Get params
-                                                                            var params = nx.bucket.getParams(nx.bucket.getForm(win));
-                                                                            //
-                                                                            var ds = nx.util.toDatasetName(nx.bucket.getView(params)._ds);
-                                                                            var view = nx.util.toViewName(nx.bucket.getView(params)._id);
-                                                                            // Parse
-                                                                            list = nx.util.splitSpace(list);
-                                                                            // Add to dataset
-                                                                            nx.desktop._addDatasetFields(ds, list);
-                                                                            // And to view
-                                                                            var fdefs = nx.desktop._addViewFields(ds, view, list);
-                                                                            // Redraw window
-                                                                            win.addFields(fdefs, function () {
-                                                                                // Get the dataset definition
-                                                                                nx.desktop._loadDataset(ds, function (dsdef) {
-                                                                                    // And the view
-                                                                                    nx.desktop._loadView(ds, view, function (viewdef) {
-                                                                                        // Show the field definition
-                                                                                        win.showFieldDefinition(list, ds, dsdef, view, viewdef);
+                                                                            // Map window
+                                                                            var win = nx.bucket.getWin(self);
+
+                                                                            nx.util.confirm('Are you sure?', 'Delete ' + req.ds + '/' + req.view + '...', function (ok) {
+
+                                                                                if (ok) {
+
+                                                                                    //
+                                                                                    var ds = req.ds;
+                                                                                    var view = req.view;
+
+                                                                                    // Fix 
+                                                                                    ds = nx.util.toDatasetName(ds);
+                                                                                    view = nx.util.toViewName(view);
+
+                                                                                    // Delete
+                                                                                    nx.util.serviceCall('AO.ViewDelete', {
+                                                                                        ds: ds,
+                                                                                        view: view
+                                                                                    }, nx.util.noOp);
+
+                                                                                    nx.desktop._leaveDSEdit(ds, view);
+
+                                                                                    // Close
+                                                                                    win.safeClose();
+
+                                                                                }
+
+                                                                            });
+
+                                                                        }
+                                                                    }, '>', {
+                                                                        label: 'Add Fields',
+                                                                        icon: 'application_add',
+                                                                        click: function (e) {
+                                                                            // Get the button
+                                                                            var win = nx.util.eventGetWindow(e);
+
+                                                                            // Get list
+                                                                            nx.util.runTool('Input', {
+                                                                                label: 'Field names',
+                                                                                atOk: function (list) {
+                                                                                    // Get params
+                                                                                    var params = nx.bucket.getParams(nx.bucket.getForm(win));
+                                                                                    //
+                                                                                    var ds = nx.util.toDatasetName(nx.bucket.getView(params)._ds);
+                                                                                    var view = nx.util.toViewName(nx.bucket.getView(params)._id);
+                                                                                    // Parse
+                                                                                    list = nx.util.splitSpace(list);
+                                                                                    // Add to dataset
+                                                                                    nx.desktop._addDatasetFields(ds, list);
+                                                                                    // And to view
+                                                                                    var fdefs = nx.desktop._addViewFields(ds, view, list);
+                                                                                    // Redraw window
+                                                                                    win.addFields(fdefs, function () {
+                                                                                        // Get the dataset definition
+                                                                                        nx.desktop._loadDataset(ds, function (dsdef) {
+                                                                                            // And the view
+                                                                                            nx.desktop._loadView(ds, view, function (viewdef) {
+                                                                                                // Show the field definition
+                                                                                                win.showFieldDefinition(list, ds, dsdef, view, viewdef);
+                                                                                            });
+                                                                                        });
                                                                                     });
-                                                                                });
+                                                                                }
                                                                             });
                                                                         }
-                                                                    });
-                                                                }
-                                                                // choices: []
-                                                            }, '>', {
+                                                                        // choices: []
+                                                                    }, '>', {
 
-                                                                label: 'Save',
-                                                                icon: 'accept',
-                                                                click: function (e) {
+                                                                        label: 'Save',
+                                                                        icon: 'accept',
+                                                                        click: function (e) {
 
-                                                                    var self = this;
+                                                                            var self = this;
 
-                                                                    // Map window
-                                                                    var win = nx.bucket.getWin(self);
+                                                                            // Map window
+                                                                            var win = nx.bucket.getWin(self);
 
-                                                                    // Get the wiews
-                                                                    var views = nx.bucket.getUsedViews(win);
-                                                                    // Add ourselves
-                                                                    views.push(view);
-                                                                    // Loop thru
-                                                                    views.forEach(function (view) {
-                                                                        // Save view definition
-                                                                        nx.desktop._updateView(windef.ds, view);
-                                                                    });
+                                                                            // Get the wiews
+                                                                            var views = nx.bucket.getUsedViews(win);
+                                                                            // Add ourselves
+                                                                            views.push(view);
+                                                                            // Loop thru
+                                                                            views.forEach(function (view) {
+                                                                                // Save view definition
+                                                                                nx.desktop._updateView(windef.ds, view);
+                                                                            });
 
-                                                                    nx.desktop._leaveDSEdit(ds, view);
+                                                                            nx.desktop._leaveDSEdit(ds, view);
 
-                                                                    // Close
-                                                                    win.safeClose();
-                                                                }
+                                                                            // Close
+                                                                            win.safeClose();
+                                                                        }
+                                                                    }
+                                                                ]
                                                             }
-                                                        ]
-                                                    }
 
-                                                }
+                                                        }
 
-                                                // Handle if unique
-                                                if (dsdef.isUnique === 'y') {
-                                                    windef.nxid = ds;
-                                                }
+                                                        // Handle if unique
+                                                        if (dsdef.isUnique === 'y') {
+                                                            windef.nxid = ds;
+                                                        }
 
-                                                // Handle caller
-                                                if (caller) {
-                                                    if (typeof caller === 'function') {
-                                                        caller = nx.bucket.getWindowID(caller);
-                                                    }
-                                                    if (caller) {
-                                                        windef.caller = caller;
-                                                    }
-                                                }
-
-                                                // According to the mode
-                                                switch (mode) {
-                                                    case 'edit':
-                                                        viewdef = self._viewEdit(viewdef);
-                                                        windef.caption = caption || nx.util.localizeDesc(data.values._desc || caption || '');
-                                                        windef.nxid = 'ao_' + ds + '_' + id;
-                                                        // ID alias?
-                                                        if (nx.util.hasValue(dsdef.idalias)) {
-                                                            // Get
-                                                            var vfld = viewdef.fields[dsdef.idalias];
-                                                            if (vfld) {
-                                                                vfld.ro = true;
+                                                        // Handle caller
+                                                        if (caller) {
+                                                            if (typeof caller === 'function') {
+                                                                caller = nx.bucket.getWindowID(caller);
+                                                            }
+                                                            if (caller) {
+                                                                windef.caller = caller;
                                                             }
                                                         }
-                                                        // Set the fields
-                                                        windef.items = self._viewFields(viewdef.fields, dsdef);
-                                                        // Make
-                                                        win = self.addWindow(windef);
-                                                        break;
-                                                    case 'add':
-                                                        windef.caption = (caption || req.sysmode ? 'Dataset/View Editor ' : 'New ') +
-                                                            (req.sysmode ? ds + '/' + viewdef._id.substr(6) : dsdef.caption || ds);
-                                                        // Set the fields
-                                                        windef.items = self._viewFields(viewdef.fields, dsdef);
-                                                        // Make
-                                                        win = self.addWindow(windef);
-                                                        break;
-                                                }
 
-                                                // Save
-                                                nx.bucket.setParams(win, req);
-                                            }
+                                                        // According to the mode
+                                                        switch (mode) {
+                                                            case 'edit':
+                                                                viewdef = self._viewEdit(viewdef);
+                                                                windef.caption = caption || nx.util.localizeDesc(data.values._desc || caption || '');
+                                                                windef.nxid = 'ao_' + ds + '_' + id;
+                                                                // ID alias?
+                                                                if (nx.util.hasValue(dsdef.idalias)) {
+                                                                    // Get
+                                                                    var vfld = viewdef.fields[dsdef.idalias];
+                                                                    if (vfld) {
+                                                                        vfld.ro = true;
+                                                                    }
+                                                                }
+                                                                // Set the fields
+                                                                windef.items = self._viewFields(viewdef.fields, dsdef);
+                                                                // Make
+                                                                win = self.addWindow(windef);
+                                                                break;
+                                                            case 'add':
+                                                                windef.caption = (caption || req.sysmode ? 'Dataset/View Editor ' : 'New ') +
+                                                                    (req.sysmode ? ds + '/' + viewdef._id.substr(6) : dsdef.caption || ds);
+                                                                // Set the fields
+                                                                windef.items = self._viewFields(viewdef.fields, dsdef);
+                                                                // Make
+                                                                win = self.addWindow(windef);
+                                                                break;
+                                                        }
+
+                                                        // Save
+                                                        nx.bucket.setParams(win, req);
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
-                                }
+                                });
 
                             }, nx.desktop.user.getIsSelector('TELE') ||
                             nx.desktop.user.getIsSelector('EMAIL') ||
@@ -1503,6 +1514,23 @@ nx.desktop = {
 
         // remove
         delete self.__ds[ds];
+    },
+
+    _assureDatasets: function (list, step , cb, at) {
+
+        var self = this;
+
+        // Start the index
+        if (typeof at === 'undefined') at = 0;
+
+        //
+        if (at >= list.length) {
+            cb(list);
+        } else {
+            self._loadDataset(list[at], function () {
+                self._assureDatasets(list,step, cb, at + step);
+            });
+        }
     },
 
     _addDatasetFields: function (ds, flds) {

@@ -339,6 +339,17 @@ namespace Proc.AO.Definitions
         /// </summary>
         public Action<ObjectClass> SavePostProcess { get; set; }
 
+        /// <summary>
+        /// 
+        /// Can billing charges be added?
+        /// 
+        /// </summary>
+        public bool IsBillable
+        {
+            get { return this.Object["isBillable"].FromDBBoolean(); }
+            set { this.Object["isBillable"] = value.ToDBBoolean(); }
+        }
+
         #region Private
         /// <summary>
         /// 

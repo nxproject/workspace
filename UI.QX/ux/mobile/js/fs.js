@@ -250,7 +250,8 @@ nx.fs = {
         var self = this;
 
         // Get the value
-        var value = widget.val();
+        var value = value;
+        if (typeof value === 'object') value = widget.val();
         // Do we have a value?
         if (value) {
             // Get the object

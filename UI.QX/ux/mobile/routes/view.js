@@ -103,14 +103,47 @@ nx._routes.push({
                             //
                             if (obj._account) {
 
+                            // 
+                                var acct = obj._account;
+
                                 // Billing?
-                                if (nx.user.getIsSelector('EMAIL')) {
-                                    // TBD
+                                if (nx.user.getIsSelector('BILLING')) {
+                                    // Can we do it?
+                                    if (dsdef.isBillable === 'y' && obj._billat) {
+                                        rb.push({
+                                            label: '>> Bill',
+                                            icon: 'money',
+                                            cb: "nx.calls.commBilling('" + acct + "','" + obj._billto + "','" + obj._billat +  "')"
+                                        });
+                                    }
                                 }
 
                                 // Extended?
                                 if (nx.user.getIsSelector('TELE') || nx.user.getIsSelector('EMAIL')) {
-                                    // TBD
+                                    if (!sep && rb.length) {
+                                        rb.push('-');
+                                        sep = true;
+                                    }
+                                    rb.push({
+                                        label: '>> Quick',
+                                        icon: 'lightning',
+                                        cb: "nx.calls.commQuick('" + acct + "')"
+                                    });
+                                    if (nx.util.isPhone(acct)) {
+                                        rb.push({
+                                            label: '>> SMS',
+                                            icon: 'phone',
+                                            cb: "nx.calls.commSMS('" + acct + "')"
+                                        });
+                                    }
+                                    if (nx.util.isEMail(acct)) {
+                                        rb.push({
+                                            label: '>> EMail',
+                                            icon: 'email',
+                                            cb: "nx.calls.commEMail('" + acct + "')"
+                                        });
+                                    }
+                                    sep = false;
                                 }
                             }
 
@@ -132,6 +165,10 @@ nx._routes.push({
                                         // Get
                                         var cdsdef = nx.user.getDSInfo(cds);
                                         if (cdsdef) {
+                                            if (!sep && rb.length) {
+                                                rb.push('-');
+                                                sep = true;
+                                            }
                                             rb.push({
                                                 childds: cds + ':' + cfld,
                                                 label: cdsdef.caption,
@@ -154,6 +191,10 @@ nx._routes.push({
                                         // Get
                                         var cdsdef = nx.user.getDSInfo(cds);
                                         if (cdsdef) {
+                                            if (!sep && rb.length) {
+                                                rb.push('-');
+                                                sep = true;
+                                            }
                                             rb.push({
                                                 childds: cds,
                                                 label: cdsdef.caption,

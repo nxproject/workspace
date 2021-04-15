@@ -102,6 +102,7 @@
     <Content Include="t\phonesmsTelemetry.js" />
     <Content Include="t\account.js" />
     <Content Include="t\quickmessage.js" />
+    <Content Include="t\telemetryData.js" />
     <Content Include="t\xemaileditor.js" />
     <Content Include="ux\mobile\routes\comm.js" />
     <Content Include="viewers\automizy\automizy-email-editor.css" />

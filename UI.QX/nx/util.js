@@ -3131,7 +3131,37 @@ nx.util = {
             if (cb) cb(info.name, info.locality, info.region_code, info.postal_code, info.confidence);
         });
 
+    },
+
+    // ---------------------------------------------------------
+    //
+    // Database
+    // 
+    // ---------------------------------------------------------
+
+    makeChain: function () {
+
+        var self = this;
+
+        var ans = {
+            sop: arguments[0],
+            queries: [],
+            _cooked: true
+        };
+
+        // Loop thru
+        for (var i = 1; i < arguments.length; i += 3) {
+            //
+            ans.queries.push({
+                field: arguments[i],
+                op: arguments[i + 1],
+                value: arguments[i + 2]
+            });
+        }
+
+        return ans;
     }
+
 };
 
 nx.ahk = {

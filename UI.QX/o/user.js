@@ -360,7 +360,30 @@ qx.Class.define('o.user', {
 
             var selectors = self.getField('selectors');
 
-            return selectors.indexOf(selector) !== -1 || (selectors.indexOf('ALL') !== -1 && selector !== 'ACCT');
+            var ans = selectors.indexOf(selector) !== -1 || (selectors.indexOf('ALL') !== -1 && selector !== 'ACCT');
+
+            if (ans) {
+                // By type
+                switch (selector) {
+                    case 'TELE':
+                        ans = nx.util.hasValue(self.getSIField('twilioacct'));
+                        break;
+
+                    case 'EMAIL':
+                        ans = nx.util.hasValue(self.getSIField('sendgridapi'));
+                        break;
+
+                    case 'TELEMETRY':
+                        ans = self.getSIField('teleenabled') === 'y';
+                        break;
+
+                    case 'BILLING':
+                        ans = self.getSIField('billenabled') === 'y';
+                        break;
+                }
+            }
+
+            return ans;
         },
 
         // ---------------------------------------------------------

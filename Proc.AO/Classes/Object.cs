@@ -56,6 +56,9 @@ namespace Proc.AO
 
         public const string FieldToken = "_token";
         public const string FieldSIO = "_sio";
+
+        public const string FieldBillTo = "_billto";
+        public const string FieldBillAt = "_billat";
         public const string FieldAccount = "_account";
 
         private const string SIOSaved = "$$object.saved";
@@ -341,7 +344,7 @@ namespace Proc.AO
         private void SetDefaultValues(ExtendedContextClass ctx = null)
         {
             // New?
-            if (this.IsNew && !this.ID.StartsWith("#") && !this.Dataset.Name.StartsWith("_"))
+            if (this.IsNew && !this.ID.StartsWith("#"))
             {
                 // Setup context
                 if (ctx == null)
@@ -1388,15 +1391,17 @@ namespace Proc.AO
             // Data?
             if (this.IsData)
             {
-                // Do we have an account?
-                if (this.Dataset.Definition.AccountFields.Count == 0)
+                // Get 
+                JObject c_Acct = this.GetAccount();
+                // Any?
+                if (c_Acct != null)
                 {
-                    // Get 
-                    string sAcct = this.GetAccount();
-                    // Any?
-                    if (sAcct.HasValue())
+                    // This is the object where the charges are generated at
+                    this.Document.SetField(FieldBillAt, this.UUID.ToString());
+
+                    foreach (string sFld in c_Acct.Keys())
                     {
-                        this.Document.SetField(FieldAccount, sAcct);
+                        this.Document.SetField(sFld, c_Acct.Get(sFld));
                     }
                 }
             }
@@ -1408,31 +1413,27 @@ namespace Proc.AO
         /// 
         /// </summary>
         /// <returns></returns>
-        public string GetAccount()
+        public JObject GetAccount()
         {
             // Assume none
-            string sAns = null;
-
-            //this.Parent.Parent.Parent.Parent.LogInfo();
+            JObject c_Ans = null;
 
             // Do we have an account field?
             List<string> c_AF = this.Dataset.Definition.AccountFields;
             // Any?
             if (c_AF.Count == 0)
             {
-                this.Parent.Parent.Parent.Parent.LogInfo("NO ACCT FIELDS");
                 // Get parent
                 string sParent = this[FieldParent];
                 if (sParent.HasValue())
                 {
-                    this.Parent.Parent.Parent.Parent.LogInfo("MOVING TO PARENT");
                     //
                     using (UUIDClass c_UUID = new UUIDClass(this.Parent.Parent, sParent))
                     {
                         using (ObjectClass c_Parent = c_UUID.AsObject)
                         {
                             // Get
-                            sAns = c_Parent.GetAccount();
+                            c_Ans = c_Parent.GetAccount();
                         }
                     }
                 }
@@ -1441,13 +1442,22 @@ namespace Proc.AO
             {
                 foreach (string sFld in c_AF)
                 {
-                    this.Parent.Parent.Parent.Parent.LogInfo("CHEKING " + sFld);
-                    sAns = this[sFld];
-                    if (sAns.HasValue()) break;
+                    string sAcct = this[sFld];
+                    if (sAcct.HasValue())
+                    {
+                        // Make holder
+                        c_Ans = new JObject();
+
+                        // Set the account plain value
+                        c_Ans.Set(FieldAccount, sAcct);
+                        // Set the bill to
+                        c_Ans.Set(FieldBillTo, UUIDClass.MakeString(DatabaseClass.DatasetBillAccess, 
+                            (this.UUID.ToString() + "/" + sAcct).MD5HashString().ToUpper()));
+                    }
                 }
             }
 
-            return sAns;
+            return c_Ans;
         }
         #endregion
 

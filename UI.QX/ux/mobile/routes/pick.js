@@ -230,15 +230,7 @@ nx.calls.pickchild = function (req) {
         }
 
         // Add chain
-        req.chain = {
-            sop: 'Any',
-            queries: [{
-                field: cfld || '_parent',
-                op: '=',
-                value: nx.db.makeID(obj._ds, obj._id)
-            }],
-            _cooked: true
-        };
+        req.chain = nx.util.makeChain('Any', (cfld || '_parent'), '=', nx.db.makeID(obj._ds, obj._id));
 
         // Call
         nx.office.goTo('pick', req);

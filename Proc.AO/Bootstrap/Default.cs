@@ -1455,7 +1455,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillAccess(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.13b"))
+            if (ds.Definition.ReleaseChanged("2021.04.15a"))
             {
                 //
                 ds.Definition.Caption = "Account";
@@ -1466,9 +1466,16 @@ namespace Proc.AO.BuiltIn
                 ds.Definition.StartIndex = "110";
                 ds.Definition.Selector = "ACCESS";
 
-                ds.Definition.ChildDSs = new List<string>() { DatabaseClass.DatasetBiilSubscription, DatabaseClass.DatasetBiilCharge, DatabaseClass.DatasetBiilInvoice }.JoinSpaces();
+                ds.Definition.ChildDSs = ""; // Cleanup a previous error
 
-                ds.Definition.RelatedDSs = "";  // Cleanup a previous error
+                List<string> c_Related = new List<string>()
+                {
+                    DatabaseClass.DatasetBiilCharge, "acct",
+                    DatabaseClass.DatasetBiilSubscription, "acct",
+                    DatabaseClass.DatasetBiilInvoice, "acct"
+                };
+
+                ds.Definition.RelatedDSs = c_Related.JoinSpaces();
 
                 ds.Definition.ClearFields();
 
@@ -1616,7 +1623,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillRate(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.13a"))
+            if (ds.Definition.ReleaseChanged("2021.04.15a"))
             {
                 //
                 ds.Definition.Caption = "Bill. Rate";
@@ -1638,9 +1645,17 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Description";
 
+                c_Field = ds.Definition["units"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
+                c_Field.Label = "Units";
+
                 c_Field = ds.Definition["rate"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Rate";
+
+                c_Field = ds.Definition["disc"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Disc.";
 
                 c_Field.SaveParent();
             }
@@ -1662,13 +1677,12 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillCharge(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.06a"))
+            if (ds.Definition.ReleaseChanged("2021.04.15e"))
             {
                 //
                 ds.Definition.Caption = "Charges";
-                ds.Definition.Placeholder = "[code] '-' [desc] @ #linkdesc([acct])#";
+                ds.Definition.Placeholder = "[#dateonlysortable([on])# [code] '-' [desc] @ #linkdesc([acct])#";
                 ds.Definition.Privileges = "av";
-                ds.Definition.IDAlias = "code";
                 ds.Definition.Icon = "money";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "hidden";
@@ -1676,9 +1690,15 @@ namespace Proc.AO.BuiltIn
 
                 ds.Definition.ClearFields();
 
-                //  
-                Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+                //    
+                Definitions.DatasetFieldClass c_Field = ds.Definition["on"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Date;
+                c_Field.DefaultValue = "#today()#";
+
+                c_Field = ds.Definition["code"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.LU;
+                c_Field.LinkDS = DatabaseClass.DatasetBiilRate;
+                c_Field.LUMap = "code desc desc units units rate rate disc disc";
 
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
@@ -1687,7 +1707,10 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Account";
-                c_Field.LinkDS = DatabaseClass.DatasetBillAccess;
+
+                c_Field = ds.Definition["at"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
+                c_Field.Label = "At";
 
                 c_Field = ds.Definition["units"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
@@ -1700,6 +1723,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["price"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Price";
+                c_Field.Compute = "[rate]*[units]";
 
                 c_Field = ds.Definition["disc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
@@ -1708,7 +1732,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["total"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Total";
-                c_Field.Compute = "([rate]*[price])-[disc]";
+                c_Field.Compute = "([units]*[rate])-[disc]";
 
                 c_Field = ds.Definition["inv"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
@@ -1716,6 +1740,19 @@ namespace Proc.AO.BuiltIn
                 c_Field.LinkDS = DatabaseClass.DatasetBiilInvoice;
 
                 c_Field.SaveParent();
+
+                // Pick
+                Definitions.PickListClass c_PL = ds.PickList("open");
+                if (c_PL.Object.IsNew)
+                {
+                    c_PL.Field1 = "inv";
+                    c_PL.Op1 = "Notexists";
+                    c_PL.Value1 = "";
+                    c_PL.Label = "Open";
+                    c_PL.Selected = true;
+
+                    c_PL.Save();
+                }
             }
 
             // Add the view
@@ -1727,6 +1764,14 @@ namespace Proc.AO.BuiltIn
 
                 // And from definition
                 c_VDefault.FromFields();
+
+                // Computed are read only
+                c_VDefault["price"].ReadOnly = true;
+                c_VDefault["total"].ReadOnly = true;
+
+                c_VDefault["acct"].ReadOnly = true;
+                c_VDefault["at"].ReadOnly = true;
+                c_VDefault["inv"].ReadOnly = true;
 
                 c_VDefault.Save();
             }
@@ -1814,7 +1859,7 @@ namespace Proc.AO.BuiltIn
 
         private static void Define_BillInvoice(this DatasetClass ds)
         { // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.06a"))
+            if (ds.Definition.ReleaseChanged("2021.04.15a"))
             {
                 //
                 ds.Definition.Caption = "Invoices";
@@ -1860,6 +1905,19 @@ namespace Proc.AO.BuiltIn
                 c_Field.Label = "Paid On";
 
                 c_Field.SaveParent();
+
+                // Pick
+                Definitions.PickListClass c_PL = ds.PickList("unpaid");
+                if (c_PL.Object.IsNew)
+                {
+                    c_PL.Field1 = "paidon";
+                    c_PL.Op1 = "Notexists";
+                    c_PL.Value1 = "";
+                    c_PL.Label = "Unpaid";
+                    c_PL.Selected = true;
+
+                    c_PL.Save();
+                }
             }
 
             // Add the view

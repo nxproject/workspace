@@ -25,7 +25,7 @@ qx.Class.define('c.account', {
     construct: function () {
 
         // Call base
-        this.base(arguments, new f.emailphone(), new t.quickmessage(), new t.account(), 
+        this.base(arguments, new f.emailphone(), new t.quickmessage(), new t.account(), new t.telemetryData(),
                 new t.emailTelemetry(), new t.emailweb(),
                 new t.phonesmsTelemetry(), new t.smsweb(), new t.phonecall(), new t.phoneweb(), 
                 new c._textfield());

@@ -364,6 +364,20 @@ qx.Class.define('tools.PropertiesDataset', {
                                         }
                                     ]
                                 }, {
+                                    caption: 'Billing',
+                                    icon: 'money',
+                                    items: [
+                                        {
+                                            nxtype: 'boolean',
+                                            top: 1,
+                                            left: 1,
+                                            width: 'default.fieldWidth',
+                                            label: 'Enable',
+                                            aoFld: 'isBillable',
+                                            value: dsdef.isBillable
+                                        }
+                                    ]
+                                }, {
                                     caption: 'Organizer',
                                     icon: 'org',
                                     items: [

@@ -116,7 +116,7 @@ nx._routes.push({
                     template: info.Template || '',
                     campaign: info.Campaign || '',
                     telemetry: data.useTelemetry,
-                    mlink: info['Message Link'] ||''
+                    mlink: info['Message Link'] || ''
                 }, function () {
                     // Go back
                     nx.office.goBack(2);
@@ -136,4 +136,34 @@ nx._routes.push({
 nx.calls.comm = function (req) {
     // 
     nx.office.goTo('comm', req);
+};
+
+// Set the call
+nx.calls.commQuick = function (req) {
+    //
+    nx.calls.pick({
+        ds: '_quickmessages',
+        onSelect: function (id) {
+            nx.fs.quickMessage(req, id);
+            nx.office.goBack();
+        }
+    });
+};
+
+// Set the call
+nx.calls.commEMail = function (req) {
+    // 
+    nx.fs.comm(req, 'email');
+};
+
+// Set the call
+nx.calls.commSMS = function (req) {
+    // 
+    nx.fs.comm(req, 'sms');
+};
+
+// Set the call
+nx.calls.commBilling = function (req, to, at) {
+    // 
+    nx.fs.comm(req, 'sms');
 };

@@ -411,7 +411,7 @@ nx.util = {
 
     noOp: function () { },
 
-    isPhone: function (value) {
+    isEMail: function (value) {
 
         var self = this;
 
@@ -424,7 +424,7 @@ nx.util = {
         return ans;
     },
 
-    isEMail: function (value) {
+    isPhone: function (value) {
 
         var self = this;
 
@@ -978,5 +978,34 @@ nx.util = {
         }
 
         return value;
-    }
+    },
+
+    // ---------------------------------------------------------
+    //
+    // Database
+    // 
+    // ---------------------------------------------------------
+
+    makeChain: function () {
+
+        var self = this;
+
+        var ans = {
+            sop: arguments[0],
+            queries: [],
+            _cooked: true
+        };
+
+        // Loop thru
+        for (var i = 1; i < arguments.length; i += 3) {
+            //
+            ans.queries.push({
+                field: arguments[i],
+                op: arguments[i + 1],
+                value: arguments[i + 2]
+            });
+        }
+
+        return ans;
+    },
 };

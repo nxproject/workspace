@@ -221,7 +221,11 @@ namespace Proc.AO.Definitions
 
                 return eAns;
             }
-            set { this.Document.SetField("nxtype", value.ToString().ToLower()); }
+            set 
+            { 
+                this.Document.SetField("nxtype", value.ToString().ToLower());
+                if (value == FieldTypes.Link) this.UseIndex = true;
+            }
         }
 
         /// <summary>
