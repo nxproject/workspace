@@ -45,6 +45,7 @@ across a varied landscape.
 * [Collaboration](readmes/README_COLL.md)
 * [Services](readmes/README_SVCS.md)
 * [Packages](readmes/README_PKG.md)
+* [AutoHotKeys - Linking your existing systenm](readmes/README_AHK.md)
 * [Infrastructure](readmes/README_INFRA.md)
 
 ## Docker
