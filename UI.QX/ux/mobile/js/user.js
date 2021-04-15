@@ -665,10 +665,74 @@ nx.user = {
                     self.updateDocuments(msg.message);
                     break;
             }
+
+            // And callbacks
+            self.processSIO(msg);
         }
     },
 
+    // ---------------------------------------------------------
+    //
+    // SIO/TP SUPPORT
+    // 
+    // ---------------------------------------------------------
+
     SIOUsers: [],
+
+    processSIO: function (event) {
+
+        var self = this;
+
+        // Do we still have a message?
+        if (event) {
+            // And callbacks
+            Object.keys(self.callbacksSIO).forEach(function (name) {
+                self.callbacksSIO[name](name, event);
+            });
+        }
+
+    },
+
+    callbacksSIO: {},
+
+    addSIO: function (name, cb) {
+
+        var self = this;
+
+        self.callbacksSIO[name] = cb;
+
+    },
+
+    removeSIO: function (name) {
+
+        var self = this;
+
+        delete self.callbacksSIO[name];
+    },
+
+    storageTP: {},
+
+    addTP: function (name, obj) {
+
+        var self = this;
+
+        self.storageTP[name] = obj;
+
+    },
+
+    removeTP: function (name) {
+
+        var self = this;
+
+        delete self.storageTP[name];
+    },
+
+    getTP: function (name) {
+
+        var self = this;
+
+        return self.storageTP[name];
+    },
 
     // ---------------------------------------------------------
     //
