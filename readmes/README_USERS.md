@@ -157,7 +157,9 @@ in the system.  The following are defined:
 * ```HELP``` - Allow access to online help
 * ```EMAIL``` - Allow access to email operations
 * ```QUICK``` - Allow for Quick Messages
-* ```TELE``` = Allow access to SMS and Voice
+* ```TELE``` - Allow access to SMS and Voice
+* ```TELEMETRY``` - Allow access to telemetry sub-system
+* ```BILLING``` - Allow access to billing sus-system
 * ```VCONF``` - Allow access to video conferencing (future)
 
 And a special ones:
