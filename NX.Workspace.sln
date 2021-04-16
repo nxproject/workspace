@@ -189,6 +189,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		readmes\README_B_CHARGE.md = readmes\README_B_CHARGE.md
 		readmes\README_B_INV.md = readmes\README_B_INV.md
 		readmes\README_B_RATE.md = readmes\README_B_RATE.md
+		readmes\README_B_SUBS.md = readmes\README_B_SUBS.md
 		readmes\README_BILLING.md = readmes\README_BILLING.md
 		readmes\README_CAMPAIGN.md = readmes\README_CAMPAIGN.md
 		readmes\README_COLL.md = readmes\README_COLL.md
