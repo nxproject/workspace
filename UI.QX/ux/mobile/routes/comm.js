@@ -22,113 +22,115 @@ nx._routes.push({
     path: '/comm/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.env.setDefaultBucket(routeTo.url);
+        if (nx.env.isNextBucket(routeTo.url)) {
 
-        var page, data = nx.env.getBucket(routeTo.url);
+            var page, data = nx.env.getBucket(routeTo.url);
 
-        //
-        var title = 'To ' + data.to;
-        nx.office.storeHistory(routeTo.url, title, '+folder', nx.builder.badge('Message', 'pink') + ' ');
+            //
+            var title = 'To ' + data.to;
+            nx.office.storeHistory(routeTo.url, title, '+folder', nx.builder.badge('Message', 'pink') + ' ');
 
-        // Body
-        var row = 1;
-        var items = [];
+            // Body
+            var row = 1;
+            var items = [];
 
-        if (data.askto) {
-            items.push({
-                nxtype: 'string',
-                top: row,
-                left: 1,
-                width: 'default.fieldWidth',
-                label: 'To'
-            });
-            row++;
-        }
-        items.push({
-            nxtype: 'string',
-            top: row,
-            left: 1,
-            width: 'default.fieldWidth',
-            label: 'Subject'
-        });
-        row++;
-        var h = 1;
-        items.push({
-            nxtype: 'textarea',
-            top: row,
-            left: 1,
-            width: 'default.fieldWidth',
-            height: h,
-            label: 'Message'
-        });
-        row += h;
-
-        if (data.choices && data.choices.length) {
-            items.push({
-                nxtype: 'combobox',
-                top: row,
-                left: 1,
-                width: 'default.fieldWidth',
-                label: 'Template',
-                choices: data.choices
-            });
-            row++;
-        }
-
-        if (data.campaigns && data.campaigns.length && data.useTelemetry === 'y') {
-            items.push({
-                nxtype: 'combobox',
-                top: row,
-                left: 1,
-                width: 'default.fieldWidth',
-                label: 'Campaign',
-                choices: data.campaigns
-            });
-            row++;
-        }
-
-        if (data.fsfn === 'sms' && data.useTelemetry === 'y') {
-            items.push({
-                nxtype: 'string',
-                top: row,
-                left: 1,
-                width: 'default.fieldWidth',
-                label: 'Message Link'
-            });
-            row++;
-        }
-
-        var page = nx.builder.page('Message', false, null,
-            [
-                nx.builder.contentBlock(nx.builder.form(items))
-            ],
-            function () {
-                // Get the data
-                var info = nx.fields.getFormData();
-
-                // 
-                nx.util.serviceCall('Communication.Process', {
-                    cmd: data.fsfn,
-                    to: data.to,
-                    subject: info.Subject,
-                    message: info.Message,
-                    att: data.att,
-                    template: info.Template || '',
-                    campaign: info.Campaign || '',
-                    telemetry: data.useTelemetry,
-                    mlink: info['Message Link'] || ''
-                }, function () {
-                    // Go back
-                    nx.office.goBack(2);
+            if (data.askto) {
+                items.push({
+                    nxtype: 'string',
+                    top: row,
+                    left: 1,
+                    width: 'default.fieldWidth',
+                    label: 'To'
                 });
+                row++;
             }
-        );
+            items.push({
+                nxtype: 'string',
+                top: row,
+                left: 1,
+                width: 'default.fieldWidth',
+                label: 'Subject'
+            });
+            row++;
+            var h = 1;
+            items.push({
+                nxtype: 'textarea',
+                top: row,
+                left: 1,
+                width: 'default.fieldWidth',
+                height: h,
+                label: 'Message'
+            });
+            row += h;
 
-        resolve({
-            template: page
-        }, {
-            context: {}
-        });
+            if (data.choices && data.choices.length) {
+                items.push({
+                    nxtype: 'combobox',
+                    top: row,
+                    left: 1,
+                    width: 'default.fieldWidth',
+                    label: 'Template',
+                    choices: data.choices
+                });
+                row++;
+            }
+
+            if (data.campaigns && data.campaigns.length && data.useTelemetry === 'y') {
+                items.push({
+                    nxtype: 'combobox',
+                    top: row,
+                    left: 1,
+                    width: 'default.fieldWidth',
+                    label: 'Campaign',
+                    choices: data.campaigns
+                });
+                row++;
+            }
+
+            if (data.fsfn === 'sms' && data.useTelemetry === 'y') {
+                items.push({
+                    nxtype: 'string',
+                    top: row,
+                    left: 1,
+                    width: 'default.fieldWidth',
+                    label: 'Message Link'
+                });
+                row++;
+            }
+
+            var page = nx.builder.page('Message', false, null,
+                [
+                    nx.builder.contentBlock(nx.builder.form(items))
+                ],
+                function () {
+                    // Get the data
+                    var info = nx.fields.getFormData();
+
+                    // 
+                    nx.util.serviceCall('Communication.Process', {
+                        cmd: data.fsfn,
+                        to: data.to,
+                        subject: info.Subject,
+                        message: info.Message,
+                        att: data.att,
+                        template: info.Template || '',
+                        campaign: info.Campaign || '',
+                        telemetry: data.useTelemetry,
+                        mlink: info['Message Link'] || ''
+                    }, function () {
+                        // Go back
+                        nx.office.goBack(2);
+                    });
+                }
+            );
+
+            resolve({
+                template: page
+            }, {
+                context: {}
+            });
+
+        }
     }
 });
 
@@ -164,6 +166,11 @@ nx.calls.commSMS = function (req) {
 
 // Set the call
 nx.calls.commBilling = function (req, to, at) {
+    // Make chain
+    var chain = nx.util.makeChain('All', 'acct', '=', to, 'at', '=', at);
     // 
-    nx.fs.comm(req, 'sms');
+    nx.calls.pick({
+        ds: '_billcharge',
+        chain: chain
+    });
 };

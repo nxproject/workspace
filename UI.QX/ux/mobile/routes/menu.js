@@ -22,21 +22,22 @@ nx._routes.push({
     path: '/menu/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.env.setDefaultBucket(routeTo.url);
+        if (nx.env.isNextBucket(routeTo.url)) {
 
-        var page, data = nx.env.getBucket(routeTo.url);
+            var page, data = nx.env.getBucket(routeTo.url);
 
-        //
-        var title = 'Select';
-        nx.office.storeHistory(routeTo.url, title, '+office', 'Select', '');
+            //
+            var title = 'Select';
+            nx.office.storeHistory(routeTo.url, title, '+office', 'Select', '');
 
-        page = nx.builder.page(title, false, null, nx.builder.contentBlock(nx.builder.menu(nx.user._menu)));
+            page = nx.builder.page(title, false, null, nx.builder.contentBlock(nx.builder.menu(nx.user._menu)));
 
-        resolve({
-            template: page
-        }, {
-            context: {}
-        });
+            resolve({
+                template: page
+            }, {
+                context: {}
+            });
+        }
     }
 });
 

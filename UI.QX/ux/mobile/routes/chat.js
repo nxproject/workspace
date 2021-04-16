@@ -22,21 +22,24 @@ nx._routes.push({
     path: '/chat/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.env.setDefaultBucket(routeTo.url);
+        if (nx.env.isNextBucket(routeTo.url)) {
 
-        var page, data = nx.env.getBucket(routeTo.url);
+            var page, data = nx.env.getBucket(routeTo.url);
 
-        //
-        var title = 'Chat - ' + data.desc
-        nx.office.storeHistory(routeTo.url, title, '+user_comment', nx.builder.badge('Chat', 'orange'), '');
+            //
+            var title = 'Chat - ' + data.desc
+            nx.office.storeHistory(routeTo.url, title, '+user_comment', nx.builder.badge('Chat', 'orange'), '');
 
             // TBD
 
-        resolve({
-            template: page
-        }, {
-            context: {}
-        });
+            nx.env.setDefaultBucket();
+
+            resolve({
+                template: page
+            }, {
+                context: {}
+            });
+        }
     }
 });
 

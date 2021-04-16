@@ -22,21 +22,22 @@ nx._routes.push({
     path: '/merge/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.env.setDefaultBucket(routeTo.url);
+        if (nx.env.isNextBucket(routeTo.url)) {
 
-        var page, data = nx.env.getBucket(routeTo.url);
+            var page, data = nx.env.getBucket(routeTo.url);
 
-        //
-        var title = data.desc;
-        nx.office.storeHistory(routeTo.url, title, '+folder', nx.builder.badge('Merge', 'pink') + ' ');
+            //
+            var title = data.desc;
+            nx.office.storeHistory(routeTo.url, title, '+folder', nx.builder.badge('Merge', 'pink') + ' ');
 
-        // TBD
+            // TBD
 
-        resolve({
-            template: page
-        }, {
-            context: {}
-        });
+            resolve({
+                template: page
+            }, {
+                context: {}
+            });
+        }
     }
 });
 

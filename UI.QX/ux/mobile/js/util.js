@@ -441,6 +441,10 @@ nx.util = {
         return ((!!value) ? 'y' : 'n');
     },
 
+    clone: function (value) {
+        return JSON.parse(JSON.stringify(value));
+    },
+
     // ---------------------------------------------------------
     //
     // Expression evaluator

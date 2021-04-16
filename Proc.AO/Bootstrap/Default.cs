@@ -1455,7 +1455,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillAccess(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.15a"))
+            if (ds.Definition.ReleaseChanged("2021.04.16a"))
             {
                 //
                 ds.Definition.Caption = "Account";
@@ -1472,7 +1472,7 @@ namespace Proc.AO.BuiltIn
                 {
                     DatabaseClass.DatasetBiilCharge, "acct",
                     DatabaseClass.DatasetBiilSubscription, "acct",
-                    DatabaseClass.DatasetBiilInvoice, "acct"
+                    DatabaseClass.DatasetBiilInvoice, "acct",
                 };
 
                 ds.Definition.RelatedDSs = c_Related.JoinSpaces();
@@ -1600,7 +1600,7 @@ namespace Proc.AO.BuiltIn
 
                 // Make the tabs
                 Definitions.ViewFieldClass c_Field = c_VDefault.AsTabs("tabs");
-                c_Field.Height = "10";
+                c_Field.Height = "11";
                 c_Field.Views = "info out in";
 
                 c_VDefault.Save();

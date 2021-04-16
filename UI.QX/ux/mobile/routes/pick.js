@@ -22,169 +22,164 @@ nx._routes.push({
     path: '/pick/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.env.setDefaultBucket(routeTo.url);
+        if (nx.env.isNextBucket(routeTo.url)) {
 
-        var page, data = nx.env.getBucket(routeTo.url);
+            var page, data = nx.env.getBucket(routeTo.url);
 
-        //
-        var ds = data.ds;
+            //
+            var ds = data.ds;
 
-        // Get the dataset
-        nx.db._loadDataset(ds, function (dsdef) {
+            // Get the dataset
+            nx.db._loadDataset(ds, function (dsdef) {
 
-            if (dsdef) {
-
-                //
-                var title = 'Select ' + dsdef.caption;
-                nx.office.storeHistory(routeTo.url, title, '+' + dsdef.icon, nx.builder.badge('Select', 'green') + ' ', '_search');
-
-                // Setup 
-                var filter = [];
-                var chain = data.chain;
-
-                // Get the search
-                var search = nx.env.getBucketItem('_search', routeTo.url);
-                if (search) {
-
-                    filter.push({
-                        field: '_desc',
-                        op: 'Any',
-                        value: search
-                    });
-
-                }
-
-                // Child pick
-                if (chain && chain.queries) {
-                    // Copy
-                    chain.queries.forEach(function (qry) {
-                        // Add
-                        filter.push(qry);
-                    });
-                }
-
-                // Per user?
-                if (nx.util.hasValue(dsdef.privField) && dsdef.privAllow === 'y' && !nx.user.getIsSelector('MGR')) {
-                    // Assure
-                    filter.push({
-                        field: dsdef.privField,
-                        op: 'Eq',
-                        value: nx.user.getName()
-                    });
-                }
-
-                // Pick list
-                var pl = nx.db.getPick(ds);
-                if (pl) {
-                // Loop thru
-                    Object.keys(pl).forEach(function (key) {
-                        // Process
-                        var qry = nx.db.processPickToolbarItem(pl[key]);
-                        if (qry) {
-                            filter.push(qry);
-                        }
-                    })
-                }
-
-                // Get the data
-                nx.db.get(ds, filter, 0, nx.env.getRows(), '_desc', null, '_id _desc', function (data) {
+                if (dsdef) {
 
                     //
-                    var rb = [];
-                    var rbl;
+                    var title = 'Select ' + dsdef.caption;
+                    nx.office.storeHistory(routeTo.url, title, '+' + dsdef.icon, nx.builder.badge('Select', 'green') + ' ', '_search');
 
-                    if (nx.user.opAllowed(ds, 'c', (dsdef.calAllow || ''))) {
-                        rb.push({
-                            label: 'Calendar',
-                            icon: 'calendar',
-                            cb: "nx.office.panelRightClose(); nx.fs.calendar('" + ds + "');"
+                    // Setup 
+                    var filter = nx.util.clone(data.chain || {
+                        sop: 'All',
+                        queries: []
+                    });
+                    // Force
+                    filter.sop = 'All';
+
+                    // Get the search
+                    var search = nx.env.getBucketItem('_search', routeTo.url);
+                    if (search) {
+
+                        filter.queries.push({
+                            field: '_desc',
+                            op: 'Any',
+                            value: search
+                        });
+
+                    }
+
+                    // Per user?
+                    if (nx.util.hasValue(dsdef.privField) && dsdef.privAllow === 'y' && !nx.user.getIsSelector('MGR')) {
+                        // Assure
+                        filter.queries.push({
+                            field: dsdef.privField,
+                            op: 'Eq',
+                            value: nx.user.getName()
                         });
                     }
 
-                    // Pick
+                    // Pick list
                     var pl = nx.db.getPick(ds);
                     if (pl) {
-                        if (rb.length) rb.push('-');
-
                         // Loop thru
                         Object.keys(pl).forEach(function (key) {
-                            var def = pl[key];
+                            // Process
+                            var qry = nx.db.processPickToolbarItem(pl[key]);
+                            if (qry) {
+                                filter.queries.push(qry);
+                            }
+                        })
+                    }
+
+                    // Get the data
+                    nx.db.get(ds, filter.queries, 0, nx.env.getRows(), '_desc', null, '_id _desc', function (data) {
+
+                        //
+                        var rb = [];
+                        var rbl;
+
+                        if (nx.user.opAllowed(ds, 'c', (dsdef.calAllow || ''))) {
                             rb.push({
-                                html: nx.builder.toggle(def.label, def.selected === 'y', function (ele) {
-                                    def.selected = (ele.checked ? 'y' : 'n');
-                                    nx.user.refreshPickList();
-                                })
+                                label: 'Calendar',
+                                icon: 'calendar',
+                                cb: "nx.office.panelRightClose(); nx.fs.calendar('" + ds + "');"
                             });
-                        });
-                    }
-
-                    //
-                    if (rb.length) {
-                        // Make options panel
-                        nx.office.panelRight(nx.builder.scrollable(nx.builder.menuSide(rb)));
-                        rbl = nx.builder.link('', 'reorder', 'nx.office.panelRightOpen();', 'Options', 'rightpanel', 'icon-large');
-                    }
-
-                    page = nx.builder.page(title,
-                        true,
-                        rbl,
-                        [
-                            nx.builder.searchbar(nx.env.getBucketItem('_search', routeTo.url)),
-                            nx.builder.picklist(ds, data, nx.env.getBucketID(routeTo.url), nx.env.getBucketItem('onSelect', routeTo.url))
-                        ],
-                        ((nx.user.opAllowed(ds, 'a') && ((dsdef.hidden || '').indexOf('v') === -1 || chain)) ?
-                            {
-                                label: 'Add',
-                                icon: 'add_circle_outline',
-                                cb: function () {
-
-                                    nx.calls.view({
-                                        ds: ds,
-                                        chain: chain
-                                    });
-                                }
-                            } : null),
-                        'nx.office.goBack()'
-                    );
-
-                    // Finalize
-                    nx.env.setBucketItem('_onSetup', function (url) {
-
-                        // Do we have a value?
-                        if (nx.env.getBucketItem('_search', url)) {
-                            // Show
-                            $('.input-clear-button').css('opacity', 1).css('visibility', 'visible').css('pointer-events', 'all');
                         }
 
-                        // Get searchbar
-                        var sb = $('input[type="search"]');
+                        // Pick
+                        var pl = nx.db.getPick(ds);
+                        if (pl) {
+                            if (rb.length) rb.push('-');
 
-                        // Get the event
-                        sb.on('input', function (e) {
-                            // Get the value
-                            var value = $(e.target).val();
-                            // Save
-                            nx.env.setBucketItem('_search', value, url);
+                            // Loop thru
+                            Object.keys(pl).forEach(function (key) {
+                                var def = pl[key];
+                                rb.push({
+                                    html: nx.builder.toggle(def.label, def.selected === 'y', function (ele) {
+                                        def.selected = (ele.checked ? 'y' : 'n');
+                                        nx.user.refreshPickList();
+                                    })
+                                });
+                            });
+                        }
 
-                            // Clear previous
-                            clearTimeout(nx.env.getBucketItem('_lookup', url));
-                            // And reset
-                            nx.env.setBucketItem('_lookup', setTimeout(nx.user.refreshPickList, 800), url)
+                        //
+                        if (rb.length) {
+                            // Make options panel
+                            nx.office.panelRight(nx.builder.scrollable(nx.builder.menuSide(rb)));
+                            rbl = nx.builder.link('', 'reorder', 'nx.office.panelRightOpen();', 'Options', 'rightpanel', 'icon-large');
+                        }
+
+                        page = nx.builder.page(title,
+                            true,
+                            rbl,
+                            [
+                                nx.builder.searchbar(nx.env.getBucketItem('_search', routeTo.url)),
+                                nx.builder.picklist(ds, data, nx.env.getBucketID(routeTo.url), nx.env.getBucketItem('onSelect', routeTo.url))
+                            ],
+                            ((nx.user.opAllowed(ds, 'a') && ((dsdef.hidden || '').indexOf('v') === -1 || data.chain)) ?
+                                {
+                                    label: 'Add',
+                                    icon: 'add_circle_outline',
+                                    cb: function () {
+
+                                        nx.calls.view({
+                                            ds: ds,
+                                            chain: data.chain
+                                        });
+                                    }
+                                } : null),
+                            'nx.office.goBack()'
+                        );
+
+                        // Finalize
+                        nx.env.setBucketItem('_onSetup', function (url) {
+
+                            // Do we have a value?
+                            if (nx.env.getBucketItem('_search', url)) {
+                                // Show
+                                $('.input-clear-button').css('opacity', 1).css('visibility', 'visible').css('pointer-events', 'all');
+                            }
+
+                            // Get searchbar
+                            var sb = $('input[type="search"]');
+
+                            // Get the event
+                            sb.on('input', function (e) {
+                                // Get the value
+                                var value = $(e.target).val();
+                                // Save
+                                nx.env.setBucketItem('_search', value, url);
+
+                                // Clear previous
+                                clearTimeout(nx.env.getBucketItem('_lookup', url));
+                                // And reset
+                                nx.env.setBucketItem('_lookup', setTimeout(nx.user.refreshPickList, 800), url)
+                            });
+
+                        }, routeTo.url);
+
+                        resolve({
+                            template: page
+                        }, {
+                            context: {}
                         });
 
-                    }, routeTo.url);
-
-
-                    resolve({
-                        template: page
-                    }, {
-                        context: {}
                     });
+                }
 
-                });
-            }
-
-        });
+            });
+        }
     }
 });
 

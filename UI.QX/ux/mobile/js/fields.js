@@ -301,15 +301,22 @@ nx.fields = {
 
         var self = this;
 
-        // Get widget
-        var widget = $(ele);
-        // Get value
-        var value = widget.val();
-        // Save
-        self.set(widget, value);
+        // Handle refresh
+        if (ele) {
 
-        // Internal
-        self.internalOnChange(widget);
+            // Get widget
+            var widget = $(ele);
+            // Get value
+            var value = widget.val();
+            // Save
+            self.set(widget, value);
+
+            // Internal
+            self.internalOnChange(widget);
+        }
+
+        // Force sync
+        nx.env.setDefaultBucket();
 
         // Get object
         var obj = nx.env.getBucketItem('_obj');

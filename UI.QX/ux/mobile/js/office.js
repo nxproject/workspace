@@ -106,13 +106,16 @@ nx.office = {
                         // History
                         routeChanged: function (newRoute, previousRoute, router) {
 
+                            // Save the url
+                            var url = newRoute.url;
+
                             // Set the default
-                            nx.env.setDefaultBucket(newRoute.url);
+                            nx.env.setDefaultBucket(url);
 
                             // Do the setup
-                            var fn = nx.env.getBucketItem('_onSetup', newRoute.url);
+                            var fn = nx.env.getBucketItem('_onSetup', url);
                             if (fn) {
-                                fn(newRoute.url);
+                                fn(url);
                             }
 
                             // Only if logged in
@@ -278,6 +281,10 @@ nx.office = {
                                 }
                             });
 
+
+                            // Refresh
+                            nx.fields.onblur();
+
                             nx.office.updateTimers();
 
                         }
@@ -341,6 +348,9 @@ nx.office = {
             bucket[key] = req[key];
         });
 
+        // Set the target
+        nx.env.setNextBucket(url);
+
         // 
         if (!nx._view) {
             // Create
@@ -348,7 +358,7 @@ nx.office = {
                 url: url
             });
         } else {
-            // Navigate
+           // Navigate
             nx._sys.views.main.router.navigate(url, {
                 //reloadCurrent: nx.env.getWinID() === name,
                 clearPreviousHistory: name === 'menu',
@@ -404,6 +414,9 @@ nx.office = {
 
         // Fill
         self.retValue = retvalue;
+
+        // Set the target
+        nx.env.setNextBucket(url);
 
         // And one more
         nx._sys.views.main.router.back(url, {

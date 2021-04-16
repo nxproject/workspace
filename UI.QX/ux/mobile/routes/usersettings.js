@@ -22,64 +22,67 @@ nx._routes.push({
     path: '/usersettings/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.env.setDefaultBucket(routeTo.url);
+        if (nx.env.isNextBucket(routeTo.url)) {
 
-        var page, data = nx.env.getBucket(routeTo.url);
+            var page, data = nx.env.getBucket(routeTo.url);
 
-        var ds = (nx.user.getIsSelector('ACCT') ? '_billaccess' : '_user');
-        var id = nx.user.getName();
+            var ds = (nx.user.getIsSelector('ACCT') ? '_billaccess' : '_user');
+            var id = nx.user.getName();
 
-        // Get object
-        nx.db.getObj(ds, id, function (result) {
+            // Get object
+            nx.db.getObj(ds, id, function (result) {
 
-            // Save
-            nx.env.setBucketItem('_obj', result, routeTo.url);
-            nx.env.setBucketItem('_ao', 'ao_' + ds + '_' + id, routeTo.url);
+                // Save
+                nx.env.setBucketItem('_obj', result, routeTo.url);
+                nx.env.setBucketItem('_ao', 'ao_' + ds + '_' + id, routeTo.url);
 
-            //
-            var title = 'User Settings';
-            nx.office.storeHistory(routeTo.url, title, '+user', title, '');
+                //
+                var title = 'User Settings';
+                nx.office.storeHistory(routeTo.url, title, '+user', title, '');
 
-            // Make page
-            nx.builder.view(ds, '_usersettings', result, function (rows) {
+                // Make page
+                nx.builder.view(ds, '_usersettings', result, function (rows) {
 
-                var page = nx.builder.page(title, true, null, rows,
-                    function () {
+                    var page = nx.builder.page(title, true, null, rows,
+                        function () {
 
-                    // Acct?
-                        if (nx.user.getIsSelector('ACCT')) {
-                            // Update
-                            nx.util.serviceCall('AO.AccessSet', {
-                                ds: ds,
-                                id: user,
-                                data: data
-                            }, function () {
-                                nx.util.notifyOK('Password reset');
-                            });
-                        } else {
-                            // Save
-                            nx.db.setObj(result, null, function () {
+                            // Acct?
+                            if (nx.user.getIsSelector('ACCT')) {
+                                // Update
+                                nx.util.serviceCall('AO.AccessSet', {
+                                    ds: ds,
+                                    id: user,
+                                    data: data
+                                }, function () {
+                                    nx.util.notifyOK('Password reset');
+                                });
+                            } else {
+                                // Save
+                                nx.db.setObj(result, null, function () {
+                                    // And go back
+                                    nx.office.goBack();
+                                });
+                            }
+                        }, function () {
+                            // Release object
+                            nx.db.clearObj(result, null, function () {
                                 // And go back
                                 nx.office.goBack();
                             });
                         }
-                    }, function () {
-                        // Release object
-                        nx.db.clearObj(result, null, function () {
-                            // And go back
-                            nx.office.goBack();
-                        });
-                    }
-                );
+                    );
 
-                resolve({
-                    template: page
-                }, {
-                    context: {}
+                    nx.env.setDefaultBucket();
+
+                    resolve({
+                        template: page
+                    }, {
+                        context: {}
+                    });
+
                 });
-
             });
-        });
+        }
     }
 });
 

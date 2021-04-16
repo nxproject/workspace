@@ -44,6 +44,7 @@ nx.env = {
 
     _buckets: {},
     _defaultBucket: null,
+    _nextBucket: null,
 
     /**
      * 
@@ -188,6 +189,37 @@ nx.env = {
         // get bucket
         var bucket = self.getBucket(url);
         if (bucket) bucket[key] = value;
+    },
+
+    getNextBucket: function () {
+
+        var self = this;
+
+        return self._nextBucket;
+
+    },
+
+    setNextBucket: function (url) {
+
+        var self = this;
+
+        self._nextBucket = url;
+
+    },
+
+    isNextBucket: function (url) {
+
+        var self = this;
+
+        var ans = self._nextBucket === url;
+
+        if (ans) {
+
+            self.setDefaultBucket(url);
+
+        }
+
+        return ans;
     },
 
     // ---------------------------------------------------------

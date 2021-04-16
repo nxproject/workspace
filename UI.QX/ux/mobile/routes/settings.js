@@ -22,97 +22,98 @@ nx._routes.push({
     path: '/settings/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.env.setDefaultBucket(routeTo.url);
+        if (nx.env.isNextBucket(routeTo.url)) {
 
-        var body = $('body');
-        var app = $('#app');
-        var theme = body.attr('class').replace('theme-', '');
-        var color = app.attr('class').replace('color-theme-', '').replace('framework7-root', '').trim();
-        var nrows = nx.env.getRows();
+            var body = $('body');
+            var app = $('#app');
+            var theme = body.attr('class').replace('theme-', '');
+            var color = app.attr('class').replace('color-theme-', '').replace('framework7-root', '').trim();
+            var nrows = nx.env.getRows();
 
-        var page = nx.builder.page('Settings', true, null,
-            [
-                nx.builder.contentBlock(nx.builder.form([
-                    {
-                        label: 'Descrition',
-                        nxtype: 'string',
-                        top: 1,
-                        left: 1,
-                        value: nx.env.getStore('desc'),
-                        on: {
-                            change: function (widget) {
-                                var value = widget.val();
-                                nx.env.setStore('desc', value);
+            var page = nx.builder.page('Settings', true, null,
+                [
+                    nx.builder.contentBlock(nx.builder.form([
+                        {
+                            label: 'Descrition',
+                            nxtype: 'string',
+                            top: 1,
+                            left: 1,
+                            value: nx.env.getStore('desc'),
+                            on: {
+                                change: function (widget) {
+                                    var value = widget.val();
+                                    nx.env.setStore('desc', value);
+                                }
+                            }
+                        }, {
+                            label: 'Mode',
+                            nxtype: 'combobox',
+                            choices: ['light', 'dark'],
+                            top: 2,
+                            left: 1,
+                            value: theme,
+                            on: {
+                                change: function (widget) {
+                                    var value = widget.val();
+                                    nx.env.setTheme(value);
+                                }
+                            }
+                        }, {
+                            label: 'Color',
+                            nxtype: 'combobox',
+                            choices: ['red',
+                                'green',
+                                'blue',
+                                'pink',
+                                'yellow',
+                                'orange',
+                                'purple',
+                                'deeppurple',
+                                'lightblue',
+                                'teal',
+                                'lime',
+                                'deeporange',
+                                'gray',
+                                'black'],
+                            top: 3,
+                            left: 1,
+                            value: color,
+                            on: {
+                                change: function (widget) {
+                                    var value = widget.val();
+                                    nx.env.setColor(value);
+                                }
+                            }
+                        }, {
+                            label: '# Rows',
+                            nxtype: 'int',
+                            top: 4,
+                            left: 1,
+                            value: nrows,
+                            on: {
+                                change: function (widget) {
+                                    var value = widget.val();
+                                    nx.env.setRows(value);
+                                }
                             }
                         }
-                    }, {
-                        label: 'Mode',
-                        nxtype: 'combobox',
-                        choices: ['light', 'dark'],
-                        top: 2,
-                        left: 1,
-                        value: theme,
-                        on: {
-                            change: function (widget) {
-                                var value = widget.val();
-                                nx.env.setTheme(value);
-                            }
-                        }
-                    }, {
-                        label: 'Color',
-                        nxtype: 'combobox',
-                        choices: ['red',
-                            'green',
-                            'blue',
-                            'pink',
-                            'yellow',
-                            'orange',
-                            'purple',
-                            'deeppurple',
-                            'lightblue',
-                            'teal',
-                            'lime',
-                            'deeporange',
-                            'gray',
-                            'black'],
-                        top: 3,
-                        left: 1,
-                        value: color,
-                        on: {
-                            change: function (widget) {
-                                var value = widget.val();
-                                nx.env.setColor(value);
-                            }
-                        }
-                    }, {
-                        label: '# Rows',
-                        nxtype: 'int',
-                        top: 4,
-                        left: 1,
-                        value: nrows,
-                        on: {
-                            change: function (widget) {
-                                var value = widget.val();
-                                nx.env.setRows(value);
-                            }
-                        }
-                    }
-                ]))
-            ],
-            null,
-            function () {
-                //
-                nx.office.goBack();
+                    ]))
+                ],
+                null,
+                function () {
+                    //
+                    nx.office.goBack();
+                });
+
+            resolve({
+                template: page
+            }, {
+                context: {}
             });
 
-        resolve({
-            template: page
-        }, {
-            context: {}
-        });
-
-        // Must always be
-        nx.fields.allowTabs();
+            // Must always be
+            nx.fields.allowTabs();
+        }
     }
 });
 

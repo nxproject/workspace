@@ -22,88 +22,90 @@ nx._routes.push({
     path: '/documents/',
     async: function (routeTo, routeFrom, resolve, reject) {
 
-        nx.env.setDefaultBucket(routeTo.url);
+        if (nx.env.isNextBucket(routeTo.url)) {
 
-        var page, data = nx.env.getBucket(routeTo.url);
+            var page, data = nx.env.getBucket(routeTo.url);
 
-        //
-        var ds = data.ds;
-        var id = data.id;
+            //
+            var ds = data.ds;
+            var id = data.id;
 
-        //
-        var title = data.desc;
-        nx.office.storeHistory(routeTo.url, title, '+folder', nx.builder.badge('Documents', 'yellow') + ' ', '_title');
+            //
+            var title = data.desc;
+            nx.office.storeHistory(routeTo.url, title, '+folder', nx.builder.badge('Documents', 'yellow') + ' ', '_title');
 
-        nx.util.serviceCall('Docs.DocumentList', {
-            ds: ds,
-            id: id
-        }, function (result) {
+            nx.util.serviceCall('Docs.DocumentList', {
+                ds: ds,
+                id: id
+            }, function (result) {
 
-            var fn;
-            if (data.skip) {
-                fn = {
-                    label: 'Skip',
-                    icon: '+cancel',
-                    cb: function () {
-                        data.skip();
-                    }
-                };
-            } else if (nx.user.opAllowed(ds, 'a')) {
-                fn = {
-                    label: 'Upload',
-                    icon: '+logo',
-                    cb: function () {
+                var fn;
+                if (data.skip) {
+                    fn = {
+                        label: 'Skip',
+                        icon: '+cancel',
+                        cb: function () {
+                            data.skip();
+                        }
+                    };
+                } else if (nx.user.opAllowed(ds, 'a')) {
+                    fn = {
+                        label: 'Upload',
+                        icon: '+logo',
+                        cb: function () {
 
-                        //
-                        var uploader = $('#upload');
+                            //
+                            var uploader = $('#upload');
 
-                        // Indirect
-                        uploader.change(function () {
+                            // Indirect
+                            uploader.change(function () {
 
-                            var fd = new FormData();
-                            var files = uploader[0].files[0];
-                            fd.append('file', files);
+                                var fd = new FormData();
+                                var files = uploader[0].files[0];
+                                fd.append('file', files);
 
-                            nx.util.notifyOK('Starting upload...');
+                                nx.util.notifyOK('Starting upload...');
 
-                            $.ajax({
-                                url: nx.util.loopbackURL() + '/f/ao/' + ds + '/' + id + '/Upload/' + files.name,
-                                data: fd,
-                                cache: false,
-                                contentType: false,
-                                processData: false,
-                                method: 'POST',
-                                type: 'POST',
-                                success: function (data) {
-                                    nx.util.notifyOK('Done');
-                                },
-                                failure: function () {
-                                    nx.util.notifyError('Unable to upload');
-                                }
-                            });
+                                $.ajax({
+                                    url: nx.util.loopbackURL() + '/f/ao/' + ds + '/' + id + '/Upload/' + files.name,
+                                    data: fd,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    method: 'POST',
+                                    type: 'POST',
+                                    success: function (data) {
+                                        nx.util.notifyOK('Done');
+                                    },
+                                    failure: function () {
+                                        nx.util.notifyError('Unable to upload');
+                                    }
+                                });
 
-                        }).click();
+                            }).click();
 
-                    }
-                };
-            }
+                        }
+                    };
+                }
 
-            page = nx.builder.page(title,
-                true,
-                null,
-                [
-                    nx.builder.documents(ds, result.list, nx.env.getBucketID(routeTo.url), data.onSelect),
-                    nx.builder.upload()
-                ],
-                fn,
-                'nx.office.goBack()'
-            );
-            resolve({
-                template: page
-            }, {
-                context: {}
+                page = nx.builder.page(title,
+                    true,
+                    null,
+                    [
+                        nx.builder.documents(ds, result.list, nx.env.getBucketID(routeTo.url), data.onSelect),
+                        nx.builder.upload()
+                    ],
+                    fn,
+                    'nx.office.goBack()'
+                );
+
+                resolve({
+                    template: page
+                }, {
+                    context: {}
+                });
             });
-        });
+        }
     }
 });
 
