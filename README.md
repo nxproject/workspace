@@ -4,7 +4,7 @@ The NX.Workspace system is designed to create data and document storage platform
 for any office in an efficient manner.  It uses containers to allow for deployment
 across a varied landscape.
 
-## Target
+## Who is this for
 
 There are two groups that are the main target of the system:
 
