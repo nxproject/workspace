@@ -2,11 +2,11 @@
 
 The billing sub-system allows for:
 
-* Rate table
-* Charges
-* Subscriptions
-* Invoices
-* Payment request
+* [Rate Table](README_B_RATE.md)
+* [Charges](README_B_CHARGE.md)
+* [Subscriptions](README_B_SUBS.md)
+* [Invoices](README_B_INV.md)
+* [Payment Request](README_B_PAY.md)
 
 ## Enabling billing
 
@@ -17,17 +17,5 @@ You enable billing ubsing the [Site Settings](README_SITE.md) tool.  In it you w
 Setting the ***Billing*** entry to ***y*** enables the billing options.
 
 You also need to include the ``BILLING``` selector for each [user](README_USERS.md) that is allowed access to the billing sub-system.
-
-## Charges
-
-TBD
-
-## Invoices
-
-TBD
-
-## Payment request
-
-TBD
 
 [Home](../README.md)
