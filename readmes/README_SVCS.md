@@ -43,7 +43,7 @@ This will link your site with the Twilio services.
 
 ### User allowed
 
-You need to include ```?TELE``` as an entry in the ***Allowed*** field for each user that is allowd use of the Twilio interface.
+You need to include ```?TELE``` as an entry in the ***Allowed*** field for each user that is allowed use of the Twilio interface.
 
 ## PositionStack
 
@@ -70,6 +70,21 @@ SendGrid is used to send emails.  To get the information reqired visit:
 ```
 https://sendgrid.com/
 ```
+### Setup
+
+You create a SendGrid account by clicking [here](https://signup.sendgrid.com/),
+
+Once you have done that, you will get ***API Key and EMail address*** .
+
+You enter the information in your ***Site Settings*** as shown here:
+
+![image](images/Site15.png)
+
+This will link your site with the SendGrid services.
+
+### User allowed
+
+You need to include ```?EMAIL``` as an entry in the ***Allowed*** field for each user that is allowed use of the SendGrid interface.
 
 ## Stripe
 
