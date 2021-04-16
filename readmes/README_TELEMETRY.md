@@ -30,16 +30,23 @@ For each interaction the folowing data is collectetd:
 
 ![image](images/TeleA2.png)
 
-## Ana;yzing telemetry data
+## Analyzing telemetry data
 
 You can analyze telemetry data using the [analyze](README_T_ANALYZE.md) tool built into NX.Worskpace.  This is an
 example of an analysis:
 
 ![image](images/TeleA1.png)
 
+The system automatically creates the settings and enables analysis on the telemetry data dataset.
+
 ## Privacy laws
 
 Many countries and other govermental entities have rules and regulations that may apply to the information gathered in the telemetry sub-system.
 Make sure that you understand and follow these rules and regulations at all times.
+
+## When telemetry is not needed
+
+You do not need to enable telementry if all you want to do is keep track of ***sent*** emails and SMS messages.  This information is part
+of each [account](README_ACCOUNTS.md).
 
 [Home](../README.md)
