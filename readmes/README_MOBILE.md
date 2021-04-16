@@ -19,7 +19,7 @@ Almost all the functionality is available in your mobile device with the excepti
 
 ![image](images/Mobile1.jpg)
 
-The login screen is similar to the login scrren in the ***webtop*** version,
+The login screen is similar to the login screen in the ***webtop*** version,
 
 ## Select
 
@@ -58,5 +58,20 @@ closes and saves any changes to the windows above the one that you navigate to.
 
 Similarly to the navigation menu, clickking on the ***top right*** ```menu``` icon displays wha would be the ***bottom toolbar***
 for pick lists and the ***top toolbar*** for data screens.
+
+## Mode
+
+You can select ***light*** or ***dark*** mode.  Dark mode is the default.
+
+## Themes
+
+You can select from a pallete of colors to be used as your theme.  Gray is the default.
+
+## Adding link to device Home Page
+
+In Android devices, you can make the mobile link behave like an app.  Simply open the browser and navigate to your mobile URL
+and then select ***Add to Home Page*** in the browser settings:
+
+![image](images/Mobile7.jpg)
 
 [Home](../README.md)
