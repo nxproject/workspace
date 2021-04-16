@@ -267,13 +267,6 @@ nx.office = {
                             // Cleanup
                             nx.env.cleanupBuckets();
 
-                            //// Kill any previous cleanups
-                            //if (nx.office.cleanupID) {
-                            //    clearTimeout(nx.office.cleanupID);
-                            //}
-                            //// And schedule pickup
-                            //nx.office.cleanupID = setTimeout(nx.env.cleanupBuckets, 1000);
-
                             nx.office.updateTimers();
 
                         }
