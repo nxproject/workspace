@@ -3,6 +3,23 @@
 These are the third party services that NX.Workspace uses.  Use of these services are optional and controlled via
 the **Site Settings** tool.
 
+## To access all settings
+
+1) Click on the ***Start*** button
+2) Select ***System***
+3) Select ***Site Settings***.
+4) Select ***Services*** tab
+
+## To access user allowed
+
+1) Click on the ***Start*** button
+2) Select ***System***
+3) Select ***Allowed Extension***
+
+### Sample allowed
+
+![image](images/SampleAllowed.png)
+
 ## Twilio
 
 Twilio is used to send and receive SMS and MMS messages and to make and receive phone calls.  To get the information
@@ -14,7 +31,7 @@ https://www.twilio.com/
 
 ### Setup
 
- You create a Twilio account by clicking [here](https://www.twilio.com/try-twilio),
+You create a Twilio account by clicking [here](https://www.twilio.com/try-twilio),
 
 Once you have done that, you will get ***Account SID, token and phone number*** [here](https://www.comm100.com/livechat/knowledgebase/where-do-i-find-the-twilio-account-sid-auth-token-and-phone-number-sid.html#:~:text=Here%20is%20how%20to%20access%20this%20information%3A%201,can%20find%20the%20SID%20for%20the%20phone%20number.).
 
@@ -22,17 +39,11 @@ You enter the information in your ***Site Settings*** as shown here:
 
 ![image](images/Site7.png)
 
-You access this by clicking on the ***Start*** button and selectib ***System*** and then ***Site Settings***.
-
 This will link your site with the Twilio services.
 
-Next is to tell ShopAide which users can make use of the services.  The best way is to create a single ***Allowed extensions*** entry that holds all the default entries.  You do this by clicking on the ***Start*** button and selectib ***System*** and then ***Allowed Extensions***.
+### User allowed
 
-Next click on the ***Add*** button and enter the following:
-
-![image](images/SampleAllowed.png)
-
-The key value is ```?TELE``` which tells the system that the user can use the telephony options, which include Twilio.  The rest of the field should contain the values appropriate for your site.
+You need to include ```?TELE``` as an entry in the ***Allowed*** field for each user that is allowd use of the Twilio interface.
 
 ## PositionStack
 
@@ -41,6 +52,16 @@ PositionStack is used to validate addresses and to geocode.  To get the informat
 ```
 https://positionstack.com/
 ```
+
+### Setup 
+
+You create a PositionStack account by clicking[here](https://positionstack.com/).  Follow the instructions on getting an ***API Key***.
+
+Once yoou have done that, enter the ***API Key*** in your ***Site Settings*** as shown here:
+
+![image](images/Site8.png)
+
+Note that the service is free for any intranet based site.  There is a fee for public facing sites that use SSL.
 
 ## SendGrid
 
