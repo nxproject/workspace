@@ -26,6 +26,10 @@ NX.Project is based on two systems, NX.Node, which provides for the HTTP layer a
 the container support, and NX.Workspace, which uses NX.Node and provides a data management
 system.  You can use NX.Node by itself, but using NX.Workspace requires NX.Node.
 
+## Which group am I in?
+
+My plans for this project is to become a consultant and using NX.Workspace, create and support as many vertical markets as I can.  I will also provide low-cost hosting services as most end users want a turn-key system.  If you are interested in my services, contact me via this channel.
+
 ## My take on containers
 
 The computer world is and has been in a cycle.  I begun with a "mainframe" that could be
