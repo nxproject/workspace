@@ -37,6 +37,8 @@ example of an analysis:
 
 ![image](images/TeleA1.png)
 
+The system automatically creates the settings and enables analysis on the telemetry data dataset.
+
 ## Privacy laws
 
 Many countries and other govermental entities have rules and regulations that may apply to the information gathered in the telemetry sub-system.
