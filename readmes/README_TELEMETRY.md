@@ -45,6 +45,6 @@ Make sure that you understand and follow these rules and regulations at all time
 ## When telemetry is not needed
 
 You do not need to enable telementry if all you want to do is keep track of ***sent*** emails and SMS messages.  This information is part
-of each [account[(README_ACCOUNTS.md).
+of each [account](README_ACCOUNTS.md).
 
 [Home](../README.md)
