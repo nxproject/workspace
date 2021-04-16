@@ -43,6 +43,6 @@ If no matching record exists in any of the datasets used, the system will create
 
 The Windows key looks like this:
 
-![image](images/IOP.jpg)
+![image](images/OIP.jpg)
 
 [Home](../README.md)
