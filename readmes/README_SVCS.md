@@ -20,7 +20,7 @@ Once you have done that, you will get ***Account SID, token and phone number*** 
 
 You enter the information in your ***Site Settings*** as shown here:
 
-![image](images/Site2.png)
+![image](images/Site7.png)
 
 You access this by clicking on the ***Start*** button and selectib ***System*** and then ***Site Settings***.
 
