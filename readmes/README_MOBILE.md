@@ -17,9 +17,9 @@ Almost all the functionality is available in your mobile device with the excepti
 
 ## Login screen
 
-![image](images/Mobile1.jpg | width=50%)
+![image](images/Mobile1.jpg)
 
-The login screen is similar to the login scrren in the ***webtop*** version,
+The login screen is similar to the login screen in the ***webtop*** version,
 
 ## Select
 
