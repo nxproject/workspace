@@ -65,7 +65,7 @@ You can select ***light*** or ***dark*** mode.  Dark mode is the default.
 
 ## Themes
 
-You can select from a pallete of colors to be used as your rtheme.  Gray is the default.
+You can select from a pallete of colors to be used as your theme.  Gray is the default.
 
 ## Adding link to device Home Page
 
