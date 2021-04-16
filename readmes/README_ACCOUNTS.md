@@ -50,7 +50,10 @@ You enable telemetry ubsing the [Site Settings](README_SITE.md) tool.  In it you
 
 Setting the ***Accounts*** entry to ***y*** enables the account options.
 
-## Automatic accoutn creation
+Note that ypu can also enter the default allowed value int the ***Def.Alwd.Def*** field, which will be used
+for any account that does not have it's own definition.
+
+## Automatic account creation
 
 Accounts are automatically created and maintained when an ***account*** field is included in a dataset, for example:
 
