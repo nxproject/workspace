@@ -39,4 +39,10 @@ You will see the matching record being opened.
 
 If no matching record exists in any of the datasets used, the system will create a new entry in the first dataset listed.
 
+## The Windows key
+
+The Windows key looks like this:
+
+![image](images/IOP.jpg)
+
 [Home](../README.md)
