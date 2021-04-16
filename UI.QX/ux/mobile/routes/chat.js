@@ -32,8 +32,6 @@ nx._routes.push({
 
             // TBD
 
-            nx.env.setDefaultBucket();
-
             resolve({
                 template: page
             }, {

@@ -126,27 +126,7 @@ nx.office = {
                                 var added = false;
                                 //
                                 var drops = nx.office.history();
-                                // Make active list, always keep the base bucket
-                                var active = ['bucket0'];
-                                // Loop thru
-                                drops.forEach(function (url) {
-                                    // The bucket id
-                                    active.push(nx.env.getBucketID(url));
-                                });
-                                // Loop thru buckets
-                                Object.keys(nx.env._buckets).forEach(function (id) {
-                                    // In the stack?
-                                    if (active.indexOf(id) === -1) {
-                                        // Get the bucket(
-                                        var bucket = nx.env._buckets[id];
-                                        // Get the object
-                                        var obj = bucket._obj;
-                                        if (obj) {
-                                            nx.db.setObj(obj, null, nx.util.noOp);
-                                        }
-                                        delete nx.env._buckets[id];
-                                    }
-                                });
+                                // Now work history in
                                 for (var i = drops.length - 2; i >= 0; i--) {
                                     // 
                                     var url = drops[i];
@@ -281,9 +261,18 @@ nx.office = {
                                 }
                             });
 
-
                             // Refresh
                             nx.fields.onblur();
+
+                            // Cleanup
+                            nx.env.cleanupBuckets();
+
+                            //// Kill any previous cleanups
+                            //if (nx.office.cleanupID) {
+                            //    clearTimeout(nx.office.cleanupID);
+                            //}
+                            //// And schedule pickup
+                            //nx.office.cleanupID = setTimeout(nx.env.cleanupBuckets, 1000);
 
                             nx.office.updateTimers();
 
@@ -299,6 +288,8 @@ nx.office = {
             nx.calls.login();
         });
     },
+
+    //cleanupID: null,
 
     /**
      * 
@@ -403,12 +394,18 @@ nx.office = {
             if (pos < 0) pos = 0;
             // Get the url
             url = history[pos];
+
             // Get the object
             var obj = nx.env.getBucketItem('_obj');
             // Any?
             if (obj) {
                 // Clear
                 nx.db.clearObj(obj, null, nx.util.noOp);
+                // Reset
+                nx.env.setBucketItem('_obj', null);
+
+                // Delete the bucket
+                nx.env.deleteBucket();
             }
         }
 

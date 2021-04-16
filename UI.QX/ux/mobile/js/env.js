@@ -103,6 +103,48 @@ nx.env = {
 
     /**
      * 
+     * Removes extra buckets
+     * 
+     */
+    cleanupBuckets: function () {
+
+        var self = nx.env;
+
+        //
+        var drops = nx.office.history();
+        // Make active list, always keep the base bucket
+        var active = ['bucket0'];
+        // Loop thru
+        drops.forEach(function (url) {
+            // The bucket id
+            active.push(self.getBucketID(url));
+        });
+        // Loop thru buckets
+        Object.keys(self._buckets).forEach(function (id) {
+            // In the stack?
+            if (active.indexOf(id) === -1) {
+                // Get the bucket(
+                var bucket = self._buckets[id];
+                // Get the object
+                var obj = bucket._obj;
+                if (obj) {
+                   nx.db.setObj(obj, null, nx.util.noOp);
+                }
+                delete self._buckets[id];
+            }
+        });
+    },
+
+    deleteBucket: function (url) {
+
+        var self = this;
+
+        delete self._buckets[self.getBucketID(url)];
+
+    },
+
+    /**
+     * 
      * Sets the default bucket and assures callbacks
      * 
      * @param {any} url

@@ -1677,7 +1677,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillCharge(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.15e"))
+            if (ds.Definition.ReleaseChanged("2021.04.16a"))
             {
                 //
                 ds.Definition.Caption = "Charges";
@@ -1715,10 +1715,12 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["units"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
                 c_Field.Label = "Units";
+                c_Field.DefaultValue = "1";
 
                 c_Field = ds.Definition["rate"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Rate";
+                c_Field.DefaultValue = "0";
 
                 c_Field = ds.Definition["price"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
@@ -1728,6 +1730,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["disc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Disc.";
+                c_Field.DefaultValue = "0";
 
                 c_Field = ds.Definition["total"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;

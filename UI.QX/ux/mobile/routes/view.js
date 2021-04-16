@@ -327,8 +327,6 @@ nx._routes.push({
 
                         page = nx.builder.oops();
 
-                        nx.env.setDefaultBucket();
-
                         resolve({
                             template: page
                         }, {
@@ -340,8 +338,6 @@ nx._routes.push({
             } else {
 
                 page = nx.builder.oops();
-
-                nx.env.setDefaultBucket();
 
                 resolve({
                     template: page

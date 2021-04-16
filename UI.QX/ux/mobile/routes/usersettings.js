@@ -72,8 +72,6 @@ nx._routes.push({
                         }
                     );
 
-                    nx.env.setDefaultBucket();
-
                     resolve({
                         template: page
                     }, {

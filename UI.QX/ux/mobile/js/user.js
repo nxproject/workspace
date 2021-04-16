@@ -1154,16 +1154,10 @@ nx.user = {
 
         var self = this;
 
-        nx.env.setDefaultBucket();
-
         // Do
         var win = nx.env.getBucketItem('winid', url);
         var ds = nx.env.getBucketItem('ds', url);
         var bucketid = nx.env.getBucketID(url);
-        var search = nx.env.getBucketItem('_search', url);
-
-        //
-        var ds = nx.env.getBucketItem('ds');
 
         // Match?
         if (!msg || (win === 'pick' && ds === msg.ds)) {
@@ -1174,53 +1168,81 @@ nx.user = {
             // Refresh
             nx.db._loadDataset(ds, function (dsdef) {
 
-                // Setup the filter
-                var filter = [];
+                // Make filter
+                self.createFilter(url, function(filter) {
 
-                // Get the search
-                if (search) {
+                    // Get the data
+                    nx.db.get(ds, filter.queries, 0, nx.env.getRows(), '_desc', null, '_id _desc', function (data) {
 
-                    filter.push({
-                        field: '_desc',
-                        op: 'Any',
-                        value: search
+                        list.html(nx.builder.picklist(ds, data, bucketid));
+
                     });
-
-                }
-
-                // Per user?
-                if (nx.util.hasValue(dsdef.privField) && dsdef.privAllow === 'y' && !self.getIsSelector('MGR')) {
-                    // Assure
-                    filter.push({
-                        field: dsdef.privField,
-                        op: 'Eq',
-                        value: nx.user.getName()
-                    });
-                }
-
-                // Pick list
-                var pl = nx.db.getPick(ds);
-                if (pl) {
-                    // Loop thru
-                    Object.keys(pl).forEach(function (key) {
-                        // Process
-                        var qry = nx.db.processPickToolbarItem(pl[key]);
-                        if (qry) {
-                            filter.push(qry);
-                        }
-                    })
-                }
-
-                // Get the data
-                nx.db.get(ds, filter, 0, nx.env.getRows(), '_desc', null, '_id _desc', function (data) {
-
-                    list.html(nx.builder.picklist(ds, data, bucketid));
 
                 });
 
             });
         }
 
+    },
+
+    createFilter: function (url, cb) {
+
+        var self = this;;
+
+        // Do
+        var ds = nx.env.getBucketItem('ds', url);
+        var data = nx.env.getBucket(url);
+        var search = nx.env.getBucketItem('_search', url);
+
+        // Refresh
+        nx.db._loadDataset(ds, function (dsdef) {
+
+            // Setup 
+            var filter = nx.util.clone(data.chain || {
+                sop: 'All',
+                queries: []
+            });
+            // Force
+            filter.sop = 'All';
+
+            // Get the search            
+            if (search) {
+
+                filter.queries.push({
+                    field: '_desc',
+                    op: 'Any',
+                    value: search
+                });
+
+            }
+
+            // Per user?
+            if (nx.util.hasValue(dsdef.privField) && dsdef.privAllow === 'y' && !nx.user.getIsSelector('MGR')) {
+                // Assure
+                filter.queries.push({
+                    field: dsdef.privField,
+                    op: 'Eq',
+                    value: nx.user.getName()
+                });
+            }
+
+            // Pick list
+            var pl = nx.db.getPick(ds);
+            if (pl) {
+                // Loop thru
+                Object.keys(pl).forEach(function (key) {
+                    // Process
+                    var qry = nx.db.processPickToolbarItem(pl[key]);
+                    if (qry) {
+                        filter.queries.push(qry);
+                    }
+                })
+            }
+
+            // Callback
+            cb(filter);
+
+        });
     },
 
     /**
@@ -1231,8 +1253,6 @@ nx.user = {
     refreshDocuments: function (url, msg) {
 
         var self = this;
-
-        nx.env.setDefaultBucket();
 
         // Do
         var win = nx.env.getBucketItem('winid', url);
