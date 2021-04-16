@@ -1,6 +1,10 @@
 # Accounts
 
-An account is a login that uses an email address or phone number as the identifier:
+An account is a login that uses an email address or phone number as the identifier.  While [users](README_USERS.md)
+are ***inhouse personnel*** , accounts are ***external entities***.
+
+Accounts are the central dataset to [billing](README_BILLING.md) and [telemetry](README.TELEMETRY.md).  Accounts
+are also ***virtual users*** when you choose and carry the same dataset rules.
 
 ![image](images/Acct1.png)
 
