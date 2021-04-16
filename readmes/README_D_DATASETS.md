@@ -16,8 +16,11 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 |Sort Order|The order in which placeholdes are to be displayed. asc for low to high, desc for high to low (default: asc)|
 |Icon|Icon representation of the dataset|
 |Default|Privileges to be used when none are given in the ***allowed*** entry for a ***user***|
-|ID field|The field to be used as the internal object identifier|
-|Child DSS|The datasets that the dataset serves as a parent|
+|ID field|Field to be used as the internal object identifier|
+|Child DSS|Datasets that the dataset serves as a parent|
+|Related|Dataset/field pairs of datasets that are related via a link|
+|Task@Create|Task to run when an object is created|
+|Task@Save|Task to run when an object is saved|
 
 ---
 
@@ -105,6 +108,13 @@ Note that time tracking must be also enabled in the ***Site Settings***
 |End On|The field that defines the end date and time in the calendar|
 |By fields|The fields that are used to filter by|
 
+---
+
+![image](images/Ds14.png)
+
+|Field|Meaning|
+|-|-|
+|Enable|Is the billing option to be shown|
 ---
 
 ![image](images/Ds10.png)
