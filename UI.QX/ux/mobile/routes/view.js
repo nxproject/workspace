@@ -115,6 +115,11 @@ nx._routes.push({
                                                 icon: 'money',
                                                 cb: "nx.calls.commBilling('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
                                             });
+                                            rb.push({
+                                                label: '>> Subscriptions',
+                                                icon: 'money',
+                                                cb: "nx.calls.commSubs('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
+                                            });
                                         }
                                     }
 

@@ -1677,12 +1677,13 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillCharge(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.16a"))
+            if (ds.Definition.ReleaseChanged("2021.04.16c"))
             {
                 //
                 ds.Definition.Caption = "Charges";
                 ds.Definition.Placeholder = "[#dateonlysortable([on])# [code] '-' [desc] @ #linkdesc([acct])#";
                 ds.Definition.Privileges = "av";
+                ds.Definition.IDAlias = "";
                 ds.Definition.Icon = "money";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "hidden";
@@ -1703,6 +1704,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Description";
+                c_Field.DefaultValue = "Generated on #today()#";
 
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
@@ -1740,7 +1742,9 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["inv"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Invoice";
-                c_Field.LinkDS = DatabaseClass.DatasetBiilInvoice;
+
+                c_Field.LinkDS = DatabaseClass.DatasetBiilInvoice; c_Field = ds.Definition["invon"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
 
                 c_Field.SaveParent();
 
@@ -1775,6 +1779,7 @@ namespace Proc.AO.BuiltIn
                 c_VDefault["acct"].ReadOnly = true;
                 c_VDefault["at"].ReadOnly = true;
                 c_VDefault["inv"].ReadOnly = true;
+                c_VDefault["invon"].ReadOnly = true;
 
                 c_VDefault.Save();
             }
@@ -1783,13 +1788,13 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillSubscription(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.06a"))
+            if (ds.Definition.ReleaseChanged("2021.04.16b"))
             {
                 //
                 ds.Definition.Caption = "Subscriptions";
-                ds.Definition.Placeholder = "[code] '-' [desc] @ #linkdesc([acct])#";
+                ds.Definition.Placeholder = "[#dateonlysortable([nexton])# [code] '-' [desc] @ #linkdesc([acct])#";
                 ds.Definition.Privileges = "av";
-                ds.Definition.IDAlias = "code";
+                ds.Definition.IDAlias = "";
                 ds.Definition.Icon = "money";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "hidden";
@@ -1801,7 +1806,7 @@ namespace Proc.AO.BuiltIn
                 Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.LU;
                 c_Field.LinkDS = DatabaseClass.DatasetBiilRate;
-                c_Field.LUMap = "???";
+                c_Field.LUMap = "code desc desc units units rate rate disc disc";
 
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
@@ -1810,19 +1815,25 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Account";
-                c_Field.LinkDS = DatabaseClass.DatasetBillAccess;
+
+                c_Field = ds.Definition["at"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
+                c_Field.Label = "At";
 
                 c_Field = ds.Definition["units"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
                 c_Field.Label = "Units";
+                c_Field.DefaultValue = "1";
 
                 c_Field = ds.Definition["rate"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Rate";
+                c_Field.DefaultValue = "0";
 
                 c_Field = ds.Definition["price"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Price";
+                c_Field.Compute = "[rate]*[units]";
 
                 c_Field = ds.Definition["disc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
@@ -1831,6 +1842,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["total"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Total";
+                c_Field.Compute = "([units]*[rate])-[disc]";
 
                 c_Field = ds.Definition["nexton"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Date;
@@ -1840,7 +1852,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["interval"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.ComboBox;
                 c_Field.Label = "Interval";
-                c_Field.Choices = "daily weekly monthly twomonths queartly yearly";
+                c_Field.Choices = "daily weekly monthly twomonths quarterly yearly";
                 c_Field.UseIndex = true;
 
                 c_Field.SaveParent();
@@ -1862,13 +1874,13 @@ namespace Proc.AO.BuiltIn
 
         private static void Define_BillInvoice(this DatasetClass ds)
         { // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.15a"))
+            if (ds.Definition.ReleaseChanged("2021.04.16a"))
             {
                 //
                 ds.Definition.Caption = "Invoices";
                 ds.Definition.Placeholder = "#datesortable([on])# '-' [billed] / [payment]";
                 ds.Definition.Privileges = "av";
-                ds.Definition.IDAlias = "code";
+                ds.Definition.IDAlias = "";
                 ds.Definition.Icon = "money";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "hidden";
@@ -1879,21 +1891,26 @@ namespace Proc.AO.BuiltIn
 
                 //  
                 Definitions.DatasetFieldClass c_Field = ds.Definition["code"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Ref#";
+                c_Field.DefaultValue = "#guid()#";
 
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Description";
 
                 c_Field = ds.Definition["on"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Date;
                 c_Field.Label = "On";
-                c_Field.DefaultValue = "#now()#";
+                c_Field.DefaultValue = "#today()#";
 
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "Account";
-                c_Field.LinkDS = DatabaseClass.DatasetBillAccess;
+
+                c_Field = ds.Definition["at"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
+                c_Field.Label = "At";
 
                 c_Field = ds.Definition["billed"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
@@ -1932,6 +1949,11 @@ namespace Proc.AO.BuiltIn
 
                 // And from definition
                 c_VDefault.FromFields();
+
+                //
+                c_VDefault["acct"].ReadOnly = true;
+                c_VDefault["at"].ReadOnly = true;
+                c_VDefault["billed"].ReadOnly = true;
 
                 c_VDefault.Save();
             }

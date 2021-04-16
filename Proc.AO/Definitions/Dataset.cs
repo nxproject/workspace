@@ -299,6 +299,17 @@ namespace Proc.AO.Definitions
 
         /// <summary>
         /// 
+        /// The task to run at create
+        /// 
+        /// </summary>
+        public string TaskAtCreate
+        {
+            get { return this.Object["taskatcreate"]; }
+            set { this.Object["taskatcreate"] = value; }
+        }
+
+        /// <summary>
+        /// 
         /// The task to run at save
         /// 
         /// </summary>

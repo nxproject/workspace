@@ -576,16 +576,46 @@ nx.desktop = {
                                     if (nx.desktop.user.getIsSelector('BILLING')) {
                                         // Can we do it?
                                         if (dsdef.isBillable === 'y' && data.values._billat) {
+                                            // Maake the chain
                                             var chain = nx.util.makeChain('All', 'acct', '=', data.values._billto, 'at', '=', data.values._billat);
-                                            tt.items.push({
-                                                label: '>> Bill',
-                                                icon: 'money',
+                                            // Room
+                                            var items = [];
+
+                                            items.push({
+                                                label: 'Charges',
                                                 click: function (e) {
                                                     nx.util.runTool('View', {
                                                         ds: '_billcharge',
                                                         chain: chain
                                                     }, nx.util.noOp);
                                                 }
+                                            });
+                                            items.push({
+                                                label: 'Subscriptions',
+                                                click: function (e) {
+                                                    nx.util.runTool('View', {
+                                                        ds: '_billsubs',
+                                                        chain: chain
+                                                    }, nx.util.noOp);
+                                                }
+                                            });
+
+                                            if (nx.desktop.user.getIsSelector('INVOICE')) {
+                                                items.push({
+                                                    label: 'Invoices',
+                                                    click: function (e) {
+                                                        nx.util.runTool('View', {
+                                                            ds: '_billinvoice',
+                                                            chain: chain
+                                                        }, nx.util.noOp);
+                                                    }
+                                                });
+                                            }
+
+                                            tt.items.push({
+                                                label: '>> Billing',
+                                                icon: 'money',
+                                                choices: items
                                             });
                                         }
                                     }

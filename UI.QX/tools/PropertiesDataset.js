@@ -133,6 +133,14 @@ qx.Class.define('tools.PropertiesDataset', {
                                             top: 10,
                                             left: 1,
                                             width: 'default.fieldWidth',
+                                            label: 'Task@Create',
+                                            aoFld: 'taskatcreate',
+                                            value: dsdef.taskatcreate
+                                        }, {
+                                            nxtype: 'keyword',
+                                            top: 10,
+                                            left: 1,
+                                            width: 'default.fieldWidth',
                                             label: 'Task@Save',
                                             aoFld: 'taskatsave',
                                             value: dsdef.taskatsave

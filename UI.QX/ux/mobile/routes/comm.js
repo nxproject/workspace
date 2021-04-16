@@ -174,3 +174,14 @@ nx.calls.commBilling = function (req, to, at) {
         chain: chain
     });
 };
+
+// Set the call
+nx.calls.commSubs = function (req, to, at) {
+    // Make chain
+    var chain = nx.util.makeChain('All', 'acct', '=', to, 'at', '=', at);
+    // 
+    nx.calls.pick({
+        ds: '_billsubs',
+        chain: chain
+    });
+};
