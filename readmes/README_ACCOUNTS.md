@@ -44,7 +44,11 @@ are also ***virtual users*** when you choose and carry the same dataset rules.
 
 ## Enabling accounts
 
-Accounts are enabled via the [Site Settings](README_SITE.md) tool, ***System*** tab.
+You enable telemetry ubsing the [Site Settings](README_SITE.md) tool.  In it you will find:
+
+![image](images/Site3.png)
+
+Setting the ***Accounts*** entry to ***y*** enables the account options.
 
 ## Automatic accoutn creation
 
