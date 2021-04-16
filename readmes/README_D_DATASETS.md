@@ -110,6 +110,13 @@ Note that time tracking must be also enabled in the ***Site Settings***
 
 ---
 
+![image](images/Ds14.png)
+
+|Field|Meaning|
+|-|-|
+|Enable|Is the billing option to be shown|
+---
+
 ![image](images/Ds10.png)
 
 |Field|Meaning|
