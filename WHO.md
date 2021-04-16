@@ -51,6 +51,15 @@ of customization, for the sandwich shop at the corner.  And just for them.
 
 That is what my goal is, and has been since 1983.
 
+## What I run NX.Workspace on
+
+We currently run various systems based from [Intel NUC](https://www.intel.com/content/www/us/en/products/details/nuc.html) 
+to [DigitalOcean](https://www.digitalocean.com/).
+
+Some run as part of intranets and all public facing sites use SSL to provide security.
+
+The previous incarnation of NX.Workspace has been used since 2018 in the legal industry.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](https://mit-license.org/) file for details
