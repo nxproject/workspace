@@ -28,7 +28,7 @@ There are two groups that are the main target of the system:
 			* [Campaigns](readmes/README_CAMPAIGN.md)
 			* [Quick Messages](readmes/README_QM.md)
 			* [Telemetry](readmes/README_TELEMETRY.md)
-			* [Billing](reademes/README_BILLING.md)
+			* [Billing](readmes/README_BILLING.md)
 			* [Time Tracking](readmes/README_D_TT.md)
 			* [Quorums](readmes/README_QUORUMS.md)
 			* [IOT](readmes/README_IOT.md)
