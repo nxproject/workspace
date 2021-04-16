@@ -12,6 +12,12 @@ Setting the ***Telemetry*** entry to ***y*** enables the telemetry options.
 
 You also need to include the ``TELEMETRY``` selector for each [user](README_USERS.md) that is allowed access to the telemetry sub-system.
 
+## Campaigns
+
+A campaign is a way to identify a set of telemetry data to a specific objective.  An example is:
+
+![image](images/TeleA3.png)
+
 ## What is telemetry data?
 
 Telemetry data is generated when and ***EMail*** or ***SMS*** is sent to an [account](README_ACCOUNTS.md) or a target ***EMail address*** 
