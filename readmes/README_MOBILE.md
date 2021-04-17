@@ -31,8 +31,10 @@ The select screen is the equivalent of the ***Start*** button in the ***webtop**
 
 ![image](images/Mobile3.jpg)
 
-The pick list is similar to the ***webtop*** version except that it displays 25 rows at a time.  You can use the search box at the top to
-filter for a value.
+The pick list is similar to the ***webtop*** version except that it displays 25 rows at a time, which is settable in the ***Settings*** screen.  
+
+You can use the search box at the top to filter for a value.  This combination provides for a speedy display and to quickly find what you
+are looking for.
 
 ## Data
 
