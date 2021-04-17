@@ -12,7 +12,7 @@ This is the pick list for a help system with multiple pages:
 
 And this is a typical help page:
 
-![image](images/Help2.md)
+![image](images/Help2.png)
 
 ## Editor
 
