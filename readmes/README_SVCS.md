@@ -55,7 +55,7 @@ https://positionstack.com/
 
 ### Setup 
 
-You create a PositionStack account by clicking[here](https://positionstack.com/).  Follow the instructions on getting an ***API Key***.
+You create a PositionStack account by clicking [here](https://positionstack.com/).  Follow the instructions on getting an ***API Key***.
 
 Once yoou have done that, enter the ***API Key*** in your ***Site Settings*** as shown here:
 
