@@ -441,7 +441,7 @@ namespace Proc.Communication
                 string sFriendly = this.Parent.User.Displayable;
 
                 // Format
-                string sHTML = this.FormatMessage(to.To, this.EMailTemplate, "EMailHolder.html", "EMail", false);
+                string sHTML = this.FormatMessage(to.To, this.EMailTemplate, "EMailTemplate.html", "EMail", false);
 
                 this.Parent.Parent.LogInfo("EMAIL\r\n" + sHTML + "\r\n");
 

@@ -51,11 +51,21 @@ namespace Proc.Communication
             string sAcctSID = this.Parent.SiteInfo.TwilioAccount;
             string sToken = this.Parent.SiteInfo.TwilioToken;
 
-            //
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            try
+            {
+                //
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
-            //
-            TwilioClient.Init(sAcctSID, sToken);
+                //
+                TwilioClient.Init(sAcctSID, sToken);
+            }
+            catch (Exception e)
+            {
+                ctx.Parent.LogInfo("SID: {0}".FormatString(sAcctSID));
+                ctx.Parent.LogInfo("TOK: {0}".FormatString(sToken));
+
+                this.Parent.Parent.LogException("CreateTwilio", e);
+            }
         }
         #endregion
 
@@ -142,7 +152,7 @@ namespace Proc.Communication
             try
             {
                 // Map the phone number
-                this.MapPhone(phone, delegate(IncomingPhoneNumberResource phone)
+                this.MapPhone(phone, delegate (IncomingPhoneNumberResource phone)
                 {
                     // Any?
                     if (phone != null)
