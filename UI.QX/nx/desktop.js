@@ -568,57 +568,57 @@ nx.desktop = {
                                     }
                                 });
 
+                                // Billing?
+                                if (nx.desktop.user.getIsSelector('BILLING')) {
+                                    // Can we do it?
+                                    if (dsdef.isBillable === 'y' && data.values._billat && data.values._billto) {
+                                        // Maake the chain
+                                        var chain = nx.util.makeChain('All', 'acct', '=', data.values._billto, 'at', '=', data.values._billat);
+                                        // Room
+                                        var items = [];
+
+                                        items.push({
+                                            label: 'Charges',
+                                            click: function (e) {
+                                                nx.util.runTool('View', {
+                                                    ds: '_billcharge',
+                                                    chain: chain
+                                                }, nx.util.noOp);
+                                            }
+                                        });
+                                        items.push({
+                                            label: 'Subscriptions',
+                                            click: function (e) {
+                                                nx.util.runTool('View', {
+                                                    ds: '_billsubs',
+                                                    chain: chain
+                                                }, nx.util.noOp);
+                                            }
+                                        });
+
+                                        if (nx.desktop.user.getIsSelector('INVOICE')) {
+                                            items.push({
+                                                label: 'Invoices',
+                                                click: function (e) {
+                                                    nx.util.runTool('View', {
+                                                        ds: '_billinvoice',
+                                                        chain: chain
+                                                    }, nx.util.noOp);
+                                                }
+                                            });
+                                        }
+
+                                        tt.items.push({
+                                            label: '>> Billing',
+                                            icon: 'money',
+                                            choices: items
+                                        });
+                                    }
+                                }
+
                                 // Do we have an account?
                                 var acct = data.values._account;
                                 if (acct) {
-
-                                    // Billing?
-                                    if (nx.desktop.user.getIsSelector('BILLING')) {
-                                        // Can we do it?
-                                        if (dsdef.isBillable === 'y' && data.values._billat) {
-                                            // Maake the chain
-                                            var chain = nx.util.makeChain('All', 'acct', '=', data.values._billto, 'at', '=', data.values._billat);
-                                            // Room
-                                            var items = [];
-
-                                            items.push({
-                                                label: 'Charges',
-                                                click: function (e) {
-                                                    nx.util.runTool('View', {
-                                                        ds: '_billcharge',
-                                                        chain: chain
-                                                    }, nx.util.noOp);
-                                                }
-                                            });
-                                            items.push({
-                                                label: 'Subscriptions',
-                                                click: function (e) {
-                                                    nx.util.runTool('View', {
-                                                        ds: '_billsubs',
-                                                        chain: chain
-                                                    }, nx.util.noOp);
-                                                }
-                                            });
-
-                                            if (nx.desktop.user.getIsSelector('INVOICE')) {
-                                                items.push({
-                                                    label: 'Invoices',
-                                                    click: function (e) {
-                                                        nx.util.runTool('View', {
-                                                            ds: '_billinvoice',
-                                                            chain: chain
-                                                        }, nx.util.noOp);
-                                                    }
-                                                });
-                                            }
-
-                                            tt.items.push({
-                                                label: '>> Billing',
-                                                icon: 'money',
-                                                choices: items
-                                            });
-                                        }
-                                    }
 
                                     // Extended?
                                     if (nx.desktop.user.getIsSelector('TELE') || nx.desktop.user.getIsSelector('EMAIL')) {

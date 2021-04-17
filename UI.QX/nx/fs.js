@@ -496,6 +496,7 @@ nx.fs = {
             //
             var urlParams = nx.web.urlStart('ds', req.ds);
             urlParams = nx.web.urlAdd('winid', 'tsk_' + req.id, urlParams);
+            urlParams = nx.web.urlAdd('pubprivallowed', 'y', urlParams);
 
             //
             nx.util.runTool('Webview', {
@@ -561,6 +562,7 @@ nx.fs = {
             //
             var urlParams = nx.web.urlStart('ds', req.ds);
             urlParams = nx.web.urlAdd('winid', 'wfl_' + req.id, urlParams);
+            urlParams = nx.web.urlAdd('pubprivallowed', 'n' , urlParams);
 
             //
             nx.util.runTool('Webview', {

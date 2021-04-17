@@ -1677,7 +1677,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillCharge(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.16c"))
+            if (ds.Definition.ReleaseChanged("2021.04.16d"))
             {
                 //
                 ds.Definition.Caption = "Charges";
@@ -1704,7 +1704,6 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Description";
-                c_Field.DefaultValue = "Generated on #today()#";
 
                 c_Field = ds.Definition["acct"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
@@ -1874,7 +1873,7 @@ namespace Proc.AO.BuiltIn
 
         private static void Define_BillInvoice(this DatasetClass ds)
         { // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.16a"))
+            if (ds.Definition.ReleaseChanged("2021.04.16b"))
             {
                 //
                 ds.Definition.Caption = "Invoices";
@@ -1898,6 +1897,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Description";
+                c_Field.DefaultValue = "#concat('Generated on ',date(today()))#";
 
                 c_Field = ds.Definition["on"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Date;

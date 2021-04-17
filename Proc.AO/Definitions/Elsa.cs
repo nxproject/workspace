@@ -141,6 +141,17 @@ namespace Proc.AO.Definitions
             get { return this.Value["caption"]; }
             set { this.Value["caption"] = value; }
         }
+
+        /// <summary>
+        /// 
+        /// The mode (public/private)
+        /// 
+        /// </summary>
+        public bool IsPublic 
+        { 
+            get { return this.Value["ispublic"].FromDBBoolean(false); }
+            set { this.Value["ispublic"] = value.ToDBBoolean(); }
+        }
         #endregion
     }
 

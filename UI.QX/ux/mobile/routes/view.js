@@ -100,28 +100,31 @@ nx._routes.push({
                                     }
                                 }
 
+                                // Billing?
+                                if (nx.user.getIsSelector('BILLING')) {
+                                    // Can we do it?
+                                    if (dsdef.isBillable === 'y' && obj._billat && obj._billto) {
+                                        // Fake it
+                                        var acct = '';
+
+                                        rb.push({
+                                            label: '>> Bill',
+                                            icon: 'money',
+                                            cb: "nx.calls.commBilling('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
+                                        });
+                                        rb.push({
+                                            label: '>> Subscriptions',
+                                            icon: 'money',
+                                            cb: "nx.calls.commSubs('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
+                                        });
+                                    }
+                                }
+
                                 //
                                 if (obj._account) {
 
                                     // 
                                     var acct = obj._account;
-
-                                    // Billing?
-                                    if (nx.user.getIsSelector('BILLING')) {
-                                        // Can we do it?
-                                        if (dsdef.isBillable === 'y' && obj._billat) {
-                                            rb.push({
-                                                label: '>> Bill',
-                                                icon: 'money',
-                                                cb: "nx.calls.commBilling('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
-                                            });
-                                            rb.push({
-                                                label: '>> Subscriptions',
-                                                icon: 'money',
-                                                cb: "nx.calls.commSubs('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
-                                            });
-                                        }
-                                    }
 
                                     // Extended?
                                     if (nx.user.getIsSelector('TELE') || nx.user.getIsSelector('EMAIL')) {

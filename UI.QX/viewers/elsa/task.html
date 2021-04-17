@@ -50,6 +50,9 @@
             <li class="nav-item">
                 <button class="btn btn-secondary" onclick="createNewWorkflow()">Clear</button>
             </li>
+            <li class="nav-item">
+                <button id="pubpriv" class="btn btn-secondary" onclick="setPubPriv()">Private</button>
+            </li>
         </ul>
     </div>
 
@@ -80,12 +83,29 @@
             designer.newWorkflow();
         }
 
+        function setPubPriv(value) {
+            //
+            var el = $('#pubpriv');
+            // No value?
+            if (!value) {
+                // Get from entry
+                value = el.attr('is');
+                // Flip
+                value = (value === 'y' ? 'n' : 'y');
+            }
+            // Set
+            el.attr('is', value);
+            // And set color
+            el.css('background', (value === 'n' ? 'grey' : '#CD5C5C')).html(value === 'n' ? 'Private' : 'Public');
+        }
+
         function saveWorkflow(data) {
             //
             if (data) {
 
                 data._desc = winid.substr(9) || '';
                 data._search = data._desc.toUpperCase();
+                data.ispublic = $('#pubpriv').attr('is');
 
                 parent.nx.util.serviceCall('AO.ObjectSet', {
                     ds: passedds,
@@ -107,6 +127,9 @@
         const urlParams = new URLSearchParams(queryString);
         const winid = urlParams.get('winid');
         const passedds = urlParams.get('ds');
+        const pubprivallowed = urlParams.get('pubprivallowed') === 'y';
+
+        if (!pubprivallowed) $('#pubpriv').hide();
 
         var designer;
 
@@ -124,6 +147,7 @@
             if (typeof data.connections === 'string') {
                 data.connections = JSON.parse(data.connections) || [];
             }
+            setPubPriv(wf.ispublic === 'y' ? 'y' : 'n');
 
             $('#designerHost').attr('data-workflow', JSON.stringify(data));
 

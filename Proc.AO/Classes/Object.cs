@@ -1392,7 +1392,7 @@ namespace Proc.AO
             if (this.IsData)
             {
                 // Get 
-                JObject c_Acct = this.GetAccount();
+                JObject c_Acct = this.GetAccount(false);
                 // Any?
                 if (c_Acct != null)
                 {
@@ -1413,7 +1413,7 @@ namespace Proc.AO
         /// 
         /// </summary>
         /// <returns></returns>
-        public JObject GetAccount()
+        public JObject GetAccount(bool allow = true)
         {
             // Assume none
             JObject c_Ans = null;
@@ -1449,7 +1449,7 @@ namespace Proc.AO
                         c_Ans = new JObject();
 
                         // Set the account plain value
-                        c_Ans.Set(FieldAccount, sAcct);
+                        if (allow) c_Ans.Set(FieldAccount, sAcct);
                         // Set the bill to
                         c_Ans.Set(FieldBillTo, UUIDClass.MakeString(DatabaseClass.DatasetBillAccess, 
                             (this.UUID.ToString() + "/" + sAcct).MD5HashString().ToUpper()));
