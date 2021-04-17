@@ -37,7 +37,7 @@ There are two groups that are the main target of the system:
 			* [Time Tracking](readmes/README_D_TT.md)
 			* [Quorums](readmes/README_QUORUMS.md)
 			* [IOT](readmes/README_IOT.md)
-			* [Help](reademes/README_HELP.md)
+			* [Help](readees/README_HELP.md)
 	* [Views](readmes/README_D_VIEWS.md)
 	* [Fields](readmes/README_D_FIELDS.md)
 	* [Objects](readmes/README_D_OBJ.md)
