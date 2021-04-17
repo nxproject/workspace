@@ -88,7 +88,7 @@ namespace Proc.AO
                             if (sDSRaw.IsSameValue("^^"))
                             {
                                 // Make list
-                                List<string> c_TBD = "ttenabled helproot acctenabled billenabled quorumenabled acctdefallowed teleenabled".SplitSpaces();
+                                List<string> c_TBD = "acctenabled acctdefallowed billenabled ttenabled teleenabled quorumenabled iotenabled helproot".SplitSpaces();
                                 // Loop thru
                                 foreach(string sKey in c_TBD)
                                 {

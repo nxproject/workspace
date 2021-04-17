@@ -170,8 +170,8 @@ namespace Proc.AO
                 // Flags
                 bool bIOT = this.SiteInfo.IOTEnabled;
                 bool bBilling = this.SiteInfo.BillingEnabled;
-                bool bQuorumEnabled = this.SiteInfo.QuorumEnabled;
-                bool bTelemetryEnabled = this.SiteInfo.TelemetryEnabled;
+                bool bQuorum = this.SiteInfo.QuorumEnabled;
+                bool bTelemetry = this.SiteInfo.TelemetryEnabled;
 
                 // Loop thru
                 for (int i = c_Ans.Count; i > 0; i--)
@@ -210,11 +210,11 @@ namespace Proc.AO
                                 break;
 
                             case "QUORUM":
-                                bRemove = !bQuorumEnabled;
+                                bRemove = !bQuorum;
                                 break;
 
                             case "TELEMETRY":
-                                bRemove = !bTelemetryEnabled;
+                                bRemove = !bTelemetry;
                                 break;
                         }
                     }
