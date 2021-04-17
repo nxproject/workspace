@@ -35,7 +35,7 @@ Once linked, clicking on the ***HElp*** entry in the ***Start*** menu, displays 
 
 ![image](images/Help4.png)
 
-## Enabling help dor the user
+## Enabling help for the user
 
 In order to have the user access help, you need to setup the ```HELP``` selector in the [***Allowed***](README_USERS.md) setting.  
 
