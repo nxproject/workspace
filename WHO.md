@@ -39,10 +39,11 @@ then be used by many people at the "same" time.  Each computer since became the 
 in the 80's, which begun with the same coputing power of the first mainframes that I  used,
 it just sat on your desk.  Over time, the power of that computer grew and by linking them
 together, we got "the cloud", one really big computer, but made of "litte" computers
-which could "timeshare" the respurces by using containers.
+which could "timeshare" the resources by using containers.
 
 I like "the cloud", but not just to run a billion people on one "application", I want
-to run a different applications for a billion people.  The NX.Node hive is the platform for such an application.
+to run a different application for a billion people.  The NX.Node hive is the platform for such an application
+and NX.Workspce is the front end.
 
 Imagine going to your dog walker and being able to setup a fairly complex application that
 handles everything from sending out "flyers" to back room accounting, with video conferencing
@@ -58,7 +59,7 @@ to [DigitalOcean](https://www.digitalocean.com/).
 
 Some run as part of intranets and all public facing sites use SSL to provide security.
 
-The previous incarnation of NX.Workspace has been used since 2018 in the legal industry.
+The previous incarnation of NX.Project has been used since 2018 in the legal industry.
 
 ## License
 
@@ -103,7 +104,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://mit-l
 ## Acknowledgments
 
 * To all of those that came before me
-* To my eldest son **Joemar**, for whom I wish this to be the starting place of something good.  **Alice** is two years older than you are.  Thank you for your contribution of all the Genomes and DNA.
+* To my eldest son **Joemar**, for whom I wish this to be the starting place of something good.  **Alice** is two years older than you are.  Thank you for your contribution of all the Genomes, DNA, time, knowledge and patience.
 * To Lewis Carroll and his wonderful **Alice's Adventure in Wonderland**, after which the original project that ended here was named, **Alice**
 * To the [qooxdoo developers](https://qooxdoo.org/) for a great product.
 * To the people at **Microsoft** for creating the often painful, but overall useful Visual Studio .NET, which has been my home since it was first released, and the creation of .NET to which I was introduced early in 2001 and have been toiling at ever since.
