@@ -17,7 +17,7 @@ This is what a new charge entry looks like:
 |At|Dataset entry where the charge was added (read-only)|
 |Units|Number of units|
 |Rate|Amount per unit to be charged|
-|Price|Unts * rate (read-only)|
+|Price|Units * rate (read-only)|
 |Disc|Discount|
 |Total|Price - discount|
 |Inv|Invoice where the charged was included (read-only)|
