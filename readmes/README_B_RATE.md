@@ -2,7 +2,7 @@
 
 The rate table allow you to define a set of charge templates that allow for accurate generation of charges.
 
-![image](images/Bill1.png)
+![image](images/Billrt1.png)
 
 |Field|Meaning|
 |-|-|
