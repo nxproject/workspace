@@ -33,12 +33,12 @@ billing system.  You should also enable [Twilio](README_SVCS.md) and/or [SendGri
 
 When you view an entry, it should look like this:
 
-![image](Billx1.png)
+![image](images/Billx1.png)
 
 You can think of the [account](README_ACCOUNTS.md) field value as an ***account ID***, so if you enter a value and save the record, when you open it
 next it should look like this:
 
-![image](Billx2.png)
+![image](images/Billx2.png)
 
 You can now add charges, subscriptions and create invoices.  The simplest billing system.
 
