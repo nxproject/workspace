@@ -55,11 +55,12 @@ for any account that does not have it's own definition.
 
 ## Automatic account creation
 
-Accounts are automatically created and maintained when an ***account*** field is included in a dataset, for example:
+Accounts are automatically created and maintained when an ***account*** field is included in a dataset.  
+The field labeled ***Access*** in this dataset is an example:
 
 ![image](images/Acct10.png)
 
-Account field allow for the display of the account dataset by using the ***Display*** entry in the options menu, accessible by
+Account fields allow for the display of the account dataset by using the ***Display*** entry in the options menu, accessible by
 right-mouse click on the field.
 
 ## Uses
