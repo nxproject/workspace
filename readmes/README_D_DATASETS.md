@@ -18,7 +18,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 |Default|Privileges to be used when none are given in the ***allowed*** entry for a ***user***|
 |ID field|Field to be used as the internal object identifier|
 |Child DSS|Datasets that the dataset serves as a parent|
-|Related|Dataset/field pairs of datasets that are related via a link|
+|Related|Datasets that are related via a link|
 |Task@Create|Task to run when an object is created|
 |Task@Save|Task to run when an object is saved|
 
