@@ -201,4 +201,9 @@ You can modify all system datasets however you should not delete any fields that
 
 Note that updates may modify the dataset definitions, which will undo any user changes.
 
+## My base dataset
+
+This is my [rolodex](rolodex.pkg) dataset.  It is a [package](README_PKG.md) that can be uploaded into the system and that you
+can hack.  It is used throught the documentation.
+
 [Home](../README.md)
