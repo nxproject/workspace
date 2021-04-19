@@ -18,7 +18,7 @@ Click on any dataset entry to display the ***Dataset Properties*** window for th
 |Default|Privileges to be used when none are given in the ***allowed*** entry for a ***user***|
 |ID field|Field to be used as the internal object identifier|
 |Child DSS|Datasets that the dataset serves as a parent|
-|Related|Dataset/field pairs of datasets that are related via a link|
+|Linked DSS|Datasets that are related via a link|
 |Task@Create|Task to run when an object is created|
 |Task@Save|Task to run when an object is saved|
 
@@ -200,5 +200,10 @@ The system has a variety of datasets that hold system information.  These datase
 You can modify all system datasets however you should not delete any fields that were previously defined as this may lead to unexpected behaviors.
 
 Note that updates may modify the dataset definitions, which will undo any user changes.
+
+## My base dataset
+
+This is my [rolodex](rolodex.pkg) dataset.  It is a [package](README_PKG.md) that can be imported into the system and that you
+can hack.  It is used throught the documentation.
 
 [Home](../README.md)

@@ -10,15 +10,12 @@ or ***calendar*** and when a change if made by one user, the change is replicate
 detected as follows:
 
 * ```Dataset``` - When the user modifies a field and then leaves it.
-* ```Document``` - When a paragraph is modified and user moves to another paragraph.
+* ```Document``` - When a paragraph is modified and user moves to another paragraph (on hold).
 * ```Calendar``` - When an event changes values.
 
 Active collaboration is active at all times.
 
 ## Chat
-
-While Quick Messages allowe for a quick back and forth, it becomes inconvenient when a number of interactions
-is required or there is a subject matter to be dicussed.  For these situations, the Chat tool is available.
 
 The Chat tool is invoked via the Chat button in the ***top toolbar*** in the window of the subject to be
 discussed.  If the ***document*** and ***calendar**, the button is visble.  In a ***dataset*** the button is
