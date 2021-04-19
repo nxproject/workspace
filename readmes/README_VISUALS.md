@@ -1,5 +1,12 @@
 # Visuals
 
+During development we found the work by [Chris Evans' Clean theme](https://github.com/sqville/ville.Clean) and have integrated
+it into NX.Workspace.  Most of the screen captures were done under the old theme which is still reachable by using:
+
+```
+<Yuour site URL>?_theme=nx
+```
+
 ## Desktop
 
 ![image](images/Desktop.png)
@@ -120,5 +127,28 @@ When the site is accessed and no user information is detected, the login window 
 Once you have given the proper credentials, a ***notification*** is displayed:
 
 ![image](images/Welcome.png)
+
+## Theming
+
+You can change some of the theme options in [Site Settings](README_SITE.md) ***System***/***Theming*** tab.  you need to enter 
+key/value pairs, for example:
+
+```
+winBackgroundColor: "#F0FFFF"
+winCaptionColor: "#FFEBCD"
+```
+
+|Key|Default|Meaning|
+|-|-|-|
+|winBackgroundColor|"#F8F8FF"|Background color of the window|
+|winCaptionColor|"#ADD8E6"|Window caption background color|
+|winCaptionFontSize|18|Size of the caption font|
+|winCaptionPadding|4|Padding size for caption|
+|winCaptionIconPadding|8|Padding size for the caption icon|
+|buttonFontSize|12|Size of the button font|
+|buttonGap|2|Size of gap between buttons|
+|toolbarGap|2|Size of the toolbar separator|
+
+Each option is enetered in its own line and you must use double quotes where indicated.
 
 [Home](../README.md)
