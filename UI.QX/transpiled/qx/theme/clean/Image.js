@@ -32,7 +32,7 @@
  * @asset(decoration/treevirtual/*)
  * @asset(decoration/cursor/*)
  */
-nxTheme.Image =
+window.nxTheme.Image =
 {
     extend: qx.core.Object,
 

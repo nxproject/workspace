@@ -332,6 +332,17 @@ namespace Proc.AO
 
         /// <summary>
         /// 
+        /// The theme file
+        /// 
+        /// </summary>
+        public string ThemeOptions
+        {
+            get { return this.SynchObject["themeoptions"]; }
+            set { this.SynchObject["themeoptions"] = value; }
+        }
+
+        /// <summary>
+        /// 
         /// Default allowed for accounts
         /// 
         /// </summary>

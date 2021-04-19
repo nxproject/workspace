@@ -158,7 +158,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.13a"))
+            if (ds.Definition.ReleaseChanged("2021.04.19b"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -359,6 +359,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
                 c_Field.Label = "# Days Ret.";
 
+                c_Field = ds.Definition["themeoptions"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
+                c_Field.Label = "Theme Opts.";
+
                 c_Field.SaveParent();
             }
 
@@ -453,13 +457,16 @@ namespace Proc.AO.BuiltIn
             if (c_CInfo.ReleaseChanged(ds.Definition.Release))
             {
                 //
-                c_CInfo.Caption = "Sizes";
+                c_CInfo.Caption = "Theming";
 
                 // Clear
                 c_CInfo.ClearFields();
 
                 // Map
-                c_CInfo.UseFields("defaultfieldWidth", "defaultpickWidth", "defaultpickHeight");
+                c_CInfo.UseFields("defaultfieldWidth", "defaultpickWidth", "defaultpickHeight", "themeoptions");
+
+                //
+                c_CInfo["themeoptions"].Height = "8";
 
                 c_CInfo.Save();
             }

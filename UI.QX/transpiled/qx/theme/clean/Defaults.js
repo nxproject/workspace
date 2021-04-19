@@ -16,24 +16,25 @@
 
 ************************************************************************ */
 
-var nxTheme = {
+(function () {
 
-    Defaults: {
+    window.nxTheme.Defaults = {
 
-        "fill": "#F8F8FF",
+        "winBackgroundColor": "#F8F8FF",
 
-        "wincaption": "#ADD8E6",
-        "winborder": "#faf5dc",
-        "winheadertext": 18,
-        "winheaderpadding": 4,
+        "winCaptionColor": "#ADD8E6",
+        "winBorderColor": "#FAF5DC",
+        "winCaptionFontSize": 18,
+        "winCaptionPadding": 4,
         "winheadericonpadding": 8,
 
-        "buttontext": 12,
-        "buttongap": 4,
+        "buttonFontSize": 12,
+        "buttonGap": 2,
 
-        "toolbarsep": 2,
+        "toolbarGap": 2,
 
         "itemHeight": 25
-    }
 
-};
+    };
+
+})();

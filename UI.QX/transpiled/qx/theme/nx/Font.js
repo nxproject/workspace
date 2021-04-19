@@ -1,131 +1,86 @@
-/* ************************************************************************
-
-   SQville Software
-
-   http://sqville.com
-
-   Copyright:
-     None
-
-   License:
-     MIT
-
-   Authors:
-     * Chris Eskew (chris.eskew@sqville.com)
-
-************************************************************************ */
-
-/**
- * The ville.Clean font theme.
- * @asset(/transpiled//transpiled/qx/theme/nx/font/Lato/*.ttf)
- * 
- */
-nxTheme.Font =
-{
-
-    fonts:
-    {
-        "default":
-        {
-            family: ["sans-serif"],
-            color: "text",
-            weight: "400",
-            size: 14,
-            sources: [
-                {
-                    family: "Lato",
-                    source: [
-                        "/transpiled/qx/theme/nx/font/Lato/Lato-Regular.ttf"
-                    ]
-                }
-            ]
+(function () {
+  var $$dbClassInfo = {
+    "dependsOn": {
+      "qx.core.Environment": {
+        "defer": "load",
+        "usage": "dynamic",
+        "require": true
+      },
+      "qx.Theme": {
+        "usage": "dynamic",
+        "require": true
+      },
+      "qx.bom.client.OperatingSystem": {
+        "require": true
+      }
+    },
+    "environment": {
+      "provided": [],
+      "required": {
+        "os.name": {
+          "load": true,
+          "className": "qx.bom.client.OperatingSystem"
         },
-
-        "bold":
-        {
-            include: "default",
-            weight: "700"
-        },
-
-        "datechooser":
-        {
-            include: "default",
-            size: 13
-        },
-
-        "datechooser-bold":
-        {
-            include: "bold",
-            size: 13
-        },
-
-        "button":
-        {
-            include: "bold",
-            size: nxTheme.Defaults.buttontext
-        },
-
-        "groupbox-legend":
-        {
-            include: "bold"
-        },
-
-        "window-header":
-        {
-            include: "default",
-            size: nxTheme.Defaults.winheadertext
-        },
-
-        "unicode-icons-sm":
-        {
-            size: 20,
-            family: ["arial", "helvetica", "Segoe UI Symbol"]
-        },
-
-        "input":
-        {
-            include: "default",
-            size: 14
-        },
-
-
-        "headline":
-        {
-            include: "default",
-            size: 24
-        },
-
-        "small":
-        {
-            include: "default",
-            size: 11
-        },
-
-        "monospace":
-        {
-            size: 11,
-            family: ["DejaVu Sans Mono", "Courier New", "monospace"]
-        },
-
-        // Theme Browser Content Formatting
-        "control-header":
-        {
-            include: "default",
-            size: 24,
-            bold: true
-        },
-
-        "control-header2":
-        {
-            include: "default",
-            size: 20
-        },
-
-        // TreeVirtual Legacy
-        "treevirtual":
-        {
-            include: "default",
-            size: 8
+        "os.version": {
+          "load": true,
+          "className": "qx.bom.client.OperatingSystem"
         }
+      }
     }
-};
+  };
+  qx.Bootstrap.executePendingDefers($$dbClassInfo);
+
+  /* ************************************************************************
+  
+     qooxdoo - the new era of web development
+  
+     http://qooxdoo.org
+  
+     Copyright:
+       2004-2008 1&1 Internet AG, Germany, http://www.1und1.de
+  
+     License:
+       MIT: https://opensource.org/licenses/MIT
+       See the LICENSE file in the project's top-level directory for details.
+  
+     Authors:
+     * Sebastian Werner (wpbasti)
+     * Andreas Ecker (ecker)
+  
+  ************************************************************************* */
+
+	var largeFont = 16;
+	var medFont = 14;
+	var smallFont = 12;
+
+  /**
+   * The nx font theme.
+   */
+  qx.Theme.define("qx.theme.nx.Font", {
+    fonts: {
+      "default": {
+        size: qx.core.Environment.get("os.name") == "win" && (qx.core.Environment.get("os.version") == "7" || qx.core.Environment.get("os.version") == "vista") ? largeFont : medFont,
+        lineHeight: 1.4,
+        family: qx.core.Environment.get("os.name") == "osx" ? ["Lucida Grande"] : qx.core.Environment.get("os.name") == "win" && (qx.core.Environment.get("os.version") == "7" || qx.core.Environment.get("os.version") == "vista") ? ["Segoe UI", "Candara"] : ["Liberation Sans", "Tahoma", "Arial", "sans-serif"]
+      },
+      "bold": {
+        size: qx.core.Environment.get("os.name") == "win" && (qx.core.Environment.get("os.version") == "7" || qx.core.Environment.get("os.version") == "vista") ? largeFont : medFont,
+        lineHeight: 1.4,
+        family: qx.core.Environment.get("os.name") == "osx" ? ["Lucida Grande"] : qx.core.Environment.get("os.name") == "win" && (qx.core.Environment.get("os.version") == "7" || qx.core.Environment.get("os.version") == "vista") ? ["Segoe UI", "Candara"] : ["Liberation Sans", "Tahoma", "Arial", "sans-serif"],
+        bold: true
+      },
+      "small": {
+        size: qx.core.Environment.get("os.name") == "win" && (qx.core.Environment.get("os.version") == "7" || qx.core.Environment.get("os.version") == "vista") ? medFont : smallFont,
+        lineHeight: 1.4,
+        family: qx.core.Environment.get("os.name") == "osx" ? ["Lucida Grande"] : qx.core.Environment.get("os.name") == "win" && (qx.core.Environment.get("os.version") == "7" || qx.core.Environment.get("os.version") == "vista") ? ["Segoe UI", "Candara"] : ["Liberation Sans", "Tahoma", "Arial", "sans-serif"]
+      },
+      "monospace": {
+        size: medFont,
+        lineHeight: 1.4,
+        family: qx.core.Environment.get("os.name") == "osx" ? ["Lucida Console", "Monaco"] : qx.core.Environment.get("os.name") == "win" && (qx.core.Environment.get("os.version") == "7" || qx.core.Environment.get("os.version") == "vista") ? ["Consolas"] : ["Consolas", "DejaVu Sans Mono", "Courier New", "monospace"]
+      }
+    }
+  });
+  qx.theme.nx.Font.$$dbClassInfo = $$dbClassInfo;
+})();
+//# sourceMappingURL=package-9.js.map?dt=1598213499061
