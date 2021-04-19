@@ -1,5 +1,12 @@
 # Visuals
 
+During development we found the work by [Chris Evans' Clean theme](https://github.com/sqville/ville.Clean) and have integrated
+it into NX.Workspace.  Most of the screen captures were done under the old theme which is still reachable by using:
+
+```
+<Yuour site URL>?_theme=nx
+```
+
 ## Desktop
 
 ![image](images/Desktop.png)
