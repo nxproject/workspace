@@ -133,8 +133,10 @@ Once you have given the proper credentials, a ***notification*** is displayed:
 You can change some of the theme options in [Site Settings](README_SITE.md) ***System***/***Theming*** tab.  you need to enter 
 key/value pairs, for example:
 
+```
 winBackgroundColor: "#F0FFFF"
 winCaptionColor: "#FFEBCD"
+```
 
 |Key|Default|Meaning|
 |-|-|-|
@@ -147,6 +149,6 @@ winCaptionColor: "#FFEBCD"
 |buttonGap|2|Size of gap between buttons|
 |toolbarGap|2|Size of the toolbar separator|
 
-Note that you must use double quotes where indicated.
+Each option is enetered in its own line and you must use double quotes where indicated.
 
 [Home](../README.md)
