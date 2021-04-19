@@ -61,6 +61,10 @@ namespace Proc.AO
         public const string FieldBillAt = "_billat";
         public const string FieldAccount = "_account";
 
+        public const string FieldTotal = "total";
+        public const string FieldBilled = "billed";
+        public const string FieldInvOn = "invon";
+
         private const string SIOSaved = "$$object.saved";
         private const string SIOData = "$$object.data";
         #endregion
@@ -97,14 +101,14 @@ namespace Proc.AO
             this.IsValid = true;
         }
 
-        internal ObjectClass(DatasetClass ds, ExtendedContextClass ctx)
+        internal ObjectClass(DatasetClass ds, ExtendedContextClass ctx, JObject chain = null)
              : base(ds)
         {
             //
             this.ID = ObjectId.GenerateNewId().ToString();
 
             // Get
-            this.Load(ctx);
+            this.Load(ctx, chain);
         }
         #endregion
 
@@ -341,7 +345,7 @@ namespace Proc.AO
         /// Sets the default values
         /// 
         /// </summary>
-        private void SetDefaultValues(ExtendedContextClass ctx = null)
+        private void SetDefaultValues(ExtendedContextClass ctx = null, JObject chain = null)
         {
             // New?
             if (this.IsNew && !this.ID.StartsWith("#"))
@@ -380,6 +384,90 @@ namespace Proc.AO
                         }
                     }
                 }
+                // And the chain
+                if (chain != null)
+                {
+                    // Get the queries
+                    JArray c_Qry = chain.GetJArray("queries");
+                    if (c_Qry != null)
+                    {
+                        // Loop thru
+                        for (int i = 0; i < c_Qry.Count; i++)
+                        {
+                            // Map
+                            JObject c_Entry = c_Qry.GetJObject(i);
+
+                            string sField = c_Entry.Get("field");
+                            string sValue = c_Entry.Get("value");
+                            // Eval
+                            using (DatumClass c_Datum = new DatumClass(ctx, sValue))
+                            {
+                                // According to type
+                                switch (c_Datum.Type)
+                                {
+                                    case DatumClass.Types.Data:
+                                    case DatumClass.Types.Expression:
+                                    case DatumClass.Types.Value:
+                                        this[sField] = c_Datum.Value;
+                                        break;
+                                    default:
+                                        this[sField] = sValue;
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Handle special cases
+                switch (this.Dataset.Name)
+                {
+                    case DatabaseClass.DatasetBiilInvoice:
+                        // Make query
+                        using (QueryClass c_Qry = new QueryClass(this.Parent.Parent[DatabaseClass.DatasetBiilCharge].DataCollection))
+                        {
+                            //
+                            string sUUID = this.UUID.ToString();
+                            double dAmt = 0;
+
+                            // Set the fields
+                            c_Qry.Add("acct", QueryElementClass.QueryOps.Eq, this["acct"]);
+                            c_Qry.Add("at", QueryElementClass.QueryOps.Eq, this["at"]);
+                            // Loop thru
+                            foreach (ObjectClass c_Charge in c_Qry.FindObjects())
+                            {
+                                // Not assigned
+                                if (!c_Charge[FieldInvOn].HasValue())
+                                {
+                                    // Flag
+                                    c_Charge[FieldParent] = sUUID;
+                                    //
+                                    dAmt += c_Charge[FieldTotal].IfEmpty().ToDouble(0);
+                                    //
+                                    c_Charge.Save();
+                                }
+                            }
+                            // Set
+                            this[FieldBilled] = dAmt.ToString();
+                        }
+                        break;
+                }
+
+                // Task
+                string sTask = this.Dataset.Definition.TaskAtCreate;
+                if (sTask.HasValue())
+                {
+                    // Call
+                    using (TaskParamsClass c_Params = new TaskParamsClass(this.Parent.Parent.Parent.Parent))
+                    {
+                        c_Params.Task = sTask;
+
+                        c_Params.AddObject("passed", this);
+                        c_Params["_user"] = ctx.User.Name;
+
+                        StoreClass c_Resp = c_Params.Call();
+                    }
+                }
             }
 
             this.SetSysValues();
@@ -401,7 +489,7 @@ namespace Proc.AO
         /// Loads the object from database
         /// 
         /// </summary>
-        public void Load(ExtendedContextClass ctx = null)
+        public void Load(ExtendedContextClass ctx = null, JObject chain = null)
         {
             // Make the filter
             using (QueryClass c_Filter = new QueryClass(this.Collection))
@@ -432,7 +520,7 @@ namespace Proc.AO
                 this.IsNew = true;
 
                 // Handle new
-                this.SetDefaultValues(ctx);
+                this.SetDefaultValues(ctx, chain);
             }
 
             // Assure
@@ -806,6 +894,52 @@ namespace Proc.AO
                         }
                     }
                 }
+
+                // Special cases
+                switch (this.Dataset.Name)
+                {
+                    case DatabaseClass.DatasetBiilCharge:
+                        if (this[FieldParent].HasValue())
+                        {
+                            if (c_Changes.Contains(FieldTotal))
+                            {
+                                // Get
+                                using (UUIDClass c_UUID = new UUIDClass(this.Parent.Parent, this[FieldParent]))
+                                {
+                                    using (ObjectClass c_Obj = c_UUID.AsObject)
+                                    {
+                                        c_Obj[FieldBilled] = (c_Obj[FieldBilled].ToDouble(0) + this.Document.GetValue(FieldTotal).ToDouble(0) - c_CData.Get(FieldTotal).ToDouble(0)).ToString();
+                                        c_Obj.Save();
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                    case DatabaseClass.DatasetBiilInvoice:
+                        // Make query
+                        using (QueryClass c_Qry = new QueryClass(this.Parent.Parent[DatabaseClass.DatasetBiilCharge].DataCollection))
+                        {
+                            //
+                            String sOn = DateTime.Now.ToDBDate();
+
+                            // Set the fields
+                            c_Qry.Add(FieldParent, QueryElementClass.QueryOps.Eq, this.UUID.ToString());
+
+                            // Loop thru
+                            foreach (ObjectClass c_Charge in c_Qry.FindObjects())
+                            {
+                                // Set
+                                if (!c_Charge[FieldInvOn].HasValue())
+                                {
+                                    c_Charge[FieldInvOn] = sOn;
+
+                                    c_Charge.Save();
+                                }
+                            }
+                        }
+                        break;
+                }
             }
             else
             {
@@ -1153,7 +1287,7 @@ namespace Proc.AO
                 using (QueryClass c_AP = new QueryClass(this.Parent.Parent[DatabaseClass.DatasetBillAccess].DataCollection))
                 {
                     // Any one related to us
-                    c_AP.Add("actual", this.UUID.ToString());
+                    c_AP.Add("actual", QueryElementClass.QueryOps.Eq, this.UUID.ToString());
                     // Bye
                     c_AP.Delete(true);
                 }
@@ -1203,11 +1337,63 @@ namespace Proc.AO
                     }
                 }
 
-                // User?
-                if (this.UUID.Dataset.Name.IsSameValue(DatabaseClass.DatasetUser))
+                // Special cases
+                switch (this.Dataset.Name)
                 {
-                    // Delete tags
-                    this.UUID.Dataset.Parent.Tagged.DeleteAll(this.UUID.ID);
+                    case DatabaseClass.DatasetUser:
+                        // Delete tags
+                        this.UUID.Dataset.Parent.Tagged.DeleteAll(this.UUID.ID);
+                        break;
+
+                    case DatabaseClass.DatasetBiilCharge:
+                        if (this[FieldParent].HasValue())
+                        {
+                            // Get
+                            using (UUIDClass c_UUID = new UUIDClass(this.Parent.Parent, this[FieldParent]))
+                            {
+                                using (ObjectClass c_Obj = c_UUID.AsObject)
+                                {
+                                    c_Obj[FieldBilled] = (c_Obj[FieldBilled].ToDouble(0) - this[FieldTotal].ToDouble(0)).ToString();
+                                    c_Obj.Save();
+                                }
+                            }
+                        }
+                        break;
+
+                    case DatabaseClass.DatasetBiilInvoice:
+                        // Make query
+                        using (QueryClass c_Qry = new QueryClass(this.Parent.Parent[DatabaseClass.DatasetBiilCharge].DataCollection))
+                        {
+                            // Set the fields
+                            c_Qry.Add(FieldParent, QueryElementClass.QueryOps.Eq, this.UUID.ToString());
+
+                            // Loop thru
+                            foreach (ObjectClass c_Charge in c_Qry.FindObjects())
+                            {
+                                // Clear
+                                c_Charge[FieldParent] = "";
+                                c_Charge[FieldInvOn] = "";
+
+                                c_Charge.Save(true);
+                            }
+                        }
+                        break;
+                }
+
+                // Task
+                string sTask = this.Dataset.Definition.TaskAtDelete;
+                if (sTask.HasValue())
+                {
+                    // Call
+                    using (TaskParamsClass c_Params = new TaskParamsClass(this.Parent.Parent.Parent.Parent))
+                    {
+                        c_Params.Task = sTask;
+
+                        c_Params.AddObject("passed", this);
+                        c_Params["_user"] = "";
+
+                        StoreClass c_Resp = c_Params.Call();
+                    }
                 }
             }
         }
@@ -1451,7 +1637,7 @@ namespace Proc.AO
                         // Set the account plain value
                         if (allow) c_Ans.Set(FieldAccount, sAcct);
                         // Set the bill to
-                        c_Ans.Set(FieldBillTo, UUIDClass.MakeString(DatabaseClass.DatasetBillAccess, 
+                        c_Ans.Set(FieldBillTo, UUIDClass.MakeString(DatabaseClass.DatasetBillAccess,
                             (this.UUID.ToString() + "/" + sAcct).MD5HashString().ToUpper()));
                     }
                 }

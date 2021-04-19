@@ -56,16 +56,6 @@ nx._routes.push({
                             nx.env.setBucketItem('_obj', obj, routeTo.url);
                             nx.env.setBucketItem('_ao', 'ao_' + ds + '_' + id, routeTo.url);
 
-                            // Get the chain
-                            var chain = data.chain;
-                            if (chain) {
-                                // Loop thru
-                                chain.queries.forEach(function (qry) {
-                                    // Set
-                                    nx.db.objSetField(obj, qry.field, qry.value);
-                                });
-                            }
-
 
                             // Make the title
                             var title = nx.db.localizeDesc(obj._desc) || ('New ' + dsdef.caption);
@@ -108,7 +98,7 @@ nx._routes.push({
                                         var acct = '';
 
                                         rb.push({
-                                            label: '>> Bill',
+                                            label: '>> Charge',
                                             icon: 'money',
                                             cb: "nx.calls.commBilling('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
                                         });
@@ -116,6 +106,11 @@ nx._routes.push({
                                             label: '>> Subscriptions',
                                             icon: 'money',
                                             cb: "nx.calls.commSubs('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
+                                        });
+                                        rb.push({
+                                            label: '>> Invoices',
+                                            icon: 'money',
+                                            cb: "nx.calls.commInvoices('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
                                         });
                                     }
                                 }
@@ -327,9 +322,9 @@ nx._routes.push({
 
                             });
 
-                        }, nx.user.getIsSelector('TELE') ||
+                        }, (nx.user.getIsSelector('TELE') ||
                         nx.user.getIsSelector('EMAIL') ||
-                        nx.user.getIsSelector('BILLING'));
+                        nx.user.getIsSelector('BILLING')), chain);
 
                     } else {
 

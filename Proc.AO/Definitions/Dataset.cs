@@ -299,28 +299,6 @@ namespace Proc.AO.Definitions
 
         /// <summary>
         /// 
-        /// The task to run at create
-        /// 
-        /// </summary>
-        public string TaskAtCreate
-        {
-            get { return this.Object["taskatcreate"]; }
-            set { this.Object["taskatcreate"] = value; }
-        }
-
-        /// <summary>
-        /// 
-        /// The task to run at save
-        /// 
-        /// </summary>
-        public string TaskAtSave
-        {
-            get { return this.Object["taskatsave"]; }
-            set { this.Object["taskatsave"] = value; }
-        }
-
-        /// <summary>
-        /// 
         /// The selector needed
         /// 
         /// </summary>
@@ -680,6 +658,41 @@ namespace Proc.AO.Definitions
         {
             get { return this.Object["chatAllow"].FromDBBoolean(); }
             set { this.Object["chatAllow"] = value.ToDBBoolean(); }
+        }
+        #endregion
+
+        #region Tasks
+        /// <summary>
+        /// 
+        /// The task to run at create
+        /// 
+        /// </summary>
+        public string TaskAtCreate
+        {
+            get { return this.Object["taskatcreate"]; }
+            set { this.Object["taskatcreate"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The task to run at save
+        /// 
+        /// </summary>
+        public string TaskAtSave
+        {
+            get { return this.Object["taskatsave"]; }
+            set { this.Object["taskatsave"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The task to run at delete
+        /// 
+        /// </summary>
+        public string TaskAtDelete
+        {
+            get { return this.Object["taskatdelete"]; }
+            set { this.Object["taskatdelete"] = value; }
         }
         #endregion
 

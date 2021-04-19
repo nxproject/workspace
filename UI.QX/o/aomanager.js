@@ -37,7 +37,7 @@ qx.Class.define('o.aomanager', {
          * @param {string} id
          * @param {object} data
          */
-        get: function (ds, id, cb, floataccount) {
+        get: function (ds, id, cb, floataccount, chain) {
 
             var self = this;
 
@@ -111,7 +111,7 @@ qx.Class.define('o.aomanager', {
          * @param {string} ds
          * @param {object} data
          */
-        create: function (ds, id, cb, floataccount) {
+        create: function (ds, id, cb, floataccount, chain) {
 
             var self = this;
 
@@ -121,7 +121,8 @@ qx.Class.define('o.aomanager', {
             // Read
             nx.util.serviceCall('AO.ObjectCreate', {
                 ds: ds,
-                floataccount: nx.util.asBoolean(floataccount)
+                floataccount: nx.util.asBoolean(floataccount),
+                chain: chain || {}
             }, function (result) {
 
                 // Do we have an id?

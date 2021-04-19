@@ -291,11 +291,15 @@
                 ]
             },
 			"nx": {
-               "uris": [
+                "uris": [                    
+                    "../transpiled/qx/theme/nx/Defaults.js",
                     "../transpiled/qx/theme/nx/Appearance.js",
 					"../transpiled/qx/theme/nx/Color.js",
 					"../transpiled/qx/theme/nx/Decoration.js",
-					"../transpiled/qx/theme/nx/Font.js"
+                    "../transpiled/qx/theme/nx/Font.js",
+                    "../transpiled/qx/theme/nx/Image.js",
+                    "../transpiled/qx/theme/nx/Custom.js",
+                    "../transpiled/qx/theme/nx/Build.js"
                 ]
 			},
             "6": {

@@ -143,7 +143,7 @@ namespace Proc.AO
         /// 
         /// </summary>
         /// <returns></returns>
-        public ObjectClass New(string id = null, ExtendedContextClass ctx = null)
+        public ObjectClass New(string id = null, ExtendedContextClass ctx = null, JObject chain = null)
         {
             //
             ObjectClass c_Ans = null;
@@ -151,7 +151,7 @@ namespace Proc.AO
             //
             if (!id.HasValue())
             {
-                c_Ans = new ObjectClass(this, ctx);
+                c_Ans = new ObjectClass(this, ctx, chain);
             }
             else
             {

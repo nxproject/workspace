@@ -30,8 +30,7 @@ qx.Class.define('c._gridheaderrenderer', {
 			var widget = new c._gridheadercell();
 			// Link
 			nx.bucket.setCellInfo(widget, cellInfo);
-			// Set the icon so user knows context menu is available
-			widget.setIcon(nx.util.getIcon('magnifier'));
+			
 
 			// Update
 			self.updateHeaderCell(cellInfo, widget);

@@ -42,6 +42,12 @@ qx.Class.define('c._gridheadercell', {
                         column: 1
                     });
 
+                    self._icon = new qx.ui.basic.Image(nx.util.getIcon('magnifier'));
+                    self._add(self._icon, {
+                        row: 1,
+                        column: 0
+                    });
+
                     self._filter = new c._textfield();
                     self._filter.setPlaceholder(ph);
                     self._add(self._filter, {
@@ -54,7 +60,7 @@ qx.Class.define('c._gridheadercell', {
                             case 'Tab':
                             case 'Enter':
                                 // Hide the filter
-                                self._filter.hide();
+                                //self._filter.hide();
                                 // 
                                 self.lookup();
                                 break;
@@ -66,14 +72,14 @@ qx.Class.define('c._gridheadercell', {
 
                     self._filter.addListener('blur', function (e) {
                         // Hide filter
-                        self._filter.hide();
+                        //self._filter.hide();
 
                         //
                         self.lookup();
                     });
                     self._filter.addListener('focus', function (e) {
                         // Show the filter on focus
-                        self._filter.show();
+                        //self._filter.show();
 
                         // Map
                         var cellinfo = nx.bucket.getCellInfo(self._filter);
@@ -82,7 +88,7 @@ qx.Class.define('c._gridheadercell', {
                     });
 
                     // Start hidden
-                    self._filter.hide();
+                    //self._filter.hide();
                     // Link
                     nx.bucket.setCellInfo(self._filter, nx.bucket.getCellInfo(self));
                     control = self._label;
@@ -114,12 +120,12 @@ qx.Class.define('c._gridheadercell', {
                         //
                         if (!self._filter.isVisible()) {
                             // Show the fiter
-                            self._filter.show();
+                            //self._filter.show();
                             // And give it focus
                             self._filter.focus();
                         } else {
                             // Hide the filter
-                            self._filter.hide();
+                            //self._filter.hide();
                             // Lookup
                             self.lookup();
                         }

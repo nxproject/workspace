@@ -266,7 +266,7 @@ nx.db = {
      * @param {any} id
      * @param {any} cb
      */
-    getObj: function (ds, id, cb, floataccount) {
+    getObj: function (ds, id, cb, floataccount, chain) {
 
         var self = this;
 
@@ -286,7 +286,8 @@ nx.db = {
                 nx.util.serviceCall('AO.ObjectGet', {
                     ds: ds,
                     id: id,
-                    floataccount: nx.util.asBoolean(floataccount)
+                    floataccount: nx.util.asBoolean(floataccount),
+                    cahin || {}
                 }, function (data) {
                     // Assure
                     data._changes = data._changes || [];

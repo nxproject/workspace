@@ -677,13 +677,12 @@ nx.desktop = {
                                         var cds = list.shift();
                                         var cfld = list.shift();
                                         // Add button
-                                        if (cds && cfld) {
+                                        if (cds) {
 
                                             //
                                             if (nx.desktop.user.opAllowed(cds, 'a') || nx.desktop.user.opAllowed(cds, 'v')) {
                                                 // Get
                                                 nx.desktop._loadDataset(cds, function (cdsdef) {
-
                                                     tt.items.push({
                                                         label: cdsdef.caption,
                                                         icon: cdsdef.icon,
@@ -775,21 +774,6 @@ nx.desktop = {
                                                         }
 
                                                     } else {
-
-                                                        // Do we have a chain?
-                                                        if (req.chain && req.chain._cooked) {
-                                                            // Get the queries
-                                                            var xlist = req.chain.queries;
-                                                            // Do we use just first
-                                                            if (req.chain.sop != - 'All') {
-                                                                xlist = [xlist[0]];
-                                                            }
-                                                            // Loop thru
-                                                            xlist.forEach(function (entry) {
-                                                                // Set the value
-                                                                data.forceField(entry.field, entry.value);
-                                                            });
-                                                        }
 
                                                         // Add tools
                                                         var tdefs = [];
@@ -1369,9 +1353,9 @@ nx.desktop = {
                                     }
                                 });
 
-                            }, nx.desktop.user.getIsSelector('TELE') ||
+                            }, (nx.desktop.user.getIsSelector('TELE') ||
                             nx.desktop.user.getIsSelector('EMAIL') ||
-                            nx.desktop.user.getIsSelector('BILLING'));
+                            nx.desktop.user.getIsSelector('BILLING')), req.chain);
                         });
                     });
                 }
@@ -1457,7 +1441,7 @@ nx.desktop = {
         return ans;
     },
 
-    _loadData: function (ds, id, cb, floataccount) {
+    _loadData: function (ds, id, cb, floataccount, chain) {
 
         var self = this;
 
@@ -1473,7 +1457,7 @@ nx.desktop = {
             }
             // Do
             if (cb) cb(data);
-        }, floataccount);
+        }, floataccount, chain);
     },
 
     _loadDataset: function (ds, cb, force) {
@@ -1546,7 +1530,7 @@ nx.desktop = {
         delete self.__ds[ds];
     },
 
-    _assureDatasets: function (list, step , cb, at) {
+    _assureDatasets: function (list, step, cb, at) {
 
         var self = this;
 
@@ -1558,7 +1542,7 @@ nx.desktop = {
             cb(list);
         } else {
             self._loadDataset(list[at], function () {
-                self._assureDatasets(list,step, cb, at + step);
+                self._assureDatasets(list, step, cb, at + step);
             });
         }
     },
@@ -2384,7 +2368,7 @@ nx.desktop = {
         // Get the date
         var now = new Date();
         //
-        button.setValue('<div align="center">' + moment().format('dddd MMMM Do YYYY*h:mm a').replace('*', '<br/>') + '</div>');
+        button.setValue('<div align="center" style="margin-top:16px;padding:2px;">' + moment().format('dddd MMMM Do YYYY*h:mm a').replace('*', '<br/>') + '</div>');
         // Compute seconds till next minute
         var till = 60 - now.getSeconds();
         // Redo

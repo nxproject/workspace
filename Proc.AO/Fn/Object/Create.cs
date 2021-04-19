@@ -19,6 +19,8 @@
 
 using System.Collections.Generic;
 
+using Newtonsoft.Json.Linq;
+
 using NX.Engine;
 using NX.Shared;
 
@@ -39,6 +41,7 @@ namespace Proc.AO
             // Get the params
             string sDS = store["ds"].AsDatasetName();
             bool bFloatAccount = store["floataccount"].FromDBBoolean();
+            JObject c_Chain = store["chain"].IfEmpty().ToJObject();
 
             // Valid?
             if (sDS.HasValue())
@@ -53,7 +56,7 @@ namespace Proc.AO
                 using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, store, null, call.UserInfo.Name))
                 {
                     // Get the object
-                    using (Proc.AO.ObjectClass c_Obj = c_DS.New(null, c_Ctx))
+                    using (Proc.AO.ObjectClass c_Obj = c_DS.New(null, c_Ctx, c_Chain))
                     {
                         // Hadle the account bit
                         if (bFloatAccount) c_Obj.FloatAccount();

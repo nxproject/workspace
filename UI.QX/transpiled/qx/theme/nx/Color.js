@@ -1,261 +1,191 @@
-(function () {
-    var $$dbClassInfo = {
-        "dependsOn": {
-            "qx.core.Environment": {
-                "defer": "load",
-                "usage": "dynamic",
-                "require": true
-            },
-            "qx.Theme": {
-                "usage": "dynamic",
-                "require": true
-            },
-            "qx.bom.client.Css": {
-                "require": true
-            }
-        },
-        "environment": {
-            "provided": [],
-            "required": {
-                "css.rgba": {
-                    "load": true,
-                    "className": "qx.bom.client.Css"
-                }
-            }
-        }
-    };
-    qx.Bootstrap.executePendingDefers($$dbClassInfo);
+/* ************************************************************************
 
-    /* ************************************************************************
-    
-       qooxdoo - the new era of web development
-    
-       http://qooxdoo.org
-    
-       Copyright:
-         2004-2008 1&1 Internet AG, Germany, http://www.1und1.de
-    
-       License:
-         MIT: https://opensource.org/licenses/MIT
-         See the LICENSE file in the project's top-level directory for details.
-    
-       Authors:
-         * Sebastian Werner (wpbasti)
-         * Andreas Ecker (ecker)
-         * Alexander Steitz (aback)
-         * Martin Wittemann (martinwittemann)
-    
-    ************************************************************************ */
+   SQville Software
 
-    var selColor = "#BB90BB";
-    /**
-     * Modern color theme
-     */
-    qx.Theme.define("qx.theme.nx.Color", {
-        colors: {
-            /*
-            ---------------------------------------------------------------------------
-              BACKGROUND COLORS
-            ---------------------------------------------------------------------------
-            */
-            // application, desktop, ...
-            "background-application": "#DFDFDF",
-            // pane color for windows, splitpanes, ...
-            "background-pane": "#F3F3F3",
-            // textfields, ...
-            "background-light": "#FCFCFC",
-            // headers, ...
-            "background-medium": "#EEEEEE",
-            // splitpane
-            "background-splitpane": "#AFAFAF",
-            // tooltip, ...
-            "background-tip": "#ffffdd",
-            // error tooltip
-            "background-tip-error": "#C72B2B",
-            // tables, ...
-            "background-odd": "#E4E4E4",
-            // progress bar
-            "progressbar-background": "white",
+   http://sqville.com
 
-            /*
-            ---------------------------------------------------------------------------
-              TEXT COLORS
-            ---------------------------------------------------------------------------
-            */
-            // other types
-            "text-light": "#909090",
-            "text-gray": "#4a4a4a",
-            // labels
-            "text-label": "#1a1a1a",
-            // group boxes
-            "text-title": "#314a6e",
-            // text fields
-            "text-input": "#000000",
-            // states
-            "text-hovered": "#001533",
-            "text-disabled": "#7B7A7E",
-            "text-selected": "#fffefe",
-            "text-active": "#26364D",
-            "text-inactive": "#404955",
-            "text-placeholder": "#CBC8CD",
+   Copyright:
+     None
 
-            /*
-            ---------------------------------------------------------------------------
-              BORDER COLORS
-            ---------------------------------------------------------------------------
-            */
-            "border-inner-scrollbar": "white",
-            // menus, tables, scrollbars, list, etc.
-            "border-main": "#4d4d4d",
-            "menu-separator-top": "#C5C5C5",
-            "menu-separator-bottom": "#FAFAFA",
-            // between toolbars
-            "border-separator": "#808080",
-            "border-toolbar-button-outer": "#b6b6b6",
-            "border-toolbar-border-inner": "#f8f8f8",
-            "border-toolbar-separator-right": "#f4f4f4",
-            "border-toolbar-separator-left": "#b8b8b8",
-            // text fields
-            "border-input": "#334866",
-            "border-inner-input": "white",
-            // disabled text fields
-            "border-disabled": "#B6B6B6",
-            // tab view, window
-            "border-pane": "#00204D",
-            // buttons
-            "border-button": "#666666",
-            // tables (vertical line)
-            "border-column": "#CCCCCC",
-            // focus state of text fields
-            "border-focused": "#99C3FE",
-            // invalid form widgets
-            "invalid": "#990000",
-            "border-focused-invalid": "#FF9999",
-            // drag & drop
-            "border-dragover": "#33508D",
-            "keyboard-focus": "black",
+   License:
+     MIT
 
-            /*
-            ---------------------------------------------------------------------------
-              TABLE COLORS
-            ---------------------------------------------------------------------------
-            */
-            // equal to "background-pane"
-            "table-pane": "#F3F3F3",
-            // own table colors
-            // "table-row-background-selected" and "table-row-background-focused-selected"
-            // are inspired by the colors of the selection decorator
-            "table-focus-indicator": "#0880EF",
-            "table-row-background-focused-selected": selColor, //"#084FAB",
-            "table-row-background-focused": "#E4E4E4", //selColor, //"#80B4EF",
-            "table-row-background-selected": selColor, //"#084FAB",
-            // equal to "background-pane" and "background-odd"
-            "table-row-background-even": "#F3F3F3",
-            "table-row-background-odd": "#E4E4E4",
-            // equal to "text-selected" and "text-label"
-            "table-row-selected": "#fffefe",
-            "table-row": "#1a1a1a",
-            // equal to "border-column"
-            "table-row-line": "#CCC",
-            "table-column-line": "#CCC",
-            "table-header-hovered": "white",
+   Authors:
+     * Chris Eskew (chris.eskew@sqville.com)
 
-            /*
-            ---------------------------------------------------------------------------
-              PROGRESSIVE TABLE COLORS
-            ---------------------------------------------------------------------------
-            */
-            "progressive-table-header": "#AAAAAA",
-            "progressive-table-header-border-right": "#F2F2F2",
-            "progressive-table-row-background-even": "#F4F4F4",
-            "progressive-table-row-background-odd": "#E4E4E4",
-            "progressive-progressbar-background": "gray",
-            "progressive-progressbar-indicator-done": "#CCCCCC",
-            "progressive-progressbar-indicator-undone": "white",
-            "progressive-progressbar-percent-background": "gray",
-            "progressive-progressbar-percent-text": "white",
+************************************************************************ */
 
-            /*
-            ---------------------------------------------------------------------------
-              CSS ONLY COLORS
-            ---------------------------------------------------------------------------
-            */
-            "selected-start": selColor, //"#004DAD",
-            "selected-end": selColor, //"#00368A",
-            "background-selected": "#00368A",
-            "tabview-background": "#07125A",
-            "shadow": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.4)" : "#999999",
-            "pane-start": "#FBFBFB",
-            "pane-end": "#F0F0F0",
-            "group-background": "#E8E8E8",
-            "group-border": "#B4B4B4",
-            "radiobutton-background": "#EFEFEF",
-            "checkbox-border": "#314A6E",
-            "checkbox-focus": "#87AFE7",
-            "checkbox-hovered": "#B2D2FF",
-            "checkbox-hovered-inner": "#D1E4FF",
-            "checkbox-inner": "#EEEEEE",
-            "checkbox-start": "#E4E4E4",
-            "checkbox-end": "#F3F3F3",
-            "checkbox-disabled-border": "#787878",
-            "checkbox-disabled-inner": "#CACACA",
-            "checkbox-disabled-start": "#D0D0D0",
-            "checkbox-disabled-end": "#D8D8D8",
-            "checkbox-hovered-inner-invalid": "#FAF2F2",
-            "checkbox-hovered-invalid": "#F7E9E9",
-            "radiobutton-checked": "#005BC3",
-            "radiobutton-disabled": "#D5D5D5",
-            "radiobutton-checked-disabled": "#7B7B7B",
-            "radiobutton-hovered-invalid": "#F7EAEA",
-            "tooltip-error": "#C82C2C",
-            "scrollbar-start": "#CCCCCC",
-            "scrollbar-end": "#F1F1F1",
-            "scrollbar-slider-start": "#EEEEEE",
-            "scrollbar-slider-end": "#C3C3C3",
-            "button-border-disabled": "#959595",
-            "button-start": "#F0F0F0",
-            "button-end": "#AFAFAF",
-            "button-disabled-start": "#F4F4F4",
-            "button-disabled-end": "#BABABA",
-            "button-hovered-start": "#F0F9FE",
-            "button-hovered-end": "#8EB8D6",
-            "button-focused": "#83BAEA",
-            "border-invalid": "#930000",
-            "input-start": "#F0F0F0",
-            "input-end": "#FBFCFB",
-            "input-focused-start": "#D7E7F4",
-            "input-focused-end": "#5CB0FD",
-            "input-focused-inner-invalid": "#FF6B78",
-            "input-border-disabled": "#9B9B9B",
-            "input-border-inner": "white",
-            "toolbar-start": "#EFEFEF",
-            "toolbar-end": "#DDDDDD",
-            "window-border": "#00204D",
-            "window-border-caption": "#727272",
-            "window-caption-active-text": "white",
-            "window-caption-active-start": "#6699ff",
-            "window-caption-active-end": "#3366ff",
-            "window-caption-inactive-start": "#F2F2F2",
-            "window-caption-inactive-end": "#DBDBDB",
-            "window-statusbar-background": "#EFEFEF",
-            "tabview-start": "#FCFCFC",
-            "tabview-end": "#EEEEEE",
-            "tabview-inactive": "#777D8D",
-            "tabview-inactive-start": "#EAEAEA",
-            "tabview-inactive-end": "#CECECE",
-            "table-header-start": "#E8E8E8",
-            "table-header-end": "#B3B3B3",
-            "menu-start": "#E8E8E9",
-            "menu-end": "#D9D9D9",
-            "menubar-start": "#E8E8E8",
-            "groupitem-start": "#A7A7A7",
-            "groupitem-end": "#949494",
-            "groupitem-text": "white",
-            "virtual-row-layer-background-even": "white",
-            "virtual-row-layer-background-odd": "white"
-        }
-    });
-    qx.theme.nx.Color.$$dbClassInfo = $$dbClassInfo;
-})();
+/**
+ * Clean color theme, based off of Simple color theme (qooxdoo) and Semantic default
+ */
+nxTheme.Color =
+{
+    aliases: {
+        primarycolor: "#3b83c0"
+    },
 
-//# sourceMappingURL=Color.js.map?dt=1598213475190
+
+
+    colors:
+    {
+        //************************
+        //*** Color Pallette 1 ***
+        //************************
+        "primary": [33, 133, 208], //#2185D0
+        "secondary": "#1b1c1d",
+        "tertiary": "#5bbd72",
+
+        // main
+        "background": "#ffffff",
+        "light-background": "#E0ECFF",
+
+        // backgrounds
+        "background-selected": "#6694E3",
+        "background-selected-disabled": "#CDCDCD",
+        "background-selected-dark": "#5685D6",
+        "background-disabled": "#F7F7F7",
+        "background-disabled-checked": "#BBBBBB",
+        "background-pane": "#ffffff",
+        "background-invalid": "#fff0f0",
+        "background-group-item": "#BABABA",
+
+        // tabview
+        "tabview-unselected": "#1866B5",
+        "tabview-button-border": "#134983",
+        "tabview-label-active-disabled": "#D9D9D9",
+        "tabviewspacebar-bar-selected": "#888888",
+        "tabview-text-normal": "#444444",
+        "tabviewspot-button-checked": "#F2F2F2",
+        "tabviewspot-button-hovered": "#F7F7F7",
+
+        // combobox
+        "combobox-hovered": "#F2F2F2",
+        "combobox-item-selected": "#F7F7F7",
+
+        // list
+        "group-item-": "#ffffff",
+
+        // text colors
+        "link": "#24B",
+        "group-item": "#ffffff",
+
+        // scrollbar
+        "scrollbar-bright": "#F1F1F1",
+        "scrollbar-dark": "#EBEBEB",
+
+        // form
+        "button": "rgba(0, 0, 0, 0.6)",
+        "button-border": "#BBB",
+        "button-border-hovered": "#939393",
+        "invalid": "#FF0000",
+
+        "button-box-bright": "#e0e0e0",
+        "button-box-bright-hovered": "#e8e8e8",
+        "button-box-dark": "#E3E3E3",
+        "button-box-bright-pressed": "#cccccc",
+        "button-box-dark-pressed": "#F5F5F5",
+        "border-lead": "#888888",
+        "button-text": "rgba(0, 0, 0, 0.6)",
+        "button-text-hovered": "rgba(0, 0, 0, 0.8)",
+        "button-focus-shadow": qx.core.Environment.get("css.rgba") ? "rgba(81, 167, 232, 0.8)" : "#51A7E8",   //SQv New
+
+        //SQ New
+        "textfield-selected": qx.core.Environment.get("css.rgba") ? "rgba(133, 183, 217, 1)" : "#85b7d9",
+        "textfield-selected-darker": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.5)" : "#BDBEBE",
+
+        //SQ New
+        "progressbar-base": qx.core.Environment.get("css.rgba") ? "rgba(229, 229, 229, 1)" : "#E5E5E5",
+        "progressbar-gray": qx.core.Environment.get("css.rgba") ? "rgba(136, 136, 136, 1)" : "#888888",
+        "progressbar-complete": qx.core.Environment.get("css.rgba") ? "rgba(33, 186, 69, 1)" : "#21BA45",
+        "progressbar-warning": qx.core.Environment.get("css.rgba") ? "rgba(242, 192, 55, 1)" : "#F2C037",
+        "progressbar-error": qx.core.Environment.get("css.rgba") ? "rgba(219, 40, 40, 1)" : "#DB2828",
+
+        //*** Primary Button colors
+        "primary-button-box": "#3b83c0",
+        "primary-button-box-hovered": "#458ac6",
+        "primary-button-box-pressed": "#3576ac",
+        "primary-button-text": "#ffffff",
+
+        //*** Secondary Button colors
+        "secondary-button-box": "#1b1c1d",
+        "secondary-button-box-hovered": "#222425",
+        "secondary-button-box-pressed": "#0a0a0b",
+        "secondary-button-inset-shadow": "rgba(39, 41, 43, 0.15)",
+        "secondary-button-text": "primary-button-text",
+
+        //*** Tertiary Button colors
+        "tertiary-button-box": "#5bbd72",
+        "tertiary-button-box-hovered": "#66C17B",
+        "tertiary-button-box-pressed": "#46AE5F",
+        "tertiary-button-inset-shadow": "rgba(39, 41, 43, 0.15)",
+        "tertiary-button-text": "primary-button-text",
+
+        "ville-black": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 1)" : "#000000",
+        "ville-arrow-gray": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.6)" : "#444444",
+        "ville-arrow-med-gray": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.4)" : "#444444",
+
+        // window
+        "window-border": nxTheme.Defaults.winborder,
+        "window-border-inner": nxTheme.Defaults.fill,
+
+        // group box
+        "white-box-border": "#D8D8D8",
+        "box-border-blue": "#3b83c0",
+        "box-border-orange": "#e07b53",
+        "box-border-green": "#5bbd72",
+
+        // shadows
+        "shadow": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.4)" : "#999999",
+        "shadow-light": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.2)" : "#CCCCCC",
+
+        // borders
+        // 'border-main' is an alias of 'background-selected' (compatibility reasons)
+        "border-main": "#6694E3",
+        "border-light": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.15)" : "#D8D8D8",
+        "border-light-darker": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.2)" : "#D8D8D8",
+        "border-light-shadow": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.15)" : "#D8D8D8",
+        "border-super-light": qx.core.Environment.get("css.rgba") ? "rgba(0, 0, 0, 0.06)" : "#EEEEEE",
+
+        // separator
+        "border-separator": "#808080",
+
+        // text
+        "text-combobox-listitem": "rgba(0, 0, 0, 0.6)", //NOT USED
+        "text": "rgba(0, 0, 0, 0.87)",
+        "text-darker": "rgba(0, 0, 0, 0.9)",
+        "text-disabled": "rgba(0, 0, 0, 0.4)",
+        "text-selected": "#000000",
+        "text-placeholder": "rgba(0, 0, 0, 0.4)",
+
+        // tooltip
+        "tooltip": "#FFFFE1",
+        "tooltip-text": "#000000",
+
+        // table
+        "table-border": "#DEDEDE",
+        "table-header": "#F9FAFB",
+        "table-focus-indicator": [179, 217, 255],
+
+        // used in table code
+        "table-header-cell": [235, 234, 219],
+        "table-row-background-focused-selected": [90, 138, 211],
+        "table-row-background-focused": [221, 238, 255],
+        "table-row-background-selected": [51, 94, 168],
+        "table-row-background-even": "#ffffff",
+        "table-row-background-odd": "#ffffff",
+        "table-row-selected": [255, 255, 255],
+        "table-row": [0, 0, 0],
+        "table-row-line": "#EEE",
+        "table-column-line": "#EEE",
+
+        // used in progressive code
+        "progressive-table-header": "#AAAAAA",
+        "progressive-table-row-background-even": [250, 248, 243],
+        "progressive-table-row-background-odd": [255, 255, 255],
+        "progressive-progressbar-background": "gray",
+        "progressive-progressbar-indicator-done": "#CCCCCC",
+        "progressive-progressbar-indicator-undone": "#ffffff",
+        "progressive-progressbar-percent-background": "gray",
+        "progressive-progressbar-percent-text": "#ffffff"
+    }
+}

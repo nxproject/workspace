@@ -67,5 +67,8 @@ namespace Proc.Stripe
         /// </summary>
         public StripeClient Client { get; set; }
         #endregion
+
+        #region Methods
+        #endregion
     }
 }

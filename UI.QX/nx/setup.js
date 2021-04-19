@@ -717,7 +717,7 @@ nx.default = {
                             break;
 
                         case 'screenHeight':
-                            ans = Math.floor(nx.util.getAbsoluteBounds(nx.desktop).height * 0.75 / nx.setup.rowHeight);
+                            ans = Math.floor(nx.util.getAbsoluteBounds(nx.desktop).height * 0.70 / nx.setup.rowHeight);
                             break;
 
                         case 'pickAdjust':

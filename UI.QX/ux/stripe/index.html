@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title data-i18n="title">NX.Workpace Payment</title>
+    <meta name="description" content="A demo of Stripe Payment Intents" />
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/global.css" />
+    <!-- Load Stripe.js on your website. -->
+    <script src="https://js.stripe.com/v3/" crossorigin="anonymous"></script>
+    <script src="js/script.js" defer></script>
+    <!-- Load translation files and libraries. -->
+    <script src="https://unpkg.com/i18next/i18next.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js" crossorigin="anonymous"></script>
+    <script src="./translation.js" defer></script>
+    <script src="https://sse-0.codesandbox.io/client-hook-6.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <form action="/Charge" method="POST">
+        <script src="https://checkout.stripe.com/checkout.js" 
+                class="stripe-button" 
+                data-key="<%= stripePublishableKey %>" 
+                data-amount="500" 
+                data-name="Automotive Classics" 
+                data-description="Invoice #666666" 
+                data-locale="auto" 
+                data-zip-code="true"
+                data-email="james@gmail.com">
+        </script>
+    </form>
+</body>
+</html>
