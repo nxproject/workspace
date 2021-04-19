@@ -324,7 +324,7 @@ nx._routes.push({
 
                         }, (nx.user.getIsSelector('TELE') ||
                         nx.user.getIsSelector('EMAIL') ||
-                        nx.user.getIsSelector('BILLING')), chain);
+                        nx.user.getIsSelector('BILLING')), data.chain);
 
                     } else {
 

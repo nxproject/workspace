@@ -287,7 +287,7 @@ nx.db = {
                     ds: ds,
                     id: id,
                     floataccount: nx.util.asBoolean(floataccount),
-                    cahin || {}
+                    chain: chain || {}
                 }, function (data) {
                     // Assure
                     data._changes = data._changes || [];

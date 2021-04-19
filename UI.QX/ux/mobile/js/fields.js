@@ -391,18 +391,24 @@ nx.fields = {
                 fmtr(widget, value, function (final) {
                     // Save
                     self.internalSet(widget, final);
-                    //
-                    nx.db.objSetField(obj, name, final);
-                    //
-                    self.signalChange(widget);
+                    // 
+                    if (obj) {
+                        //
+                        nx.db.objSetField(obj, name, final);
+                        //
+                        self.signalChange(widget);
+                    }
                 });
             } else {
                 // Set
                 self.internalSet(widget, value);
-                //
-                nx.db.objSetField(obj, name, value);
-                //
-                self.signalChange(widget);
+                // 
+                if (obj) {
+                    //
+                    nx.db.objSetField(obj, name, value);
+                    //
+                    self.signalChange(widget);
+                }
             }
         }
     },
