@@ -1429,9 +1429,28 @@ nxTheme.Appearance =
         ---------------------------------------------------------------------------
         */
 
-        "selectbox": "textfield",
+        "selectbox": {
+
+            include: "textfield",
+            style: function () {
+                return {
+                    padding: [0, 14],
+                    height: 19
+                };
+            }
+        },
 
         "selectbox/atom": "atom",
+
+        //"selectbox/atom": {
+
+        //    include: "atom",
+        //    style: function (states) {
+        //        return {
+        //            height: 25
+        //        };
+        //    }
+        //},
 
         "selectbox/popup": {
 
@@ -1663,13 +1682,18 @@ nxTheme.Appearance =
                         backgroundColor = "background-selected-disabled";
                     }
                 }
+
+                padding = [0, 0, 0, 0]; // EC
+
                 return {
-                    gap: 4,
+                    gap: 0, // EC
                     padding: padding,
                     backgroundColor: backgroundColor,
                     textColor: states.selected ? "text-selected" : "text",
                     decorator: states.lead ? "lead-item" : states.dragover ? "dragover" : undefined,
-                    opacity: states.drag ? 0.5 : undefined
+                    opacity: states.drag ? 0.5 : undefined,
+                    height: nxTheme.Defaults.itemHeight,
+                    maxHeight: nxTheme.Defaults.itemHeight
                 };
             }
         },

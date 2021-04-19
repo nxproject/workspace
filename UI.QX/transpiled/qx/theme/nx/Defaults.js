@@ -31,7 +31,9 @@ var nxTheme = {
         "buttontext": 12,
         "buttongap": 4,
 
-        toolbarsep: 2
+        "toolbarsep": 2,
+
+        "itemHeight": 25
     }
 
 };
