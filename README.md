@@ -19,6 +19,7 @@ There are two groups that are the main target of the system:
 * Features
 	* [Basics](readmes/README_D_BASICS.md)
 		* [Lists and Expressions](readmes/README_LE.md)
+	* [Objects](readmes/README_D_OBJ.md)
 	* [Datasets](readmes/README_D_DATASETS.md)
 		* [Pick Fields](readmes/README_D_PICK.md)
 		* [System Datasets](README_D_SYSDS.md)
@@ -40,7 +41,6 @@ There are two groups that are the main target of the system:
 			* [Help](readmes/README_HELP.md)
 	* [Views](readmes/README_D_VIEWS.md)
 	* [Fields](readmes/README_D_FIELDS.md)
-	* [Objects](readmes/README_D_OBJ.md)
 	* Support
 		* [Documents](readmes/README_D_DOCS.md)
 			* [Merging](readmes/README_T_MERGE.md)
