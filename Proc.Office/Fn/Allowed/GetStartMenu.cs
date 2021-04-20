@@ -143,6 +143,9 @@ namespace Proc.Office
                                 c_Entry.Set("view", c_ME.View);
                                 c_Entry.Set("icon", c_ME.Icon);
 
+                                // Tool array
+                                JObject c_DStools = new JObject();
+
                                 // Loop thru
                                 foreach (string sFile in c_Files)
                                 {
@@ -155,11 +158,12 @@ namespace Proc.Office
                                         {
                                             if (!bHidden) c_AllEntries.Add(c_MEa);
 
-                                            if (c_ME.Tools == null) c_ME.Tools = new List<string>();
-                                            c_ME.Tools.Add(c_MEa.Name);
+                                            c_DStools.Set(c_MEa.Name, c_MEa.Caption);
                                         }
                                     }
                                 }
+
+                                c_Entry.Set("tools", c_DStools);
 
                                 c_Privs.Set(sDS, c_Entry);
                                 JArray c_G = new JArray();
@@ -192,7 +196,7 @@ namespace Proc.Office
                         //
                         string sDS = c_Item.Key;
                         string sView = null;
-                        List<string> c_Tools = new List<string>();
+                        List<string> c_LTools = new List<string>();
 
                         JArray c_G = new JArray();
 
@@ -215,7 +219,7 @@ namespace Proc.Office
                                         }
                                         else
                                         {
-                                            c_Tools.Add(c_Option.Value);
+                                            c_LTools.Add(c_Option.Value);
                                         }
                                     }
                                     break;
@@ -252,6 +256,9 @@ namespace Proc.Office
                                     // Compute hidden
                                     bool bHidden = this.ComputeHidden(c_Wkg, c_ME, sLocation);
 
+                                    // Tools
+                                    JObject c_Tools = new JObject();
+
                                     // Loop thru
                                     foreach (string sFile in c_Files)
                                     {
@@ -267,15 +274,12 @@ namespace Proc.Office
                                             }
                                         }
                                         // If real, add
-                                        if (c_MEa != null && c_MEa.Dataset.IsSameValue(sDS) && c_Tools.IndexOf(c_ME.Name) != -1)
+                                        if (c_MEa != null && c_MEa.Dataset.IsSameValue(sDS) && 
+                                            (c_LTools.IndexOf(c_ME.Name) != -1 || c_LTools.IndexOf("*") != -1))
                                         {
-                                            if (c_ME.Tools == null) c_ME.Tools = new List<string>();
-                                            c_ME.Tools.Add(c_MEa.Name);
+                                            c_Tools.Set(c_ME.Name, c_ME.Caption);
                                         }
                                     }
-
-                                    // Add tools
-                                    c_ME.Tools = c_Tools;
 
                                     // Add to menu
                                     if (!bHidden) c_AllEntries.Add(c_ME);
@@ -286,7 +290,7 @@ namespace Proc.Office
                                     c_Entry.Set("caption", c_Wkg.Caption);
                                     c_Entry.Set("privileges", c_Item.Value);
                                     c_Entry.Set("view", sView);
-                                    c_Entry.Set("tools", c_Tools.ToJArray());
+                                    c_Entry.Set("tools", c_Tools);
                                     c_Entry.Set("icon", c_ME.Icon);
 
                                     c_Privs.Set(sDS, c_Entry);
@@ -419,11 +423,7 @@ namespace Proc.Office
                     bOK = !c_ME.IsTool || (c_ME.IsTool && !c_ME.Dataset.HasValue());
                 }
                 else
-                {
-                    bOK = ds.IsSameValue(c_ME.Dataset) &&
-                            c_ME.IsTool &&
-                            (c_ME.Tools == null || c_ME.Tools.Contains(c_ME.Name));
-                }
+                {}
 
                 // 
                 if (bOK)
@@ -431,7 +431,7 @@ namespace Proc.Office
                     // Priority changed?
                     if (sPrio.HasValue() && !sPrio.IsSameValue(c_ME.StartPriority))
                     {
-                        // Add separator
+                        // Add separator 
                         c_Ans.Add("-");
                     }
                     // Save
@@ -628,7 +628,7 @@ namespace Proc.Office
         public string StartPrivilege { get; set; }
 
         public bool IsTool { get; set; }
-        public List<string> Tools { get; set; }
+        //public List<string> Tools { get; set; }
 
         public bool IsSystem { get; set; }
         #endregion

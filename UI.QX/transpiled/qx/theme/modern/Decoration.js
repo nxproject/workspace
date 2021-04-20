@@ -42,7 +42,7 @@
    *
    * @asset(qx/decoration/Modern/toolbar/toolbar-part.gif)
    */
-  qx.Theme.define("qx.theme.modern.Decoration", {
+  qx.Theme.define("qx.theme.nx.Decoration", {
     aliases: {
       decoration: "qx/decoration/Modern"
     },
@@ -883,7 +883,7 @@
       }
     }
   });
-  qx.theme.modern.Decoration.$$dbClassInfo = $$dbClassInfo;
+  qx.theme.nx.Decoration.$$dbClassInfo = $$dbClassInfo;
 })();
 
 //# sourceMappingURL=Decoration.js.map?dt=1598213475312

@@ -18,16 +18,17 @@
 
 ************************************************************************ */
 
-qx.Class.define('tools.SiteMgmt', {
+qx.Class.define('tools.AskPayment', {
 
     type: 'static',
 
     statics: {
 
         startindex: '200',
-        startgroup: 'System',
         startpriority: 'K',
-        startprivilege: 'MGR',
+        startprivilege: 'BILLING',
+        ds: '_billinvoice',
+        caption: 'Request Payment',
 
         // This is what you override
         do: function (req) {

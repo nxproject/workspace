@@ -52,7 +52,7 @@
   /**
    * The modern font theme.
    */
-  qx.Theme.define("qx.theme.modern.Font", {
+  qx.Theme.define("qx.theme.nx.Font", {
     fonts: {
       "default": {
         size: qx.core.Environment.get("os.name") == "win" && (qx.core.Environment.get("os.version") == "7" || qx.core.Environment.get("os.version") == "vista") ? 12 : 11,
@@ -77,7 +77,7 @@
       }
     }
   });
-  qx.theme.modern.Font.$$dbClassInfo = $$dbClassInfo;
+  qx.theme.nx.Font.$$dbClassInfo = $$dbClassInfo;
 })();
 
 //# sourceMappingURL=Font.js.map?dt=1598213475362

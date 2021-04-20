@@ -800,6 +800,15 @@
 
     };
 
+    var themeLoader = function (theme) {
+        selfLoader([
+            "../transpiled/qx/theme/" + theme+ "/Appearance.js",
+            "../transpiled/qx/theme/" + theme + "/Color.js",
+            "../transpiled/qx/theme/" + theme + "/Decoration.js",
+            "../transpiled/qx/theme/" + theme + "/Font.js"
+        ]);
+    };
+
     // ECANDIDUS 2021-04-19
     var queryString = window.location.search;
     var urlParams = new URLSearchParams(queryString);
@@ -813,13 +822,27 @@
     switch (theme) {
 
         case 'nx':
-            selfLoader([
-                "../transpiled/qx/theme/nx/Appearance.js",
-                "../transpiled/qx/theme/nx/Color.js",
-                "../transpiled/qx/theme/nx/Decoration.js",
-                "../transpiled/qx/theme/nx/Font.js"
-            ]);
+        case 'classic':
+        case 'modern':
+            themeLoader(theme);
             break;
+
+        case "simple":
+            selfLoader([
+                "../transpiled/qx/theme/" + theme + "/Appearance.js",
+                "../transpiled/qx/theme/" + theme + "/Decoration.js",
+                "../transpiled/qx/theme/" + theme + "/Image.js"
+            ]);
+
+        case "manager":
+            selfLoader([
+                "../transpiled/qx/theme/" + theme + "/Appearance.js",
+                "../transpiled/qx/theme/" + theme + "/Color.js",
+                "../transpiled/qx/theme/" + theme + "/Decoration.js",
+                "../transpiled/qx/theme/" + theme + "/Font.js",
+                "../transpiled/qx/theme/" + theme + "/Icon.js",
+                "../transpiled/qx/theme/" + theme + "/Meta.js"
+            ]);
 
         default:
             $.get("/gettheme", function (data) {

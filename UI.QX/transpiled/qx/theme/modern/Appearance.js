@@ -124,7 +124,7 @@
    *
    * @asset(qx/decoration/Modern/colorselector/*)
    */
-  qx.Theme.define("qx.theme.modern.Appearance", {
+  qx.Theme.define("qx.theme.nx.Appearance", {
     appearances: {
       /*
       ---------------------------------------------------------------------------
@@ -2281,7 +2281,7 @@
       }
     }
   });
-  qx.theme.modern.Appearance.$$dbClassInfo = $$dbClassInfo;
+  qx.theme.nx.Appearance.$$dbClassInfo = $$dbClassInfo;
 })();
 
 //# sourceMappingURL=Appearance.js.map?dt=1598213475689

@@ -103,7 +103,7 @@ var createCheckoutSession = function () {
 };
 
 /* Get your Stripe publishable key to initialize Stripe.js */
-fetch('/config')
+fetch('/stripe/config')
     .then(function (result) {
         return result.json();
     })

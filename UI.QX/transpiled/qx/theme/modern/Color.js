@@ -50,7 +50,7 @@
   /**
    * Modern color theme
    */
-  qx.Theme.define("qx.theme.modern.Color", {
+  qx.Theme.define("qx.theme.nx.Color", {
     colors: {
       /*
       ---------------------------------------------------------------------------
@@ -254,7 +254,7 @@
       "virtual-row-layer-background-odd": "white"
     }
   });
-  qx.theme.modern.Color.$$dbClassInfo = $$dbClassInfo;
+  qx.theme.nx.Color.$$dbClassInfo = $$dbClassInfo;
 })();
 
 //# sourceMappingURL=Color.js.map?dt=1598213475190

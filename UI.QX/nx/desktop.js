@@ -778,6 +778,23 @@ nx.desktop = {
                                                         // Add tools
                                                         var tdefs = [];
 
+                                                        var dstools = nx.desktop.user.getDSInfo(req.ds).tools;
+                                                        if (dstools) {
+                                                            // Loop thru
+                                                            Object.keys(dstools).forEach(function (tool) {
+                                                                // Add
+                                                                tdefs.push({
+                                                                    label: dstools[tool],
+                                                                    click: function (e) {
+                                                                        nx.util.runTool(tool, {
+                                                                            ds: req.ds,
+                                                                            id: req.id
+                                                                        });
+                                                                    }
+                                                                });
+                                                            });
+                                                        }
+
                                                         if (nx.desktop.user.opAllowed(req.ds, 'v', (dsdef.chatAllow || ''))) {
                                                             tdefs.push({
                                                                 label: 'Chat',
@@ -1354,8 +1371,8 @@ nx.desktop = {
                                 });
 
                             }, (nx.desktop.user.getIsSelector('TELE') ||
-                            nx.desktop.user.getIsSelector('EMAIL') ||
-                            nx.desktop.user.getIsSelector('BILLING')), req.chain);
+                                nx.desktop.user.getIsSelector('EMAIL') ||
+                                nx.desktop.user.getIsSelector('BILLING')), req.chain);
                         });
                     });
                 }
