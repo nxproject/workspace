@@ -18,7 +18,7 @@
 
 ************************************************************************ */
 
-qx.Class.define('tools.AskPayment', {
+qx.Class.define('tools.askpayment', {
 
     type: 'static',
 
@@ -29,103 +29,16 @@ qx.Class.define('tools.AskPayment', {
         startprivilege: 'BILLING',
         ds: '_billinvoice',
         caption: 'Request Payment',
+        icon: 'money',
 
         // This is what you override
         do: function (req) {
 
             // Get the data
-            nx.util.serviceCall('Office.ListContainers', {}, function (result) {
+            nx.util.serviceCall('Stripe.AskPayment', req, function (result) {
 
                 //
-                if (result && result.list) {
-
-                    var win = nx.desktop.addWindow({
-
-                        nxid: 'sitemgmt',
-                        caption: 'Site Management',
-                        defaultCommand: 'Ok',
-                        center: 'both',
-                        icon: 'house',
-
-                        items: [
-
-                            {
-                                nxtype: 'grid',
-                                top: 1,
-                                left: 1,
-                                width: 'default.screenWidth',
-                                height: 'default.screenHeight',
-                                label: '',
-                                columns: [
-                                    'Names',
-                                    'State',
-                                    'Status',
-                                    'Created',
-                                    'Command',
-                                    'Ports',
-                                    'Mounts',
-                                    'ID'
-                                ],
-                                data: result.list,
-                                isPick: true,
-                                listeners: {
-
-                                    selected: function (e) {
-                                        // Get the widget
-                                        var widget = nx.util.eventGetWidget(e);
-                                        // And the parameters
-                                        var params = nx.bucket.getParams(widget);
-                                        // Get the data
-                                        var data = nx.util.eventGetData(e);
-
-                                        // Open all selected
-                                        data.forEach(function (row) {
-
-                                            // Get logs
-                                            nx.util.serviceCall('Office.GetLogs', {
-                                                id: row.ID
-                                            }, function (result) {
-                                                var win = nx.desktop.addWindow({
-                                                    caption: row.Names,
-                                                    caller: win,
-                                                    items: [
-                                                        {
-                                                            nxtype: 'textarea',
-                                                            top: 1,
-                                                            left: 1,
-                                                            width: 'default.pickWidth',
-                                                            height: 'default.pickHeight@0.75',
-                                                            label: '',
-                                                            value: result.logs
-                                                        }
-                                                    ],
-                                                    topToolbar: {
-                                                        items: [
-                                                            {
-                                                                label: 'Copy',
-                                                                icon: 'page_white_copy',
-                                                                click: function (e) {
-                                                                    nx.util.copy(result.logs);
-                                                                    nx.util.notifyInfo('Copied to clipboard');
-                                                                }
-                                                            }
-                                                        ]
-                                                    }
-                                                });
-                                            });
-                                        });
-
-                                        widget.resetSelection();
-                                    }
-
-                                },
-                                cookie: 'sitemgmt'
-                            }
-                        ]
-
-                    });
-
-                }
+                nx.util.processToolReturn(result);
 
             });
         }

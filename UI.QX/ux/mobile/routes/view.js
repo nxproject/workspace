@@ -90,10 +90,36 @@ nx._routes.push({
                                     }
                                 }
 
+                                // Tools
+                                var tools = nx.user.getDSInfo(ds).tools;
+                                if (tools) {
+                                // Get the list
+                                    var list = Object.keys(tools);
+                                    if (list.length) {
+                                        // Loop thru
+                                        Object.keys(tools).forEach(function (tname) {
+                                            if (!sep && rb.length) {
+                                                rb.push('-');
+                                                sep = true;
+                                            }
+                                            // Add
+                                            rb.push({
+                                                label: tools[tname],
+                                                cb: 'nx.tools.' + tname + '();'
+                                            });
+                                        });
+                                        sep = false;
+                                    }
+                                }
+
                                 // Billing?
                                 if (nx.user.getIsSelector('BILLING')) {
                                     // Can we do it?
                                     if (dsdef.isBillable === 'y' && obj._billat && obj._billto) {
+                                        if (!sep && rb.length) {
+                                            rb.push('-');
+                                            sep = true;
+                                        }
                                         // Fake it
                                         var acct = '';
 
@@ -323,8 +349,8 @@ nx._routes.push({
                             });
 
                         }, (nx.user.getIsSelector('TELE') ||
-                        nx.user.getIsSelector('EMAIL') ||
-                        nx.user.getIsSelector('BILLING')), data.chain);
+                            nx.user.getIsSelector('EMAIL') ||
+                            nx.user.getIsSelector('BILLING')), data.chain);
 
                     } else {
 

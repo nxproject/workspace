@@ -26,7 +26,7 @@ window.nx = {
 
     calls: {},
 
-    //_callbacks: {}
+    tools: {}
 
 };
 
@@ -81,7 +81,9 @@ nx.office = {
             'routes/merge',
             'routes/delete',
             'routes/comm',
-            'routes/atend'
+            'routes/atend',
+
+            'tools/askpayment'
 
         ], function () {
 

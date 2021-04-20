@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Proc.AO\Proc.AO.csproj" />
+    <ProjectReference Include="..\Proc.Office\Proc.Office.csproj" />
   </ItemGroup>
 
   <ItemGroup>

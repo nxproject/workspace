@@ -445,6 +445,16 @@ nx.util = {
         return JSON.parse(JSON.stringify(value));
     },
 
+    processToolReturn: function (result) {
+
+        var self = this;
+
+        if (result && result.msg) {
+            self['notify' + (result.msgtype || 'Info')](result.msg);
+        }
+
+    },
+
     // ---------------------------------------------------------
     //
     // Expression evaluator

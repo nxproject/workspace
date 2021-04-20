@@ -98,7 +98,7 @@
     <Content Include="c\_tree.js" />
     <Content Include="c\_window.js" />
     <Content Include="c\zip.js" />
-    <Content Include="tools\AskPayment.js" />
+    <Content Include="tools\askpayment.js" />
     <Content Include="transpiled\qxWeb.js" />
     <Content Include="transpiled\qx\theme\classic\Appearance.js" />
     <Content Include="transpiled\qx\theme\classic\Color.js" />
@@ -173,6 +173,7 @@
     <Content Include="t\telemetryData.js" />
     <Content Include="t\xemaileditor.js" />
     <Content Include="ux\mobile\routes\comm.js" />
+    <Content Include="ux\mobile\tools\askpayment.js" />
     <Content Include="ux\stripe\css\global.css" />
     <Content Include="ux\stripe\css\normalize.css" />
     <Content Include="ux\stripe\index.html" />
@@ -1941,6 +1942,7 @@
     <Folder Include="i\" />
     <Folder Include="ux\mobile\js\" />
     <Folder Include="ux\mobile\css\" />
+    <Folder Include="ux\mobile\tools\" />
     <Folder Include="ux\mobile\routes\" />
     <Folder Include="ux\mobile\static\" />
     <Folder Include="ux\mobile\tp\" />

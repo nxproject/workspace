@@ -782,6 +782,16 @@ nx.util = {
         }
     },
 
+    processToolReturn: function (result) {
+
+        var self = this;
+
+        if (result && result.msg) {
+            self['notify' + (result.msgtype || 'Info')](result.msg);
+        }
+
+    },
+
     // ---------------------------------------------------------
     //
     // PICK

@@ -1724,5 +1724,137 @@ namespace Proc.AO
             return c_Ans;
         }
         #endregion
+
+        #region Object
+        /// <summary>
+        /// 
+        /// Converts an object to its JSON format
+        /// translating when needed and including child and linked
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public JObject Explode()
+        {
+            //
+            JObject c_Ans = new JObject();
+
+            // Add the system items
+            c_Ans.Set("_desc", this["_desc"]);
+
+            // Loop thru
+            foreach (string sField in this.Dataset.Definition.FieldNames)
+            {
+                // Get the thield definition
+                Definitions.DatasetFieldClass c_Field = this.Dataset.Definition[sField];
+                // Get the value
+                string sValue = this[sField].IfEmpty();
+                // Flag as settable
+                bool bSet = true;
+
+                // Any?
+                if (sValue.HasValue())
+                {
+                    // According to type
+                    switch (c_Field.Type)
+                    {
+                        case Definitions.DatasetFieldClass.FieldTypes.Date:
+                            sValue = sValue.FromDBDate().FormattedAs("MM/dd/yyyy");
+                            break;
+
+                        case Definitions.DatasetFieldClass.FieldTypes.DateTime:
+                            sValue = sValue.FromDBDate().FormattedAs("MM/dd/yyyy hh:mm tt");
+                            break;
+
+                        case Definitions.DatasetFieldClass.FieldTypes.Currency:
+                            sValue = "{0:c}".FormatString(sValue.ToDouble(0));
+                            break;
+
+                        case Definitions.DatasetFieldClass.FieldTypes.Grid:
+                            // TBD
+                            break;
+
+                        case Definitions.DatasetFieldClass.FieldTypes.Link:
+                            // Map
+                            using (UUIDClass c_UUID = new UUIDClass(this.Dataset.Parent, sValue))
+                            {
+                                using (ObjectClass c_Child = c_UUID.AsObject)
+                                {
+                                    // Save
+                                    c_Ans.Set(sField, c_Child.Explode());
+
+                                    bSet = false;
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                // Save
+                if (bSet) c_Ans.Set(sField, "");
+            }
+
+            // Child datasets
+            string sDSS = this.Dataset.Definition.ChildDSs.IfEmpty();
+            if (sDSS.HasValue())
+            {
+                // Make holder
+                JObject c_Holder = new JObject();
+
+                List<string> c_DSS = sDSS.SplitSpaces();
+                // Any?
+                // Loop thru
+                foreach (string sDS in c_DSS)
+                {
+                    c_Holder.Set(sDS, this.ExplodeAll(sDS, "_parent", this.UUID.ToString()));
+                }
+
+                // Save
+                c_Ans.Add("_child", c_Holder);
+            }
+
+            // Linked datasets
+            string sDSS = this.Dataset.Definition.RelatedDSs.IfEmpty();
+            if (sDSS.HasValue())
+            {
+                // Make holder
+                JObject c_Holder = new JObject();
+
+                List<string> c_DSS = sDSS.SplitSpaces();
+                // Any?
+                // Loop thru
+                for (int i = 0; i < c_DSS.Count; i += 2)
+                {
+                    c_Holder.Set(sDS, this.ExplodeAll(c_DSS[i], c_DSS[i + 1], this.UUID.ToString()));
+                }
+
+                // Save
+                c_Ans.Add("_child", c_Holder);
+            }
+
+            return c_Ans;
+        }
+
+        private JArray ExplodeAll(string ds, string field, string value)
+        {
+            //
+            JArray c_Ans = new JArray();
+
+            // Make a query
+            using(QueryClass c_Qry = new QueryClass(this.Parent.Parent[ds].DataCollection))
+            {
+                // 
+                c_Qry.Add(field, QueryElementClass.QueryOps.Eq, value);
+
+                // Loop thru
+                foreach(ObjectClass c_Obj in c_Qry.FindObjects())
+                {
+                    // Add
+                    c_Ans.Add(c_Obj.Explode());
+                }
+            }
+
+            return c_Ans;
+        }
+        #endregion
     }
 }

@@ -786,9 +786,15 @@ nx.desktop = {
                                                                 tdefs.push({
                                                                     label: dstools[tool],
                                                                     click: function (e) {
+                                                                        // Get the widget
+                                                                        var widget = nx.util.eventGetWidget(e);
+                                                                        // And the form
+                                                                        var win = nx.bucket.getWin(widget);
+
                                                                         nx.util.runTool(tool, {
                                                                             ds: req.ds,
-                                                                            id: req.id
+                                                                            id: req.id,
+                                                                            data: win.getFormData()
                                                                         });
                                                                     }
                                                                 });
