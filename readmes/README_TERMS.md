@@ -1,5 +1,7 @@
 # Basics
 
+## Terms
+
 * ```Keyword``` - A word that starts with a letter and may contain letters and numbers only.  All items in NX.Workspace are named witha a keyword.
 * ```JSON``` - The format that all the objects are stored in.
 * ```List``` - A list of words separated by spaces.
@@ -51,7 +53,20 @@
 * ```Main menu``` - The menu displayed in the left side when the main menu icon is clicked.
 * ```Support menu``` - The menu displayed in the right side when the support menu icon is clicked.
 
----
+## Concepts
+
+for the purpose of explaining NX.Workspace, I will refer to the old-fashioned contact book.
+
+### Object
+
+The basic unit of information is an object, also refered as an entry.  In a contact book, each name is an object.
+
+Each object is made up of fields, in our contact book, you would have a name field, an address field, a city field, a state field,
+a zip code field and a phone number field.
+
+### Dataset
+
+A dataset is the grouping of all objects that have the same characteristics.  In our example, the contact book is a dataset.
 
 ## Browsers
 
