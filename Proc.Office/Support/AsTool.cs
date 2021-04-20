@@ -126,7 +126,7 @@ namespace Proc.Office
         /// <param name="msg"></param>
         public void ReturnError(string msg)
         {
-            this.ReturnMessageType = EntryPointNotFoundException.er;
+            this.ReturnMessageType = ReturnMessageTypes.Error;
             this.ReturnMessage = msg;
         }
         #endregion

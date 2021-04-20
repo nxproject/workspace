@@ -1736,10 +1736,7 @@ namespace Proc.AO
         public JObject Explode()
         {
             //
-            JObject c_Ans = new JObject();
-
-            // Add the system items
-            c_Ans.Set("_desc", this["_desc"]);
+            JObject c_Ans = this.AsJObject;
 
             // Loop thru
             foreach (string sField in this.Dataset.Definition.FieldNames)
