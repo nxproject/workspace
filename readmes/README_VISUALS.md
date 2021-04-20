@@ -4,8 +4,10 @@ During development we found the work by [Chris Evans' Clean theme](https://githu
 it into NX.Workspace.  Most of the screen captures were done under the old theme which is still reachable by using:
 
 ```
-<Yuour site URL>?_theme=nx
+<Your site URL>?_theme=nx
 ```
+
+The following themes are available: ***classic***, ***modern*** and ***nx***.
 
 ## Desktop
 
