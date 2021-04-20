@@ -99,7 +99,15 @@ namespace Proc.Docs
                                     using (DocumentClass c_Target = new DocumentClass(c_Mgr, c_Obj.Folder, c_Source.Name))
                                     {
                                         // Merge
-                                        c_Source.Merge(c_Target, c_Map.Eval(c_Ctx));
+                                        c_Source.Merge(c_Target, c_Map.Eval(c_Ctx), delegate(string text)
+                                        {
+                                            // Do handlebars
+                                            HandlebarDataClass c_HData = new HandlebarDataClass();
+                                            // Add the exploded object
+                                            c_HData.Merge(c_Obj.Explode());
+                                            // Merge
+                                            return text.Handlebars(c_HData);
+                                        });
 
                                         // Add
                                         c_Done.Add(c_Target.Path);

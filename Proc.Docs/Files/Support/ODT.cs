@@ -94,13 +94,15 @@ namespace Proc.Docs.Files
         /// <param name="doc">The byte array of the document contents</param>
         /// <param name="values">The store</param>
         /// <returns>A byte array of the merged document</returns>
-        public void Merge(ODTDocumentClass doc, ExtendedContextClass ctx, NX.Engine.Files.DocumentClass result)
+        public void Merge(ODTDocumentClass doc, ExtendedContextClass ctx, Func<string, string> preproc, NX.Engine.Files.DocumentClass result)
         {
             // 
             try
             {
                 // Get the text
                 string sWkg = this.GetContents(doc.Location);
+                // Handlebars?
+                if (preproc != null) sWkg = preproc(sWkg);
 
                 // Map the store
                 HandlebarDataClass c_Data = new HandlebarDataClass();

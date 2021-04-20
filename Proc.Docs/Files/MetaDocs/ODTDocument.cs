@@ -25,6 +25,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System;
+
+using Newtonsoft.Json.Linq;
 
 using NX.Engine;
 using NX.Engine.Files;
@@ -48,19 +51,19 @@ namespace Proc.Docs.Files
         /// Merges the document with a given store of data
         /// 
         /// </summary>
-        public void Merge(DocumentClass result, ExtendedContextClass ctx)
+        public void Merge(DocumentClass result, ExtendedContextClass ctx, Func<string, string> preproc)
         {
             // Create support object for Adobe
             using (ODTClass c_Filler = new ODTClass())
             {
                 // And merge
-                c_Filler.Merge(this, ctx, result);
+                c_Filler.Merge(this, ctx, preproc, result);
             }
 
             //
             using (ODTClass c_Cvt = new ODTClass())
             {
-                c_Cvt.Merge(this, ctx, this.Parent);
+                c_Cvt.Merge(this, ctx, preproc, this.Parent);
             }
         }
         #endregion

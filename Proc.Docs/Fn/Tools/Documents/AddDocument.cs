@@ -50,58 +50,76 @@ namespace Proc.Docs
             if (sName.HasValue())
             {
                 // Get the manager
-                NX.Engine.Files.ManagerClass c_Mgr = call.Env.Globals.Get<NX.Engine.Files.ManagerClass>();
+                Proc.AO.ManagerClass c_ObjMgr = call.Env.Globals.Get<Proc.AO.ManagerClass>();
 
-                // Process template
-                if (sTemplate.HasValue())
+                // Get the user dataset
+                DatasetClass c_DS = c_ObjMgr.DefaultDatabase[sDS];
+
+                // Get the object
+                using (Proc.AO.ObjectClass c_Obj = c_DS[sID])
                 {
-                    // Get the folder
-                    using (FolderClass c_Folder = new FolderClass(c_Mgr, sFolder))
+                    // Get the manager
+                    NX.Engine.Files.ManagerClass c_Mgr = call.Env.Globals.Get<NX.Engine.Files.ManagerClass>();
+
+                    // Process template
+                    if (sTemplate.HasValue())
                     {
-                        //
-                        DocumentClass c_Template = null;
-                        bool bIsTemp = false;
-
-                        // System?
-                        if (sTemplate.StartsWith("!"))
+                        // Get the folder
+                        using (FolderClass c_Folder = new FolderClass(c_Mgr, sFolder))
                         {
-                            // The system document
-                            string sQXDir = "".WorkingDirectory().CombinePath("ui.qx").CombinePath("docs").CombinePath(sTemplate.Substring(1) + ".odt");
-                            // A temp
-                            c_Template = new DocumentClass(c_Mgr, c_Folder.SubFolder("_merge"), "F" + sQXDir.MD5HashString() + ".odt");
-                            // Copy
-                            c_Template.ValueAsBytes = sQXDir.ReadFileAsBytes();
-                            // Remember to delete
-                            bIsTemp = true;
-                        }
-                        else
-                        {
-                            c_Template = new DocumentClass(c_Mgr, "/" + sTemplate);
-                        }
+                            //
+                            DocumentClass c_Template = null;
+                            bool bIsTemp = false;
 
-                        // Make target
-                        using (DocumentClass c_Target = new DocumentClass(c_Mgr, c_Folder, sName + ".odt"))
-                        {
-                            // Copy
-                            c_Template.CopyTo(c_Target, true);
-
-                            // Merge?
-                            if (!bNoMerge)
+                            // System?
+                            if (sTemplate.StartsWith("!"))
                             {
-                                // Make the context
-                                using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, c_Passed, null, call.UserInfo.Name))
-                                {
-                                    // Merge
-                                    c_Template.Merge(c_Target, c_Template.MergeMap().Eval(c_Ctx));
-                                }
+                                // The system document
+                                string sQXDir = "".WorkingDirectory().CombinePath("ui.qx").CombinePath("docs").CombinePath(sTemplate.Substring(1) + ".odt");
+                                // A temp
+                                c_Template = new DocumentClass(c_Mgr, c_Folder.SubFolder("_merge"), "F" + sQXDir.MD5HashString() + ".odt");
+                                // Copy
+                                c_Template.ValueAsBytes = sQXDir.ReadFileAsBytes();
+                                // Remember to delete
+                                bIsTemp = true;
+                            }
+                            else
+                            {
+                                c_Template = new DocumentClass(c_Mgr, "/" + sTemplate);
                             }
 
-                            // Pass back
-                            if (c_Target.Exists) c_Ans["path"] = c_Target.Path;
-                        }
+                            // Make target
+                            using (DocumentClass c_Target = new DocumentClass(c_Mgr, c_Folder, sName + ".odt"))
+                            {
+                                // Copy
+                                c_Template.CopyTo(c_Target, true);
 
-                        // Delete
-                        if (bIsTemp) c_Template.Delete();
+                                // Merge?
+                                if (!bNoMerge)
+                                {
+                                    // Make the context
+                                    using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, c_Passed, null, call.UserInfo.Name))
+                                    {
+                                        // Merge
+                                        c_Template.Merge(c_Target, c_Template.MergeMap().Eval(c_Ctx), delegate (string text)
+                                        {
+                                        // Do handlebars
+                                        HandlebarDataClass c_HData = new HandlebarDataClass();
+                                        // Add the exploded object
+                                        c_HData.Merge(c_Obj.Explode());
+                                        // Merge
+                                        return text.Handlebars(c_HData);
+                                        });
+                                    }
+                                }
+
+                                // Pass back
+                                if (c_Target.Exists) c_Ans["path"] = c_Target.Path;
+                            }
+
+                            // Delete
+                            if (bIsTemp) c_Template.Delete();
+                        }
                     }
                 }
             }
