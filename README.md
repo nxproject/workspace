@@ -34,7 +34,7 @@ There are two groups that are the main target of the system:
 				* [Charges](readmes/README_B_CHARGE.md)
 				* [Subscriptions](readmes/README_B_SUBS.md)
 				* [Invoices](readmes/README_B_INV.md)
-				* [Payment Request](readmes/README_B_PAY.md)
+					* [Payment Request](readmes/README_B_PAY.md)
 			* [Time Tracking](readmes/README_D_TT.md)
 			* [Quorums](readmes/README_QUORUMS.md)
 			* [IOT](readmes/README_IOT.md)
