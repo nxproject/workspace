@@ -1799,13 +1799,15 @@ namespace Proc.AO
             {
                 // Make holder
                 JObject c_Holder = new JObject();
-
+                // Split
                 List<string> c_DSS = sDSS.SplitSpaces();
+                // 
+                string sUUID = this.UUID.ToString();
                 // Any?
                 // Loop thru
                 foreach (string sDS in c_DSS)
                 {
-                    c_Holder.Set(sDS, this.ExplodeAll(sDS, "_parent", this.UUID.ToString()));
+                    c_Holder.Set(sDS, this.ExplodeAll(sDS, "_parent", sUUID));
                 }
 
                 // Save
@@ -1813,27 +1815,59 @@ namespace Proc.AO
             }
 
             // Linked datasets
-            string sDSS = this.Dataset.Definition.RelatedDSs.IfEmpty();
+            sDSS = this.Dataset.Definition.RelatedDSs.IfEmpty();
             if (sDSS.HasValue())
             {
                 // Make holder
                 JObject c_Holder = new JObject();
-
+                // Done
+                NamedListClass<int> c_Done = new NamedListClass<int>();
+                // Split
                 List<string> c_DSS = sDSS.SplitSpaces();
+                // 
+                string sUUID = this.UUID.ToString();
                 // Any?
                 // Loop thru
                 for (int i = 0; i < c_DSS.Count; i += 2)
                 {
-                    c_Holder.Set(sDS, this.ExplodeAll(c_DSS[i], c_DSS[i + 1], this.UUID.ToString()));
+                    // Parse
+                    string sDS = c_DSS[i];
+                    string sDSRef = sDS;
+                    string sField = c_DSS[i + 1];
+
+                    // 
+                    if(c_Done.Contains(sDS))
+                    {
+                        // Up one
+                        c_Done[sDS]++;
+                        // And buid ref
+                        sDSRef = sDS + c_Done[sDS];
+                    }
+                    else
+                    {
+                        // Make room
+                        c_Done[sDS] = 0;
+                    }
+
+                    c_Holder.Set(sDSRef, this.ExplodeAll(sDS, sField, sUUID));
                 }
 
                 // Save
-                c_Ans.Add("_child", c_Holder);
+                c_Ans.Add("_links", c_Holder);
             }
 
             return c_Ans;
         }
 
+        /// <summary>
+        /// 
+        /// Get the exploded records of child/related
+        /// 
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         private JArray ExplodeAll(string ds, string field, string value)
         {
             //
