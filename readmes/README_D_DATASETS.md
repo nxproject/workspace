@@ -193,9 +193,31 @@ If you only wish to display the date portion, you can use:
 Thes functions plus the ***Sort Order*** dataset definition value provide a method to properly handle date fields in
 a placeholder.  If the timezone parameter if onitted, the UTC datetime will be shown.
 
+## Child datasets
+
+A sample of a child dataset, using our contact book as the base dataset, are notes.  For each entry in the contact book, you can
+have any number of notes.  When viewed from the parent's perspective, you get only the group of children that belongs to that
+parent, so you do not see notes made for John in Mike's not list.  When you add a child from the parent, the note is automatically
+connected.
+
+At the ***Start*** level, you have the choice of not seeing the notes dataset or seeing it in its entirety.  A note entered 
+at this level does not have a parent and can only be accessed from the ***Start*** menu.
+
+## Linked datasets
+
+A linked dataset is one where the second dataset has a ***link*** field that uses the ***root*** dataset as the ***linked dataset***.
+
+Where in a child dataset, the parent is defined at the time of creation, in a linked dataset, the link can change over time.
+
+Using our contact book example, we can add a new dataset called ***company*** where we keep company information.  Then in the
+contact book we can add a ***link*** field that point to ***company***.  The contact can change companies at any time and in the
+company dataset, we can set the linked datastes to include the contact dataset and the link field in that dataset.
+
+Note that you can have any nummber of linked fields in a dataset, but only one parent.
+
 ## System datasets
 
-The system has a variety of datasets that hold system information.  These dataset names atrart with an undescrore ***_***.
+The system has a variety of datasets that hold system information.  These dataset names start with an undescrore ***_***.
 
 You can modify all system datasets however you should not delete any fields that were previously defined as this may lead to unexpected behaviors.
 
@@ -204,6 +226,6 @@ Note that updates may modify the dataset definitions, which will undo any user c
 ## My base dataset
 
 This is my [rolodex](rolodex.pkg) dataset.  It is a [package](README_PKG.md) that can be imported into the system and that you
-can hack.  It is used throught the documentation.
+can hack.  It is used throught the documentation.  It is my contact book.
 
 [Home](../README.md)
