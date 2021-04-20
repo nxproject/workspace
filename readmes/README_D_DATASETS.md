@@ -217,7 +217,7 @@ Note that you can have any nummber of linked fields in a dataset, but only one p
 
 ## System datasets
 
-The system has a variety of datasets that hold system information.  These dataset names atrart with an undescrore ***_***.
+The system has a variety of datasets that hold system information.  These dataset names start with an undescrore ***_***.
 
 You can modify all system datasets however you should not delete any fields that were previously defined as this may lead to unexpected behaviors.
 
