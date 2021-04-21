@@ -107,7 +107,7 @@ namespace Proc.Docs
                                             // Do handlebars
                                             HandlebarDataClass c_HData = new HandlebarDataClass(call.Env);
                                             // Add the object
-                                            c_HData.Merge(c_Obj.Explode(c_Ctx));
+                                            c_HData.Merge(c_Obj.Explode(ExplodeMakerClass.ExplodeModes.Yes, c_Ctx));
                                             // Merge
                                             return text.Handlebars(c_HData);
                                         });

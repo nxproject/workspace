@@ -39,7 +39,7 @@ namespace Proc.AO
             // Get the params
             string sDS = store["ds"].AsDatasetName();
             string sID = store["id"];
-            bool bFloatAccount = store["floataccount"].FromDBBoolean();
+            StoreClass c_Passed = store.GetAsStore("data");
 
             // Valid?
             if (sDS.HasValue() && sID.HasValue())
@@ -50,14 +50,18 @@ namespace Proc.AO
                 // Get the user dataset
                 DatasetClass c_DS = c_Mgr.DefaultDatabase[sDS];
 
-                // Get the object
-                using (Proc.AO.ObjectClass c_Obj = c_DS[sID])
+                // Make the context
+                using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, c_Passed, null, call.UserInfo.Name))
                 {
-                    // Hadle the account bit
-                    if (bFloatAccount) c_Obj.FloatAccount();
+                    // Get the object
+                    using (Proc.AO.ObjectClass c_Obj = c_DS[sID])
+                    {
+                        // Hadle the account bit
+                        c_Obj.FloatAccount();
 
-                    // Copy all fields
-                    c_Ans = new StoreClass(c_Obj.Explode());
+                        // Copy all fields
+                        c_Ans["schema"] = c_Obj.Explode(ExplodeMakerClass.ExplodeModes.Yes, c_Ctx).ToString();
+                    }
                 }
             }
 

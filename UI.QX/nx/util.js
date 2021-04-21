@@ -1495,7 +1495,6 @@ nx.util = {
             ans[key] = obj2[key];
         });
 
-
         return ans;
     },
 
@@ -2027,11 +2026,19 @@ nx.util = {
         // Remove
         delete options.callback;
 
+        // Merge the defaults
+        options = self.merge({
+            messageMaxLength: 300,
+            fontSize: '16px'
+        }, options);
+
         // Make the options
         options = self.merge({
-            style: 'Success',
-            messageMaxLength: 300
+            style: 'Success'
         }, options || {});
+
+        // Init
+        Notiflix.Notify.Init(options);
 
         // Do we have a callback?
         if (callback) {
@@ -2039,7 +2046,7 @@ nx.util = {
             Notiflix.Notify[options.style](msg, callback, options);
         } else {
             // Make the button
-            Notiflix.Notify[options.style](msg);
+            Notiflix.Notify[options.style](msg, null, options);
         }
     },
 

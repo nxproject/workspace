@@ -241,7 +241,7 @@ namespace Proc.AO
                     using (HandlebarDataClass c_Data = new HandlebarDataClass(c_Env))
                     {
                         // Add the object
-                        c_Data.Merge(c_Obj.Explode());
+                        c_Data.Merge(c_Obj.Explode(ExplodeMakerClass.ExplodeModes.Yes));
                         // Make a new context (from "with")
                         using var frame = options.CreateFrame(c_Data);
                         var blockParamsValues = frame.BlockParams(options.BlockVariables);
@@ -281,7 +281,7 @@ namespace Proc.AO
                     using (HandlebarDataClass c_Data = new HandlebarDataClass(c_Env))
                     {
                         // Add the object
-                        c_Data.Merge(c_Obj.Explode());
+                        c_Data.Merge(c_Obj.Explode(ExplodeMakerClass.ExplodeModes.Yes));
                         // Make a new context (from "with")
                         using var frame = options.CreateFrame(c_Data);
                         var blockParamsValues = frame.BlockParams(options.BlockVariables);

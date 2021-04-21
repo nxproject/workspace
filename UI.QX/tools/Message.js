@@ -90,6 +90,18 @@ qx.Class.define('tools.Message', {
                 defaultCommand: 'Ok',
                 allowClose: false,
                 caller: req.caller,
+                topToolbar: {
+                    items: [
+                        {
+                            label: 'Copy',
+                            icon: 'page_white_copy',
+                            click: function (e) {
+                                nx.util.copy(req.msg);
+                                nx.util.notifyInfo('Copied to clipboard');
+                            }
+                        }
+                    ]
+                },
 
                 items: [
 

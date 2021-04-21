@@ -130,36 +130,67 @@ qx.Class.define('tools.Documents', {
             var tb, cmds;
 
             if (!req.fsfn) {
-                tb = {
-
-                    items: [
-                        {
-                            label: 'Select',
-                            icon: 'tick',
-                            toggle: true,
-                            click: function (e) {
-                                // Get the widget
-                                var widget = nx.util.eventGetWidget(e);
-                                // Get the renderer
-                                var renderer = nx.util.eventGetWindow(e).getRenderer();
-                                // Get the tree
-                                var tree = renderer.getChildrenOfClass('c._tree')[0];
-                                //
-                                var selMode = tree.getSelectionMode();
-                                //
-                                switch (selMode) {
-                                    case 'single':
-                                        tree.setSelectionMode('multi');
-                                        break;
-                                    default:
-                                        // Reset
-                                        tree.setSelectionMode('single');
-                                        break;
-                                }
-                            }
+                var tbitems = [{
+                    label: 'Select',
+                    icon: 'tick',
+                    toggle: true,
+                    click: function (e) {
+                        // Get the widget
+                        var widget = nx.util.eventGetWidget(e);
+                        // Get the renderer
+                        var renderer = nx.util.eventGetWindow(e).getRenderer();
+                        // Get the tree
+                        var tree = renderer.getChildrenOfClass('c._tree')[0];
+                        //
+                        var selMode = tree.getSelectionMode();
+                        //
+                        switch (selMode) {
+                            case 'single':
+                                tree.setSelectionMode('multi');
+                                break;
+                            default:
+                                // Reset
+                                tree.setSelectionMode('single');
+                                break;
                         }
-                    ]
+                    }
+                }];
 
+                if (req.id !== nx.setup.templatesID) {
+                    tbitems.push('>');
+                    tbitems.push({
+                        label: 'Display Context',
+                        icon: 'chart_organisation',
+                        click: function (e) {
+                            // Get the widget
+                            var widget = nx.util.eventGetWidget(e);
+                            var params = nx.bucket.getParams(widget);
+                            //
+                            var data;
+                            if (req.caller) {
+                                data = req.caller.getFormData();
+                            }
+                            // Process
+                            nx.util.serviceCall('AO.ObjectGetExploded', {
+                                ds: req.ds,
+                                id: req.id,
+                                data: data || {}
+                            }, function (result) {
+                                // Did we get a path?
+                                if (result && result.schema) {
+                                    // Call
+                                    nx.util.runTool('Message', {
+                                        caption: 'Context',
+                                        msg: JSON.stringify(JSON.parse(result.schema), null, 2)
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+
+                tb = {
+                    items: tbitems
                 };
             } else {
                 cmds = {
@@ -700,6 +731,8 @@ qx.Class.define('tools.Documents', {
                     }
                 });
 
+            } else if (!asfolder) {
+                cm.push();
             }
 
             var del = true;

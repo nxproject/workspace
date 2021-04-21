@@ -95,7 +95,7 @@ namespace Proc.Task
                 if (c_Obj != null)
                 {
                     //
-                    c_HData.Merge(c_Obj.Explode(ctx));
+                    c_HData.Merge(c_Obj.Explode(ExplodeMakerClass.ExplodeModes.Yes, ctx));
                 }
                 // Merge
                 return text.Handlebars(c_HData);

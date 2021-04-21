@@ -109,9 +109,7 @@ namespace Proc.Docs
                                         c_Template.Merge(c_Target, c_Template.MergeMap().Eval(c_Ctx), delegate (string text)
                                         {
                                             // 
-                                            JObject c_Raw = c_Obj.Explode(c_Ctx);
-                                            // Dump
-                                            call.Env.LogInfo("DATA: {0}".FormatString(c_Raw.ToSimpleString()));
+                                            JObject c_Raw = c_Obj.Explode(ExplodeMakerClass.ExplodeModes.Yes, c_Ctx);
                                             // Do handlebars
                                             HandlebarDataClass c_HData = new HandlebarDataClass(call.Env);
                                             // Add the exploded object
