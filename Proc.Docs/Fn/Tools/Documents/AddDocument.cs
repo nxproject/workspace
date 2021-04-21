@@ -109,7 +109,7 @@ namespace Proc.Docs
                                         c_Template.Merge(c_Target, c_Template.MergeMap().Eval(c_Ctx), delegate (string text)
                                         {
                                             // 
-                                            JObject c_Raw = c_Obj.Explode(c_Passed);
+                                            JObject c_Raw = c_Obj.Explode(c_Ctx);
                                             // Dump
                                             call.Env.LogInfo("DATA: {0}".FormatString(c_Raw.ToSimpleString()));
                                             // Do handlebars

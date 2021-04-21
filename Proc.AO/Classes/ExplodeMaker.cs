@@ -49,18 +49,40 @@ namespace Proc.AO
         #endregion
 
         #region Methods
-        public static JObject Explode(this ObjectClass obj, StoreClass passed = null, ExplodeModes mode = ExplodeModes.UpDown)
+        public static JObject Explode(this ObjectClass obj, AO.ExtendedContextClass ctx = null, StoreClass passed = null, ExplodeModes mode = ExplodeModes.UpDown)
         {
             JObject c_Ans = new JObject();
 
             // Must be valid
             if (obj != null)
             {
-                //
+                // STart with base
                 c_Ans = obj.AsJObject;
+                // Merge passed
                 if (passed != null)
                 {
                     c_Ans.Merge(passed.SynchObject);
+                }
+                // Handle context
+                if(ctx != null)
+                {
+                    // Get store list
+                    List<string> c_Stores = ctx.Stores.Keys;
+                    // Loop thru
+                    foreach(string sStore in c_Stores)
+                    {
+                        // Passed?
+                        if(sStore.IsSameValue(Names.Passed))
+                        {
+                            // Merge
+                            c_Ans.Merge(ctx.Stores[sStore]);
+                        }
+                        else
+                        {
+                            // Make child
+                            c_Ans.Set("_" + sStore, ctx.Stores[sStore]);
+                        }
+                    }
                 }
 
                 string sUUID = obj.UUID.ToString();
