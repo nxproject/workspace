@@ -392,6 +392,6 @@ This is an example of a fairly complex data ***context***:
   ]
 }
 ```
-Using drective ssyntax ```{{_sys.name}}``` would return ***Demo Site^^^.
+Using drective ssyntax ```{{_sys.name}}``` would return ***Demo Site***.
 
 [Home](../README.md)
