@@ -158,7 +158,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.19b"))
+            if (ds.Definition.ReleaseChanged("2021.04.21a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -285,7 +285,7 @@ namespace Proc.AO.BuiltIn
 
                 c_Field = ds.Definition["iotenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
-                c_Field.Label = "IOT Enabled";
+                c_Field.Label = "IOT";
 
                 c_Field = ds.Definition["stripepub"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
@@ -297,7 +297,7 @@ namespace Proc.AO.BuiltIn
 
                 c_Field = ds.Definition["ttenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
-                c_Field.Label = "Time Track Enabled";
+                c_Field.Label = "Time Track";
 
                 c_Field = ds.Definition["psapi"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
@@ -329,7 +329,7 @@ namespace Proc.AO.BuiltIn
 
                 c_Field = ds.Definition["quorumenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
-                c_Field.Label = "Quorum Enabled";
+                c_Field.Label = "Quorum";
 
                 c_Field = ds.Definition["acctdefallowed"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Allowed;

@@ -104,19 +104,19 @@ namespace Proc.Docs.Files
                 // Handlebars?
                 if (preproc != null) sWkg = preproc(sWkg);
 
-                // Map the store
-                HandlebarDataClass c_Data = new HandlebarDataClass();
-                c_Data.Merge(ctx.Stores[Names.Passed]);
+                //// Map the store
+                //HandlebarDataClass c_Data = new HandlebarDataClass();
+                //c_Data.Merge(ctx.Stores[Names.Passed]);
 
-                // Process handlebars
-                sWkg = sWkg.Handlebars(c_Data, delegate (string field, object thisvalue)
-                {
-                    // Save this
-                    c_Data.Set("this", thisvalue);
+                //// Process handlebars
+                //sWkg = sWkg.Handlebars(c_Data, delegate (string field, object thisvalue)
+                //{
+                //    // Save this
+                //    c_Data.Set("this", thisvalue);
 
-                    // Eval
-                    return Expression.Eval(ctx, field).Value;
-                });
+                //    // Eval
+                //    return Expression.Eval(ctx, field).Value;
+                //});
                 // Find all the fields
                 MatchCollection c_Matches = Regex.Matches(sWkg, Pattern);
                 // Loop thru

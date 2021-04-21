@@ -17,6 +17,8 @@
 /// 
 ///--------------------------------------------------------------------------------
 
+using Newtonsoft.Json.Linq;
+
 using NX.Engine;
 using NX.Engine.Files;
 using NX.Shared;
@@ -58,6 +60,9 @@ namespace Proc.Docs
                 // Get the object
                 using (Proc.AO.ObjectClass c_Obj = c_DS[sID])
                 {
+                    // Float the account
+                    c_Obj.FloatAccount();
+
                     // Get the manager
                     NX.Engine.Files.ManagerClass c_Mgr = call.Env.Globals.Get<NX.Engine.Files.ManagerClass>();
 
@@ -103,12 +108,20 @@ namespace Proc.Docs
                                         // Merge
                                         c_Template.Merge(c_Target, c_Template.MergeMap().Eval(c_Ctx), delegate (string text)
                                         {
-                                        // Do handlebars
-                                        HandlebarDataClass c_HData = new HandlebarDataClass();
-                                        // Add the exploded object
-                                        c_HData.Merge(c_Obj.Explode());
-                                        // Merge
-                                        return text.Handlebars(c_HData);
+                                            // Make the stack
+                                            ExplodeStackClass c_Stack = new ExplodeStackClass(c_ObjMgr.DefaultDatabase);
+                                            // Explode the object
+                                            c_Stack.Add(ExplodeStackClass.ExplodeModes.UpDown, c_Obj, c_Passed);
+                                            // 
+                                            JObject c_Raw = c_Stack.Result;
+                                            // Dump
+                                            call.Env.LogInfo("DATA: {0}".FormatString(c_Raw.ToSimpleString()));
+                                            // Do handlebars
+                                            HandlebarDataClass c_HData = new HandlebarDataClass();
+                                            // Add the exploded object
+                                            c_HData.Merge(c_Raw);
+                                            // Merge
+                                            return text.Handlebars(c_HData);
                                         });
                                     }
                                 }

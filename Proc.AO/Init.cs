@@ -17,6 +17,8 @@
 /// 
 ///--------------------------------------------------------------------------------
 
+using HandlebarsDotNet;
+
 using NX.Engine;
 using NX.Shared;
 
@@ -40,10 +42,10 @@ namespace Proc.AO
             env.Use("Proc.Communication");
 
             // Extend eval
-            FunctionsDefinitions c_Defs = Context.FunctionsTable;
+            FunctionsDefinitions c_Defs = NX.Engine.Context.FunctionsTable;
 
             //
-            c_Defs.AddFn(new StaticFunction("objvalue", delegate (Context ctx, object[] ps)
+            c_Defs.AddFn(new StaticFunction("objvalue", delegate (NX.Engine.Context ctx, object[] ps)
             {
                 if (ps.Length == 2)
                 {
@@ -57,7 +59,7 @@ namespace Proc.AO
             "Returns the field value for an optional object and field",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The object name if a second value is give, otherwise the field name"),
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The field name")));
-            c_Defs.AddFn(new StaticFunction("objfield", delegate (Context ctx, object[] ps)
+            c_Defs.AddFn(new StaticFunction("objfield", delegate (NX.Engine.Context ctx, object[] ps)
             {
                 if (ps.Length == 2)
                 {
@@ -71,7 +73,7 @@ namespace Proc.AO
             "Returns the field representation for an optional object and field",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Required, "The object name if a second value is give, otherwise the field name"),
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The field name")));
-            c_Defs.AddFn(new StaticFunction("objisnew", delegate (Context ctx, object[] ps)
+            c_Defs.AddFn(new StaticFunction("objisnew", delegate (NX.Engine.Context ctx, object[] ps)
             {
                 bool bAns = true;
 
@@ -88,7 +90,7 @@ namespace Proc.AO
             }, 1, 1,
             "Returns true if the object is new",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The object name")));
-            c_Defs.AddFn(new StaticFunction("objid", delegate (Context ctx, object[] ps)
+            c_Defs.AddFn(new StaticFunction("objid", delegate (NX.Engine.Context ctx, object[] ps)
             {
                 string sAns = "";
 
@@ -103,7 +105,7 @@ namespace Proc.AO
             }, 1, 1,
             "Returns the object UUID",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The object name")));
-            c_Defs.AddFn(new StaticFunction("objidonly", delegate (Context ctx, object[] ps)
+            c_Defs.AddFn(new StaticFunction("objidonly", delegate (NX.Engine.Context ctx, object[] ps)
             {
                 string sAns = "";
 
@@ -119,7 +121,7 @@ namespace Proc.AO
             "Returns the ID portion object UUID",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The object name")));
 
-            c_Defs.AddFn(new StaticFunction("objds", delegate (Context ctx, object[] ps)
+            c_Defs.AddFn(new StaticFunction("objds", delegate (NX.Engine.Context ctx, object[] ps)
             {
                 string sAns = "";
 
@@ -135,7 +137,7 @@ namespace Proc.AO
             "Returns the dataset portion object UUID",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The object name")));
 
-            c_Defs.AddFn(new StaticFunction("linkdscaption", delegate (Context ctx, object[] ps)
+            c_Defs.AddFn(new StaticFunction("linkdscaption", delegate (NX.Engine.Context ctx, object[] ps)
             {
                 string sAns = "";
 
@@ -158,7 +160,7 @@ namespace Proc.AO
             "Returns the link dataset captio",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The link value")));
 
-            c_Defs.AddFn(new StaticFunction("linkdesc", delegate (Context ctx, object[] ps)
+            c_Defs.AddFn(new StaticFunction("linkdesc", delegate (NX.Engine.Context ctx, object[] ps)
             {
                 string sAns = "";
 
@@ -184,7 +186,7 @@ namespace Proc.AO
             "Returns the link placeholder",
             new ParameterDefinitionClass(ParameterDefinitionClass.Types.Optional, "The link value")));
 
-            c_Defs.AddFn(new StaticFunction("user", delegate (Context ctx, object[] ps)
+            c_Defs.AddFn(new StaticFunction("user", delegate (NX.Engine.Context ctx, object[] ps)
             {
                 string sAns = "";
 
@@ -204,8 +206,35 @@ namespace Proc.AO
                 // Update
                 c_Mgr.DefaultDatabase.SiteInfo.UpdateEnv(true, true);
             };
-        }
 
+            // Extend handlebars
+            HandlebarsExtensionsClass.Register("getlink", (output, options, context, arguments) =>
+            {
+                if (arguments.Length != 1)
+                {
+                    throw new HandlebarsException("{{#getlink}} helper must have exactly one argument");
+                }
+
+                // Params
+                var id = arguments.At<string>(0);
+
+                if (!HandlebarsUtils.IsTruthyOrNonEmpty(arguments[0]))
+                {
+                    options.Inverse(output, context);
+                    return;
+                }
+
+                // Convert
+                string[] asPices = id.Split(':', System.StringSplitOptions.RemoveEmptyEntries);
+                string sConv = "_objects." + asPices[0] + "." + asPices[1];
+
+                using var frame = options.CreateFrame(sConv);
+                var blockParamsValues = frame.BlockParams(options.BlockVariables);
+                blockParamsValues[0] = arguments[0];
+
+                options.Template(output, frame);
+            });
+        }
 
         #region Statics
         /// <summary>

@@ -67,6 +67,9 @@ namespace Proc.Docs
                 // Get the object
                 using (Proc.AO.ObjectClass c_Obj = c_DS[sObjID])
                 {
+                    // Float account
+                    c_Obj.FloatAccount();
+
                     // Get the list
                     List<string> c_List = new List<string>() { sPath };
 
@@ -103,8 +106,12 @@ namespace Proc.Docs
                                         {
                                             // Do handlebars
                                             HandlebarDataClass c_HData = new HandlebarDataClass();
+                                            // Make the stack
+                                            ExplodeStackClass c_Stack = new ExplodeStackClass(c_ObjMgr.DefaultDatabase);
+                                            // Explode the object
+                                            c_Stack.Add(ExplodeStackClass.ExplodeModes.UpDown, c_Obj, c_Passed);
                                             // Add the exploded object
-                                            c_HData.Merge(c_Obj.Explode());
+                                            c_HData.Merge(c_Stack.Result);
                                             // Merge
                                             return text.Handlebars(c_HData);
                                         });

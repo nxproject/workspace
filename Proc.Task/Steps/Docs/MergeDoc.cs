@@ -82,8 +82,27 @@ namespace Proc.Task
             // Make target
             DocumentClass c_Target = ctx.Documents[sTo];
 
+            // Get the object
+            AO.ObjectClass c_Obj = ctx.Objects[""];
+
             // Merge
-            c_Source.Merge(c_Target, c_Map.Eval(ctx));
+            c_Source.Merge(c_Target, c_Map.Eval(ctx), delegate (string text)
+            {
+                // Do handlebars
+                HandlebarDataClass c_HData = new HandlebarDataClass();
+                // Add the exploded object
+                if (c_Obj != null)
+                {
+                    // Make the stack
+                    AO.ExplodeStackClass c_Stack = new AO.ExplodeStackClass(ctx.DBManager.DefaultDatabase);
+                    // Explode the object
+                    c_Stack.Add(AO.ExplodeStackClass.ExplodeModes.UpDown, c_Obj);
+                    //
+                    c_HData.Merge(c_Stack.Result);
+                }
+                // Merge
+                return text.Handlebars(c_HData);
+            });
 
             return eAns;
         }

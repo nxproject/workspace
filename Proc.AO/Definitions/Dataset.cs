@@ -313,7 +313,20 @@ namespace Proc.AO.Definitions
         /// List of access fields
         /// 
         /// </summary>
-        public List<string> AccountFields {  get  { return this.Object.GetAsJArray(ObjectClass.FieldAccount).ToList(); } }
+        public List<string> AccountFields {  
+            get  
+            {
+                List<string> c_Ans = new List<string>();
+
+                try
+                {
+                    c_Ans = this.Object.GetAsJArray(ObjectClass.FieldAccount).ToList();
+                }
+                catch { }
+
+                return c_Ans;
+            } 
+        }
 
         /// <summary>
         /// 
