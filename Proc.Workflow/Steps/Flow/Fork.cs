@@ -75,7 +75,7 @@ namespace Proc.Workflow
         public override ReturnClass ExecStep(WorkflowContextClass ctx, ArgsClass args)
         {
             // Get the manager
-            ManagerClass c_Mgr = ctx.Parent.Globals.Get<ManagerClass>();
+            ManagerClass c_Mgr = ctx.Env.Globals.Get<ManagerClass>();
 
 
             // Get the outcomes

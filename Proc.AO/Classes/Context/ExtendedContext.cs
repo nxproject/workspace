@@ -57,11 +57,12 @@ namespace Proc.AO
     {
         #region Constructor
         public ExtendedContextClass(EnvironmentClass env, StoreClass store, AO.ObjectClass obj, string user)
-            : base(env, store)
+            : base(store)
         {
             //
-            this.DocumentManager = this.Parent.Globals.Get<NX.Engine.Files.ManagerClass>();
-            this.DBManager = this.Parent.Globals.Get<AO.ManagerClass>();
+            this.Env = env;
+            this.DocumentManager = this.Env.Globals.Get<NX.Engine.Files.ManagerClass>();
+            this.DBManager = this.Env.Globals.Get<AO.ManagerClass>();
 
             //
             this.Objects = new ContextStoreClass<AO.ObjectClass>();
@@ -121,6 +122,13 @@ namespace Proc.AO
         #endregion
 
         #region Properties
+        /// <summary>
+        /// 
+        /// The working environment
+        /// 
+        /// </summary>
+        public EnvironmentClass Env { get; private set; }
+
         /// <summary>
         /// 
         /// The manager
@@ -284,7 +292,7 @@ namespace Proc.AO
         #region SIO
         public void SendNotification(string user, string mesaage, List<DocumentClass> attachments)
         {
-            SIO.ManagerClass c_Mgr = this.Parent.Globals.Get<SIO.ManagerClass>();
+            SIO.ManagerClass c_Mgr = this.Env.Globals.Get<SIO.ManagerClass>();
 
             // Attachments
             string sAtt = new JArray(attachments).ToSimpleString();

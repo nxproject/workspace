@@ -58,7 +58,7 @@ namespace Proc.IOTIF
                 using (AO.UUIDClass c_UUID = new UUIDClass(ctx.DBManager.DefaultDatabase, ctx.Option))
                 {
                     //
-                    using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Parent))
+                    using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Env))
                     {
                         c_Params.Task = ctx.Verb;
                         c_Params.AddObject("passed", c_UUID);

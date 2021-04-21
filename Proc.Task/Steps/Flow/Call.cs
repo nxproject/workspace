@@ -84,7 +84,7 @@ namespace Proc.Task
             StoreClass c_Pushed = null;
 
             //
-            using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Parent))
+            using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Env))
             {
                 c_Params.Task = sProc;
 

@@ -443,7 +443,7 @@ namespace Proc.Communication
                 // Format
                 string sHTML = this.FormatMessage(to.To, this.EMailTemplate, "EMailTemplate.html", "EMail", false);
 
-                this.Parent.Parent.LogInfo("EMAIL\r\n" + sHTML + "\r\n");
+                this.Parent.Env.LogInfo("EMAIL\r\n" + sHTML + "\r\n");
 
                 //Validate
                 if (sEMailLogin.HasValue() && sEMailPwd.HasValue())
@@ -520,9 +520,9 @@ namespace Proc.Communication
                     // Get
                     Proc.Telemetry.DataClass c_Tele = this.GetTelemetry("SMS", "SMS");
                     // Make URL
-                    string sURL = this.Parent.Parent.ReachableURL.CombinePath("zm", this.ToSave(), to.To.Compress());
+                    string sURL = this.Parent.Env.ReachableURL.CombinePath("zm", this.ToSave(), to.To.Compress());
                     // Bitly
-                    sURL = sURL.Bitly(this.Parent.Parent);
+                    sURL = sURL.Bitly(this.Parent.Env);
                     // Add
                     sHTML += "\r\n\r\n{0}: ".FormatString(this.MessageLink.IfEmpty("To see the message")) + sURL;
                 }
@@ -649,7 +649,7 @@ namespace Proc.Communication
         private void UpdateLstOut(Telemetry.DataClass data, string user)
         {
             // Get the manage
-            AO.ManagerClass c_Mgr = this.Parent.Parent.Globals.Get<AO.ManagerClass>();
+            AO.ManagerClass c_Mgr = this.Parent.Env.Globals.Get<AO.ManagerClass>();
             // And update
             using (AO.AccessClass c_AE = new AO.AccessClass(c_Mgr, user))
             {
@@ -768,10 +768,10 @@ namespace Proc.Communication
             }
 
             // Predined
-            this.Values.Set("publicurl", this.Parent.Parent.ReachableURL);
+            this.Values.Set("publicurl", this.Parent.Env.ReachableURL);
             this.Values.Set("sys", this.Parent.Database.SiteInfo.AsJObject);
             this.Values.Set("user", this.Parent.User.SynchObject);
-            this.Values.Set("env", this.Parent.Parent.AsParameters);
+            this.Values.Set("env", this.Parent.Env.AsParameters);
 
             // Data
             if (this.Object != null)
@@ -796,17 +796,7 @@ namespace Proc.Communication
                 sTemplate = c_Tele.Replace(sTemplate, "./images/social-nxproject.gif", "zt", @"/social-nxproject.gif".PublicURL(), usebitly, to);
             }
 
-            return sTemplate.Handlebars(this.Values, delegate (string value, object thisvalue)
-            {
-                // Save this
-                this.Values.Set("this", thisvalue);
-
-                // Eval
-                using (Context c_Ctx = new Context(this.Parent.Parent, vars: this.Values))
-                {
-                    return Expression.Eval(c_Ctx, value).Value;
-                }
-            }).Replace("".PublicURL(), this.Parent.Parent.ReachableURL);
+            return sTemplate.Handlebars(this.Values).Replace("".PublicURL(), this.Parent.Env.ReachableURL);
         }
 
         /// <summary>

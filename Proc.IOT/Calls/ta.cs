@@ -55,7 +55,7 @@ namespace Proc.IOTIF
             if (ctx.Option.HasValue())
             {
                 //
-                using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Parent))
+                using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Env))
                 {
                     c_Params.Task = ctx.Verb;
                     c_Params.AddStore("passed", ctx.Params);

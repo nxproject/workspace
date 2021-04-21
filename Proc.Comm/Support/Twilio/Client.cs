@@ -61,10 +61,10 @@ namespace Proc.Communication
             }
             catch (Exception e)
             {
-                ctx.Parent.LogInfo("SID: {0}".FormatString(sAcctSID));
-                ctx.Parent.LogInfo("TOK: {0}".FormatString(sToken));
+                ctx.Env.LogInfo("SID: {0}".FormatString(sAcctSID));
+                ctx.Env.LogInfo("TOK: {0}".FormatString(sToken));
 
-                this.Parent.Parent.LogException("CreateTwilio", e);
+                this.Parent.Env.LogException("CreateTwilio", e);
             }
         }
         #endregion
@@ -98,7 +98,7 @@ namespace Proc.Communication
             catch (Exception e)
             {
                 sAns = e.GetAllExceptions();
-                this.Parent.Parent.LogException("SendSMS", e);
+                this.Parent.Env.LogException("SendSMS", e);
             }
 
             return sAns;
@@ -132,7 +132,7 @@ namespace Proc.Communication
             catch (Exception e)
             {
                 sAns = e.GetAllExceptions();
-                this.Parent.Parent.LogException("MakeCall", e);
+                this.Parent.Env.LogException("MakeCall", e);
             }
 
             return sAns;
@@ -158,7 +158,7 @@ namespace Proc.Communication
                     if (phone != null)
                     {
                         // Get the loopback URL
-                        string sURL = this.Parent.Parent.ReachableURL;
+                        string sURL = this.Parent.Env.ReachableURL;
 
                         //
                         string sRef = refuuid.ToBase64URL();
@@ -180,7 +180,7 @@ namespace Proc.Communication
             catch (Exception e)
             {
                 sAns = e.GetAllExceptions();
-                this.Parent.Parent.LogException("RegisterPhone", e);
+                this.Parent.Env.LogException("RegisterPhone", e);
             }
 
             return sAns;

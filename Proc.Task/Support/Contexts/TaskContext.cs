@@ -159,7 +159,7 @@ namespace Proc.Task
         /// <returns></returns>
         public StoreClass CallFN(string fn, StoreClass store)
         {
-            return base.Parent.FN(fn, store);
+            return this.Env.FN(fn, store);
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace Proc.Task
         public void SIO(string fn, params string[] values)
         {
             // Open the manager
-            Proc.SIO.ManagerClass c_Mgr = this.Parent.Globals.Get<Proc.SIO.ManagerClass>();
+            Proc.SIO.ManagerClass c_Mgr = this.Env.Globals.Get<Proc.SIO.ManagerClass>();
 
             // Make a message
             using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, Proc.SIO.MessageClass.Modes.Internal, fn, values))

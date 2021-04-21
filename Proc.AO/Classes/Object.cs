@@ -357,7 +357,7 @@ namespace Proc.AO
                 }
                 else
                 {
-                    ctx = new ExtendedContextClass(ctx.Parent, ctx.Stores[Names.Passed], this, ctx.User.Name);
+                    ctx = new ExtendedContextClass(ctx.Env, ctx.Stores[Names.Passed], this, ctx.User.Name);
                 }
                 // Loop thru
                 foreach (string sField in this.Dataset.Definition.FieldNames)

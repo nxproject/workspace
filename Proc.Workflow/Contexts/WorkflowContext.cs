@@ -96,7 +96,7 @@ namespace Proc.Workflow
         #region Methods
         public StoreClass CallFN(string fn, StoreClass store)
         {
-            return base.Parent.FN(fn, store);
+            return this.Env.FN(fn, store);
         }
         #endregion
 

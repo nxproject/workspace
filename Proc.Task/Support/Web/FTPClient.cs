@@ -163,10 +163,10 @@ namespace Proc.Task
                 this.Close();
             }
 
-            ctx.Parent.LogInfo((issftp ? "SFTP" : "FTP") + " Connection being attempted");
-            ctx.Parent.LogInfo("Server: {0}".FormatString(url));
-            ctx.Parent.LogInfo("Port: {0}".FormatString(port));
-            ctx.Parent.LogInfo("User Name: {0}".FormatString(name));
+            ctx.Env.LogInfo((issftp ? "SFTP" : "FTP") + " Connection being attempted");
+            ctx.Env.LogInfo("Server: {0}".FormatString(url));
+            ctx.Env.LogInfo("Port: {0}".FormatString(port));
+            ctx.Env.LogInfo("User Name: {0}".FormatString(name));
 
             string sMsg = "Successful";
             if (!bAns)
@@ -174,7 +174,7 @@ namespace Proc.Task
                 sMsg += "Failed - " + this.LastError;
             }
 
-            ctx.Parent.LogInfo("Connection: {0}".FormatString(sMsg));
+            ctx.Env.LogInfo("Connection: {0}".FormatString(sMsg));
 
             this.CurrentDirectory = "/";
 

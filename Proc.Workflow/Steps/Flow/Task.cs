@@ -93,7 +93,7 @@ namespace Proc.Workflow
             if (c_Store == null) c_Store = new StoreClass();
 
             //
-            using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Parent))
+            using (TaskParamsClass c_Params = new TaskParamsClass(ctx.Env))
             {
                 c_Params.Task = sTask;
                 c_Params.AddStore(Names.Passed, c_Store);

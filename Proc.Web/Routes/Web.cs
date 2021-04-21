@@ -65,17 +65,7 @@ namespace Proc.Web
                 c_Values.Merge(c_DBMgr.DefaultDatabase.SiteInfo.AsJObject);
                 c_Values.Merge(c_Obj.AsJObject);
                 // Apply changes
-                sContents = sContents.Handlebars(c_Values, delegate (string value, object thisvalue)
-                {
-                    // Save this
-                    c_Values.Set("this", thisvalue);
-
-                    // Eval
-                    using (Context c_Ctx = new Context(call.Env,  vars: c_Values))
-                    {
-                        return Expression.Eval(c_Ctx, value).Value;
-                    }
-                });
+                sContents = sContents.Handlebars(c_Values);
 
                 // And deliver
                 using (MemoryStream c_Stream = new MemoryStream(sContents.ToBytes()))
