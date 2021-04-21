@@ -362,12 +362,12 @@
                         }, {
                             text: 'Attachments',
                             onclick: function () {
-                                editor.insertContent('<br />{{#if attachments}}<br />Attachments<br />{{ #each attachments }}<br />{{ this.caption }}: {{ this.href }}<br />{{/each}}<br />\{{/if}}<br />');
+                                editor.insertContent('<br />{{#if attachments}}Attachments<br />{{ #each attachments }}<br />{{ this.caption }}: {{ this.href }}{{/each}}<br />\{{/if}}');
                             }
                         }, {
                             text: 'Actions',
                             onclick: function () {
-                                editor.insertContent('<br />{{#if actions}}<br />{{#each actions}}<br />{{this.caption}} -- {{this.href}}<br />{{/each}}<br />{{/if}}<br />');
+                                editor.insertContent('<br />{{#if actions}}{{#each actions}}<br />{{this.caption}} -- {{this.href}}{{/each}}<br />{{/if}}');
                             }
                         }
                     ]
