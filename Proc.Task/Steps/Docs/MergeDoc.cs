@@ -26,6 +26,7 @@ using NX.Engine;
 using NX.Engine.Files;
 using Proc.Docs.Files;
 using Common.TaskWF;
+using Proc.AO;
 
 namespace Proc.Task
 {
@@ -89,16 +90,12 @@ namespace Proc.Task
             c_Source.Merge(c_Target, c_Map.Eval(ctx), delegate (string text)
             {
                 // Do handlebars
-                HandlebarDataClass c_HData = new HandlebarDataClass();
+                HandlebarDataClass c_HData = new HandlebarDataClass(ctx.Env);
                 // Add the exploded object
                 if (c_Obj != null)
                 {
-                    // Make the stack
-                    AO.ExplodeStackClass c_Stack = new AO.ExplodeStackClass(ctx.DBManager.DefaultDatabase);
-                    // Explode the object
-                    c_Stack.Add(AO.ExplodeStackClass.ExplodeModes.UpDown, c_Obj);
                     //
-                    c_HData.Merge(c_Stack.Result);
+                    c_HData.Merge(c_Obj.Explode());
                 }
                 // Merge
                 return text.Handlebars(c_HData);

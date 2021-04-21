@@ -108,16 +108,12 @@ namespace Proc.Docs
                                         // Merge
                                         c_Template.Merge(c_Target, c_Template.MergeMap().Eval(c_Ctx), delegate (string text)
                                         {
-                                            // Make the stack
-                                            ExplodeStackClass c_Stack = new ExplodeStackClass(c_ObjMgr.DefaultDatabase);
-                                            // Explode the object
-                                            c_Stack.Add(ExplodeStackClass.ExplodeModes.UpDown, c_Obj, c_Passed);
                                             // 
-                                            JObject c_Raw = c_Stack.Result;
+                                            JObject c_Raw = c_Obj.Explode(c_Passed);
                                             // Dump
                                             call.Env.LogInfo("DATA: {0}".FormatString(c_Raw.ToSimpleString()));
                                             // Do handlebars
-                                            HandlebarDataClass c_HData = new HandlebarDataClass();
+                                            HandlebarDataClass c_HData = new HandlebarDataClass(call.Env);
                                             // Add the exploded object
                                             c_HData.Merge(c_Raw);
                                             // Merge

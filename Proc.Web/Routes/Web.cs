@@ -60,7 +60,7 @@ namespace Proc.Web
                 string sContents = c_Obj["text"];
 
                 // Get the values
-                HandlebarDataClass c_Values = new HandlebarDataClass();
+                HandlebarDataClass c_Values = new HandlebarDataClass(call.Env);
                 c_Values.Merge(call.Env.AsParameters);
                 c_Values.Merge(c_DBMgr.DefaultDatabase.SiteInfo.AsJObject);
                 c_Values.Merge(c_Obj.AsJObject);

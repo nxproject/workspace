@@ -56,12 +56,8 @@ namespace Proc.AO
                     // Hadle the account bit
                     if (bFloatAccount) c_Obj.FloatAccount();
 
-                    // Make the stack
-                    ExplodeStackClass c_Stack = new ExplodeStackClass(c_Mgr.DefaultDatabase);
-                    // Explode the object
-                    c_Stack.Add(ExplodeStackClass.ExplodeModes.UpDown, c_Obj);
                     // Copy all fields
-                    c_Ans = new StoreClass(c_Stack.Result);
+                    c_Ans = new StoreClass(c_Obj.Explode());
                 }
             }
 

@@ -61,7 +61,7 @@ namespace Proc.Communication
         public eMessageClass(AO.ExtendedContextClass ctx)
             : base(ctx)
         {
-            this.Values = new HandlebarDataClass();
+            this.Values = new HandlebarDataClass(ctx.Env);
 
             this.Initialize();
         }
@@ -69,7 +69,7 @@ namespace Proc.Communication
         public eMessageClass(AO.ExtendedContextClass ctx, string value)
             : base(ctx)
         {
-            this.Values = new HandlebarDataClass();
+            this.Values = new HandlebarDataClass(ctx.Env);
             this.Values.Merge(value.ToJObject());
 
             this.Initialize();

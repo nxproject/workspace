@@ -212,11 +212,11 @@ namespace Proc.AO
             {
                 if (arguments.Length != 1)
                 {
-                    throw new HandlebarsException("{{#getlink}} helper must have exactly one argument");
+                    throw new HandlebarsException("{{getlink}} helper must have exactly one argument");
                 }
 
                 // Params
-                var id = arguments.At<string>(0);
+                var uuid = arguments.At<string>(0);
 
                 if (!HandlebarsUtils.IsTruthyOrNonEmpty(arguments[0]))
                 {
@@ -225,16 +225,74 @@ namespace Proc.AO
                 }
 
                 // Convert
-                string[] asPices = id.Split(':', System.StringSplitOptions.RemoveEmptyEntries);
-                string sConv = "_objects." + asPices[0] + "." + asPices[1];
+                string[] asPices = uuid.Split(':', System.StringSplitOptions.RemoveEmptyEntries);
 
-                using var frame = options.CreateFrame(sConv);
-                var blockParamsValues = frame.BlockParams(options.BlockVariables);
-                blockParamsValues[0] = arguments[0];
+                // Params
+                var ds = asPices[0];
+                var id = asPices[1];
 
-                options.Template(output, frame);
+                // Get the environment
+                EnvironmentClass c_Env = context["_env"] as EnvironmentClass;
+                // Get the databse manager
+                ManagerClass c_Mgr = c_Env.Globals.Get<ManagerClass>();
+                // Read the object
+                using (ObjectClass c_Obj = c_Mgr.DefaultDatabase[ds][id])
+                {
+                    using (HandlebarDataClass c_Data = new HandlebarDataClass(c_Env))
+                    {
+                        // Add the object
+                        c_Data.Merge(c_Obj.Explode());
+                        // Make a new context (from "with")
+                        using var frame = options.CreateFrame(c_Data);
+                        var blockParamsValues = frame.BlockParams(options.BlockVariables);
+                        blockParamsValues[0] = arguments[0];
+
+                        options.Template(output, frame);
+                    }
+                }
+            });
+
+            HandlebarsExtensionsClass.Register("get", (output, options, context, arguments) =>
+            {
+                if (arguments.Length != 2)
+                {
+                    throw new HandlebarsException("{{get}} helper must have exactly two argumenst");
+                }
+
+                if (!HandlebarsUtils.IsTruthyOrNonEmpty(arguments[0]) ||
+                !HandlebarsUtils.IsTruthyOrNonEmpty(arguments[1])
+                )
+                {
+                    options.Inverse(output, context);
+                    return;
+                }
+
+                // Params
+                var ds = arguments.At<string>(0);
+                var id = arguments.At<string>(1);
+
+                // Get the environment
+                EnvironmentClass c_Env = context["_env"] as EnvironmentClass;
+                // Get the databse manager
+                ManagerClass c_Mgr = c_Env.Globals.Get<ManagerClass>();
+                // Read the object
+                using (ObjectClass c_Obj = c_Mgr.DefaultDatabase[ds][id])
+                {
+                    using (HandlebarDataClass c_Data = new HandlebarDataClass(c_Env))
+                    {
+                        // Add the object
+                        c_Data.Merge(c_Obj.Explode());
+                        // Make a new context (from "with")
+                        using var frame = options.CreateFrame(c_Data);
+                        var blockParamsValues = frame.BlockParams(options.BlockVariables);
+                        blockParamsValues[0] = arguments[0];
+
+                        options.Template(output, frame);
+                    }
+                }
             });
         }
+
 
         #region Statics
         /// <summary>
