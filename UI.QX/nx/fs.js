@@ -703,7 +703,7 @@ nx.fs = {
             topToolbar: req.topToolbar,
             bottomToolbar: req.bottomToolbar
         });
-    },
+    }
 
 };
 

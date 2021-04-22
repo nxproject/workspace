@@ -28,12 +28,13 @@ qx.Class.define('c._signature', {
         self.base(arguments);
 
         // Add handler
-        self.addListener('appear', function () {
+        self.addListener('appear', function ()
+        {
+            //
+            self.makePad();
 
             // Do we have a starting value?
             if (self._stored) {
-                //
-                self.makePad();
 
                 if (self._pad) {
 
@@ -81,6 +82,32 @@ qx.Class.define('c._signature', {
 
                                     }
 
+                                }
+                            }, {
+                                label: nx.setup.viaWeb + 'Signature',
+                                icon: nx.setup.viaWebIcon,
+                                click: function (e) {
+                                    // Get the widget
+                                    var widget = nx.util.eventGetWidget(e);
+                                    // Get the patams
+                                    var wparams = nx.bucket.getParams(widget);
+                                    // Get the form
+                                    var form = nx.bucket.getForm(widget);
+                                    // Get the params
+                                    var params = nx.bucket.getParams(form);
+                                    // Call
+                                    nx.fs.remoteLink(
+                                        {
+                                            type: 'signature',
+                                            limit: 1 * 60,
+                                            uses: 25,
+                                            value: {
+                                                ds: params.ds,
+                                                id: params.id,
+                                                winid: params.nxid,
+                                                fld: wparams.aoFld
+                                            }
+                                        }, 'ux/signature', nx.bucket.getWin(widget), nx.setup.viaWeb + 'Signature')
                                 }
                             }
                         ];
