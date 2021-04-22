@@ -1587,6 +1587,21 @@ qx.Class.define('c._window', {
             return ans;
         },
 
+        /**
+         * 
+         * Returns the changes in the form
+         * 
+         */
+        setFormDataChange: function (field) {
+
+            var self = this;
+
+            if (self._aoobject) {
+                // Fla
+                self._aoobject.markField(field);
+            }
+        },
+
         doCommand: function (label) {
 
             var self = this;

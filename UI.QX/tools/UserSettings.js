@@ -53,8 +53,6 @@ qx.Class.define('tools.UserSettings', {
                         //
                         nx.desktop.user.setValues(data);
                     }
-
-                    nx.util.clear(data);
                 }
 
             });

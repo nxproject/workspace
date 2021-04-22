@@ -39,8 +39,8 @@ namespace Proc.AO
         #endregion
 
         #region Constructor
-        public ExtendedUserClass(JObject values, SiteInfoClass si)
-            : base(values)
+        public ExtendedUserClass(AO.ObjectClass values, SiteInfoClass si)
+            : base(values.AsJObject)
         {
             //
             this.SiteInfo = si;
@@ -236,6 +236,17 @@ namespace Proc.AO
         {
             get { return this["commfooter"]; }
             set { this["commfooter"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The signature
+        /// 
+        /// </summary>
+        public string Signature
+        {
+            get { return this["signature"]; }
+            set { this["signature"] = value; }
         }
         #endregion
 

@@ -51,20 +51,20 @@ namespace Proc.Docs.Files
         /// Merges the document with a given store of data
         /// 
         /// </summary>
-        public void Merge(DocumentClass result, ExtendedContextClass ctx, Func<string, string> preproc)
+        public void Merge(DocumentClass result, 
+            ExtendedContextClass ctx, 
+            Func<string, string> preproc,
+            string signature)
         {
             // Create support object for Adobe
             using (ODTClass c_Filler = new ODTClass())
             {
                 // And merge
-                c_Filler.Merge(this, ctx, preproc, result);
+                c_Filler.Merge(this, ctx, preproc, result, signature);
             }
 
-            //
-            using (ODTClass c_Cvt = new ODTClass())
-            {
-                c_Cvt.Merge(this, ctx, preproc, this.Parent);
-            }
+            // Put back
+            this.Parent.CopyTo(result);
         }
         #endregion
     }

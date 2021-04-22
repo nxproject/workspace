@@ -367,7 +367,7 @@
                         }, {
                             text: 'Actions',
                             onclick: function () {
-                                editor.insertContent('<br />{{#if actions}}{{#each actions}}<br />{{this.caption}} -- {{this.href}}{{/each}}<br />{{/if}}');
+                                editor.insertContent('{{#if actions}}{{#each actions}}{{this.caption}} -- {{this.href}}{{/each}}{{/if}}');
                             }
                         }
                     ]
@@ -1578,7 +1578,7 @@
                 $block.addClass('aee-text-block-item');
                 var html = '';
                 //var text = $A.translate('<br />{{#if attachments}}<br /><b>Attachments</b><br />{{ #each attachments }}<br />{{ this.caption }}: {{ this.href }}<br />{{/each}}<br />\{{/if}}<br />');
-                var text = $A.translate('{{#if attachments}}<br /><b>Attachments</b><br />{{#each attachments}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize;">{{this.caption}}</a><br />{{/each}}{{/if}}<br />');
+                var text = $A.translate('{{#if attachments}}<b>Attachments</b>{{#each attachments}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize;">{{this.caption}}</a>{{/each}}{{/if}}<br />');
                 for (var i = 0; i < 1; i++) {
                     html += text;
                 }

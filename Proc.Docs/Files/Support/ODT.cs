@@ -94,52 +94,106 @@ namespace Proc.Docs.Files
         /// <param name="doc">The byte array of the document contents</param>
         /// <param name="values">The store</param>
         /// <returns>A byte array of the merged document</returns>
-        public void Merge(ODTDocumentClass doc, ExtendedContextClass ctx, Func<string, string> preproc, NX.Engine.Files.DocumentClass result)
+        public void Merge(ODTDocumentClass doc,
+            ExtendedContextClass ctx,
+            Func<string, string> preproc,
+            NX.Engine.Files.DocumentClass result,
+            string signature)
         {
             // 
             try
             {
-                // Get the text
-                string sWkg = this.GetContents(doc.Location);
-                // Handlebars?
-                if (preproc != null) sWkg = preproc(sWkg);
-
-                //// Map the store
-                //HandlebarDataClass c_Data = new HandlebarDataClass();
-                //c_Data.Merge(ctx.Stores[Names.Passed]);
-
-                //// Process handlebars
-                //sWkg = sWkg.Handlebars(c_Data, delegate (string field, object thisvalue)
-                //{
-                //    // Save this
-                //    c_Data.Set("this", thisvalue);
-
-                //    // Eval
-                //    return Expression.Eval(ctx, field).Value;
-                //});
-                // Find all the fields
-                MatchCollection c_Matches = Regex.Matches(sWkg, Pattern);
-                // Loop thru
-                for (int i = c_Matches.Count; i > 0; i--)
+                // Open the archive
+                using (ZipArchive c_Pkg = ZipFile.Open(doc.Location, ZipArchiveMode.Update))
                 {
-                    // Get
-                    Match c_Match = c_Matches[i - 1];
-                    // Get the pattern
-                    string sPatt = c_Match.Value;
-                    // Evaluate
-                    using (DatumClass c_Datum = new DatumClass(ctx, sPatt))
+                    // Get the text
+                    string sWkg = this.GetContents(c_Pkg);
+                    // Handlebars?
+                    if (preproc != null) sWkg = preproc(sWkg);
+
+                    // Find all the fields
+                    MatchCollection c_Matches = Regex.Matches(sWkg, Pattern);
+                    // Loop thru
+                    for (int i = c_Matches.Count; i > 0; i--)
                     {
-                        // Get the value
-                        string sRepl = c_Datum.Value.IfEmpty("");
-                        // And replace
-                        sWkg = sWkg.Replace(sPatt, sRepl);
+                        // Get
+                        Match c_Match = c_Matches[i - 1];
+                        // Get the pattern
+                        string sPatt = c_Match.Value;
+                        // Evaluate
+                        using (DatumClass c_Datum = new DatumClass(ctx, sPatt))
+                        {
+                            // Get the value
+                            string sRepl = c_Datum.Value.IfEmpty("");
+                            // And replace
+                            sWkg = sWkg.Replace(sPatt, sRepl);
+                        }
+                    }
+
+                    // Write it back
+                    this.SetContents(c_Pkg, sWkg);
+
+                    // Handle signature
+                    if (signature.HasValue())
+                    {
+                        this.SetSignature(c_Pkg, signature);
                     }
                 }
-
-                // Write it back
-                this.SetContents(result.Location, sWkg);
             }
             catch { }
+        }
+        #endregion
+
+        #region Archive
+        /// <summary>
+        /// 
+        /// Gets an entry
+        /// 
+        /// </summary>
+        /// <param name="pkg"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private byte[] GetEntry(ZipArchive pkg, string name)
+        {
+            //
+            byte[] abAns = null;
+
+            try
+            {
+                // Find
+                ZipArchiveEntry c_Entry = pkg.GetEntry(name);
+                // Copy
+                using (Stream c_Source = c_Entry.Open())
+                {
+                    using (MemoryStream c_Target = new MemoryStream())
+                    {
+                        c_Source.CopyTo(c_Target);
+
+                        // Get body
+                        abAns = c_Target.ToArray();
+                    }
+                }
+            }
+            catch { }
+
+            return abAns;
+        }
+
+        private void SetEntry(ZipArchive pkg, string name, byte[] value)
+        {
+            // Find
+            ZipArchiveEntry c_Entry = pkg.GetEntry(name);
+            if (c_Entry != null) c_Entry.Delete();
+            // Copy
+            c_Entry = pkg.CreateEntry(name);
+
+            using (MemoryStream c_Source = new MemoryStream(value))
+            {
+                using (Stream c_Target = c_Entry.Open())
+                {
+                    c_Source.CopyTo(c_Target);
+                }
+            }
         }
         #endregion
 
@@ -158,26 +212,30 @@ namespace Proc.Docs.Files
 
             try
             {
-                // Get the text
-                string sWkg = this.GetContents(doc.Location);
-
-                //
-                List<string> c_Done = new List<string>();
-
-                // Find all the fields
-                MatchCollection c_Matches = Regex.Matches(sWkg, Pattern);
-                for (int i = 0; i < c_Matches.Count; i++)
+                // Open the archive
+                using (ZipArchive c_Pkg = ZipFile.Open(doc.Location, ZipArchiveMode.Update))
                 {
-                    // Get
-                    Match c_Match = c_Matches[i];
-                    // Get the pattern
-                    string sPatt = c_Match.Value;
-                    // Only once
-                    if (c_Done.Contains(sPatt))
-                    {
-                        c_Done.Add(sPatt);
+                    // Get the text
+                    string sWkg = this.GetContents(c_Pkg);
 
-                        c_Ans.Add(new FieldInfoClass(sPatt.Substring(1, sPatt.Length - 2)));
+                    //
+                    List<string> c_Done = new List<string>();
+
+                    // Find all the fields
+                    MatchCollection c_Matches = Regex.Matches(sWkg, Pattern);
+                    for (int i = 0; i < c_Matches.Count; i++)
+                    {
+                        // Get
+                        Match c_Match = c_Matches[i];
+                        // Get the pattern
+                        string sPatt = c_Match.Value;
+                        // Only once
+                        if (!c_Done.Contains(sPatt))
+                        {
+                            c_Done.Add(sPatt);
+
+                            c_Ans.Add(new FieldInfoClass(sPatt.Substring(1, sPatt.Length - 2)));
+                        }
                     }
                 }
             }
@@ -195,25 +253,46 @@ namespace Proc.Docs.Files
         /// Get the text
         /// 
         /// </summary>
-        /// <param name="path"></param>
         /// <returns></returns>
-        private string GetContents(string path)
+        private string GetContents(ZipArchive pkg)
         {
-            using (FileStream c_ZStream = new FileStream(path, FileMode.Open))
-            {
-                using (ZipArchive c_Pkg = new ZipArchive(c_ZStream, ZipArchiveMode.Update))
-                {
-                    // Find
-                    ZipArchiveEntry c_Entry = c_Pkg.GetEntry(EntryName);
-                    // Copy
-                    using (Stream c_Source = c_Entry.Open())
-                    {
-                        using (MemoryStream c_Target = new MemoryStream())
-                        {
-                            c_Source.CopyTo(c_Target);
+            //
+            return this.GetEntry(pkg, EntryName).FromBytes();
+        }
 
-                            // Get body
-                            return c_Target.ToArray().FromBytes();
+        /// <summary>
+        /// 
+        /// Fills in all the signature images
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="newvalue"></param>
+        private void SetSignature(ZipArchive pkg, string newvalue)
+        {
+            // Get the contents
+            string sContents = this.GetContents(pkg);
+            // Look for images
+            MatchCollection c_Poss = Regex.Matches(sContents, @"xlink:href=\x22(?<ref>[^\x22]+)");
+            // Any?
+            if (c_Poss.Count > 0)
+            {
+                // Loop thru
+                foreach (Match c_Match in c_Poss)
+                {
+                    // Get the name
+                    string sName = c_Match.Groups["ref"].Value;
+
+                    // Find
+                    byte[] c_Image = this.GetEntry(pkg, sName);
+                    string sMD5 = c_Image.MD5Hash().ToBase64();
+                    // Is it it?
+                    if (sMD5.IsSameValue("zx8/9aERR8EcdIwTNy2zYw=="))
+                    {
+                        // Do we have a new one?
+                        if (newvalue.HasValue())
+                        {
+                            //
+                            this.SetEntry(pkg, sName, newvalue.Substring(1 + newvalue.IndexOf(",")).FromBase64Bytes());
                         }
                     }
                 }
@@ -227,27 +306,9 @@ namespace Proc.Docs.Files
         /// </summary>
         /// <param name="path"></param>
         /// <param name="value"></param>
-        private void SetContents(string path, string value)
+        private void SetContents(ZipArchive pkg, string value)
         {
-            using (FileStream c_ZStream = new FileStream(path, FileMode.Open))
-            {
-                using (ZipArchive c_Pkg = new ZipArchive(c_ZStream, ZipArchiveMode.Update))
-                {
-                    // Find
-                    ZipArchiveEntry c_Entry = c_Pkg.GetEntry(EntryName);
-                    if (c_Entry != null) c_Entry.Delete();
-                    // Copy
-                    c_Entry = c_Pkg.CreateEntry(EntryName);
-
-                    using (MemoryStream c_Source = new MemoryStream(value.ToBytes()))
-                    {
-                        using (Stream c_Target = c_Entry.Open())
-                        {
-                            c_Source.CopyTo(c_Target);
-                        }
-                    }
-                }
-            }
+            this.SetEntry(pkg, EntryName, value.ToBytes());
         }
         #endregion
     }

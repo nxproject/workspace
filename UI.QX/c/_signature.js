@@ -137,6 +137,10 @@ qx.Class.define('c._signature', {
                 ans = self._stored;
             }
 
+            //
+            var field = nx.bucket.getParams(self).aoFld;
+            nx.bucket.getWin(self).setFormDataChange(field);
+
             return ans;
 
         },

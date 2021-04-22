@@ -74,13 +74,17 @@ namespace Proc.Docs.Files
         /// </summary>
         /// <param name="result"></param>
         /// <param name="data"></param>
-        public static void Merge(this DocumentClass doc, DocumentClass result, ExtendedContextClass ctx, Func<string, string> preproc)
+        public static void Merge(this DocumentClass doc, 
+            DocumentClass result, 
+            ExtendedContextClass ctx, 
+            Func<string, string> preproc,
+            string signature)
         {
             // According to type
             switch (doc.Extension)
             {
                 case "odt":
-                    doc.ODT().Merge(result, ctx, preproc);
+                    doc.ODT().Merge(result, ctx, preproc, signature);
                     break;
 
                 case "pdf":

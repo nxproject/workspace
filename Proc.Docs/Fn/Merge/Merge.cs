@@ -98,6 +98,9 @@ namespace Proc.Docs
                                 // Make the context
                                 using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, c_Passed, null, call.UserInfo.Name))
                                 {
+                                    // Get the signature
+                                    string sSignature = c_Ctx.Signature(c_Obj);
+
                                     // Make target
                                     using (DocumentClass c_Target = new DocumentClass(c_Mgr, c_Obj.Folder, c_Source.Name))
                                     {
@@ -110,7 +113,7 @@ namespace Proc.Docs
                                             c_HData.Merge(c_Obj.Explode(ExplodeMakerClass.ExplodeModes.Yes, c_Ctx));
                                             // Merge
                                             return text.Handlebars(c_HData);
-                                        });
+                                        }, sSignature);
 
                                         // Add
                                         c_Done.Add(c_Target.Path);

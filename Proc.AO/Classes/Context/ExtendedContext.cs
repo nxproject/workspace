@@ -93,7 +93,7 @@ namespace Proc.AO
             if (!sUser.HasValue() && store != null) sUser = store["_user"];
             if (sUser.HasValue())
             {
-                this.User = new ExtendedUserClass(this.GetObject(AO.DatabaseClass.DatasetUser, sUser).AsJObject, this.DBManager.DefaultDatabase.SiteInfo);
+                this.User = new ExtendedUserClass(this.GetObject(AO.DatabaseClass.DatasetUser, sUser), this.DBManager.DefaultDatabase.SiteInfo);
                 this.Stores[Names.User] = this.User;
             }
 
@@ -220,9 +220,9 @@ namespace Proc.AO
         /// <returns></returns>
         public List<AO.ObjectClass> Query(AO.DatasetClass ds, params string[] values)
         {
-            using(AO.QueryClass c_Qry = new QueryClass(ds.DataCollection))
+            using (AO.QueryClass c_Qry = new QueryClass(ds.DataCollection))
             {
-                for(int i=0;i < values.Length;i+=2)
+                for (int i = 0; i < values.Length; i += 2)
                 {
                     c_Qry.Add(values[i], QueryElementClass.QueryOps.Eq, values[i + 1]);
                 }
@@ -261,7 +261,7 @@ namespace Proc.AO
             string sName = value.Prefix.IfEmpty(Names.Passed);
 
             // Is there an object?
-            if(this.Objects.Has(sName))
+            if (this.Objects.Has(sName))
             {
                 sAns = this.Objects[sName][value.Field];
             }
@@ -273,6 +273,47 @@ namespace Proc.AO
             return sAns.IfEmpty();
         }
 
+        /// <summary>
+        /// 
+        /// Returns the signature to be used
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public string Signature(AO.ObjectClass obj)
+        {
+            string sAns = null;
+
+            // Do we have an object?
+            if (obj != null && obj.IsData)
+            {
+                // Loop thru
+                foreach (string sField in obj.Dataset.Definition.FieldNames)
+                {
+                    // Signature?
+                    if (obj.Dataset.Definition[sField].Type == Definitions.DatasetFieldClass.FieldTypes.Signature)
+                    {
+                        // Get it
+                        sAns = obj[sField];
+                        // 
+                        if (sAns.HasValue())
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Still need one?
+            if (!sAns.HasValue() && this.User != null)
+            {
+                // Get from user
+                sAns = this.User.Signature;
+            }
+
+            return sAns;
+        }
+
         public override string ToString()
         {
             StringBuilder c_Buffer = new StringBuilder();
@@ -280,7 +321,7 @@ namespace Proc.AO
             c_Buffer.AppendLine("USER\r\n" + this.User.ToString());
             c_Buffer.AppendLine("SITE\r\n " + this.SiteInfo.ToString());
 
-            foreach(string sStore in this.Stores.Keys)
+            foreach (string sStore in this.Stores.Keys)
             {
                 c_Buffer.Append("STORE {0}\r\n".FormatString(sStore) + this.Stores[sStore].ToStringSafe());
             }
@@ -298,10 +339,10 @@ namespace Proc.AO
             string sAtt = new JArray(attachments).ToSimpleString();
 
             //
-            using(SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, SIO.MessageClass.Modes.Internal, "$$noti", 
-                "to", user, 
-                "type", "QM", 
-                "msg", mesaage, 
+            using (SIO.MessageClass c_Msg = new SIO.MessageClass(c_Mgr, SIO.MessageClass.Modes.Internal, "$$noti",
+                "to", user,
+                "type", "QM",
+                "msg", mesaage,
                 "att", sAtt))
             {
                 c_Msg.Send();

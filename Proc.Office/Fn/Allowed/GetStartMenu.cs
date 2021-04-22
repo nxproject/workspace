@@ -84,7 +84,7 @@ namespace Proc.Office
             c_Docs.Sort();
             for (int i = c_Docs.Count; i > 0; i--)
             {
-                if (c_Docs[i - 1].IsSameValue("Backups"))
+                if (c_Docs[i - 1].IsSameValue("Backups") || !c_Docs[i - 1].EndsWith(".odt"))
                 {
                     c_Docs.RemoveAt(i - 1);
                 }

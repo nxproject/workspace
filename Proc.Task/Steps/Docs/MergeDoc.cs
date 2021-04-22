@@ -85,21 +85,27 @@ namespace Proc.Task
 
             // Get the object
             AO.ObjectClass c_Obj = ctx.Objects[""];
-
-            // Merge
-            c_Source.Merge(c_Target, c_Map.Eval(ctx), delegate (string text)
+            // Must have one
+            if (c_Obj != null)
             {
+                // Get the signature
+                string sSignature = ctx.Signature(c_Obj);
+
+                // Merge
+                c_Source.Merge(c_Target, c_Map.Eval(ctx), delegate (string text)
+                {
                 // Do handlebars
                 HandlebarDataClass c_HData = new HandlebarDataClass(ctx.Env);
                 // Add the exploded object
                 if (c_Obj != null)
-                {
+                    {
                     //
                     c_HData.Merge(c_Obj.Explode(ExplodeMakerClass.ExplodeModes.Yes, ctx));
-                }
+                    }
                 // Merge
                 return text.Handlebars(c_HData);
-            });
+                }, sSignature);
+            }
 
             return eAns;
         }

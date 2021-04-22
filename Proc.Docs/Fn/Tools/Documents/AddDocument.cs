@@ -105,6 +105,9 @@ namespace Proc.Docs
                                     // Make the context
                                     using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, c_Passed, null, call.UserInfo.Name))
                                     {
+                                        // Get the signature
+                                        string sSignature = c_Ctx.Signature(c_Obj);
+
                                         // Merge
                                         c_Template.Merge(c_Target, c_Template.MergeMap().Eval(c_Ctx), delegate (string text)
                                         {
@@ -116,7 +119,7 @@ namespace Proc.Docs
                                             c_HData.Merge(c_Raw);
                                             // Merge
                                             return text.Handlebars(c_HData);
-                                        });
+                                        }, sSignature);
                                     }
                                 }
 
