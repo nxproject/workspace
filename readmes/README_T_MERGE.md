@@ -137,7 +137,10 @@ These are the built-in templates:
 |Template|Use|
 |-|-|
 |Empty|An empty document|
-|Letterhead|An empty document with letterhead|
+|Letterhead with User Signature|Dcument with letterhead and signature from user|
+|Letterhead|Document with letterhead and no signature
+|Object Signature|Document with object signature|
+|User Signature|Document with user signature|
 
 ## Document sets
 
@@ -393,5 +396,15 @@ This is an example of a fairly complex data ***context***:
 }
 ```
 Using drective ssyntax ```{{_sys.name}}``` would return ***Demo Site***.
+
+## Signatures
+
+There are three types of signatures allowed in a document:
+
+* [User](https://github.com/nxproject/workspace/blob/master/Proc.AO/Classes/Context/Signatures/signature_user.png) - Signature obtained from User Settings
+* [Object](https://github.com/nxproject/workspace/blob/master/Proc.AO/Classes/Context/Signatures/signature_object.png) - Signature obtained form ***signature*** field in merged object
+* [Demand](https://github.com/nxproject/workspace/blob/master/Proc.AO/Classes/Context/Signatures/signature_demand.png) - Signature obtained on demand (TBD)
+
+You can obtain the image from the links above and then insert the image in the place you want the signature to appear.  You can resize the image but altering the contents in any  other way will destroy the link.
 
 [Home](../README.md)

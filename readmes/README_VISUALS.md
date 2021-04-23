@@ -9,7 +9,13 @@ it into NX.Workspace.  Most of the screen captures were done under the old theme
 
 The following themes are available: ***classic***, ***modern*** and ***nx***.
 
-## Desktop
+## Webtop
+
+This is the webtop (web based desktop) using the ***clean*** or default theme:
+
+![image](images/DesktopCleanC.png)
+
+And this is the original or ***nx*** theme:
 
 ![image](images/Desktop.png)
 
@@ -142,6 +148,8 @@ winCaptionColor: "#FFEBCD"
 
 |Key|Default|Meaning|
 |-|-|-|
+|desktopColor|"#f0f0f5"|Background color of the desktop|
+|desktopUrl|""|URL to an image file to serve as desktop background|
 |winBackgroundColor|"#F8F8FF"|Background color of the window|
 |winCaptionColor|"#ADD8E6"|Window caption background color|
 |winCaptionFontSize|18|Size of the caption font|
