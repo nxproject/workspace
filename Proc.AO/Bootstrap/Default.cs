@@ -847,7 +847,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_User(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.13a"))
+            if (ds.Definition.ReleaseChanged("2021.04.22d"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("User");
@@ -915,6 +915,7 @@ namespace Proc.AO.BuiltIn
 
                 c_Field = ds.Definition["signature"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Signature;
+                c_Field.Label = ".";
 
                 c_Field = ds.Definition["footer"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
@@ -1017,12 +1018,30 @@ namespace Proc.AO.BuiltIn
                 c_Pers.Caption = "Personal";
 
                 //
-                c_Pers.UseFields("dispname", "title", "phone", "signature");
+                c_Pers.UseFields("dispname", "title", "phone");
 
                 // Adjust height
-                c_Pers["signature"].Height = "default.signatureHeight";
+                //c_Pers["signature"].Height = "default.signatureHeight";
 
                 c_Pers.Save();
+            }
+
+            Definitions.ViewClass c_Sign = ds.View("signs");
+            if (c_Sign.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_Sign.Caption = "Signature";
+
+                //
+                c_Sign.UseFields("signature");
+
+                // Adjust 
+                var c_Field = c_Sign["signature"];
+                c_Field.Height = "default.signatureHeight";
+                c_Field.LabelWidth = "0.1";
+                c_Field.Label = "";
+
+                c_Sign.Save();
             }
 
             // Add the view
@@ -1050,7 +1069,7 @@ namespace Proc.AO.BuiltIn
                 // Make the tabs
                 Definitions.ViewFieldClass c_Field = c_VUSett.AsTabs("tabsu");
                 c_Field.Height = "17";
-                c_Field.Views = "infou personal modes email twilio";
+                c_Field.Views = "infou personal signs modes email twilio";
 
                 c_VUSett.Save();
             }

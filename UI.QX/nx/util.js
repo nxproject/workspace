@@ -2715,10 +2715,10 @@ nx.util = {
         var id = ele.attr('id');
 
         // Start loop
-        self.eventOnVisibleSub(id, cb);
+        self.eventInVisibleById(id, cb);
     },
 
-    eventOnVisibleSub: function (id, cb) {
+    eventInVisibleById: function (id, cb) {
 
         var self = this;
 
@@ -2728,7 +2728,7 @@ nx.util = {
             cb(id);
         } else {
             setTimeout(function () {
-                self.eventOnVisibleSub(id, cb);
+                self.eventInVisibleById(id, cb);
             }, 400);
         }
     },

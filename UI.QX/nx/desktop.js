@@ -113,7 +113,7 @@ nx.desktop = {
             'tp.chrono-min',
             'tp.md5-min',
             'tp.keydrown-min',
-            'tp.signaturepad-min',
+            'tp.signaturepad-umd',
             'tp.clipboard-min',
 
             'qx.bom.Cookie',

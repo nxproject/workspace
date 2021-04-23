@@ -99,6 +99,8 @@
     <Content Include="c\_window.js" />
     <Content Include="c\zip.js" />
     <Content Include="tools\askpayment.js" />
+    <Content Include="tp\signaturepad-umd.js" />
+    <Content Include="tp\signaturepad.css" />
     <Content Include="transpiled\qxWeb.js" />
     <Content Include="transpiled\qx\theme\classic\Appearance.js" />
     <Content Include="transpiled\qx\theme\classic\Color.js" />
@@ -1913,6 +1915,7 @@
     <Content Include="ux\mobile\static\404.html" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="tp\" />
     <Folder Include="transpiled\" />
     <Folder Include="transpiled\app\" />
     <Folder Include="transpiled\qx\" />
