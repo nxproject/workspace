@@ -33,6 +33,8 @@
 
         "toolbarGap": 2,
 
+        "desktopColor": "#f0f0f5",
+
         "itemHeight": 25
 
     };

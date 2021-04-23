@@ -1915,6 +1915,7 @@
     <Content Include="ux\mobile\static\404.html" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="background\" />
     <Folder Include="tp\" />
     <Folder Include="transpiled\" />
     <Folder Include="transpiled\app\" />

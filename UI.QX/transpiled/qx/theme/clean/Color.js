@@ -186,6 +186,8 @@ window.nxTheme.Color =
         "progressive-progressbar-indicator-done": "#CCCCCC",
         "progressive-progressbar-indicator-undone": "#ffffff",
         "progressive-progressbar-percent-background": "gray",
-        "progressive-progressbar-percent-text": "#ffffff"
+        "progressive-progressbar-percent-text": "#ffffff",
+
+        "desktop": window.nxTheme.Defaults.desktopColor
     }
 }

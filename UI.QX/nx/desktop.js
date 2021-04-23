@@ -25,6 +25,19 @@ nx.desktop = {
 
         // Create the desktop
         nx.desktop.root = new qx.ui.window.Desktop();
+        nx.desktop.root.addListener('appear', function (e) {
+            // Colorize
+            nx.desktop.root.setBackgroundColor(nxTheme.Defaults.desktopColor);
+            // Wait until it is drawn
+            nx.util.eventOnVisible(e, function (id) {
+            // Do we have an image?
+                var img = nxTheme.Defaults.desktopUrl;
+                if (img) {
+                    // Set
+                    nx.desktop.setBackgroundImage(img);
+                }
+            });
+        });
         // Limits
         var width = window.innerWidth;
         nx.desktop.root.setWidth(width);
@@ -264,6 +277,11 @@ nx.desktop = {
             // Large Device
             return "lg"
         }
+    },
+
+    setBackgroundImage: function (url) {
+        // Make the url
+        $("[qxclass*='qx.ui.window.Desktop']").css('background-image', "url('" + url + "')").css('background-size', 'cover');
     },
 
     // ---------------------------------------------------------
