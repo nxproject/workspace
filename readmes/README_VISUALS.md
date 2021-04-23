@@ -148,6 +148,8 @@ winCaptionColor: "#FFEBCD"
 
 |Key|Default|Meaning|
 |-|-|-|
+|desktopColor|"#f0f0f5"|Background color of the desktop|
+|desktopUrl|""|URL to an image file to serve as desktop background|
 |winBackgroundColor|"#F8F8FF"|Background color of the window|
 |winCaptionColor|"#ADD8E6"|Window caption background color|
 |winCaptionFontSize|18|Size of the caption font|
