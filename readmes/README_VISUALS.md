@@ -9,7 +9,13 @@ it into NX.Workspace.  Most of the screen captures were done under the old theme
 
 The following themes are available: ***classic***, ***modern*** and ***nx***.
 
-## Desktop
+## Webtop
+
+This is the webtop (web based desktop) using the ***clean*** or default theme:
+
+![image](images/DesktopClean.png)
+
+And this is the original or ***nx*** theme:
 
 ![image](images/Desktop.png)
 
