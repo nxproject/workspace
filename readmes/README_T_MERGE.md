@@ -402,7 +402,7 @@ Using drective ssyntax ```{{_sys.name}}``` would return ***Demo Site***.
 There are three types of signatures allowed in a document:
 
 * [User](https://github.com/nxproject/workspace/blob/master/Proc.AO/Classes/Context/Signatures/signature_user.png) - Signature obtained from User Settings
-* [Object](https://github.com/nxproject/workspace/blob/master/Proc.AO/Classes/Context/Signatures/signature_object.png) - Signature obtained form ***signature*** fied in merged object
+* [Object](https://github.com/nxproject/workspace/blob/master/Proc.AO/Classes/Context/Signatures/signature_object.png) - Signature obtained form ***signature*** field in merged object
 * [Demand](https://github.com/nxproject/workspace/blob/master/Proc.AO/Classes/Context/Signatures/signature_demand.png) - Signature obtained on demand (TBD)
 
 You can obtain the image from the links above and then insert the image in the place you want the signature to appear.  You can resize the image but altering the contents in any  other way will destroy the link.
