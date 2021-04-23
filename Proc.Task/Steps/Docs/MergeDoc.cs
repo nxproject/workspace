@@ -89,7 +89,7 @@ namespace Proc.Task
             if (c_Obj != null)
             {
                 // Get the signature
-                string sSignature = ctx.Signature(c_Obj);
+                SignaturesClass c_Signature = ctx.Signature(c_Obj);
 
                 // Merge
                 c_Source.Merge(c_Target, c_Map.Eval(ctx), delegate (string text)
@@ -104,7 +104,7 @@ namespace Proc.Task
                     }
                 // Merge
                 return text.Handlebars(c_HData);
-                }, sSignature);
+                }, c_Signature);
             }
 
             return eAns;

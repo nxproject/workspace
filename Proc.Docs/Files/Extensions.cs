@@ -78,7 +78,7 @@ namespace Proc.Docs.Files
             DocumentClass result, 
             ExtendedContextClass ctx, 
             Func<string, string> preproc,
-            string signature)
+            SignaturesClass signature)
         {
             // According to type
             switch (doc.Extension)

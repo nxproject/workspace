@@ -22,50 +22,64 @@
 /// 
 ///--------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
+/// Packet Manager Requirements
+/// 
+/// 
+/// Install-Package Newtonsoft.Json -Version 12.0.3
+/// 
+
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 
 using Newtonsoft.Json.Linq;
 
 using NX.Engine;
 using NX.Engine.Files;
 using NX.Shared;
-using Proc.Docs.Files;
-using Proc.AO;
 
-namespace Proc.Docs.Files
+namespace Proc.AO
 {
-    public class ODTDocumentClass : ShadowDocumentClass
+    public class SignaturesClass : IDisposable, IEnumerable<SignatureClass>
     {
         #region Constructor
-        public ODTDocumentClass(DocumentClass odoc)
-            : base(odoc, "odt")
+        public SignaturesClass()
         { }
         #endregion
 
-        #region Methods
+        #region IDisposable
+        public void Dispose()
+        { }
+        #endregion
+
+        #region IEnumerable
+        public IEnumerator<SignatureClass> GetEnumerator()
+        {
+            return this.Signatures.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.Signatures.Values.GetEnumerator();
+        }
+        #endregion
+
+        #region Indexer
+        public SignatureClass this[SignatureClass.SignatureTypes stype]
+        {
+            get { return this.Signatures[stype.ToString()]; }
+            set { this.Signatures[stype.ToString()] = value; }
+        }
+        #endregion
+
+        #region Properties
         /// <summary>
         /// 
-        /// Merges the document with a given store of data
+        /// The cache of signatures
         /// 
         /// </summary>
-        public void Merge(DocumentClass result, 
-            ExtendedContextClass ctx, 
-            Func<string, string> preproc,
-            SignaturesClass signature)
-        {
-            // Create support object for Adobe
-            using (ODTClass c_Filler = new ODTClass())
-            {
-                // And merge
-                c_Filler.Merge(this, ctx, preproc, result, signature);
-            }
-
-            // Put back
-            this.Parent.CopyTo(result);
-        }
+        public NamedListClass<SignatureClass> Signatures { get; set; } = new NamedListClass<SignatureClass>();
         #endregion
     }
 }

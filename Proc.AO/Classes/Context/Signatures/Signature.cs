@@ -22,50 +22,73 @@
 /// 
 ///--------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
+/// Packet Manager Requirements
+/// 
+/// 
+/// Install-Package Newtonsoft.Json -Version 12.0.3
+/// 
+
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 using Newtonsoft.Json.Linq;
 
 using NX.Engine;
 using NX.Engine.Files;
 using NX.Shared;
-using Proc.Docs.Files;
-using Proc.AO;
 
-namespace Proc.Docs.Files
+namespace Proc.AO
 {
-    public class ODTDocumentClass : ShadowDocumentClass
+    public class SignatureClass : IDisposable
     {
         #region Constructor
-        public ODTDocumentClass(DocumentClass odoc)
-            : base(odoc, "odt")
+        public SignatureClass(SignatureTypes type, string value)
+        {
+            // Save
+            this.Signature = value;
+            // And fingerprint
+            this.Fingerprint = this.GetResource("signature_{0}.md5".FormatString(type.ToString().ToLower())).FromBytes();
+        }
+        #endregion
+
+        #region IDisposable
+        public void Dispose()
         { }
         #endregion
 
-        #region Methods
+        #region Enums
+        public enum SignatureTypes
+        {
+            User,
+            Object
+        }
+        #endregion
+
+        #region Properties
         /// <summary>
         /// 
-        /// Merges the document with a given store of data
+        /// The signature as dataURL
         /// 
         /// </summary>
-        public void Merge(DocumentClass result, 
-            ExtendedContextClass ctx, 
-            Func<string, string> preproc,
-            SignaturesClass signature)
-        {
-            // Create support object for Adobe
-            using (ODTClass c_Filler = new ODTClass())
-            {
-                // And merge
-                c_Filler.Merge(this, ctx, preproc, result, signature);
-            }
+        public string Signature { get; private set; }
 
-            // Put back
-            this.Parent.CopyTo(result);
+        /// <summary>
+        /// 
+        /// As an image
+        /// 
+        /// </summary>
+        public byte[] AsImage
+        {
+            get { return this.Signature.Substring(1 + this.Signature.IndexOf(",")).FromBase64Bytes(); }
         }
+
+        /// <summary>
+        /// 
+        /// The fingerprint to match
+        /// 
+        /// </summary>
+        public string Fingerprint { get; private set; }
         #endregion
     }
 }

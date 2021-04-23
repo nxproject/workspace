@@ -98,7 +98,7 @@ namespace Proc.Docs.Files
             ExtendedContextClass ctx,
             Func<string, string> preproc,
             NX.Engine.Files.DocumentClass result,
-            string signature)
+            SignaturesClass signature)
         {
             // 
             try
@@ -134,10 +134,7 @@ namespace Proc.Docs.Files
                     this.SetContents(c_Pkg, sWkg);
 
                     // Handle signature
-                    if (signature.HasValue())
-                    {
-                        this.SetSignature(c_Pkg, signature);
-                    }
+                    this.SetSignature(c_Pkg, signature);
                 }
             }
             catch { }
@@ -267,7 +264,7 @@ namespace Proc.Docs.Files
         /// </summary>
         /// <param name="path"></param>
         /// <param name="newvalue"></param>
-        private void SetSignature(ZipArchive pkg, string newvalue)
+        private void SetSignature(ZipArchive pkg, SignaturesClass signature)
         {
             // Get the contents
             string sContents = this.GetContents(pkg);
@@ -284,15 +281,15 @@ namespace Proc.Docs.Files
 
                     // Find
                     byte[] c_Image = this.GetEntry(pkg, sName);
-                    string sMD5 = c_Image.MD5Hash().ToBase64();
-                    // Is it it?
-                    if (sMD5.IsSameValue("zx8/9aERR8EcdIwTNy2zYw=="))
+                    string sMD5 = c_Image.MD5HashString();
+                    // Loop thru
+                    foreach (SignatureClass c_Signature in signature)
                     {
-                        // Do we have a new one?
-                        if (newvalue.HasValue())
+                        // Is it it?
+                        if (sMD5.IsSameValue(c_Signature.Fingerprint))
                         {
                             //
-                            this.SetEntry(pkg, sName, newvalue.Substring(1 + newvalue.IndexOf(",")).FromBase64Bytes());
+                            this.SetEntry(pkg, sName, c_Signature.AsImage);
                         }
                     }
                 }

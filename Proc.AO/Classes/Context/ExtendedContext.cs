@@ -280,9 +280,9 @@ namespace Proc.AO
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public string Signature(AO.ObjectClass obj)
+        public SignaturesClass Signature(AO.ObjectClass obj)
         {
-            string sAns = null;
+            SignaturesClass c_Ans = new SignaturesClass();
 
             // Do we have an object?
             if (obj != null && obj.IsData)
@@ -294,24 +294,24 @@ namespace Proc.AO
                     if (obj.Dataset.Definition[sField].Type == Definitions.DatasetFieldClass.FieldTypes.Signature)
                     {
                         // Get it
-                        sAns = obj[sField];
+                        string sSign = obj[sField];
                         // 
-                        if (sAns.HasValue())
+                        if (sSign.HasValue())
                         {
+                            c_Ans[SignatureClass.SignatureTypes.Object] = new SignatureClass(SignatureClass.SignatureTypes.Object, sSign);
                             break;
                         }
                     }
                 }
             }
 
-            // Still need one?
-            if (!sAns.HasValue() && this.User != null)
+            // Get from user
+            if (this.User.Signature.HasValue())
             {
-                // Get from user
-                sAns = this.User.Signature;
+                c_Ans[SignatureClass.SignatureTypes.User] = new SignatureClass(SignatureClass.SignatureTypes.User, this.User.Signature);
             }
 
-            return sAns;
+            return c_Ans;
         }
 
         public override string ToString()
