@@ -104,7 +104,8 @@ nx._routes.push({
                                             }
                                             // Add
                                             rb.push({
-                                                label: tools[tname],
+                                                label: tools[tname].caption,
+                                                icon: tools[tname].icon,
                                                 cb: 'nx.tools.' + tname + '();'
                                             });
                                         });
@@ -125,12 +126,12 @@ nx._routes.push({
 
                                         rb.push({
                                             label: '>> Charge',
-                                            icon: 'money',
+                                            icon: 'coins',
                                             cb: "nx.calls.commBilling('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
                                         });
                                         rb.push({
                                             label: '>> Subscriptions',
-                                            icon: 'money',
+                                            icon: 'tag_red',
                                             cb: "nx.calls.commSubs('" + acct + "','" + obj._billto + "','" + obj._billat + "')"
                                         });
                                         rb.push({

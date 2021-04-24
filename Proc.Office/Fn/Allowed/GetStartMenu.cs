@@ -158,7 +158,10 @@ namespace Proc.Office
                                         {
                                             if (!bHidden) c_AllEntries.Add(c_MEa);
 
-                                            c_DStools.Set(c_MEa.Name, c_MEa.Caption);
+                                            JObject c_TEntry = new JObject();
+                                            c_TEntry.Set("caption", c_MEa.Caption);
+                                            c_TEntry.Set("icon", c_MEa.Icon);
+                                            c_DStools.Set(c_MEa.Name, c_TEntry);
                                         }
                                     }
                                 }
@@ -277,7 +280,11 @@ namespace Proc.Office
                                         if (c_MEa != null && c_MEa.Dataset.IsSameValue(sDS) && 
                                             (c_LTools.IndexOf(c_ME.Name) != -1 || c_LTools.IndexOf("*") != -1))
                                         {
-                                            c_Tools.Set(c_ME.Name, c_ME.Caption);
+
+                                            JObject c_TEntry = new JObject();
+                                            c_TEntry.Set("caption", c_ME.Caption);
+                                            c_TEntry.Set("icon", c_ME.Icon);
+                                            c_Tools.Set(c_ME.Name, c_TEntry);
                                         }
                                     }
 

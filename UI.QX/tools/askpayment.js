@@ -29,7 +29,7 @@ qx.Class.define('tools.askpayment', {
         startprivilege: 'BILLING',
         ds: '_billinvoice',
         caption: 'Request Payment',
-        icon: 'money',
+        icon: 'coins',
 
         // This is what you override
         do: function (req) {

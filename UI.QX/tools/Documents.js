@@ -705,6 +705,31 @@ qx.Class.define('tools.Documents', {
                 }
             });
 
+            if (!asfolder && nx.desktop.user.getIsSelector('MGR')) {
+                cm.push({
+                    label: 'URL',
+                    icon: 'world',
+                    click: function (e) {
+                        // Get the widget
+                        var widget = nx.util.eventGetWidget(e);
+                        var params = nx.bucket.getParams(widget);
+                        // Call
+                        tools.Documents.processCall(params.win, widget, function (objinfo, sel, cb) {
+                            // Any?
+                            if (sel) {
+                            // Loop thru
+                                sel.forEach(function (file) {
+                                    //
+                                    var url = nx.util.loopbackURL() + '/f' + file;
+                                    nx.util.copy(url);
+                                    nx.util.notifyInfo('URL copied to clipboard');
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
             if (req.id === nx.setup.templatesID) {
 
                 cm.push({

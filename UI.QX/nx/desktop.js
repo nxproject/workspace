@@ -597,6 +597,7 @@ nx.desktop = {
 
                                         items.push({
                                             label: 'Charges',
+                                            icon: 'coins',
                                             click: function (e) {
                                                 nx.util.runTool('View', {
                                                     ds: '_billcharge',
@@ -606,6 +607,7 @@ nx.desktop = {
                                         });
                                         items.push({
                                             label: 'Subscriptions',
+                                            icon: 'tag_red',
                                             click: function (e) {
                                                 nx.util.runTool('View', {
                                                     ds: '_billsubs',
@@ -617,6 +619,7 @@ nx.desktop = {
                                         if (nx.desktop.user.getIsSelector('INVOICE')) {
                                             items.push({
                                                 label: 'Invoices',
+                                                icon: 'money',
                                                 click: function (e) {
                                                     nx.util.runTool('View', {
                                                         ds: '_billinvoice',
@@ -664,7 +667,7 @@ nx.desktop = {
                                 }
 
                                 // Add documents
-                                if (nx.desktop.user.opAllowed(ds, 'd')) {
+                                if (nx.desktop.user.opAllowed(ds, 'd') || req.ds==='_sys') {
                                     tt.items.push({
                                         label: 'Documents',
                                         icon: 'folder',
@@ -802,7 +805,8 @@ nx.desktop = {
                                                             Object.keys(dstools).forEach(function (tool) {
                                                                 // Add
                                                                 tdefs.push({
-                                                                    label: dstools[tool],
+                                                                    label: dstools[tool].caption,
+                                                                    icon: dstools[tool].icon,
                                                                     click: function (e) {
                                                                         // Get the widget
                                                                         var widget = nx.util.eventGetWidget(e);

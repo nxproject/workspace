@@ -1649,14 +1649,14 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillRate(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.15a"))
+            if (ds.Definition.ReleaseChanged("2021.04.23a"))
             {
                 //
                 ds.Definition.Caption = "Bill. Rate";
                 ds.Definition.Placeholder = "[code] '-' [desc]";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "code";
-                ds.Definition.Icon = "money";
+                ds.Definition.Icon = "lock";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "300";
                 ds.Definition.Selector = "BILLING";
@@ -1703,14 +1703,14 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillCharge(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.18a"))
+            if (ds.Definition.ReleaseChanged("2021.04.23a"))
             {
                 //
                 ds.Definition.Caption = "Charges";
                 ds.Definition.Placeholder = "[#dateonlysortable([on])# [code] '-' [desc] @ #linkdesc([acct])#";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "";
-                ds.Definition.Icon = "money";
+                ds.Definition.Icon = "coins";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "hidden";
                 ds.Definition.Selector = "BILLING";
@@ -1814,14 +1814,14 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillSubscription(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.16b"))
+            if (ds.Definition.ReleaseChanged("2021.04.23a"))
             {
                 //
                 ds.Definition.Caption = "Subscriptions";
                 ds.Definition.Placeholder = "[#dateonlysortable([nexton])# [code] '-' [desc] @ #linkdesc([acct])#";
                 ds.Definition.Privileges = "av";
                 ds.Definition.IDAlias = "";
-                ds.Definition.Icon = "money";
+                ds.Definition.Icon = "tag_red";
                 ds.Definition.StartGroup = "System";
                 ds.Definition.StartIndex = "hidden";
                 ds.Definition.Selector = "BILLING";
