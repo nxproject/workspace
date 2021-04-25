@@ -50,7 +50,7 @@ These generate the [directives](README_LE.md) for each type of entry:
 |Data|```{{replace_with_field}}```|
 |Attachments|```{{#if \_attachments}}<b>Attachments</b>{{#each \_attachments}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize;">{{this.caption}}</a>{{/each}}{{/if}}<br />```|
 |Actions|```{{#if \_actions}}<br />{{#each \_actions}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};">{{this.caption}}</a>{{/each}}{{/if}}<br />```|
-|Site Information|<span style="font-size: 12pt; "><b>{{\_sys.name}}</b></span><br>{{\_sys.addr1}}<br>{{\_sys.city}}, {{\_sys.state}}&nbsp;<br>{{\_sys.phone}}<br></span>```|
+|Site Information|```<span style="font-size: 12pt; "><b>{{\_sys.name}}</b></span><br>{{\_sys.addr1}}<br>{{\_sys.city}}, {{\_sys.state}}&nbsp;<br>{{\_sys.phone}}<br></span>```|
 |Payment Request|```{{\_paymentrequest}}```|
 
 Note that you can use any field that is part of the [extended merge](EADME_T_MERGE.md) logic available for documents.
