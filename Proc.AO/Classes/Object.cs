@@ -359,31 +359,7 @@ namespace Proc.AO
                 {
                     ctx = new ExtendedContextClass(ctx.Env, ctx.Stores[Names.Passed], this, ctx.User.Name);
                 }
-                // Loop thru
-                foreach (string sField in this.Dataset.Definition.FieldNames)
-                {
-                    // Get the field
-                    Definitions.DatasetFieldClass c_Field = this.Dataset.Definition[sField];
-                    // Does it have a default value?
-                    if (c_Field.DefaultValue.HasValue())
-                    {
-                        using (DatumClass c_Datum = new DatumClass(ctx, c_Field.DefaultValue))
-                        {
-                            // According to type
-                            switch (c_Datum.Type)
-                            {
-                                case DatumClass.Types.Data:
-                                case DatumClass.Types.Expression:
-                                case DatumClass.Types.Value:
-                                    this[sField] = c_Datum.Value;
-                                    break;
-                                default:
-                                    this[sField] = c_Field.DefaultValue;
-                                    break;
-                            }
-                        }
-                    }
-                }
+
                 // And the chain
                 if (chain != null)
                 {
@@ -414,6 +390,32 @@ namespace Proc.AO
                                         this[sField] = sValue;
                                         break;
                                 }
+                            }
+                        }
+                    }
+                }
+
+                // Loop thru
+                foreach (string sField in this.Dataset.Definition.FieldNames)
+                {
+                    // Get the field
+                    Definitions.DatasetFieldClass c_Field = this.Dataset.Definition[sField];
+                    // Does it have a default value?
+                    if (c_Field.DefaultValue.HasValue())
+                    {
+                        using (DatumClass c_Datum = new DatumClass(ctx, c_Field.DefaultValue))
+                        {
+                            // According to type
+                            switch (c_Datum.Type)
+                            {
+                                case DatumClass.Types.Data:
+                                case DatumClass.Types.Expression:
+                                case DatumClass.Types.Value:
+                                    this[sField] = c_Datum.Value;
+                                    break;
+                                default:
+                                    this[sField] = c_Field.DefaultValue;
+                                    break;
                             }
                         }
                     }

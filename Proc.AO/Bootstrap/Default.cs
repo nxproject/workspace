@@ -158,7 +158,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.21a"))
+            if (ds.Definition.ReleaseChanged("2021.04.24d"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -327,6 +327,22 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Billing";
 
+                c_Field = ds.Definition["billinvtemplate"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Inv. Template";
+
+                c_Field = ds.Definition["billinvrtemplate"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Pay Req. Tmplt.";
+
+                c_Field = ds.Definition["billinvrsubj"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Pay Req. Subj.";
+
+                c_Field = ds.Definition["billinvrmsg"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Pay Req. Msg.";
+
                 c_Field = ds.Definition["quorumenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Quorum";
@@ -396,6 +412,10 @@ namespace Proc.AO.BuiltIn
                 c_CInfo.UseFields(
                     "acctenabled", "acctdefallowed",
                     "billenabled",
+                    "billinvtemplate",
+                    "billinvrtemplate",
+                    "billinvrsubj",
+                    "billinvrmsg",
                     "ttenabled",
                     "teleenabled",
                     "quorumenabled", 
@@ -1900,7 +1920,7 @@ namespace Proc.AO.BuiltIn
 
         private static void Define_BillInvoice(this DatasetClass ds)
         { // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.17b"))
+            if (ds.Definition.ReleaseChanged("2021.04.25b"))
             {
                 //
                 ds.Definition.Caption = "Invoices";
@@ -1924,7 +1944,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Description";
-                c_Field.DefaultValue = "#concat('Generated on ',date(today()))#";
+                c_Field.DefaultValue = "#linkdesc([at])#";
 
                 c_Field = ds.Definition["on"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Date;

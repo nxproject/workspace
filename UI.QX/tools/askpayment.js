@@ -34,11 +34,23 @@ qx.Class.define('tools.askpayment', {
         // This is what you override
         do: function (req) {
 
-            // Get the data
-            nx.util.serviceCall('Stripe.AskPayment', req, function (result) {
+            // Map
+            var win = req.win;
+            // Save the window
+            win.save(function () {
+                // Get the data
+                var data = win.getFormData();
 
-                //
-                nx.util.processToolReturn(result);
+                // Make the request
+                nx.util.serviceCall('Stripe.AskPayment', {
+                    ds: req.ds,
+                    id: req.id
+                }, function(result) {
+
+                    //
+                    nx.util.processToolReturn(result);
+
+                });
 
             });
         }

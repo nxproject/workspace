@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>{{site}} EMail</title>
+    <title>{{_sys.name}} EMail</title>
     <style>
         /* -------------------------------------
             INLINED WITH htmlemail.io/inline
@@ -152,7 +152,7 @@
                     <!-- START CENTERED WHITE CONTAINER -->
                     <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">This is preheader text.Some clients will show this text as a preview.</span>
 
-                    <h2>{{subject}}</h2>
+                    <h2>{{_subject}}</h2>
                     <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
                         <!-- START MAIN CONTENT AREA -->
                         <tr>
@@ -160,13 +160,12 @@
                                 <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
                                     <tr>
                                         <td style=" vertical-align top;">
-                                            <p class="pre">{{message}}</p>
+                                            <p class="pre">{{_message}}</p>
                                             <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; box-sizing: border-box;">
                                                 <tbody>
-                                                    {{#if attachments}}
-                                                    <hr />
+                                                    {{#if _attachments}}
                                                     <h4>Attachments</h4>
-                                                    {{#each attachments}}
+                                                    {{#each _attachments}}
                                                     <tr>
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top; text-align: center;">
                                                             <a href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};">
@@ -175,13 +174,12 @@
                                                         </td>
                                                     </tr>
                                                     {{/each}}
-                                                    <hr />
                                                     <br />
                                                     {{/if}}
                                                     <tr>
-                                                        <td align="center" style=" vertical-align top; padding-bottom 15px;">{{post}}</td>
+                                                        <td align="center" style=" vertical-align top; padding-bottom 15px;">{{_post}}</td>
                                                     </tr>
-                                                    {{#if actions}}
+                                                    {{#if _actions}}
                                                     <tr>
                                                         {{#each actions}}
                                                         <td align="center" style=" vertical-align top; padding-bottom 15px;">
@@ -206,13 +204,13 @@
                         <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
                             <tr>
                                 <td class="content-block" style=" vertical-align top; padding-bottom 10px; padding-top 10px; color #999999; text-align center;">
-                                    <span class="apple-link" style="color: #999999; text-align: center;">{{footer}}</span>
+                                    <span class="apple-link" style="color: #999999; text-align: center;">{{_footer}}</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="content-block powered-by" style=" vertical-align top; padding-bottom 10px; padding-top 10px; font-size 12px; color #999999; text-align center;">
                                     <br />
-                                    Powered by <a href="{{url}}" style="color: #999999; font-size: 12px; text-align: center; text-decoration: none;">NX.Project</a>.
+                                    Powered by <a href="{{_url}}" style="color: #999999; font-size: 12px; text-align: center; text-decoration: none;">NX.Project</a>.
                                 </td>
                             </tr>
                         </table>

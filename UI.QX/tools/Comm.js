@@ -53,6 +53,8 @@ qx.Class.define('tools.Comm', {
                             // Add
                             choices.push(entry.code);
                         });
+                        // SOrt
+                        choices.sort();
                         // Call
                         tools.Comm.campaign(req, choices);
                     } else {
@@ -90,6 +92,8 @@ qx.Class.define('tools.Comm', {
                                 // Add
                                 campaigns.push(entry.code);
                             });
+                            // Sort
+                            campaigns.sort();
                             // Call
                             tools.Comm.display(req, choices, campaigns);
                         } else {
@@ -216,7 +220,9 @@ qx.Class.define('tools.Comm', {
                                     template: template || '',
                                     campaign: campaign,
                                     telemetry: req.useTelemetry,
-                                    mlink: mlink
+                                    mlink: mlink,
+                                    ds: req.ds,
+                                    id: req.id
                                 });
 
                                 // Close

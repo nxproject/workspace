@@ -816,7 +816,7 @@ nx.desktop = {
                                                                         nx.util.runTool(tool, {
                                                                             ds: req.ds,
                                                                             id: req.id,
-                                                                            data: win.getFormData()
+                                                                            win: win
                                                                         });
                                                                     }
                                                                 });

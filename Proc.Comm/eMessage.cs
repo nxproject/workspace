@@ -41,20 +41,21 @@ namespace Proc.Communication
     public class eMessageClass : ChildOfClass<AO.ExtendedContextClass>
     {
         #region Constants
-        private const string KeySubj = "subject";
-        private const string KeyMsg = "message";
-        private const string KeyPost = "post";
-        private const string KeyFooter = "footer";
+        public const string KeySubj = "_subject";
+        public const string KeyMsg = "_message";
+        public const string KeyPost = "_post";
+        public const string KeyFooter = "_footer";
 
-        private const string KeyTo = "to";
-        private const string KeyTelemetry = "telemetry";
-        private const string KeyCampaign = "campaign";
-        private const string KeyEMailTemplate = "template";
-        private const string KeySMSTemplate = "smstemplate";
-        private const string KeyCommand = "cmd";
-        private const string KeyUser = "user";
-        private const string KeyAttachments = "att";
-        private const string KeyMessageLink = "mlink";
+        public const string KeyTo = "to";
+        public const string KeyTelemetry = "telemetry";
+        public const string KeyCampaign = "campaign";
+        public const string KeyEMailTemplate = "template";
+        public const string KeySMSTemplate = "smstemplate";
+        public const string KeyCommand = "cmd";
+        public const string KeyUser = "user";
+        public const string KeyAttachments = "att";
+        public const string KeyMessageLink = "mlink";
+        public const string KeyInvoice = "inv";
         #endregion
 
         #region Constructor
@@ -66,11 +67,11 @@ namespace Proc.Communication
             this.Initialize();
         }
 
-        public eMessageClass(AO.ExtendedContextClass ctx, string value)
+        public eMessageClass(AO.ExtendedContextClass ctx, HandlebarDataClass value)
             : base(ctx)
         {
-            this.Values = new HandlebarDataClass(ctx.Env);
-            this.Values.Merge(value.ToJObject());
+            this.Values = value;
+            if(this.Values == null) this.Values = new HandlebarDataClass(ctx.Env);
 
             this.Initialize();
         }
@@ -252,6 +253,13 @@ namespace Proc.Communication
 
         // Callbacks
         public Action<eAddressClass, bool> UserCB { get; set; }
+
+        /// <summary>
+        /// 
+        /// The invoice code
+        /// 
+        /// </summary>
+        public string Invoice { get { return this.Values.GetAsString(KeyInvoice); } set { this.Values.Set(KeyInvoice, value); } }
         #endregion
 
         #region Methods
@@ -443,8 +451,6 @@ namespace Proc.Communication
                 // Format
                 string sHTML = this.FormatMessage(to.To, this.EMailTemplate, "EMailTemplate.html", "EMail", false);
 
-                this.Parent.Env.LogInfo("EMAIL\r\n" + sHTML + "\r\n");
-
                 //Validate
                 if (sEMailLogin.HasValue() && sEMailPwd.HasValue())
                 {
@@ -515,7 +521,7 @@ namespace Proc.Communication
                 string sHTML = this.FormatMessage(to.To, this.SMSTemplate, "SMSTemplate.html", "SMS", true);
 
                 // Telemetry?
-                if(this.Telemetry)
+                if (this.Telemetry)
                 {
                     // Get
                     Proc.Telemetry.DataClass c_Tele = this.GetTelemetry("SMS", "SMS");
@@ -694,7 +700,7 @@ namespace Proc.Communication
                         // Get holder
                         string sHolder = this.GetResource("EMailHolder.html").FromBytes();
                         // Fill
-                        sTemplate = sHolder.Replace("{message}", sTemplate);
+                        sTemplate = sHolder.Replace("{contents}", sTemplate);
                     }
                 }
             }
@@ -733,7 +739,7 @@ namespace Proc.Communication
                     c_Attachments.Add(c_Entry);
                 }
 
-                this.Values.Set("attachments", c_Attachments);
+                this.Values.Set("_attachments", c_Attachments);
             }
 
             // Build actions list
@@ -764,13 +770,19 @@ namespace Proc.Communication
                     c_Actions.Add(c_Entry);
                 }
 
-                this.Values.Set("actions", c_Actions);
+                this.Values.Set("_actions", c_Actions);
+            }
+
+            // Invoice
+            if (this.Invoice.HasValue())
+            {
+                this.Values.Set("_askpayment", "// TBD");
             }
 
             // Predined
             this.Values.Set("publicurl", this.Parent.Env.ReachableURL);
-            this.Values.Set("sys", this.Parent.Database.SiteInfo.AsJObject);
-            this.Values.Set("user", this.Parent.User.SynchObject);
+            //this.Values.Set("sys", this.Parent.Database.SiteInfo.AsJObject);
+            //this.Values.Set("user", this.Parent.User.SynchObject);
             this.Values.Set("env", this.Parent.Env.AsParameters);
 
             // Data
@@ -795,6 +807,8 @@ namespace Proc.Communication
                 // And the telemetry link
                 sTemplate = c_Tele.Replace(sTemplate, "./images/social-nxproject.gif", "zt", @"/social-nxproject.gif".PublicURL(), usebitly, to);
             }
+
+            this.Parent.Env.Debug();
 
             return sTemplate.Handlebars(this.Values).Replace("".PublicURL(), this.Parent.Env.ReachableURL);
         }
@@ -843,20 +857,20 @@ namespace Proc.Communication
         /// <param name="env"></param>
         /// <param name="store"></param>
         /// <returns></returns>
-        public static eMessageClass FromStore(EnvironmentClass env, StoreClass store)
+        public static eMessageClass FromStore(EnvironmentClass env, StoreClass store, HandlebarDataClass data = null)
         {
             // Get the params
-            string sTo = store[KeyTo];
-            string sFn = store[KeyCommand];
-            string sSubj = store[KeySubj];
-            string sMsg = store[KeyMsg];
-            string sAtt = store[KeyAttachments];
-            string sTemplate = store[KeyEMailTemplate];
-            string sCampaign = store[KeyCampaign];
-            string sTelemetry = store[KeyTelemetry];
-            string sUser = store[KeyUser];
-            string sPost = store[KeyPost];
-            string sFooter = store[KeyFooter];
+            string sTo = store.PossiblySys(KeyTo);
+            string sFn = store.PossiblySys(KeyCommand);
+            string sSubj = store.PossiblySys(KeySubj);
+            string sMsg = store.PossiblySys(KeyMsg);
+            string sAtt = store.PossiblySys(KeyAttachments);
+            string sTemplate = store.PossiblySys(KeyEMailTemplate);
+            string sCampaign = store.PossiblySys(KeyCampaign);
+            string sTelemetry = store.PossiblySys(KeyTelemetry);
+            string sUser = store.PossiblySys(KeyUser);
+            string sPost = store.PossiblySys(KeyPost);
+            string sFooter = store.PossiblySys(KeyFooter);
 
             // Handle to
             JArray c_To = sTo.ToJArrayOptional();
@@ -888,14 +902,15 @@ namespace Proc.Communication
             AO.ExtendedContextClass c_Ctx = new AO.ExtendedContextClass(env, null, null, sUser);
 
             // Make the message
-            eMessageClass c_Msg = new eMessageClass(c_Ctx);
+            eMessageClass c_Msg = new eMessageClass(c_Ctx, data);
 
             c_Msg.Telemetry = !sTelemetry.IsSameValue("n");
             c_Msg.Post = sPost;
             c_Msg.Footer = sFooter;
             c_Msg.Command = sFn;
             c_Msg.User = sUser;
-            c_Msg.MessageLink = store[KeyMessageLink];
+            c_Msg.MessageLink = store.PossiblySys(KeyMessageLink);
+            c_Msg.Invoice = store.PossiblySys(KeyInvoice);
 
             // Set the template
             c_Msg.EMailTemplate = sTemplate;

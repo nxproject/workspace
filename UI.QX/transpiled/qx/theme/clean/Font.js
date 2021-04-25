@@ -35,7 +35,7 @@ window.nxTheme.Font =
                 {
                     family: "Lato",
                     source: [
-                        "/transpiled/qx/theme/nx/font/Lato/Lato-Regular.ttf"
+                        "/transpiled/qx/theme/clean/font/Lato/Lato-Regular.ttf"
                     ]
                 }
             ]

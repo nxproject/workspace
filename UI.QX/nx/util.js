@@ -2029,7 +2029,8 @@ nx.util = {
         // Merge the defaults
         options = self.merge({
             messageMaxLength: 300,
-            fontSize: '16px'
+            fontSize: '16px',
+            width: '350px'
         }, options);
 
         // Make the options

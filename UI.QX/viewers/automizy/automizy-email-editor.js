@@ -72,11 +72,11 @@
 
 (function () {
     $AEE.ready(function () {
+
         $AEE.settings.systemFieldStart = '[{';
         $AEE.settings.systemFieldEnd = '}]';
         $AEE.settings.customFieldStart = '{{';
         $AEE.settings.customFieldEnd = '}}';
-
 
         $AEE.settings.fontFamilies = [
             //['andale mono,times', 'Andale Mono'],
@@ -346,28 +346,43 @@
                 });
                 editor.addButton('customfields', {
                     type: 'menubutton',
-                    text: $A.translate('Fields'),
+                    text: $A.translate('Merge Fields'),
                     icon: false,
                     menu: [
                         {
                             text: 'Subject',
                             onclick: function () {
-                                editor.insertContent('{{subject}} ');
+                                editor.insertContent($AEE.nx.templates.subject);
                             }
                         }, {
                             text: 'Message',
                             onclick: function () {
-                                editor.insertContent('{{message}} ');
+                                editor.insertContent($AEE.nx.templates.message);
+                            }
+                        }, {
+                            text: 'Data',
+                            onclick: function () {
+                                editor.insertContent($AEE.nx.templates.field);
                             }
                         }, {
                             text: 'Attachments',
                             onclick: function () {
-                                editor.insertContent('<br />{{#if attachments}}Attachments<br />{{ #each attachments }}<br />{{ this.caption }}: {{ this.href }}{{/each}}<br />\{{/if}}');
+                                editor.insertContent($AEE.nx.templates.attachments);
                             }
                         }, {
                             text: 'Actions',
                             onclick: function () {
-                                editor.insertContent('{{#if actions}}{{#each actions}}{{this.caption}} -- {{this.href}}{{/each}}{{/if}}');
+                                editor.insertContent($AEE.nx.templates.actions);
+                            }
+                        }, {
+                            text: 'Site Information',
+                            onclick: function () {
+                                editor.insertContent($AEE.nx.templates.siteinfo);
+                            }
+                        }, {
+                            text: 'Payment Request',
+                            onclick: function () {
+                                editor.insertContent($AEE.nx.templates.paymentrequest);
                             }
                         }
                     ]
@@ -482,14 +497,6 @@
                 */
             }
         };
-
-
-
-
-
-
-
-
 
         $AEE.settings.tinymceHtmlBlock = {
             oninit: function (editor) {
@@ -1099,7 +1106,7 @@
                 change: function () {
                     var url = this.val();                                               // ECANDIDUS 2021-04-05
                     if (url && url.indexOf('http') !== 0) url = $AEE.d.config.imageUploadApiUrl + '/' + url;
-                    t.d.img.src = url;                                      
+                    t.d.img.src = url;
                     //t.d.img.src = this.val();                                         // END ECANDIDUS
                     t.d.$previewImage.attr('src', t.d.img.src).show();
                 }
@@ -1514,13 +1521,29 @@
     $AEE.ready(function () {
 
         $AEE.blocks.push({
+            icon: 'askpayment.gif',
+            name: 'askpayment',
+            category: 'content',
+            title: $A.translate('Payment Request'),
+            drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
+                $block.addClass('aee-text-block-item');
+                var html = $AEE.nx.templates.askpayment;
+                html = '<div style="text-align: center;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
+
+                $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
+                $content.tinymce($AEE.settings.tinymceBlock);
+            }
+        });
+
+        $AEE.blocks.push({
             icon: 'telemetry.gif',
             name: 'telemetry',
             category: 'content',
             title: $A.translate('Telemetry'),
             drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
                 $block.addClass('aee-text-block-item');
-                var html = '<img src="' + $AEE.d.config.dir + '/images/social-nxproject.gif" style="vertical-align: middle;" /> <b>Delivered by NX.Project</b>';
+                var html = '<img src="' + $AEE.d.config.url + '/images/social-nxproject.gif" style="vertical-align: middle;" /> <b>Delivered by NX.Project</b>';
                 html = '<div style="text-align: center;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
                 var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
 
@@ -1537,7 +1560,7 @@
             drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
                 $block.addClass('aee-text-block-item');
                 var html = '';
-                var text = $A.translate('{{subject}}');
+                var text = $A.translate($AEE.nx.templates.subject);
                 for (var i = 0; i < 1; i++) {
                     html += text;
                 }
@@ -1557,7 +1580,7 @@
             drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
                 $block.addClass('aee-text-block-item');
                 var html = '';
-                var text = $A.translate('{{message}}');
+                var text = $A.translate($AEE.nx.templates.message);
                 for (var i = 0; i < 1; i++) {
                     html += text;
                 }
@@ -1578,7 +1601,7 @@
                 $block.addClass('aee-text-block-item');
                 var html = '';
                 //var text = $A.translate('<br />{{#if attachments}}<br /><b>Attachments</b><br />{{ #each attachments }}<br />{{ this.caption }}: {{ this.href }}<br />{{/each}}<br />\{{/if}}<br />');
-                var text = $A.translate('{{#if attachments}}<b>Attachments</b>{{#each attachments}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize;">{{this.caption}}</a>{{/each}}{{/if}}<br />');
+                var text = $A.translate($AEE.nx.templates.attachments);
                 for (var i = 0; i < 1; i++) {
                     html += text;
                 }
@@ -1598,7 +1621,7 @@
             drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
                 $block.addClass('aee-text-block-item');
                 var html = '';
-                var text = $A.translate('{{#if actions}}<br />{{#each actions}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};">{{this.caption}}</a>{{/each}}{{/if}}<br />');
+                var text = $A.translate($AEE.nx.templates.actions);
                 for (var i = 0; i < 1; i++) {
                     html += text;
                 }
@@ -1618,7 +1641,7 @@
             drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
                 $block.addClass('aee-text-block-item');
                 var html = '';
-                var text = '<span style="font-size: 12pt; "><b>{{sys.name}}</b></span><br>{{sys.addr1}}<br>{{sys.city}}, {{sys.state}}&nbsp;<br>{{sys.phone}}<br></span>';
+                var text = $AEE.nx.templates.siteinfo;
                 for (var i = 0; i < 1; i++) {
                     html += text;
                 }
@@ -1638,7 +1661,7 @@
             drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
                 $block.addClass('aee-text-block-item');
                 var html = '';
-                var text = $A.translate('The content of this email is confidential and intended for the recipient specified in message only. It is strictly forbidden to share any part of this message with any third party, without a written consent of the sender. If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.');
+                var text = $A.translate($AEE.nx.templates.privacy);
                 for (var i = 0; i < 1; i++) {
                     html += text;
                 }
@@ -2191,6 +2214,20 @@
 
     $AEE.layoutReady(function () {
 
+        // NX.Workspace items
+        $AEE.nx = {
+            templates: {
+                subject: '{{_subject}}',
+                message: '{{_message}}',
+                attachments: '{{#if _attachments}}<b>Attachments</b>{{#each _attachments}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize;">{{this.caption}}</a>{{/each}}{{/if}}<br />',
+                actions: '{{#if _actions}}<br />{{#each _actions}}<br /><a class="aee-image-block-button" href="{{this.href}}" target="_blank" style="display: inline-block; color: #ffffff; background-color: {{this.color}}; border: solid 1px {{this.color}}; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 2; padding: 12px 25px; text-transform: capitalize; border-color: {{this.color}};">{{this.caption}}</a>{{/each}}{{/if}}<br />',
+                siteinfo: '<span style="font-size: 12pt; "><b>{{_sys.name}}</b></span><br>{{_sys.addr1}}<br>{{_sys.city}}, {{_sys.state}}&nbsp;<br>{{_sys.phone}}<br></span>',
+                privacy: 'The content of this email is confidential and intended for the recipient specified in message only. It is strictly forbidden to share any part of this message with any third party, without a written consent of the sender. If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.',
+                askpayment: '{{_paymentrequest}}',
+                field: '{{replace_with_field}}'
+            }
+        };
+
         $AEE.elements.$blockSettingsShareBox = $('<div id="aee-block-settings-share-box" class="aee-block-settings-box"></div>').appendTo($AEE.elements.$blockSettingsContent);
 
         $AEE.elements.$shareFacebookIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-facebook.gif" />');
@@ -2198,6 +2235,7 @@
         $AEE.elements.$shareLinkedinIcon = $('<img src="' + $AEE.d.config.dir + '/images/social-linkedin.gif" />');
 
         $AEE.rebuildIcons = function ($block, options) {
+
             var $block = $block || $AEE.elements.$activeBlock;
             var options = options || {};
             var $textCell = $block.find('.aee-share-block-content-cell-text:first');
@@ -2970,7 +3008,7 @@
             $block.data('automizy-dropped', true);
             $AEE.setBlockSettings($block);
             $AEE.inputs.bpbm.change();
-        }, 20)
+        }, 20);
     };
 
     $AEE.buildBlockList = function () {
@@ -2982,6 +3020,7 @@
             'siteinfo',
             'privacy',
             'telemetry',
+            'askpayment',
             'image',
             'text',
             'title',

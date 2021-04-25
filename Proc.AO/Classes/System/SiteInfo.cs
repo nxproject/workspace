@@ -565,6 +565,50 @@ namespace Proc.AO
             get { return this.SynchObject["stripesec"]; }
             set { this.SynchObject["stripesec"] = value; }
         }
+
+        /// <summary>
+        /// 
+        /// The template to use for an invoice
+        /// 
+        /// </summary>
+        public string BillingTemplate
+        {
+            get { return this.SynchObject["billinvtemplate"]; }
+            set { this.SynchObject["billinvtemplate"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The template to use for a payment request
+        /// 
+        /// </summary>
+        public string PayReqSubject
+        {
+            get { return this.SynchObject["billinvrsubj"]; }
+            set { this.SynchObject["billinvrsubj"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The template to use for a payment request
+        /// 
+        /// </summary>
+        public string PayReqMessage
+        {
+            get { return this.SynchObject["billinvrmsg"]; }
+            set { this.SynchObject["billinvrmsg"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The template to use for a payment request
+        /// 
+        /// </summary>
+        public string PayReqTemplate
+        {
+            get { return this.SynchObject["billinvrtemplate"]; }
+            set { this.SynchObject["billinrvtemplate"] = value; }
+        }
         #endregion
 
         #region Quorums

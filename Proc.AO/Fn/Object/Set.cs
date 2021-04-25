@@ -22,9 +22,9 @@
 /// Install-Package Newtonsoft.Json -Version 12.0.3
 /// 
 
-using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
-using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 using NX.Engine;
 using NX.Shared;
@@ -44,6 +44,7 @@ namespace Proc.AO
             string sDS = store["ds"].AsDatasetName();
             string sID = store["id"];
             JObject c_Data = store.GetAsJObject("data");
+            bool IsEmailTemplate = store["cleanEmail"].IfEmpty().FromDBBoolean();
 
             // Valid?
             if (sDS.HasValue() && sID.HasValue())
@@ -66,7 +67,39 @@ namespace Proc.AO
                         // Loop thru
                         foreach (string sField in c_Data.Keys())
                         {
-                            c_Obj[sField] = c_Data.Get(sField);
+                            string sValue = c_Data.Get(sField);
+
+                            //
+                            if (IsEmailTemplate)
+                            {
+                                call.Env.Debug();
+
+                                // Get the wrappers
+                                MatchCollection c_Matches = Regex.Matches(sValue, @"\x7B\x7B[^\x3C\x7B\x7D]*\x3C[^\x7D]*\x3E\x7D\x7D");
+                                // Loop thru
+                                foreach(Match c_Match in c_Matches)
+                                {
+                                    // Get the value
+                                    string sWPatt = c_Match.Value;
+                                    // Get the field
+                                    Match c_Field = Regex.Match(sWPatt, @"\x3E[^\x3C]+\x3C");
+                                    if (c_Field.Success)
+                                    {
+                                        // Get the field
+                                        string sFPatt = c_Field.Value;
+                                        // Make replacement
+                                        string sRepl = sWPatt.Substring(2, sWPatt.Length - 4);
+                                        // And field
+                                        string sFRepl = ">{{" + sFPatt.Substring(1, sFPatt.Length - 2) + "}}<";
+                                        // Replace field
+                                        sRepl = sRepl.Replace(sFPatt, sFRepl);
+                                        // Replace
+                                        sValue = sValue.Replace(sWPatt, sRepl);
+                                    }
+                                }
+                            }
+
+                            c_Obj[sField] = sValue;
                         }
 
                         // Save

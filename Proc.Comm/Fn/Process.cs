@@ -52,10 +52,39 @@ namespace Proc.Communication
             // Push back
             store["user"] = call.UserInfo.Name;
 
-            // Make message
-            using (eMessageClass c_Msg = eMessageClass.FromStore(call.Env, store))
+            string sObjDS = store["ds"].AsDatasetName();
+            string sObjID = store["id"];
+
+            // Valid?
+            if (sObjDS.HasValue() && sObjID.HasValue())
             {
-                c_Msg.Send(true);                
+                // Get the manager
+                Proc.AO.ManagerClass c_ObjMgr = call.Env.Globals.Get<Proc.AO.ManagerClass>();
+
+                // Get the user dataset
+                DatasetClass c_DS = c_ObjMgr.DefaultDatabase[sObjDS];
+
+                // Get the object
+                using (Proc.AO.ObjectClass c_Obj = c_DS[sObjID])
+                {
+                    // Float account
+                    c_Obj.FloatAccount();
+
+                    // Make the context
+                    using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, null, null, call.UserInfo.Name))
+                    {
+                        // Do handlebars
+                        HandlebarDataClass c_HData = new HandlebarDataClass(call.Env);
+                        // Add the object
+                        c_HData.Merge(c_Obj.Explode(ExplodeMakerClass.ExplodeModes.Yes, c_Ctx));
+
+                        // Make message
+                        using (eMessageClass c_Msg = eMessageClass.FromStore(call.Env, store, c_HData))
+                        {
+                            c_Msg.Send(true);
+                        }
+                    }
+                }
             }
 
             return c_Ans;

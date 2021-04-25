@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Proc.AO\Proc.AO.csproj" />
+    <ProjectReference Include="..\Proc.Comm\Proc.Communication.csproj" />
     <ProjectReference Include="..\Proc.Office\Proc.Office.csproj" />
   </ItemGroup>
 
@@ -20,10 +21,6 @@
     <Reference Include="NX.Shared">
       <HintPath>..\..\Node\NX.Shared\bin\Debug\netcoreapp3.1\NX.Shared.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Routes\" />
   </ItemGroup>
 
 </Project>

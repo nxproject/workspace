@@ -1,12 +1,12 @@
-﻿From {{user.name}}@{{sys.name}}: {{subject}} - {{message}}
-{{#if attachments}}
+﻿From {{_user.name}}@{{_sys.name}}: {{_subject}} - {{_message}}
+{{#if _attachments}}
 Attachments
-{{#each attachments}}
+{{#each _attachments}}
 {{this.caption}}: {{this.href}}
 {{/each}}
 {{/if}}
-{{#if actions}}
-{{#each actions}}
+{{#if _actions}}
+{{#each _actions}}
 {{this.caption}} -- {{this.href}}
 {{/each}}
 {{/if}}
