@@ -63,6 +63,8 @@ namespace Proc.AO
 
         public const string FieldTotal = "total";
         public const string FieldBilled = "billed";
+        public const string FieldTax = "tax";
+        public const string FieldTaxable = "taxable";
         public const string FieldInvOn = "invon";
 
         private const string SIOSaved = "$$object.saved";
@@ -431,6 +433,7 @@ namespace Proc.AO
                             //
                             string sUUID = this.UUID.ToString();
                             double dAmt = 0;
+                            double dTAmt = 0;
 
                             // Set the fields
                             c_Qry.Add("acct", QueryElementClass.QueryOps.Eq, this["acct"]);
@@ -445,12 +448,19 @@ namespace Proc.AO
                                     c_Charge[FieldParent] = sUUID;
                                     //
                                     dAmt += c_Charge[FieldTotal].IfEmpty().ToDouble(0);
+                                    if (c_Charge[FieldTaxable].FromDBBoolean())
+                                    {
+                                        dTAmt += c_Charge[FieldTotal].IfEmpty().ToDouble(0);
+                                    }
                                     //
                                     c_Charge.Save();
                                 }
                             }
+                            // Compute tax
+                            double dTax = dTAmt * (this.Parent.Parent.SiteInfo.TaxRate / 100);
+                            this[FieldTax] = "{0:#0:00}".FormatString(dTax);
                             // Set
-                            this[FieldBilled] = dAmt.ToString();
+                            this[FieldBilled] = "{0:#0:00}".FormatString(dAmt + dTax);
                         }
                         break;
                 }

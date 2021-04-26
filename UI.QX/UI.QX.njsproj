@@ -185,9 +185,10 @@
     <Content Include="ux\signature\js\signaturepad-umd.js" />
     <Content Include="ux\stripe\css\global.css" />
     <Content Include="ux\stripe\css\normalize.css" />
+    <Content Include="ux\stripe\done.html" />
+    <Content Include="ux\stripe\fail.html" />
     <Content Include="ux\stripe\index.html" />
     <Content Include="ux\stripe\js\index.js" />
-    <Content Include="ux\stripe\js\script.js" />
     <Content Include="viewers\automizy\automizy-email-editor.css" />
     <Content Include="viewers\automizy\automizy-email-editor.js" />
     <Content Include="viewers\automizy\images\automizy-logo-100x100.jpg" />

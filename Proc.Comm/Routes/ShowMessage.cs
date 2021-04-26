@@ -42,7 +42,7 @@ namespace Proc.Communication
     /// </summary>
     public class ShowMessage : RouteClass
     {
-        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "zm", ":id", ":target" };
+        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "zm", ":target", ":id" };
         public override void Call(HTTPCallClass call, StoreClass store)
         {
             // Get path
@@ -58,7 +58,7 @@ namespace Proc.Communication
                 if (sID.HasValue())
                 {
                     // Make message
-                    eMessageClass c_Msg = eMessageClass.FromSave(call.Env, sID);
+                    eMessageClass c_Msg = eMessageClass.FromSave(call.Env, sUser);
 
                     // Clear to
                     c_Msg.To.Clear();

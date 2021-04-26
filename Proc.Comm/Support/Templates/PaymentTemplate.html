@@ -149,118 +149,18 @@
             <td style=" vertical-align top;"> &nbsp;</td>
             <td class="container" style=" vertical-align top; display block; Margin 0 auto; max-width 580px; padding 10px; width 580px;">
                 <div class="content" style="box-sizing: border-box; display: block; Margin: 0 auto; max-width: 580px; padding: 10px;">
+                    <!-- START CENTERED WHITE CONTAINER -->
                     <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">This is preheader text.Some clients will show this text as a preview.</span>
 
                     <h2>{{_subject}}</h2>
                     <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
+                        <!-- START MAIN CONTENT AREA -->
                         <tr>
                             <td class="wrapper" style=" vertical-align top; box-sizing border-box; padding 10px;">
                                 <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
                                     <tr>
                                         <td style=" vertical-align top;">
                                             <p class="pre">{{_message}}</p>
-
-                                            {{#if _askpayment}}
-                                            <table border="0" style="border-collapse: collapse; width: 98.6254%; height: 477px;">
-                                                <tbody>
-                                                    <tr style="height: opx;">
-                                                        <td style="width: 1.0%;"></td>
-                                                        <td style="width: 13.0%;"></td>
-                                                        <td style="width: 10.0%;"></td>
-                                                        <td style="width: 25.0%;"></td>
-                                                        <td style="width: 10.0%;"></td>
-                                                        <td style="width: 12.5%;"></td>
-                                                        <td style="width: 12.5%;"></td>
-                                                        <td style="width: 15.0%;"></td>
-                                                        <td style="width: 1.0%;"></td>
-                                                    </tr>
-                                                    <tr style="height: 31px;">
-                                                        <td />
-                                                        <td colspan="3"><strong>{{_sys.name}}</strong></td>
-                                                        <td colspan="4">{{acct.actual.name}}</td>
-                                                        <td />
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                        <td colspan="3">{{_sys.addr1}}</td>
-                                                        <td colspan="4">{{acct.actual.address}}</td>
-                                                        <td />
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                        <td colspan="3">{{_sys.city}}, {{_sys.state}} {{_sys.zip}}</td>
-                                                        <td colspan="4">{{acct.actual.city}}, {{acct.actual.state}} {{acct.actual.zip}}</td>
-                                                        <td />
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                        <td colspan="3">{{_sys.phone}}</td>
-                                                        <td colspan="4"></td>
-                                                        <td />
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                        <td colspan="4">Invoice: {{code}}</td>
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                        <td colspan="4">Description: {{desc}}</td>
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                        <td colspan="4">Invoiced On: {{on}}</td>
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                        <td colspan="7"><hr /></td>
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                        <td><strong>On</strong></td>
-                                                        <td><strong>Item</strong></td>
-                                                        <td><strong>Description</strong></td>
-                                                        <td style="text-align: right;"><strong>Units</strong></td>
-                                                        <td style="text-align: right;"><strong>Rate</strong></td>
-                                                        <td style="text-align: right;"><strong>Disc</strong></td>
-                                                        <td style="text-align: right;"><strong>Amount</strong></td>
-                                                        <td></td>
-                                                    </tr>
-                                                    <!-- {{#each _child._billcharge}} -->
-                                                    <tr style="height: 26px;">
-                                                        <td></td>
-                                                        <td>{{this.on}}</td>
-                                                        <td>{{this.code}}</td>
-                                                        <td style="text-align: left;">{{this.desc}}</td>
-                                                        <td style="text-align: right;">{{this.units}}</td>
-                                                        <td style="text-align: right;">{{this.rate}}</td>
-                                                        <td style="text-align: right;">{{this.disc}}</td>
-                                                        <td style="text-align: right;">{{this.total}}</td>
-                                                    </tr>
-                                                    <!-- {{/each}} -->
-                                                    <tr style="height: 26px;">
-                                                        <td />
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td colspan="6"></td>
-                                                        <td>Tax</td>
-                                                        <td>{{tax}}</td>
-                                                    </tr>
-                                                    <tr style="height: 26px;">
-                                                        <td colspan="6"></td>
-                                                        <td><strong>Total</strong></td>
-                                                        <td>{{billed}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td />
-                                                    </tr>
-                                                </tbody>
-                                                <tbody></tbody>
-                                            </table>
-                                            {{/if}}
-
                                             <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; box-sizing: border-box;">
                                                 <tbody>
                                                     {{#if _attachments}}
@@ -276,10 +176,10 @@
                                                     {{/each}}
                                                     <br />
                                                     {{/if}}
-                                                    {{#if _actions}}
                                                     <tr>
                                                         <td align="center" style=" vertical-align top; padding-bottom 15px;">{{_post}}</td>
                                                     </tr>
+                                                    {{#if _actions}}
                                                     <tr>
                                                         {{#each actions}}
                                                         <td align="center" style=" vertical-align top; padding-bottom 15px;">
@@ -297,7 +197,9 @@
                                 </table>
                             </td>
                         </tr>
+                        <!-- END MAIN CONTENT AREA -->
                     </table>
+                    <!-- START FOOTER -->
                     <div class="footer" style="clear: both; Margin-top: 10px; text-align: center; width: 100%;">
                         <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
                             <tr>
@@ -313,6 +215,8 @@
                             </tr>
                         </table>
                     </div>
+                    <!-- END FOOTER -->
+                    <!-- END CENTERED WHITE CONTAINER -->
                 </div>
             </td>
             <td style=" vertical-align top;"> &nbsp;</td>

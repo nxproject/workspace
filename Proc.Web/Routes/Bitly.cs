@@ -44,6 +44,8 @@ namespace Proc.Web
         public override List<string> RouteTree => new List<string>() { RouteClass.GET(), "b", ":id" };
         public override void Call(HTTPCallClass call, StoreClass store)
         {
+            call.Env.Debug();
+
             // Get the ID
             string sID = store["id"];
 

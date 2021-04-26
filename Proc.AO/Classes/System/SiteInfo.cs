@@ -301,6 +301,17 @@ namespace Proc.AO
 
         /// <summary>
         /// 
+        /// The tax rate
+        /// 
+        /// </summary>
+        public double TaxRate
+        {
+            get { return this.SynchObject["taxrate"].ToDouble(0); }
+            set { this.SynchObject["taxrate"] = value.ToString(); }
+        }
+
+        /// <summary>
+        /// 
         /// The number of days of bitly retention
         /// 
         /// </summary>
@@ -608,6 +619,17 @@ namespace Proc.AO
         {
             get { return this.SynchObject["billinvrtemplate"]; }
             set { this.SynchObject["billinrvtemplate"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The template to use for a payment
+        /// 
+        /// </summary>
+        public string PayMakeTemplate
+        {
+            get { return this.SynchObject["billpaytemplate"]; }
+            set { this.SynchObject["billpaytemplate"] = value; }
         }
         #endregion
 

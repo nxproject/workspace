@@ -45,31 +45,40 @@ namespace Proc.Stripe
 
                 // Get the site info
                 AO.SiteInfoClass c_SI = c_Mgr.DefaultDatabase.SiteInfo;
-                if (!c_SI.PayReqTemplate.HasValue())
-                {
-                    c_WEnv.ReturnError("Payment request template must be defined");
+                //if (!c_SI.PayReqTemplate.HasValue())
+                //{
+                //    c_WEnv.ReturnError("Payment request template must be defined");
 
-                    return c_WEnv.Return;
-                }
-                else
+                //    return c_WEnv.Return;
+                //}
+                //else
+                //{
+                // Make the UUID
+                using (AO.UUIDClass c_UUID = new UUIDClass(c_Mgr.DefaultDatabase, c_WEnv.ObjDS, c_WEnv.ObjID))
                 {
-                    // Make the UUID
-                    using (AO.UUIDClass c_UUID = new UUIDClass(c_Mgr.DefaultDatabase, c_WEnv.ObjDS, c_WEnv.ObjID))
+                    // Get the invoice
+                    using (AO.ObjectClass c_Inv = c_UUID.AsObject)
                     {
-                        // Get the invoice
-                        using (AO.ObjectClass c_Inv = c_UUID.AsObject)
+                        // Get the accout UUID
+                        using (AO.UUIDClass c_AUUID = new UUIDClass(c_Mgr.DefaultDatabase, c_Inv["acct"]))
                         {
-                            // Get the accout UUID
-                            using (AO.UUIDClass c_AUUID = new UUIDClass(c_Mgr.DefaultDatabase, c_Inv["acct"]))
+                            // Get the account
+                            using (AO.ObjectClass c_Acct = c_AUUID.AsObject)
                             {
                                 // Get the account
-                                using (AO.ObjectClass c_Acct = c_AUUID.AsObject)
-                                {
-                                    // Get the account
-                                    string sAcct = c_Acct["name"];
+                                // TBD
+                                string sAcct = c_Acct["name"];
 
-                                    using (StoreClass c_Params = new StoreClass())
+                                using (StoreClass c_Params = new StoreClass())
+                                {
+                                    // Make the context
+                                    using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, null, null, call.UserInfo.Name))
                                     {
+                                        // Do handlebars
+                                        HandlebarDataClass c_HData = new HandlebarDataClass(call.Env);
+                                        // Add the object
+                                        c_HData.Merge(c_WEnv.Object.Explode(ExplodeMakerClass.ExplodeModes.Yes, c_Ctx));
+
                                         // Fill store
                                         c_Params[eMessageClass.KeyTo] = sAcct;
                                         c_Params[eMessageClass.KeyCommand] = "email";
@@ -88,7 +97,7 @@ namespace Proc.Stripe
                                         //c_Params[KeyMessageLink];
 
                                         // Make message
-                                        using (eMessageClass c_Msg = eMessageClass.FromStore(call.Env, c_Params))
+                                        using (eMessageClass c_Msg = eMessageClass.FromStore(call.Env, c_Params, c_HData))
                                         {
                                             c_Msg.Send(true);
 
@@ -102,6 +111,7 @@ namespace Proc.Stripe
                         }
                     }
                 }
+                //}
             }
         }
     }

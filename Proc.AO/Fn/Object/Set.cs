@@ -72,8 +72,6 @@ namespace Proc.AO
                             //
                             if (IsEmailTemplate)
                             {
-                                call.Env.Debug();
-
                                 // Get the wrappers
                                 MatchCollection c_Matches = Regex.Matches(sValue, @"\x7B\x7B[^\x3C\x7B\x7D]*\x3C[^\x7D]*\x3E\x7D\x7D");
                                 // Loop thru

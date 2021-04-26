@@ -158,7 +158,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.24d"))
+            if (ds.Definition.ReleaseChanged("2021.04.26b"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -206,6 +206,10 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["taxid"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Tax ID";
+
+                c_Field = ds.Definition["taxrate"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Float;
+                c_Field.Label = "Tax Rate";
 
                 c_Field = ds.Definition["timezone"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Timezone;
@@ -343,6 +347,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Pay Req. Msg.";
 
+                c_Field = ds.Definition["billpaytemplate"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "PayTmplt.";
+
                 c_Field = ds.Definition["quorumenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Quorum";
@@ -394,7 +402,7 @@ namespace Proc.AO.BuiltIn
 
                 // Map
                 c_VInfo.UseFields("name", "addr1", "addr2", "city", "state", "zip",
-                    "phone", "fax", "taxid");
+                    "phone", "fax", "taxid", "taxrate");
 
                 c_VInfo.Save();
             }
@@ -416,6 +424,7 @@ namespace Proc.AO.BuiltIn
                     "billinvrtemplate",
                     "billinvrsubj",
                     "billinvrmsg",
+                    "billpaytemplate",
                     "ttenabled",
                     "teleenabled",
                     "quorumenabled", 
@@ -1723,7 +1732,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillCharge(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.23a"))
+            if (ds.Definition.ReleaseChanged("2021.04.26a"))
             {
                 //
                 ds.Definition.Caption = "Charges";
@@ -1745,7 +1754,7 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["code"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.LU;
                 c_Field.LinkDS = DatabaseClass.DatasetBiilRate;
-                c_Field.LUMap = "code desc desc units units rate rate disc disc";
+                c_Field.LUMap = "code desc desc units units rate rate disc disc taxable taxable";
 
                 c_Field = ds.Definition["desc"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
@@ -1783,6 +1792,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Total";
                 c_Field.Compute = "([units]*[rate])-[disc]";
+
+                c_Field = ds.Definition["taxable"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "Taxable";
 
                 c_Field = ds.Definition["_parent"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
@@ -1834,7 +1847,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillSubscription(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.23a"))
+            if (ds.Definition.ReleaseChanged("2021.04.26a"))
             {
                 //
                 ds.Definition.Caption = "Subscriptions";
@@ -1889,6 +1902,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Total";
                 c_Field.Compute = "([units]*[rate])-[disc]";
+
+                c_Field = ds.Definition["taxable"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "Taxable";
 
                 c_Field = ds.Definition["nexton"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Date;
@@ -1958,6 +1975,10 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["at"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Link;
                 c_Field.Label = "At";
+
+                c_Field = ds.Definition["tax"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
+                c_Field.Label = "Tax";
 
                 c_Field = ds.Definition["billed"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;

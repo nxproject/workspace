@@ -1654,6 +1654,26 @@
         });
 
         $AEE.blocks.push({
+            icon: 'invoice.gif',
+            name: 'invoice',
+            category: 'content',
+            title: $A.translate('Invoice'),
+            drop: function ($block, $contentCell, $topCell, $rightCell, $bottomCell, $leftCell) {
+                $block.addClass('aee-text-block-item');
+                var html = '';
+                var text = $A.translate($AEE.nx.templates.invoice);
+                for (var i = 0; i < 1; i++) {
+                    html += text;
+                }
+                html = '<div style="text-align: left;"><span style="font-family: arial, helvetica, sans-serif; font-size: 11pt;">' + html + '</span></div>';
+                var $content = $('<div contenteditable></div>').addClass('aee-text-block-content').html(html).appendTo($contentCell);
+
+                $AEE.settings.tinymceBlock.oninit = function (editor) { editor.focus() };
+                $content.tinymce($AEE.settings.tinymceBlock);
+            }
+        });
+
+        $AEE.blocks.push({
             icon: 'privacy.gif',
             name: 'privacy',
             category: 'content',
@@ -2224,7 +2244,8 @@
                 siteinfo: '<span style="font-size: 12pt; "><b>{{_sys.name}}</b></span><br>{{_sys.addr1}}<br>{{_sys.city}}, {{_sys.state}}&nbsp;<br>{{_sys.phone}}<br></span>',
                 privacy: 'The content of this email is confidential and intended for the recipient specified in message only. It is strictly forbidden to share any part of this message with any third party, without a written consent of the sender. If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.',
                 askpayment: '{{_paymentrequest}}',
-                field: '{{replace_with_field}}'
+                field: '{{replace_with_field}}',
+                invoice: '<table border=0 style="border-collapse:collapse;width:98.6254%;height:477px;"><tbody><tr style="height:opx;"><td style="width:1.0%;"></td><td style="width:13.0%;"></td><td style="width:10.0%;"></td><td style="width:25.0%;"></td><td style="width:10.0%;"></td><td style="width:12.5%;"></td><td style="width:12.5%;"></td><td style="width:15.0%;"></td><td style="width:1.0%;"></td></tr><tr style="height:31px;"><td /><td colspan=3><strong>{{_sys.name}}</strong></td><td colspan=4>{{acct.actual.name}}</td><td /></tr><tr style="height:26px;"><td /><td colspan=3>{{_sys.addr1}}</td><td colspan=4>{{acct.actual.address}}</td><td /></tr><tr style="height:26px;"><td /><td colspan=3>{{_sys.city}}, {{_sys.state}}{{_sys.zip}}</td><td colspan=4>{{acct.actual.city}}, {{acct.actual.state}}{{acct.actual.zip}}</td><td /></tr><tr style="height:26px;"><td /><td colspan=3>{{_sys.phone}}</td><td colspan=4></td><td /></tr><tr style="height:26px;"><td /></tr><tr style="height:26px;"><td /><td colspan=4>Invoice: {{code}}</td></tr><tr style="height:26px;"><td /><td colspan=4>Description: {{desc}}</td></tr><tr style="height:26px;"><td /><td colspan=4>Invoiced On: {{on}}</td></tr><tr style="height:26px;"><td /><td colspan=7><hr /></td></tr><tr style="height:26px;"><td /><td><strong>On</strong></td><td><strong>Item</strong></td><td><strong>Description</strong></td><td style="text-align:right;"><strong>Units</strong></td><td style="text-align:right;"><strong>Rate</strong></td><td style="text-align:right;"><strong>Disc</strong></td><td style="text-align:right;"><strong>Amount</strong></td><td></td></tr><!-- {{#each _child._billcharge}}--><tr style="height:26px;"><td></td><td>{{this.on}}</td><td>{{this.code}}</td><td style="text-align:left;">{{this.desc}}</td><td style="text-align:right;">{{this.units}}</td><td style="text-align:right;">{{this.rate}}</td><td style="text-align:right;">{{this.disc}}</td><td style="text-align:right;">{{this.total}}</td></tr><!-- {{/each}}--><tr style="height:26px;"><td /></tr><tr style="height:26px;"><td colspan=6></td><td>Tax</td><td>{{tax}}</td></tr><tr style="height:26px;"><td colspan=6></td><td><strong>Total</strong></td><td>{{billed}}</td></tr><tr><td /></tr></tbody><tbody></tbody></table>'
             }
         };
 
@@ -3018,6 +3039,7 @@
             'attachments',
             'actions',
             'siteinfo',
+            'invoice',
             'privacy',
             'telemetry',
             'askpayment',

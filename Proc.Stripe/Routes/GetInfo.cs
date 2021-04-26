@@ -38,9 +38,9 @@ namespace Proc.Stripe
     /// 
     /// 
     /// </summary>
-    public class AskPaymnt : RouteClass
+    public class GetInfo : RouteClass
     {
-        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), SupportClass.Route, "askpayment", ":id" };
+        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), SupportClass.Route, "getinfo", ":id" };
         public override void Call(HTTPCallClass call, StoreClass store)
         {
             // Get the params
@@ -66,12 +66,31 @@ namespace Proc.Stripe
                         double dBalance = c_Inv["billed"].ToDouble(0) - c_Inv["payment"].ToDouble(0);
                         if (dBalance > 0)
                         {
-                            // Make params
-                            JObject c_Params = new JObject();
-                            c_Params.Set("id", sID);
+                            // Make the context
+                            using (ExtendedContextClass c_Ctx = new ExtendedContextClass(call.Env, null, null, call.UserInfo.Name))
+                            {
+                                // Do handlebars
+                                HandlebarDataClass c_HData = new HandlebarDataClass(call.Env);
+                                // Add the object
+                                c_HData.Merge(c_Inv.Explode(ExplodeMakerClass.ExplodeModes.Yes, c_Ctx));
 
-                            // Redirect
-                            call.Redirect(call.Env.ReachableURL + "/stripe/index.html".URLQuery(c_Params));
+                                // Make message
+                                using (eMessageClass c_Msg = eMessageClass.FromStore(call.Env, store, c_HData))
+                                {
+                                    // Get the body
+                                    string sMsg = c_Msg.FormatMessage("", c_SI.PayMakeTemplate, "PaymentTemplate.html", "EMail", true);
+
+                                    //
+                                    JObject c_Resp = new JObject();
+                                    c_Resp.Set("publicKey", c_SI.StripePublic);
+
+                                    // TBD
+                                    c_Resp.Set("amount", "{0:#0.00}".FormatString(dBalance));
+                                    c_Resp.Set("body", sMsg);
+
+                                    call.RespondWithJSON(c_Resp);
+                                }
+                            }
                         }
                     }
                 }

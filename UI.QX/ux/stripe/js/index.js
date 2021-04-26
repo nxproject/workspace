@@ -1,7 +1,7 @@
 // Fetch your Stripe publishable key to initialize Stripe.js
 // In practice, you might just hard code the publishable API
 // key here.
-fetch('/config')
+fetch('/stripep/getconfig')
     .then(function (result) {
         return result.json();
     })

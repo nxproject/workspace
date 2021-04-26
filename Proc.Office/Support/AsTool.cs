@@ -81,6 +81,27 @@ namespace Proc.Office
         public string ObjID { get { return this.Passed["id"]; } }
 
         /// <summary>
+        ///  The passed object
+        ///  
+        /// </summary>
+        private AO.ObjectClass IObject { get; set; }
+        public AO.ObjectClass Object
+        {
+            get
+            {
+                if(this.IObject==null && this.ObjDS.HasValue())
+                {
+                    // Get the database manager
+                    AO.ManagerClass c_Mgr = this.Parent.Env.Globals.Get<AO.ManagerClass>();
+                    // Get the object
+                    this.IObject = c_Mgr.DefaultDatabase[this.ObjDS][this.ObjID];
+                }
+
+                return this.IObject;
+            }
+        }
+
+        /// <summary>
         /// 
         /// The in-memory object when the tool is called
         /// 

@@ -2103,8 +2103,6 @@ nx.util = {
 
         var self = nx.util;
 
-        // TBD - Handle att as string of JARRAY
-
         // Make the options
         options = self.merge({
             style: 'Info',

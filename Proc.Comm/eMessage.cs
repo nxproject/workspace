@@ -71,7 +71,7 @@ namespace Proc.Communication
             : base(ctx)
         {
             this.Values = value;
-            if(this.Values == null) this.Values = new HandlebarDataClass(ctx.Env);
+            if (this.Values == null) this.Values = new HandlebarDataClass(ctx.Env);
 
             this.Initialize();
         }
@@ -82,7 +82,10 @@ namespace Proc.Communication
             this.Subject = "A message for you";
             this.Message = "";
             this.Post = "";
-            this.Footer = this.Parent.User.CommFooter;
+            if (this.Parent.User != null)
+            {
+                this.Footer = this.Parent.User.CommFooter;
+            }
 
         }
         #endregion
@@ -776,7 +779,7 @@ namespace Proc.Communication
             // Invoice
             if (this.Invoice.HasValue())
             {
-                this.Values.Set("_askpayment", "// TBD");
+                this.Values.Set("_askpayment", this.Parent.Env.ReachableURL.CombineURL("stripep", "askpayment", this.Invoice));
             }
 
             // Predined
@@ -808,7 +811,8 @@ namespace Proc.Communication
                 sTemplate = c_Tele.Replace(sTemplate, "./images/social-nxproject.gif", "zt", @"/social-nxproject.gif".PublicURL(), usebitly, to);
             }
 
-            this.Parent.Env.Debug();
+            // Remove comments
+            sTemplate = sTemplate.Replace("<!--", "").Replace("-->", "");
 
             return sTemplate.Handlebars(this.Values).Replace("".PublicURL(), this.Parent.Env.ReachableURL);
         }
@@ -947,8 +951,12 @@ namespace Proc.Communication
         /// <returns></returns>
         public static eMessageClass FromSave(EnvironmentClass env, string value)
         {
+            //
+            HandlebarDataClass c_HData = new HandlebarDataClass(env);
+            c_HData.Merge(value.Decompress().ToJObject());
+
             // Do
-            return eMessageClass.FromStore(env, new StoreClass(value.Decompress().ToJObject()));
+            return eMessageClass.FromStore(env, new StoreClass(), c_HData);
         }
         #endregion
     }
