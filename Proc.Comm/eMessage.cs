@@ -779,7 +779,8 @@ namespace Proc.Communication
             // Invoice
             if (this.Invoice.HasValue())
             {
-                this.Values.Set("_askpayment", this.Parent.Env.ReachableURL.CombineURL("stripep", "askpayment", this.Invoice));
+                this.Values.Set("_askpayment", this.Parent.Env.ReachableURL.CombineURL("stripe").URLMake("id", this.Invoice));
+                this.Values.Set("_askpaymentcolor", "#6495ED");
             }
 
             // Predined

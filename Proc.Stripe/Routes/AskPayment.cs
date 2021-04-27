@@ -45,6 +45,9 @@ namespace Proc.Stripe
         {
             // Get the params
             string sID = store["id"];
+
+            string sURL = call.Env.ReachableURL + "/stripe/fail.html";
+
             // Must have one
             if (sID.HasValue())
             {
@@ -71,11 +74,14 @@ namespace Proc.Stripe
                             c_Params.Set("id", sID);
 
                             // Redirect
-                            call.Redirect(call.Env.ReachableURL + "/stripe/index.html".URLQuery(c_Params));
+                            sURL = call.Env.ReachableURL + "/stripe/index.html".URLQuery(c_Params);
                         }
                     }
                 }
             }
+
+            // Redirect
+            call.Redirect(sURL);
         }
     }
 }

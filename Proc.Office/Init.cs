@@ -62,6 +62,7 @@ namespace Proc.Office
             env.Use("Proc.LibreOffice");
 
             // Stripe
+            env.Use("Stripe.net");
             env.Use("Proc.Stripe");
 
             // The website

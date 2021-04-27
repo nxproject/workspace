@@ -29,14 +29,35 @@ using Newtonsoft.Json.Linq;
 using NX.Engine;
 using NX.Engine.Files;
 using NX.Shared;
-using Proc.Docs.Files;
+using Proc.AO;
+using Proc.Communication;
 
 namespace Proc.Stripe
 {
-    public class SupportClass
+    /// <summary>
+    /// 
+    /// 
+    /// </summary>
+    public class Checkout : RouteClass
     {
-        #region Constants
-        public const string Route = "stripep";
-        #endregion
+        public override List<string> RouteTree => new List<string>() { RouteClass.GET(), SupportClass.Route, "checkout", ":id" };
+        public override void Call(HTTPCallClass call, StoreClass store)
+        {
+            string sAns = null;
+
+            // Get the params
+            string sID = store["id"];
+
+            // Must have one
+            if (sID.HasValue())
+            {
+                //
+                ManagerClass c_Mgr = call.Env.Globals.Get<ManagerClass>();
+                sAns = c_Mgr.Checkout(sID);
+            }
+
+            //
+            call.RespondWithText(sAns.IfEmpty());
+        }
     }
 }

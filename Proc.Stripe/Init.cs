@@ -2,12 +2,7 @@
 /// 
 /// Copyright (C) 2020-2021 Jose E. Gonzalez (nxoffice2021@gmail.com) - All Rights Reserved
 /// 
-/// Permission is hereby granted, free of charge, to any person obtaining a copy
-/// of this software and associated documentation files (the "Software"), to deal
-/// in the Software without restriction, including without limitation the rights
-/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-/// copies of the Software, and to permit persons to whom the Software is
-/// furnished to do so, subject to the following conditions:
+/// This work is covered by GPL v3 as defined in https://www.gnu.org/licenses/gpl-3.0.en.html
 /// 
 /// The above copyright notice and this permission notice shall be included in all
 /// copies or substantial portions of the Software.
@@ -22,21 +17,27 @@
 /// 
 ///--------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-
-using Newtonsoft.Json.Linq;
+using System.Text;
 
 using NX.Engine;
-using NX.Engine.Files;
 using NX.Shared;
-using Proc.Docs.Files;
+using NX.Engine.Files;
 
 namespace Proc.Stripe
 {
-    public class SupportClass
+    /// <summary>
+    /// 
+    /// Default setup
+    /// 
+    /// </summary>
+    public class Init : FNClass
     {
-        #region Constants
-        public const string Route = "stripep";
-        #endregion
+        public override void Initialize(EnvironmentClass env)
+        {
+            // Create Manager
+            ManagerClass c_Mgr = env.Globals.Get<ManagerClass>();
+
+            base.Initialize(env);
+        }
     }
 }

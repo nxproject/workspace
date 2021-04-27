@@ -46,7 +46,13 @@ namespace Proc.Telemetry
             //
             this.ID = id;
 
-            this.Values = this.ID.Decompress().ToJObject();
+            try
+            {
+                this.Values = this.ID.Decompress().ToJObject();
+            }
+            catch { }
+
+            if (this.Values == null) this.Values = new JObject();
         }
 
         public DataClass(AO.DatabaseClass db, string template, string via, string campaign)

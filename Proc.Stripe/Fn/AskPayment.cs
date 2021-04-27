@@ -17,6 +17,7 @@
 /// 
 ///--------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 
 using NX.Engine;
@@ -59,6 +60,10 @@ namespace Proc.Stripe
                     // Get the invoice
                     using (AO.ObjectClass c_Inv = c_UUID.AsObject)
                     {
+                        // Set the request date
+                        c_Inv["reqon"] = DateTime.Now.ToDBDate();
+                        c_Inv.Save();
+
                         // Get the accout UUID
                         using (AO.UUIDClass c_AUUID = new UUIDClass(c_Mgr.DefaultDatabase, c_Inv["acct"]))
                         {
@@ -66,8 +71,9 @@ namespace Proc.Stripe
                             using (AO.ObjectClass c_Acct = c_AUUID.AsObject)
                             {
                                 // Get the account
-                                // TBD
                                 string sAcct = c_Acct["name"];
+                                string sSubject = "Payment request";
+                                string sMsg = (sAcct.IsFormattedPhone() ? "Click on the link to view invoice" : "Click on pay button to complete transaction");
 
                                 using (StoreClass c_Params = new StoreClass())
                                 {
@@ -82,19 +88,11 @@ namespace Proc.Stripe
                                         // Fill store
                                         c_Params[eMessageClass.KeyTo] = sAcct;
                                         c_Params[eMessageClass.KeyCommand] = "email";
-                                        c_Params[eMessageClass.KeySubj] = c_SI.PayReqSubject.IfEmpty("Payment request");
-                                        c_Params[eMessageClass.KeyMsg] = c_SI.PayReqMessage.IfEmpty("This is a payment request");
+                                        c_Params[eMessageClass.KeySubj] = c_SI.PayReqSubject.IfEmpty(sSubject);
+                                        c_Params[eMessageClass.KeyMsg] = c_SI.PayReqMessage.IfEmpty(sMsg);
                                         c_Params["user"] = call.UserInfo.Name;
                                         c_Params[eMessageClass.KeyEMailTemplate] = c_SI.PayReqTemplate;
                                         c_Params[eMessageClass.KeyInvoice] = c_Inv["code"];
-
-                                        //string sAtt = c_Params[KeyAttachments];                                     
-                                        //string sCampaign = c_Params[KeyCampaign];
-                                        //string sTelemetry = c_Params[KeyTelemetry];
-                                        //string sUser = c_Params[KeyUser];
-                                        //string sPost = c_Params[KeyPost];
-                                        //string sFooter = c_Params[KeyFooter];
-                                        //c_Params[KeyMessageLink];
 
                                         // Make message
                                         using (eMessageClass c_Msg = eMessageClass.FromStore(call.Env, c_Params, c_HData))

@@ -306,7 +306,7 @@ namespace Proc.AO
         /// </summary>
         public double TaxRate
         {
-            get { return this.SynchObject["taxrate"].ToDouble(0); }
+            get { return this.SynchObject["taxrate"].IfEmpty().ToDouble(0); }
             set { this.SynchObject["taxrate"] = value.ToString(); }
         }
 
@@ -630,6 +630,17 @@ namespace Proc.AO
         {
             get { return this.SynchObject["billpaytemplate"]; }
             set { this.SynchObject["billpaytemplate"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// The date and time the payment was requested
+        /// 
+        /// </summary>
+        public string PayReqOn
+        {
+            get { return this.SynchObject["reqon"]; }
+            set { this.SynchObject["reqon"] = value; }
         }
         #endregion
 

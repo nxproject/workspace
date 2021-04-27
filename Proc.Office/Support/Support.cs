@@ -151,7 +151,7 @@ namespace Proc.Office
                                 //}
                                 //else
                                 //{
-                                    buffer.AppendLine(sContents);
+                                buffer.AppendLine(sContents);
                                 //}
 
                                 // Get last written on

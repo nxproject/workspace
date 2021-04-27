@@ -1937,7 +1937,7 @@ namespace Proc.AO.BuiltIn
 
         private static void Define_BillInvoice(this DatasetClass ds)
         { // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.25b"))
+            if (ds.Definition.ReleaseChanged("2021.04.27a"))
             {
                 //
                 ds.Definition.Caption = "Invoices";
@@ -1984,6 +1984,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Billed";
 
+                c_Field = ds.Definition["reqon"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
+                c_Field.Label = "Req. On";
+
                 c_Field = ds.Definition["payment"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Currency;
                 c_Field.Label = "Payment";
@@ -2022,6 +2026,7 @@ namespace Proc.AO.BuiltIn
                 c_VDefault["acct"].ReadOnly = true;
                 c_VDefault["at"].ReadOnly = true;
                 c_VDefault["billed"].ReadOnly = true;
+                c_VDefault["reqon"].ReadOnly = true;
 
                 c_VDefault.Save();
             }

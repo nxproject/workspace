@@ -7,73 +7,44 @@
     <title>NX.Project Checkout</title>
 
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="css/normalize.css" />
-    <link rel="stylesheet" href="css/global.css" />
     <script src="https://js.stripe.com/v3/" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div class="sr-root">
-        <div class="sr-main">
-            <section class="container">
-                <div id="preso" />
-
-                <button id="submit">Pay</button>
-            </section>
-
-            <div id="error-message"></div>
-        </div>
-    </div>
     <script>
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const id = urlParams.get('id');
 
         var submitBtn = document.querySelector('#submit');
-        fetch('/stripep/getinfo')
+        fetch('/stripep/checkout/' + id)
             .then(function (result) {
                 return result.json();
             })
-            .then(function (json) {
-                if (!json.publicKey) {
+            .then(function (db) {
+                return JSON.parse(db.value);
+            })
+            .then(function (data) {
+                if (!data.publicKey) {
                     window.location.href = "stripe/fail.html";
                 } else {
-                    const stripe = Stripe(json.publicKey);
-                    submitBtn.value = "Pay $" + json.amount;
-                    document.getElementById('preso').innerHTML += json.body;
+                    var stripe = Stripe(data.publicKey);
+                    // Redirect to Checkout. with the ID of the
+                    // CheckoutSession created on the server.
+                    stripe.redirectToCheckout({
+                        sessionId: data.sessionId,
+                    })
+                        .then(function (result) {
+                            // If redirection fails, display an error to the customer.
+                            if (result.error) {
+                                var displayError = document.getElementById('error-message');
+                                displayError.textContent = result.error.message;
+                            } else {
+                                window.location.href = "stripe/done.html";
+                            }
+                        });
                 }
             });
-        
-
-        submitBtn.addEventListener('click', function (evt) {
-            // Create the checkout session.
-            fetch('/stripep/checkoutsession', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    quantity: quantity, // with the quantity
-                }),
-            }).then(function (result) {
-                return result.json();
-            }).then(function (data) {
-                // Redirect to Checkout. with the ID of the
-                // CheckoutSession created on the server.
-                stripe.redirectToCheckout({
-                    sessionId: data.sessionId,
-                })
-                    .then(function (result) {
-                        // If redirection fails, display an error to the customer.
-                        if (result.error) {
-                            var displayError = document.getElementById('error-message');
-                            displayError.textContent = result.error.message;
-                        } else {
-                            window.location.href = "stripe/done.html";
-                        }
-                    });
-            });
-        });
     </script>
 </body>
 </html>

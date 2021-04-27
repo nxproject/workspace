@@ -99,6 +99,7 @@
     <Content Include="c\_window.js" />
     <Content Include="c\zip.js" />
     <Content Include="tools\askpayment.js" />
+    <Content Include="tools\geninvoice.js" />
     <Content Include="tp\signaturepad-umd.js" />
     <Content Include="tp\signaturepad.css" />
     <Content Include="transpiled\qxWeb.js" />
@@ -183,12 +184,9 @@
     <Content Include="ux\signature\index.html" />
     <Content Include="ux\signature\js\app.js" />
     <Content Include="ux\signature\js\signaturepad-umd.js" />
-    <Content Include="ux\stripe\css\global.css" />
-    <Content Include="ux\stripe\css\normalize.css" />
     <Content Include="ux\stripe\done.html" />
     <Content Include="ux\stripe\fail.html" />
     <Content Include="ux\stripe\index.html" />
-    <Content Include="ux\stripe\js\index.js" />
     <Content Include="viewers\automizy\automizy-email-editor.css" />
     <Content Include="viewers\automizy\automizy-email-editor.js" />
     <Content Include="viewers\automizy\images\automizy-logo-100x100.jpg" />
@@ -1970,8 +1968,6 @@
     <Folder Include="ux\signature\css\" />
     <Folder Include="ux\signature\js\" />
     <Folder Include="ux\stripe\" />
-    <Folder Include="ux\stripe\css\" />
-    <Folder Include="ux\stripe\js\" />
     <Folder Include="ux\tt\" />
     <Folder Include="viewers\" />
     <Folder Include="viewers\automizy\" />
