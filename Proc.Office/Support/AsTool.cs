@@ -18,6 +18,7 @@
 ///--------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 
 using NX.Engine;
 using NX.Shared;
@@ -89,7 +90,7 @@ namespace Proc.Office
         {
             get
             {
-                if(this.IObject==null && this.ObjDS.HasValue())
+                if (this.IObject == null && this.ObjDS.HasValue())
                 {
                     // Get the database manager
                     AO.ManagerClass c_Mgr = this.Parent.Env.Globals.Get<AO.ManagerClass>();
@@ -149,6 +150,22 @@ namespace Proc.Office
         {
             this.ReturnMessageType = ReturnMessageTypes.Error;
             this.ReturnMessage = msg;
+        }
+
+        /// <summary>
+        /// 
+        /// Addds a document to the return
+        /// 
+        /// </summary>
+        /// <param name="doc"></param>
+        public void ReturnDocument(NX.Engine.Files.DocumentClass doc)
+        {
+            // Get
+            List<string> c_Docs = this.Return["docs"].IfEmpty().SplitSpaces();
+            // Add
+            c_Docs.Add(doc.Path);
+            // Save
+            this.Return["docs"] = c_Docs.JoinSpaces(); ;
         }
         #endregion
     }

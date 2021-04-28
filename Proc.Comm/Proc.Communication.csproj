@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Proc.AO\Proc.AO.csproj" />
+    <ProjectReference Include="..\Proc.Docs\Proc.Docs.csproj" />
     <ProjectReference Include="..\Proc.Telemetry\Proc.Telemetry.csproj" />
     <ProjectReference Include="..\Proc.Web\Proc.Web.csproj" />
   </ItemGroup>

@@ -35,6 +35,7 @@ using NX.Engine;
 using NX.Engine.Files;
 using Proc.Telemetry;
 using Proc.Web;
+using Proc.Docs.Files;
 
 namespace Proc.Communication
 {
@@ -681,7 +682,7 @@ namespace Proc.Communication
         /// </summary>
         /// <param name="template"></param>
         /// <returns></returns>
-        public string FormatMessage(string to, string template, string defaulttemplate, string via, bool usebitly, bool webformat = false)
+        public string FormatMessage(string to, string template, string defaulttemplate, string via, bool usebitly, bool webformat = false, bool aspdf = false)
         {
             // Setup for telemetry
             bool bTelemetry = this.Telemetry && this.Parent.SiteInfo.TelemetryEnabled;
@@ -714,73 +715,77 @@ namespace Proc.Communication
                 sTemplate = this.GetResource(defaulttemplate).FromBytes();
             }
 
-            // Build attachment list
-            if (this.Attachments != null && this.Attachments.Count > 0)
+            //
+            if (!aspdf)
             {
-                JArray c_Attachments = new JArray();
-
-                // Loop thru
-                foreach (eAttachmenClass c_File in this.Attachments.Documents)
+                // Build attachment list
+                if (this.Attachments != null && this.Attachments.Count > 0)
                 {
-                    // Get the URL
-                    string sURL = c_File.Document.URL;
+                    JArray c_Attachments = new JArray();
 
-                    // Do we do telemetry?
-                    if (bTelemetry)
+                    // Loop thru
+                    foreach (eAttachmenClass c_File in this.Attachments.Documents)
                     {
-                        // Convert
-                        sURL = c_Tele.AddTelemetry("zd", sURL, usebitly, to);
+                        // Get the URL
+                        string sURL = c_File.Document.URL;
+
+                        // Do we do telemetry?
+                        if (bTelemetry)
+                        {
+                            // Convert
+                            sURL = c_Tele.AddTelemetry("zd", sURL, usebitly, to);
+                        }
+
+                        //
+                        JObject c_Entry = new JObject();
+
+                        c_Entry.Set("color", "#3498db");
+                        c_Entry.Set("href", sURL);
+                        c_Entry.Set("caption", c_File.Label.IfEmpty(c_File.Document.Name).ToUpper());
+
+                        c_Attachments.Add(c_Entry);
                     }
 
-                    //
-                    JObject c_Entry = new JObject();
-
-                    c_Entry.Set("color", "#3498db");
-                    c_Entry.Set("href", sURL);
-                    c_Entry.Set("caption", c_File.Label.IfEmpty(c_File.Document.Name).ToUpper());
-
-                    c_Attachments.Add(c_Entry);
+                    this.Values.Set("_attachments", c_Attachments);
                 }
 
-                this.Values.Set("_attachments", c_Attachments);
-            }
-
-            // Build actions list
-            if (this.Actions != null && this.Actions.Count > 0)
-            {
-                JArray c_Actions = new JArray();
-
-                // Loop thru
-                foreach (eActionClass c_Action in this.Actions.Actions)
+                // Build actions list
+                if (this.Actions != null && this.Actions.Count > 0)
                 {
-                    // Get the URL
-                    string sURL = c_Action.URL;
+                    JArray c_Actions = new JArray();
 
-                    // Do we do telemetry?
-                    if (bTelemetry)
+                    // Loop thru
+                    foreach (eActionClass c_Action in this.Actions.Actions)
                     {
-                        // Convert
-                        sURL = c_Tele.AddTelemetry("zr", sURL, usebitly, to);
+                        // Get the URL
+                        string sURL = c_Action.URL;
+
+                        // Do we do telemetry?
+                        if (bTelemetry)
+                        {
+                            // Convert
+                            sURL = c_Tele.AddTelemetry("zr", sURL, usebitly, to);
+                        }
+
+                        //
+                        JObject c_Entry = new JObject();
+
+                        c_Entry.Set("color", c_Action.Color);
+                        c_Entry.Set("href", sURL);
+                        c_Entry.Set("caption", c_Action.Caption.ToUpper());
+
+                        c_Actions.Add(c_Entry);
                     }
 
-                    //
-                    JObject c_Entry = new JObject();
-
-                    c_Entry.Set("color", c_Action.Color);
-                    c_Entry.Set("href", sURL);
-                    c_Entry.Set("caption", c_Action.Caption.ToUpper());
-
-                    c_Actions.Add(c_Entry);
+                    this.Values.Set("_actions", c_Actions);
                 }
 
-                this.Values.Set("_actions", c_Actions);
-            }
-
-            // Invoice
-            if (this.Invoice.HasValue())
-            {
-                this.Values.Set("_askpayment", this.Parent.Env.ReachableURL.CombineURL("stripe").URLMake("id", this.Invoice));
-                this.Values.Set("_askpaymentcolor", "#6495ED");
+                // Invoice
+                if (this.Invoice.HasValue())
+                {
+                    this.Values.Set("_askpayment", this.Parent.Env.ReachableURL.CombineURL("stripe").URLMake("id", this.Invoice));
+                    this.Values.Set("_askpaymentcolor", "#6495ED");
+                }
             }
 
             // Predined
@@ -850,6 +855,46 @@ namespace Proc.Communication
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// Converts message to PDF
+        /// 
+        /// </summary>
+        /// <param name="doc"></param>
+        public void AsPDF(DocumentClass doc)
+        {
+            try
+            {
+                // Make HTML
+                string sHTML = this.FormatMessage("", this.EMailTemplate, "EMailTemplate.html", "EMail", false);
+
+                // Into a file
+                using (DocumentClass c_HTML = new DocumentClass(doc.Parent, doc.Path.SetExtensionFromPath("html")))
+                {
+                    // Save
+                    c_HTML.Value = sHTML;
+
+                    using (DocumentClass c_ODT = new DocumentClass(doc.Parent, doc.Path.SetExtensionFromPath("odt")))
+                    {
+                        // First conversion
+                        ConversionClass.Convert(c_HTML, c_ODT);
+
+                        // 
+                        using (DocumentClass c_PDF = new DocumentClass(doc.Parent, doc.Path.SetExtensionFromPath("pdf")))
+                        {
+                            // Second conversion
+                            ConversionClass.Convert(c_ODT, c_PDF);
+                        }
+
+                        c_ODT.Delete();
+                    }
+
+                    c_HTML.Delete();
+                }
+            }
+            catch { }
         }
         #endregion
 

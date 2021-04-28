@@ -18,7 +18,7 @@
 
 ************************************************************************ */
 
-qx.Class.define('tools.askpayment', {
+qx.Class.define('tools.invaspdf', {
 
     type: 'static',
 
@@ -28,7 +28,7 @@ qx.Class.define('tools.askpayment', {
         startpriority: 'K',
         startprivilege: 'BILLING',
         ds: '_billinvoice',
-        caption: 'Generate Invoice',
+        caption: 'Invoice as PDF',
         icon: 'printer',
 
         // This is what you override
@@ -42,7 +42,7 @@ qx.Class.define('tools.askpayment', {
                 var data = win.getFormData();
 
                 // Make the request
-                nx.util.serviceCall('Stripe.GenerateInvoice', {
+                nx.util.serviceCall('Stripe.AsPDF', {
                     ds: req.ds,
                     id: req.id
                 }, function (result) {

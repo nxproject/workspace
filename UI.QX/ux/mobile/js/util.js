@@ -449,8 +449,20 @@ nx.util = {
 
         var self = this;
 
-        if (result && result.msg) {
-            self['notify' + (result.msgtype || 'Info')](result.msg);
+        if (result) {
+            if (result.msg) {
+                self['notify' + (result.msgtype || 'Info')](result.msg);
+            }
+            if (result.docs) {
+                // Split
+                var docs = self.splitSpace(result.docs);
+                // Show
+                docs.forEach(function (doc) {
+                    nx.fs.view({
+                        path: doc
+                    });
+                });
+            }
         }
 
     },

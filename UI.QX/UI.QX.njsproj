@@ -99,7 +99,7 @@
     <Content Include="c\_window.js" />
     <Content Include="c\zip.js" />
     <Content Include="tools\askpayment.js" />
-    <Content Include="tools\geninvoice.js" />
+    <Content Include="tools\invaspdf.js" />
     <Content Include="tp\signaturepad-umd.js" />
     <Content Include="tp\signaturepad.css" />
     <Content Include="transpiled\qxWeb.js" />
