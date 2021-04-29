@@ -590,17 +590,6 @@ namespace Proc.AO
 
         /// <summary>
         /// 
-        /// The template to use for an invoice
-        /// 
-        /// </summary>
-        public string BillingTemplate
-        {
-            get { return this.SynchObject["billinvtemplate"]; }
-            set { this.SynchObject["billinvtemplate"] = value; }
-        }
-
-        /// <summary>
-        /// 
         /// The template to use for a payment request
         /// 
         /// </summary>
@@ -630,28 +619,6 @@ namespace Proc.AO
         {
             get { return this.SynchObject["billinvrtemplate"]; }
             set { this.SynchObject["billinrvtemplate"] = value; }
-        }
-
-        /// <summary>
-        /// 
-        /// The template to use for a payment
-        /// 
-        /// </summary>
-        public string PayMakeTemplate
-        {
-            get { return this.SynchObject["billpaytemplate"]; }
-            set { this.SynchObject["billpaytemplate"] = value; }
-        }
-
-        /// <summary>
-        /// 
-        /// The date and time the payment was requested
-        /// 
-        /// </summary>
-        public string PayReqOn
-        {
-            get { return this.SynchObject["reqon"]; }
-            set { this.SynchObject["reqon"] = value; }
         }
 
         /// <summary>

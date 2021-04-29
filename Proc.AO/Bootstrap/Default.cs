@@ -158,7 +158,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.29a"))
+            if (ds.Definition.ReleaseChanged("2021.04.29b"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -331,10 +331,6 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Billing";
 
-                c_Field = ds.Definition["billinvtemplate"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Inv. Template";
-
                 c_Field = ds.Definition["billinvrtemplate"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Pay Req. Tmplt.";
@@ -346,10 +342,6 @@ namespace Proc.AO.BuiltIn
                 c_Field = ds.Definition["billinvrmsg"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Pay Req. Msg.";
-
-                c_Field = ds.Definition["billpaytemplate"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Pay Tmplt.";
 
                 c_Field = ds.Definition["billdom"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
@@ -427,11 +419,9 @@ namespace Proc.AO.BuiltIn
                 // Map
                 c_OBilling.UseFields(
                     "billenabled",
-                    "billinvtemplate",
                     "billinvrtemplate",
                     "billinvrsubj",
                     "billinvrmsg",
-                    "billpaytemplate",
                     "billdom"                    
                     );
 
