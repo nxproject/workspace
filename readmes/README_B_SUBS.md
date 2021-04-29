@@ -8,7 +8,7 @@ As you can see, two new fields are added at the bottom:
 
 |Field|Meaning|
 |-|-|
-|NExt On|Date when the next charge will be created|
+|Next On|Date when the next charge will be created|
 |Interval|Period of time to elpase between charges|
 
 In the example, a new charge will be created on May 10th and repeated each month.
