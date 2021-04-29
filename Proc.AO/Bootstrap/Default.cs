@@ -1937,7 +1937,7 @@ namespace Proc.AO.BuiltIn
 
         private static void Define_BillInvoice(this DatasetClass ds)
         { // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.27a"))
+            if (ds.Definition.ReleaseChanged("2021.04.28a"))
             {
                 //
                 ds.Definition.Caption = "Invoices";
@@ -2027,6 +2027,7 @@ namespace Proc.AO.BuiltIn
                 c_VDefault["at"].ReadOnly = true;
                 c_VDefault["billed"].ReadOnly = true;
                 c_VDefault["reqon"].ReadOnly = true;
+                c_VDefault["tax"].ReadOnly = true;
 
                 c_VDefault.Save();
             }

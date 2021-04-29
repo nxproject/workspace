@@ -39,6 +39,8 @@ namespace Proc.Stripe
     {
         public override StoreClass Do(HTTPCallClass call, StoreClass store)
         {
+            call.Env.Debug();
+
             //
             using (Proc.Office.AsToolClass c_WEnv = new AsToolClass(call, store))
             {

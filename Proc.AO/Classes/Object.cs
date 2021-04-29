@@ -427,40 +427,43 @@ namespace Proc.AO
                 switch (this.Dataset.Name)
                 {
                     case DatabaseClass.DatasetBiilInvoice:
-                        // Make query
-                        using (QueryClass c_Qry = new QueryClass(this.Parent.Parent[DatabaseClass.DatasetBiilCharge].DataCollection))
+                        if (!this.ID.IsSameValue("templates"))
                         {
-                            //
-                            string sUUID = this.UUID.ToString();
-                            double dAmt = 0;
-                            double dTAmt = 0;
-
-                            // Set the fields
-                            c_Qry.Add("acct", QueryElementClass.QueryOps.Eq, this["acct"]);
-                            c_Qry.Add("at", QueryElementClass.QueryOps.Eq, this["at"]);
-                            // Loop thru
-                            foreach (ObjectClass c_Charge in c_Qry.FindObjects())
+                            // Make query
+                            using (QueryClass c_Qry = new QueryClass(this.Parent.Parent[DatabaseClass.DatasetBiilCharge].DataCollection))
                             {
-                                // Not assigned
-                                if (!c_Charge[FieldInvOn].HasValue())
+                                //
+                                string sUUID = this.UUID.ToString();
+                                double dAmt = 0;
+                                double dTAmt = 0;
+
+                                // Set the fields
+                                c_Qry.Add("acct", QueryElementClass.QueryOps.Eq, this["acct"]);
+                                c_Qry.Add("at", QueryElementClass.QueryOps.Eq, this["at"]);
+                                // Loop thru
+                                foreach (ObjectClass c_Charge in c_Qry.FindObjects())
                                 {
-                                    // Flag
-                                    c_Charge[FieldParent] = sUUID;
-                                    //
-                                    dAmt += c_Charge[FieldTotal].IfEmpty().ToDouble(0);
-                                    if (c_Charge[FieldTaxable].FromDBBoolean())
+                                    // Not assigned
+                                    if (!c_Charge[FieldInvOn].HasValue() || c_Charge[FieldParent].IsSameValue(sUUID))
                                     {
-                                        dTAmt += c_Charge[FieldTotal].IfEmpty().ToDouble(0);
+                                        // Flag
+                                        c_Charge[FieldParent] = sUUID;
+                                        //
+                                        dAmt += c_Charge[FieldTotal].IfEmpty().ToDouble(0);
+                                        if (c_Charge[FieldTaxable].IfEmpty().FromDBBoolean())
+                                        {
+                                            dTAmt += c_Charge[FieldTotal].IfEmpty().ToDouble(0);
+                                        }
+                                        //
+                                        c_Charge.Save();
                                     }
-                                    //
-                                    c_Charge.Save();
                                 }
+                                // Compute tax
+                                double dTax = dTAmt * (this.Parent.Parent.SiteInfo.TaxRate / 100);
+                                this[FieldTax] = "{0:#0.00}".FormatString(dTax);
+                                // Set
+                                this[FieldBilled] = "{0:#0.00}".FormatString(dAmt + dTax);
                             }
-                            // Compute tax
-                            double dTax = dTAmt * (this.Parent.Parent.SiteInfo.TaxRate / 100);
-                            this[FieldTax] = "{0:#0:00}".FormatString(dTax);
-                            // Set
-                            this[FieldBilled] = "{0:#0:00}".FormatString(dAmt + dTax);
                         }
                         break;
                 }
@@ -1318,37 +1321,6 @@ namespace Proc.AO
                     c_Msg.Send();
                 }
 
-                // Get the children dss
-                var cds = this.Dataset.Definition.ChildDSs;
-                if (cds.HasValue())
-                {
-                    //
-                    string sOID = this.UUID.ToString();
-
-                    // Make list
-                    List<string> c_DSS = cds.SplitSpaces();
-                    // Loop thru
-                    foreach (string sCDS in c_DSS)
-                    {
-                        // Get te dataset
-                        DatasetClass c_CDSD = this.Parent.Parent[sCDS];
-
-                        // Make the query
-                        using (QueryClass c_Qry = new QueryClass(c_CDSD.DataCollection))
-                        {
-                            //
-                            c_Qry.Add(ObjectClass.FieldParent, QueryElementClass.QueryOps.Eq, sOID);
-
-                            // Loop thru
-                            foreach (ObjectClass c_Child in c_Qry.FindObjects())
-                            {
-                                // Delete
-                                c_Child.Delete();
-                            }
-                        }
-                    }
-                }
-
                 // Special cases
                 switch (this.Dataset.Name)
                 {
@@ -1390,6 +1362,37 @@ namespace Proc.AO
                             }
                         }
                         break;
+                }
+
+                // Get the children dss
+                var cds = this.Dataset.Definition.ChildDSs;
+                if (cds.HasValue())
+                {
+                    //
+                    string sOID = this.UUID.ToString();
+
+                    // Make list
+                    List<string> c_DSS = cds.SplitSpaces();
+                    // Loop thru
+                    foreach (string sCDS in c_DSS)
+                    {
+                        // Get te dataset
+                        DatasetClass c_CDSD = this.Parent.Parent[sCDS];
+
+                        // Make the query
+                        using (QueryClass c_Qry = new QueryClass(c_CDSD.DataCollection))
+                        {
+                            //
+                            c_Qry.Add(ObjectClass.FieldParent, QueryElementClass.QueryOps.Eq, sOID);
+
+                            // Loop thru
+                            foreach (ObjectClass c_Child in c_Qry.FindObjects())
+                            {
+                                // Delete
+                                c_Child.Delete();
+                            }
+                        }
+                    }
                 }
 
                 // Task

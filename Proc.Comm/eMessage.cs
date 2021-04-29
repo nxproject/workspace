@@ -57,6 +57,7 @@ namespace Proc.Communication
         public const string KeyAttachments = "att";
         public const string KeyMessageLink = "mlink";
         public const string KeyInvoice = "inv";
+        public const string KeyStripe = "stripe";
         #endregion
 
         #region Constructor
@@ -779,12 +780,20 @@ namespace Proc.Communication
 
                     this.Values.Set("_actions", c_Actions);
                 }
+            }
 
-                // Invoice
-                if (this.Invoice.HasValue())
+            // Invoice
+            if (this.Invoice.HasValue())
+            {
+                this.Values.Set("_invoice", this.Invoice);
+
+                if (!aspdf)
                 {
-                    this.Values.Set("_askpayment", this.Parent.Env.ReachableURL.CombineURL("stripe").URLMake("id", this.Invoice));
-                    this.Values.Set("_askpaymentcolor", "#6495ED");
+                    if (this.Parent.DBManager.DefaultDatabase.SiteInfo.StripePublic.HasValue() && !aspdf)
+                    {
+                        this.Values.Set("_askpayment", this.Parent.Env.ReachableURL.CombineURL("stripe").URLMake("id", this.Invoice));
+                        this.Values.Set("_askpaymentcolor", "#6495ED");
+                    }
                 }
             }
 
@@ -868,7 +877,7 @@ namespace Proc.Communication
             try
             {
                 // Make HTML
-                string sHTML = this.FormatMessage("", this.EMailTemplate, "EMailTemplate.html", "EMail", false);
+                string sHTML = this.FormatMessage("", this.EMailTemplate, "EMailTemplate.html", "EMail", false, false, true);
 
                 // Into a file
                 using (DocumentClass c_HTML = new DocumentClass(doc.Parent, doc.Path.SetExtensionFromPath("html")))
