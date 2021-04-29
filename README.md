@@ -4,12 +4,22 @@ The NX.Workspace system is designed to create data and document storage platform
 for any office in an efficient manner.  It uses containers to allow for deployment
 across a varied landscape.
 
-## Who is this for
+## Who is this for?
 
 There are two groups that are the main target of the system:
 
 * The DIY person that wants to create a simple system for their own use.  This group may take advantage of the data input creation tools and data linking options to crate and maintain a data and document storage system.
 * A tech-savy consultant.  This group may take advantage of the advanced features of the system to create systems that are tailored for a specific industry.  He/She can then package the system and distribute his/her work by having his/her clients install the NX.Workspace and then adding the consultant's work. 
+
+## What does the code do?
+
+The basic goal of this project is to show what can be done with open source.  The project has the following tenets:
+
+* A database management system
+* A document management system with document generation
+* A billing system
+* A marketing system
+* A collaborative work system
 
 ## Table of contents
 
