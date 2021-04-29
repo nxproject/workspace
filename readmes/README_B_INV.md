@@ -1,5 +1,9 @@
 # Invoices
 
-Invoices are created at the [account](README_ACCOUNTS.md) level and are made up of all open charges for the account.
+Invoices are created from all open charges.  
+
+![image](images/Billi1.png)
+
+
 
 [Home](../README.md)
