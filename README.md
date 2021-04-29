@@ -30,6 +30,7 @@ There are two groups that are the main target of the system:
 			* [Quick Messages](readmes/README_QM.md)
 			* [Telemetry](readmes/README_TELEMETRY.md)
 			* [Billing](readmes/README_BILLING.md)
+				* [Setup](readmes/README_B_SETUP.md)
 				* [Rate Table](readmes/README_B_RATE.md)
 				* [Charges](readmes/README_B_CHARGE.md)
 				* [Subscriptions](readmes/README_B_SUBS.md)
