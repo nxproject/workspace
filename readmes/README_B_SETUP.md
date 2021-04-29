@@ -28,4 +28,19 @@ The [EMail template](README_EMT.md) tool allows you to create invoice templates.
 
 Note that all other sections are avaliable to fully customizze the invoice.
 
+## Dataset
+
+You need to decide which dataset can be used as a billing source.  This dataset must a descendant of the dataset that holds the [account](README_ACCOUNTS.md)
+field.  In the examples, we set the ***order*** dataset to be the billable dataset:
+
+![image](images/Billz4.png)
+
+In ur exaample, the structure is:
+
+  * Client (holds the ***account*** field labeles as ***Access***)
+  * Vehicle
+  * Order (billing is done here)
+
+In the simplest billing setup, the dataset that holds the account is the billable one.
+
 [Home](../README.md)
