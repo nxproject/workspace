@@ -320,6 +320,17 @@ namespace Proc.AO
             get { return this.SynchObject["bitly"].ToInteger(0); }
             set { this.SynchObject["bitly"] = value.ToString(); }
         }
+
+        /// <summary>
+        /// 
+        /// Update site?
+        /// 
+        /// </summary>
+        public bool AutoUpdate
+        {
+            get { return this.SynchObject["autoupd"].FromDBBoolean(); }
+            set { this.SynchObject["autoupd"] = value.ToDBBoolean(); }
+        }
         #endregion
 
         #region Indexer

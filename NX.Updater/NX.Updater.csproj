@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Proc.AO\Proc.AO.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="NX.Engine">
       <HintPath>..\..\Node\NX.Engine\bin\Debug\netcoreapp3.1\NX.Engine.dll</HintPath>
     </Reference>

@@ -158,7 +158,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.26b"))
+            if (ds.Definition.ReleaseChanged("2021.04.28a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -387,6 +387,10 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.TextArea;
                 c_Field.Label = "Theme Opts.";
 
+                c_Field = ds.Definition["autoupd"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
+                c_Field.Label = "Auto Update";
+
                 c_Field.SaveParent();
             }
 
@@ -431,6 +435,7 @@ namespace Proc.AO.BuiltIn
                     "iotenabled",  
                     "helproot",
                     "proccount",
+                    "autoupd",
                     "bitly"
                     );
 
@@ -1107,7 +1112,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Cron(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.03.18a"))
+            if (ds.Definition.ReleaseChanged("2021.04.28a"))
             {
                 //
                 ds.Definition.Caption = ds.Definition.Caption.IfEmpty("CRON");
@@ -1130,17 +1135,9 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Pattern";
 
-                c_Field = ds.Definition["start"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
-                c_Field.Label = "Start On";
-
                 c_Field = ds.Definition["next"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.DateTime;
                 c_Field.Label = "Next On";
-
-                c_Field = ds.Definition["nextl"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "Next";
 
                 c_Field = ds.Definition["enabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;

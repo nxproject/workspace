@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using NX.Engine;
 using NX.Shared;
 using NX.Engine.Hive;
+using Proc.AO;
 
 namespace NXUpdater
 {

@@ -60,28 +60,16 @@ namespace Proc.Cron
             set { this.Parent.Pattern = value; }
         }
 
-        public DateTime StartOn
-        {
-            get { return this.Parent.StartOn; }
-            set { this.Parent.StartOn = value; }
-        }
-
         public bool Enabled
         {
             get { return this.Parent.Enabled; }
             set { this.Parent.Enabled = value; }
         }
 
-        public DateTime Next
+        public DateTime NextOn
         {
             get { return this.Parent.NextOn; }
             set { this.Parent.NextOn = value; }
-        }
-
-        public List<string> NextList
-        {
-            get { return this.Parent.ScheduledOn.SplitSpaces(); }
-            set { this.Parent.ScheduledOn = value.Join(" "); }
         }
         #endregion
 
@@ -92,7 +80,7 @@ namespace Proc.Cron
 
             JArray c_TBD = new JArray();
 
-            DateTime c_Start = this.StartOn.ToUniversalTime();
+            DateTime c_Start = this.NextOn.ToUniversalTime();
             if (c_Start < DateTime.Now) c_Start = DateTime.Now.ToUniversalTime();
             if (count < 1) count = 1;
 
@@ -105,14 +93,13 @@ namespace Proc.Cron
                 c_Next = expression.GetNextOccurrence(c_Start, tz);
             }
 
-            this.NextList = c_TBD.ToList();
             if (c_TBD.Count == 0)
             {
-                this.Next = DateTime.MaxValue;
+                this.NextOn = DateTime.MaxValue;
             }
             else
             {
-                this.Next = this.NextList[0].FromDBDate();
+                this.NextOn = c_TBD.Get(0).FromDBDate();
             }
         }
         #endregion

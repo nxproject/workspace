@@ -45,10 +45,7 @@ namespace Proc.Web
         /// <param name="env">The current environment</param>
         public ManagerClass(EnvironmentClass env)
             : base(env)
-        {
-            // Start cleanup
-            this.CleanupThreadID = SafeThreadManagerClass.StartThread("".GUID(), new System.Threading.ParameterizedThreadStart(this.CleanupThread));
-        }
+        { }
         #endregion
 
         #region IDisposable
@@ -72,43 +69,6 @@ namespace Proc.Web
         /// 
         /// </summary>
         private string CleanupThreadID { get; set; }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// 
-        /// Maks sure that items expire
-        /// 
-        /// </summary>
-        /// <param name="status"></param>
-        private void CleanupThread(object status)
-        {
-            SafeThreadStatusClass c_Status = status as SafeThreadStatusClass;
-
-            // Wait a while
-            c_Status.WaitFor(2.MinutesAsTimeSpan());
-
-            // Loop
-            while (c_Status.IsActive)
-            {
-                // Get the manager
-                AO.ManagerClass c_Mgr = this.Parent.Globals.Get<AO.ManagerClass>();
-                // Make a query
-                using (AO.QueryClass c_Query = new QueryClass(c_Mgr.DefaultDatabase[AO.DatabaseClass.DatasetBitly].DataCollection))
-                {
-                    // Days old
-                    int iDays = c_Mgr.DefaultDatabase.SiteInfo.BitlyDays;
-                    if (iDays <= 0) iDays = 7;
-                    // Set the filter
-                    c_Query.Add("creon", QueryElementClass.QueryOps.Lt, DateTime.Now.AddDays(iDays-iDays).ToDBDate());
-                    // Delete
-                    c_Query.Delete(true);
-                }
-
-                // Once a day is fine
-                c_Status.WaitFor(1.DaysAsTimeSpan());
-            }
-        }
         #endregion
     }
 }

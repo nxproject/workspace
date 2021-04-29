@@ -17,6 +17,7 @@
 /// 
 ///--------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 
 using NX.Engine;
@@ -37,10 +38,6 @@ namespace Proc.Cron
         public ManagerClass(EnvironmentClass env)
             : base(env)
         {
-            // Setup
-            this.AOInterface = env.Globals.Get<Proc.AO.ManagerClass>();
-            this.Dataset = this.AOInterface.DefaultDatabase[AO.DatabaseClass.DatasetCron];
-
             // Synch support
             this.Synch = env.Globals.Get<Proc.SIO.ManagerClass>();
             this.Synch.MessageReceived += delegate (SIO.MessageClass msg)
@@ -59,10 +56,10 @@ namespace Proc.Cron
             };
 
             // Setup queen logic
-            this.Parent.Hive.QueenChanged += delegate()
+            this.Parent.Hive.QueenChanged += delegate ()
             {
                 // Are we the queen?
-                if(this.Parent.Hive.Roster.IsQueen)
+                if (this.Parent.Hive.Roster.IsQueen)
                 {
                     this.StartProcess();
                 }
@@ -73,7 +70,7 @@ namespace Proc.Cron
             };
 
             // Handle startup
-            if(this.Parent.Hive.Roster.IsQueen)
+            if (this.Parent.Hive.Roster.IsQueen)
             {
                 this.StartProcess();
             }
@@ -96,14 +93,7 @@ namespace Proc.Cron
         /// The MongoDb client
         /// 
         /// </summary>
-        public Proc.AO.ManagerClass AOInterface { get; private set; }
-
-        /// <summary>
-        /// 
-        /// The dataset
-        /// 
-        /// </summary>
-        public AO.DatasetClass Dataset { get; private set; }
+        public Proc.AO.ManagerClass DBManager { get; private set; }
 
         /// <summary>
         /// 
@@ -163,7 +153,64 @@ namespace Proc.Cron
         /// <param name="status"></param>
         private void ProcessThread(object status)
         {
-            // TBD
+            //
+            SafeThreadStatusClass c_Status = status as SafeThreadStatusClass;
+
+            // Last run date
+            DateTime c_Last = DateTime.Now;
+
+            //
+            while (c_Status.IsActive)
+            {
+                // Flag starting time
+                DateTime c_Now = DateTime.Now;
+
+                // Get the database manager
+                this.DBManager = this.Parent.Globals.Get<AO.ManagerClass>();
+
+                // Open a query
+                using (AO.QueryClass c_Qry = new QueryClass(this.DBManager.DefaultDatabase[AO.DatabaseClass.DatasetCron].DataCollection))
+                {
+                    // Get already marked
+                    c_Qry.Add("next", QueryElementClass.QueryOps.Lte, c_Now.ToDBDate());
+
+                    // Loop theu
+                    foreach (AO.ObjectClass c_Obj in c_Qry.FindObjects())
+                    {
+                        // Wrap
+                        using (CronEntryClass c_Entry = new CronEntryClass(c_Obj))
+                        {
+                            // Run
+                            c_Entry.Run(this);
+                        }
+                    }
+                }
+
+                // Has the date changed?
+                if (c_Last.DayOfYear != c_Now.DayOfYear)
+                {
+                    //
+                    this.DailyHousekeeping();
+                }
+
+                // Has the month changed?
+                if (c_Last.Month != c_Now.Month)
+                {
+                    this.MonthlyHousekeeping();
+                }
+
+                // Has the year changed?
+                if (c_Last.Year != c_Now.Year)
+                {
+                    this.YearlyHousekeeping();
+                }
+
+                // Reset
+                c_Last = c_Now;
+
+                // Wait a few minutes
+                c_Status.WaitFor(3.MillisecondsAsTimeSpan());
+            }
         }
 
         /// <summary>
@@ -191,6 +238,52 @@ namespace Proc.Cron
                 }
             }
         }
+        #endregion
+
+        #region Housekeeping
+        /// <summary>
+        /// 
+        /// Stuff we have to do everyday
+        /// 
+        /// </summary>
+        private void DailyHousekeeping()
+        {
+
+            // Make a query
+            using (AO.QueryClass c_Query = new QueryClass(this.DBManager.DefaultDatabase[AO.DatabaseClass.DatasetBitly].DataCollection))
+            {
+                // Days old
+                int iDays = this.DBManager.DefaultDatabase.SiteInfo.BitlyDays;
+                if (iDays <= 0) iDays = 7;
+                // Set the filter
+                c_Query.Add("creon", QueryElementClass.QueryOps.Lt, DateTime.Now.AddDays(iDays - iDays).ToDBDate());
+                // Delete
+                c_Query.Delete(true);
+            }
+
+
+            // DO we need to update?
+            if (this.DBManager.DefaultDatabase.SiteInfo.AutoUpdate)
+            {
+                // Run
+                this.Parent.FN("Updater.Run");
+            }
+        }
+
+        /// <summary>
+        ///  Stuff we have to do every month
+        ///  
+        /// </summary>
+        private void MonthlyHousekeeping()
+        { }
+
+        /// <summary>
+        /// 
+        /// Stuff we have to do every year
+        /// 
+        /// </summary>
+        private void YearlyHousekeeping()
+        { }
         #endregion
     }
 }

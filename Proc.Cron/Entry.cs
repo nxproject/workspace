@@ -47,24 +47,13 @@ namespace Proc.Cron
 
         /// <summary>
         /// 
-        /// The cron patter
+        /// The cron pattern
         /// 
         /// </summary>
         public string Pattern
         {
             get { return this["patt"]; }
             set { this["patt"] = value; }
-        }
-
-        /// <summary>
-        /// 
-        /// The date and time to start
-        /// 
-        /// </summary>
-        public DateTime StartOn
-        {
-            get { return this["start"].FromDBDate(); }
-            set { this["start"] = value.ToDBDate(); }
         }
 
         /// <summary>
@@ -76,17 +65,6 @@ namespace Proc.Cron
         {
             get { return this["next"].FromDBDate(); }
             set { this["next"] = value.ToDBDate(); }
-        }
-
-        /// <summary>
-        /// 
-        /// The list of when to run next
-        /// 
-        /// </summary>
-        public string ScheduledOn
-        {
-            get { return this["nextl"]; }
-            set { this["nextl"] = value; }
         }
 
         /// <summary>
@@ -134,29 +112,39 @@ namespace Proc.Cron
         }
         #endregion
 
-        #region Statics
-        /// <summary>
-        /// 
-        /// Gets an user
-        /// 
-        /// </summary>
-        /// <param name="env"></param>
-        /// <param name="name"></param>
-        /// <param name="pwd"></param>
-        /// <returns></returns>
-        public static CronEntryClass Get(ManagerClass mgr, string name)
+        #region Methods
+        public void Run(ManagerClass mgr)
         {
-            // Assume none
-            CronEntryClass c_Ans = null;
+            // Assume one shot
+            bool bKill = !this.Fn.HasValue();
 
-            // Must have name
-            if (name.HasValue())
+            // Do we kill?
+            if(bKill)
             {
-                // Get
-                c_Ans = new CronEntryClass(mgr.Dataset.New(name));
+                this.Delete();
             }
+            else
+            {
+                // Compute next
+                using(ExpressionClass c_Expr = new ExpressionClass(this))
+                {
+                    c_Expr.Compute(mgr.DBManager.DefaultDatabase.SiteInfo.Timezone.GetTimezone(), 1);
 
-            return c_Ans;
+                    // All done?
+                    if(this.NextOn != DateTime.MaxValue)
+                    {
+                        // Put back
+                        this.Save();
+
+                        // And run
+                        mgr.Parent.FN(this.Fn);
+                    }
+                    else
+                    {
+                        this.Delete();
+                    }
+                }
+            }
         }
         #endregion
     }
