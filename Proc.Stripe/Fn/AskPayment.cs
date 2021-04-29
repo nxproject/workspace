@@ -46,14 +46,6 @@ namespace Proc.Stripe
 
                 // Get the site info
                 AO.SiteInfoClass c_SI = c_Mgr.DefaultDatabase.SiteInfo;
-                //if (!c_SI.PayReqTemplate.HasValue())
-                //{
-                //    c_WEnv.ReturnError("Payment request template must be defined");
-
-                //    return c_WEnv.Return;
-                //}
-                //else
-                //{
                 // Make the UUID
                 using (AO.UUIDClass c_UUID = new UUIDClass(c_Mgr.DefaultDatabase, c_WEnv.ObjDS, c_WEnv.ObjID))
                 {
@@ -109,7 +101,6 @@ namespace Proc.Stripe
                         }
                     }
                 }
-                //}
             }
         }
     }

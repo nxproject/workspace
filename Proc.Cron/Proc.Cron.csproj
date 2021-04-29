@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Proc.AO\Proc.AO.csproj" />
+    <ProjectReference Include="..\Proc.Comm\Proc.Communication.csproj" />
     <ProjectReference Include="..\Proc.SIO\Proc.SIO.csproj" />
   </ItemGroup>
 

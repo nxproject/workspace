@@ -426,6 +426,11 @@ namespace Proc.AO
                 // Handle special cases
                 switch (this.Dataset.Name)
                 {
+                    case DatabaseClass.DatasetBiilCharge:
+                        // To make searching easier
+                        this[FieldInvOn] = "";
+                        break;
+
                     case DatabaseClass.DatasetBiilInvoice:
                         if (!this.ID.IsSameValue("templates"))
                         {

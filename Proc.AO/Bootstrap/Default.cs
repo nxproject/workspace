@@ -158,7 +158,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.28a"))
+            if (ds.Definition.ReleaseChanged("2021.04.29a"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -349,7 +349,11 @@ namespace Proc.AO.BuiltIn
 
                 c_Field = ds.Definition["billpaytemplate"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
-                c_Field.Label = "PayTmplt.";
+                c_Field.Label = "Pay Tmplt.";
+
+                c_Field = ds.Definition["billdom"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Int;
+                c_Field.Label = "Inv. DOM.";
 
                 c_Field = ds.Definition["quorumenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
@@ -411,38 +415,76 @@ namespace Proc.AO.BuiltIn
                 c_VInfo.Save();
             }
 
-            Definitions.ViewClass c_CInfo = ds.View("sysa");
-            if (c_CInfo.ReleaseChanged(ds.Definition.Release))
+            Definitions.ViewClass c_OBilling = ds.View("optbill");
+            if (c_OBilling.ReleaseChanged(ds.Definition.Release))
             {
                 //
-                c_CInfo.Caption = "Options";
+                c_OBilling.Caption = "Billing";
 
                 // Clear
-                c_CInfo.ClearFields();
+                c_OBilling.ClearFields();
 
                 // Map
-                c_CInfo.UseFields(
-                    "acctenabled", "acctdefallowed",
+                c_OBilling.UseFields(
                     "billenabled",
                     "billinvtemplate",
                     "billinvrtemplate",
                     "billinvrsubj",
                     "billinvrmsg",
                     "billpaytemplate",
-                    "ttenabled",
-                    "teleenabled",
-                    "quorumenabled", 
-                    "iotenabled",  
+                    "billdom"                    
+                    );
+
+                c_OBilling.Save();
+            }
+
+            Definitions.ViewClass c_OBasic = ds.View("optbasic");
+            if (c_OBasic.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_OBasic.Caption = "Basic";
+
+                // Clear
+                c_OBasic.ClearFields();
+
+                // Map
+                c_OBasic.UseFields(
+                    "acctenabled", "acctdefallowed",
                     "helproot",
                     "proccount",
                     "autoupd",
                     "bitly"
                     );
 
-                c_CInfo.Save();
+                c_OBasic.Save();
             }
 
-            c_CInfo = ds.View("ahk");
+            Definitions.ViewClass c_OExtras = ds.View("optextra");
+            if (c_OExtras.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_OExtras.Caption = "Options";
+
+                // Clear
+                c_OExtras.ClearFields();
+
+                // Map
+                c_OExtras.UseFields(
+                    "acctenabled", "acctdefallowed",
+                    "ttenabled",
+                    "teleenabled",
+                    "quorumenabled",
+                    "iotenabled",
+                    "helproot",
+                    "proccount",
+                    "autoupd",
+                    "bitly"
+                    );
+
+                c_OExtras.Save();
+            }
+
+            Definitions.ViewClass c_CInfo = ds.View("ahk");
             if (c_CInfo.ReleaseChanged(ds.Definition.Release))
             {
                 //
@@ -641,7 +683,7 @@ namespace Proc.AO.BuiltIn
                 // Make the tabs
                 Definitions.ViewFieldClass c_Field = c_VSys.AsTabs("sysvt");
                 c_Field.Height = "15";
-                c_Field.Views = "sysa sysb sysc sysd";
+                c_Field.Views = "optbasic optbill optextra sysb sysc sysd";
 
                 c_VSys.Save();
             }

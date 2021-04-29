@@ -20,10 +20,13 @@
 using System;
 using System.Collections.Generic;
 
+using Newtonsoft.Json.Linq;
+
 using NX.Engine;
 using NX.Shared;
 using Proc.AO;
 using Proc.SIO;
+using Proc.Communication;
 
 namespace Proc.Cron
 {
@@ -257,11 +260,15 @@ namespace Proc.Cron
             //
             this.Parent.LogInfo("Starting daily housekeeping...");
 
-            // Make a query
-            using (AO.QueryClass c_Query = new QueryClass(this.DBManager.DefaultDatabase[AO.DatabaseClass.DatasetBitly].DataCollection))
+            // Help out a bit
+            AO.DatabaseClass c_DB = this.DBManager.DefaultDatabase;
+            AO.SiteInfoClass c_SI = c_DB.SiteInfo;
+
+            // Cleanup bitly
+            using (AO.QueryClass c_Query = new QueryClass(c_DB[AO.DatabaseClass.DatasetBitly].DataCollection))
             {
-                // Days old
-                int iDays = this.DBManager.DefaultDatabase.SiteInfo.BitlyDays;
+                // Assure days
+                int iDays = c_SI.BitlyDays;
                 if (iDays <= 0) iDays = 7;
                 // Set the filter
                 c_Query.Add("creon", QueryElementClass.QueryOps.Lt, DateTime.Now.AddDays(iDays - iDays).ToDBDate());
@@ -269,8 +276,167 @@ namespace Proc.Cron
                 c_Query.Delete(true);
             }
 
+            // Do subscriptions
+            using (AO.QueryClass c_Query = new QueryClass(c_DB[AO.DatabaseClass.DatasetBiilSubscription].DataCollection))
+            {
+                // Everything till today
+                c_Query.Add("nexton", QueryElementClass.QueryOps.Lt, DateTime.Today.AddDays(1).ToDBDate());
+                // Loop
+                foreach (AO.ObjectClass c_Sub in c_Query.FindObjects())
+                {
+                    // Must have a next on
+                    string sNextOn = c_Sub["nexton"].IfEmpty();
+                    if (sNextOn.HasValue())
+                    {
+                        // Create charge
+                        AO.ObjectClass c_Charge = c_DB[AO.DatabaseClass.DatasetBiilCharge].New();
+                        // Fill
+                        c_Charge["code"] = c_Sub["code"];
+                        c_Charge["desc"] = c_Sub["code"];
+                        c_Charge["acct"] = c_Sub["code"];
+                        c_Charge["at"] = c_Sub["code"];
+                        c_Charge["units"] = c_Sub["code"];
+                        c_Charge["rate"] = c_Sub["code"];
+                        c_Charge["price"] = c_Sub["code"];
+                        c_Charge["disc"] = c_Sub["code"];
+                        c_Charge["total"] = c_Sub["code"];
+                        c_Charge["taxable"] = c_Sub["code"];
+                        // Save
+                        c_Charge.Save();
 
-            // DO we need to update?
+                        // Compute next
+                        DateTime c_NextOn = sNextOn.FromDBDate();
+                        switch (c_Sub["interval"])
+                        {
+                            case "daily":
+                                c_NextOn = c_NextOn.AddDays(1);
+                                break;
+                            case "weekly":
+                                c_NextOn = c_NextOn.AddDays(7);
+                                break;
+                            case "twomonths":
+                                c_NextOn = c_NextOn.AddMonths(2);
+                                break;
+                            case "quarterly":
+                                c_NextOn = c_NextOn.AddMonths(3);
+                                break;
+                            case "yearly":
+                                c_NextOn = c_NextOn.AddYears(1);
+                                break;
+                            default:
+                                c_NextOn = c_NextOn.AddMonths(17);
+                                break;
+                        }
+                        // Update
+                        c_Sub["nexton"] = c_NextOn.ToDBDate();
+                        c_Sub.Save();
+                    }
+                }
+            }
+
+            // Do invoicing
+            int iDOM = c_SI.InvoiceDOM;
+            if (iDOM != 0)
+            {
+                // Adjust
+                if (iDOM < 0)
+                {
+                    iDOM = DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month) + 1 + iDOM;
+                }
+                // Is today the day?
+                if (DateTime.Today.Day == iDOM)
+                {
+                    // List of done
+                    List<string> c_Done = new List<string>();
+
+                    // Make filter
+                    using (AO.QueryClass c_Query = new QueryClass(c_DB[AO.DatabaseClass.DatasetBiilCharge].DataCollection))
+                    {
+                        // Only if no invoice
+                        c_Query.Add("invon", QueryElementClass.QueryOps.Eq, "");
+
+                        // Loop thru
+                        foreach (AO.ObjectClass c_Charge in c_Query.FindObjects())
+                        {
+                            // Get reference
+                            string sRef = c_Charge["acct"].IfEmpty() + "-" + c_Charge["at"].IfEmpty();
+                            // Done?
+                            if (!c_Done.Contains(sRef))
+                            {
+                                // Flag
+                                c_Done.Add(sRef);
+
+                                // Create chain
+                                JArray c_Queries = new JArray();
+                                JObject c_Entry = new JObject();
+                                c_Entry.Set("field", "acct");
+                                c_Entry.Set("value", c_Charge["acct"].IfEmpty());
+                                c_Queries.Add(c_Entry);
+                                c_Entry = new JObject();
+                                c_Entry.Set("field", "at");
+                                c_Entry.Set("value", c_Charge["at"].IfEmpty());
+                                c_Queries.Add(c_Entry);
+                                JObject c_Chain = new JObject();
+                                c_Chain.Set("queries", c_Queries);
+
+                                //Make invoice
+                                AO.ObjectClass c_Inv = c_DB[AO.DatabaseClass.DatasetBiilCharge].New(chain: c_Chain);
+                                // Does it have a total?
+                                if (c_Inv["total"].ToDouble(0) != 0)
+                                {
+                                    // Get the accout UUID
+                                    using (AO.UUIDClass c_AUUID = new UUIDClass(c_DB, c_Inv["acct"]))
+                                    {
+                                        // Get the account
+                                        using (AO.ObjectClass c_Acct = c_AUUID.AsObject)
+                                        {
+                                            // Get the account
+                                            string sAcct = c_Acct["name"];
+                                            string sSubject = "Payment request";
+                                            string sMsg = (sAcct.IsFormattedPhone() ? "Click on the link to view invoice" : "Click on pay button to complete transaction");
+
+                                            using (StoreClass c_Params = new StoreClass())
+                                            {
+                                                // Make the context
+                                                using (ExtendedContextClass c_Ctx = new ExtendedContextClass(this.Parent, null, null, ""))
+                                                {
+                                                    // Do handlebars
+                                                    HandlebarDataClass c_HData = new HandlebarDataClass(this.Parent);
+                                                    // Add the object
+                                                    c_HData.Merge(c_Inv.Explode(ExplodeMakerClass.ExplodeModes.Yes, c_Ctx));
+
+                                                    // Fill store
+                                                    c_Params[eMessageClass.KeyTo] = sAcct;
+                                                    c_Params[eMessageClass.KeyCommand] = "email";
+                                                    c_Params[eMessageClass.KeySubj] = c_SI.PayReqSubject.IfEmpty(sSubject);
+                                                    c_Params[eMessageClass.KeyMsg] = c_SI.PayReqMessage.IfEmpty(sMsg);
+                                                    c_Params["user"] = "";
+                                                    c_Params[eMessageClass.KeyEMailTemplate] = c_SI.PayReqTemplate;
+                                                    c_Params[eMessageClass.KeyInvoice] = c_Inv["code"];
+
+                                                    // Make message
+                                                    using (eMessageClass c_Msg = eMessageClass.FromStore(this.Parent, c_Params, c_HData))
+                                                    {
+                                                        c_Msg.Send(false);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //
+                                    c_Inv["reqon"] = DateTime.Now.ToDBDate();
+                                    // And save
+                                    c_Inv.Save();
+                                    // Send
+                                    // TBD
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Do we need to update?
             if (this.DBManager.DefaultDatabase.SiteInfo.AutoUpdate)
             {
                 // Run

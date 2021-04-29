@@ -653,6 +653,17 @@ namespace Proc.AO
             get { return this.SynchObject["reqon"]; }
             set { this.SynchObject["reqon"] = value; }
         }
+
+        /// <summary>
+        /// 
+        /// The day of the month when invoicing takes place
+        /// 
+        /// </summary>
+        public int InvoiceDOM
+        {
+            get { return this.SynchObject["billdom"].IfEmpty().ToInteger(0); }
+            set { this.SynchObject["billdom"] = value.ToString(); }
+        }
         #endregion
 
         #region Quorums
