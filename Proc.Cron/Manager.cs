@@ -160,6 +160,9 @@ namespace Proc.Cron
             DateTime c_Last = DateTime.Now;
 
             //
+            this.Parent.LogInfo("Starting CRON process...");
+
+            //
             while (c_Status.IsActive)
             {
                 // Flag starting time
@@ -209,8 +212,11 @@ namespace Proc.Cron
                 c_Last = c_Now;
 
                 // Wait a few minutes
-                c_Status.WaitFor(3.MillisecondsAsTimeSpan());
+                c_Status.WaitFor(3.MinutesAsTimeSpan());
             }
+
+            //
+            this.Parent.LogInfo("Ending CRON process...");
         }
 
         /// <summary>
@@ -248,6 +254,8 @@ namespace Proc.Cron
         /// </summary>
         private void DailyHousekeeping()
         {
+            //
+            this.Parent.LogInfo("Starting daily housekeeping...");
 
             // Make a query
             using (AO.QueryClass c_Query = new QueryClass(this.DBManager.DefaultDatabase[AO.DatabaseClass.DatasetBitly].DataCollection))
@@ -268,6 +276,9 @@ namespace Proc.Cron
                 // Run
                 this.Parent.FN("Updater.Run");
             }
+
+            //
+            this.Parent.LogInfo("Ending daily housekeeping...");
         }
 
         /// <summary>
@@ -275,7 +286,13 @@ namespace Proc.Cron
         ///  
         /// </summary>
         private void MonthlyHousekeeping()
-        { }
+        {
+            //
+            this.Parent.LogInfo("Starting monthly housekeeping...");
+
+            //
+            this.Parent.LogInfo("Ending monthly housekeeping...");
+        }
 
         /// <summary>
         /// 
@@ -283,7 +300,12 @@ namespace Proc.Cron
         /// 
         /// </summary>
         private void YearlyHousekeeping()
-        { }
+        { //
+            this.Parent.LogInfo("Starting yearly housekeeping...");
+
+            //
+            this.Parent.LogInfo("Ending yearly housekeeping...");
+        }
         #endregion
     }
 }

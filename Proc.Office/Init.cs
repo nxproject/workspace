@@ -70,6 +70,7 @@ namespace Proc.Office
 
             // The updater logic
             env.Use("Proc.Updater");
+            env.Use("Proc.Cron");
 
             // Call bootstrap
             env.FN("Office.LoadExtensions");
