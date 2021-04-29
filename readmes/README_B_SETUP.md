@@ -22,7 +22,7 @@ As shown, yu can use the ***test*** keys for testing but make sure that you are 
 
 ## Templates
 
-The |[EMail template](README_EMT.md) tool allows you to create invoice templates.  Two sections are explicitly used:
+The [EMail template](README_EMT.md) tool allows you to create invoice templates.  Two sections are explicitly used:
 
 ![image](images/Billz3.png)
 
