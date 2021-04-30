@@ -3,7 +3,7 @@
 An account is a login that uses an email address or phone number as the identifier.  While [users](README_USERS.md)
 are ***inhouse personnel*** , accounts are ***external entities***.
 
-Accounts are the central dataset to [billing](README_BILLING.md) and [telemetry](README.TELEMETRY.md).  Accounts
+Accounts are the central dataset to [billing](README_BILLING.md) and [telemetry](README_TELEMETRY.md).  Accounts
 are also ***virtual users*** when you choose and carry the same dataset rules.
 
 ![image](images/Acct1.png)
@@ -58,11 +58,12 @@ are also ***virtual users*** when you choose and carry the same dataset rules.
 
 Accounts are always enabled but you set configuration parameters in the [Site Settings](README_SITE.md) tool:
 
-![image](images/Site20.png)
+![image](images/Acct20.png)
 
 |Field|Meaning|
-|Acct.Def.Alwd|Default [allowed](README_USERS.md).  Note that ***?ACCT*** is automatically prepended|
-|Acct.Mirror|Dataset that mirros certain account feilds|
+|-|-|
+|Acct.Def.Alwd|Default [allowed](README_USERS.md).  Note that ```?ACCT``` is automatically prepended|
+|Acct.Mirror|Dataset that mirrors certain account fields|
 |Mirror Map|List of target/source field paris from the ***Account*** dataset to the mirror dataset|
 
 ## Automatic account creation
@@ -74,6 +75,11 @@ The field labeled ***Access*** in this dataset is an example:
 
 Account fields allow for the display of the account dataset by using the ***Display*** entry in the options menu, accessible by
 right-mouse click on the field.
+
+## Creation via Subscribe
+
+You can include a ```Subscribe``` button in an [EMail Template](README_EMT.md) and when the user clicks on it an account
+is created.  If a ***mirror dataset*** is defined, an entry will be created in that dataset.
 
 ## Uses
 
