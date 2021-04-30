@@ -61,8 +61,9 @@ Accounts are always enabled but you set configuration parameters in the [Site Se
 ![image](images/Acct20.png)
 
 |Field|Meaning|
-|Acct.Def.Alwd|Default [allowed](README_USERS.md).  Note that ***?ACCT*** is automatically prepended|
-|Acct.Mirror|Dataset that mirros certain account feilds|
+|-|-|
+|Acct.Def.Alwd|Default [allowed](README_USERS.md).  Note that ```?ACCT``` is automatically prepended|
+|Acct.Mirror|Dataset that mirros certain account fields|
 |Mirror Map|List of target/source field paris from the ***Account*** dataset to the mirror dataset|
 
 ## Automatic account creation
