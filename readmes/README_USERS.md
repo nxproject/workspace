@@ -113,7 +113,7 @@ Tells the system that the user can ***add*** and ***view*** ***notes***.
 There are four options that can be included for each dataset:
 
 * ```@``` - Use view given
-* ```%``` - User is a mamber of the group given
+* ```%``` - User is a member of the group given
 * ```$``` - User is allowed use of the tool given
 * ```#``` - Read rules from allowed extension given
 
