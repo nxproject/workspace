@@ -31,23 +31,24 @@ qx.Class.define('tools.UserSettings', {
 
             var isacct = nx.desktop.user.getIsSelector('ACCT');
             var user = nx.desktop.user.getName();
+            var params = nx.util.parseID(nx.desktop.user.getField("uuid"));
 
             nx.desktop.addWindowDS({
-                ds: (isacct ? '_billaccess' : '_user'),
-                id: user,
+                ds: params.ds,
+                id: params.id,
                 view: '_usersettings',
                 caption: 'Personal Settings',
                 atSave: function (data) {
 
                     // Acct?
-                    if (isacct) {
+                    if (params.ds === '_billaccess') {
                         // Update
                         nx.util.serviceCall('AO.AccessSet', {
-                            ds: '_billaccess',
-                            id: user,
+                            ds: params.ds,
+                            id: params.id,
                             data: data
                         }, function () {
-                            nx.util.notifyOK('Password reset');
+                            nx.util.notifyOK('Settings updated');
                         });
                     } else {
                         //
