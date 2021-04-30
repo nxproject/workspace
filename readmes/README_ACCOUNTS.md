@@ -58,7 +58,7 @@ are also ***virtual users*** when you choose and carry the same dataset rules.
 
 Accounts are always enabled but you set configuration parameters in the [Site Settings](README_SITE.md) tool:
 
-![image](images/Site20.png)
+![image](images/Acct20.png)
 
 |Field|Meaning|
 |Acct.Def.Alwd|Default [allowed](README_USERS.md).  Note that ***?ACCT*** is automatically prepended|
