@@ -918,6 +918,94 @@ namespace Proc.AO
                 // Special cases
                 switch (this.Dataset.Name)
                 {
+                    case DatabaseClass.DatasetBillAccess:
+                        // Has the name changed?
+                        if (c_Changes.Contains("dispname") ||
+                            c_Changes.Contains("address") ||
+                            c_Changes.Contains("city") ||
+                            c_Changes.Contains("state") ||
+                            c_Changes.Contains("zip"))
+                        {
+                            // Do we have a mirror?
+                            string sMirror = this.Dataset.Parent.SiteInfo.AccountMirrorDS;
+                            if (sMirror.HasValue())
+                            {
+                                // Make list
+                                List<string> c_Map = this.Dataset.Parent.SiteInfo.AccountMirrorMap.SplitSpaces();
+
+                                // Map the mirror
+                                DatasetClass c_Mirror = this.Dataset.Parent[sMirror];
+
+                                // Get the access fields
+                                List<string> c_Accounts = c_Mirror.Definition.AccountFields;
+                                // Assume new object needed
+                                bool bNew = true;
+
+                                // Loop thru
+                                foreach (string sAccount in c_Accounts)
+                                {
+                                    // Open it
+                                    using (QueryClass c_Query = new QueryClass(c_Mirror.DataCollection))
+                                    {
+                                        // Query field
+                                        c_Query.Add(sAccount, QueryElementClass.QueryOps.Eq, this["name"]);
+
+                                        // Get object list
+                                        List<ObjectClass> c_Objs = c_Query.FindObjects();
+
+                                        // Loop thru
+                                        foreach (AO.ObjectClass c_Obj in c_Objs)
+                                        {
+                                            // Flag for changes
+                                            bool bChanged = false;
+
+                                            // Fill
+                                            for (int i = 0; i < c_Map.Count; i += 2)
+                                            {
+                                                if (!c_Obj[c_Map[i]].IsSameValue(this[c_Map[i + 1]]))
+                                                {
+                                                    c_Obj[c_Map[i]] = this[c_Map[i + 1]];
+                                                    bChanged = true;
+                                                }
+                                            }
+
+                                            // Save
+                                            if (bChanged) c_Obj.Save();
+                                            // And fla
+                                            bNew = false;
+                                        }
+                                    }
+                                }
+
+                                // Do we need a new one?
+                                if (bNew)
+                                {
+                                    // Make
+                                    using (ObjectClass c_Obj = c_Mirror.New())
+                                    {
+                                        // Fill the account
+                                        foreach (string sAccount in c_Accounts)
+                                        {
+                                            c_Obj[sAccount] = this["name"];
+                                        }
+
+                                        // Fill
+                                        for (int i = 0; i < c_Map.Count; i += 2)
+                                        {
+                                            c_Obj[c_Map[i]] = this[c_Map[i + 1]];
+                                        }
+
+                                        // Save
+                                        c_Obj.Save();
+
+                                        // And delete selve, as new entry would have created duplicate
+                                        this.Delete();
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
                     case DatabaseClass.DatasetBiilCharge:
                         if (this[FieldParent].HasValue())
                         {
@@ -955,6 +1043,52 @@ namespace Proc.AO
                                     c_Charge[FieldInvOn] = sOn;
 
                                     c_Charge.Save();
+                                }
+                            }
+                        }
+                        break;
+
+                    default:
+                        // Account source changed?
+                        if(this.Dataset.Name.IsSameValue(this.Dataset.Parent.SiteInfo.AccountMirrorDS))
+                        {
+                            // Make list
+                            List<string> c_Map = this.Dataset.Parent.SiteInfo.AccountMirrorMap.SplitSpaces();
+
+                            // Get list of access
+                            List<string> c_Accounts = this.Dataset.Definition.AccountFields;
+                            // Loop thru
+                            foreach (string sAccount in c_Accounts)
+                            {
+                                // Does it have a value?
+                                string sAcctNo = this[sAccount];
+                                if (sAcctNo.HasValue())
+                                {
+                                    // Query the access dataset
+                                    using (QueryClass c_Query = new QueryClass(this.Dataset.Parent[DatabaseClass.DatasetBillAccess].DataCollection))
+                                    {
+                                        // Map by name
+                                        c_Query.Add("name", QueryElementClass.QueryOps.Eq, sAcctNo);
+                                        // Loop thru
+                                        foreach(ObjectClass c_Obj in c_Query.FindObjects())
+                                        {
+                                            // Flag
+                                            bool bChanged = false;
+
+                                            // Fill
+                                            for (int i = 0; i < c_Map.Count; i += 2)
+                                            {
+                                                if (!c_Obj[c_Map[i + 1]].IsSameValue(this[c_Map[i]]))
+                                                {
+                                                    c_Obj[c_Map[i + 1]] = this[c_Map[i]];
+                                                    bChanged = true;
+                                                }
+                                            }
+
+                                            //
+                                            if (bChanged) c_Obj.Save();
+                                        }
+                                    }
                                 }
                             }
                         }

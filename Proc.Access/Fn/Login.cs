@@ -45,11 +45,11 @@ namespace Proc.Access
             bool bRM = values["rm"].FromDBBoolean();
             string sLocation = values["location"];
 
-            // Is it a remembeer me token?
+            // Is it a remember me token?
             if (bRM)
             {
                 // Valid?
-                Tuple<string, string>c_RM = call.Env.RMDecode(sUser);
+                Tuple<string, string> c_RM = call.Env.RMDecode(sUser);
                 // Valid?
                 if (c_RM.Item1.HasValue() && c_RM.Item2.HasValue())
                 {
@@ -72,11 +72,16 @@ namespace Proc.Access
                 // Get what we need
                 string sName = c_User.Name;
                 string sAllowed = c_User.Allowed;
+                string sUUID = "";
 
                 // Is it real?
                 bool bOk = c_User.IsValid;
                 // Is it valid?
-                if (bOk) bOk = AO.Definitions.UserClass.ValidatePassword(c_User.Password, sPwd);
+                if (bOk)
+                {
+                    bOk = AO.Definitions.UserClass.ValidatePassword(c_User.Password, sPwd);
+                    sUUID = c_User.UUID.ToString();
+                }
 
                 // 
                 if (!bOk)
@@ -96,7 +101,8 @@ namespace Proc.Access
                             if (bOk)
                             {
                                 sName = sUser.ToLower();
-                                sAllowed = c_PO["allowed"];
+                                sAllowed = "?ACCT " + c_PO["allowed"];
+                                sUUID = c_PO.UUID.ToString();
 
                                 // Update last login
                                 c_PO["lastin"] = DateTime.Now.ToDBDate();
@@ -130,11 +136,18 @@ namespace Proc.Access
                                     if (bOk)
                                     {
                                         sName = sPhone;
-                                        sAllowed = c_PO["allowed"];
+                                        sAllowed = "?ACCT " + c_PO["allowed"];
                                         break;
                                     }
                                 }
                             }
+                        }
+
+                        // Handle default allowed
+                        if (bOk && !sAllowed.HasValue())
+                        {
+                            // Get from site settings
+                            sAllowed = "?ACCT " + c_Mgr.DefaultDatabase.SiteInfo.AccountDefaultAllowed;
                         }
                     }
 
@@ -173,7 +186,7 @@ namespace Proc.Access
                 {
                     // Delete temp files
                     NX.Engine.Files.ManagerClass c_DocMgr = call.Env.Globals.Get<NX.Engine.Files.ManagerClass>();
-                    using(NX.Engine.Files.FolderClass c_Folder = new NX.Engine.Files.FolderClass(c_DocMgr, AO.ExtendedUserClass.UserFolder.CombinePath(sName)))
+                    using (NX.Engine.Files.FolderClass c_Folder = new NX.Engine.Files.FolderClass(c_DocMgr, AO.ExtendedUserClass.UserFolder.CombinePath(sName)))
                     {
                         c_Folder.Delete();
                     }
@@ -188,6 +201,7 @@ namespace Proc.Access
                                                                     "location", sLocation));
 
                     // And save passed
+                    c_Ans.Set("uuid", sUUID);
                     c_Ans.Set("commands", c_Partial["commands"]);
                     c_Ans.Set("menu", c_Partial["menu"]);
                     c_Ans.Set("datasets", c_Partial["datasets"]);

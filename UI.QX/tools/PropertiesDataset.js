@@ -247,6 +247,14 @@ qx.Class.define('tools.PropertiesDataset', {
                                             label: 'Private field',
                                             aoFld: 'privField',
                                             value: dsdef.privField
+                                        }, {
+                                            nxtype: 'keyword',
+                                            top: 3,
+                                            left: 1,
+                                            width: 'default.fieldWidth',
+                                            label: 'Acct. Priv. field',
+                                            aoFld: 'aprivField',
+                                            value: dsdef.aprivField
                                         }
                                     ]
                                 }, {

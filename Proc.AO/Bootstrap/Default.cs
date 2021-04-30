@@ -158,7 +158,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_Sys(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.29b"))
+            if (ds.Definition.ReleaseChanged("2021.04.30c"))
             {
                 //
                 ds.Definition.Caption = "Site Settings";
@@ -323,10 +323,6 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
                 c_Field.Label = "Help Root";
 
-                c_Field = ds.Definition["acctenabled"];
-                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
-                c_Field.Label = "Accounts";
-
                 c_Field = ds.Definition["billenabled"];
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Billing";
@@ -387,6 +383,14 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Boolean;
                 c_Field.Label = "Auto Update";
 
+                c_Field = ds.Definition["acctmirrords"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Keyword;
+                c_Field.Label = "Acct. Mirror";
+
+                c_Field = ds.Definition["acctmirrormap"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
+                c_Field.Label = "Mirror Map";
+
                 c_Field.SaveParent();
             }
 
@@ -439,7 +443,7 @@ namespace Proc.AO.BuiltIn
 
                 // Map
                 c_OBasic.UseFields(
-                    "acctenabled", "acctdefallowed",
+                    "acctdefallowed", "acctmirrords", "acctmirrormap",
                     "helproot",
                     "proccount",
                     "autoupd",
@@ -460,15 +464,10 @@ namespace Proc.AO.BuiltIn
 
                 // Map
                 c_OExtras.UseFields(
-                    "acctenabled", "acctdefallowed",
                     "ttenabled",
                     "teleenabled",
                     "quorumenabled",
-                    "iotenabled",
-                    "helproot",
-                    "proccount",
-                    "autoupd",
-                    "bitly"
+                    "iotenabled"
                     );
 
                 c_OExtras.Save();
@@ -1539,7 +1538,7 @@ namespace Proc.AO.BuiltIn
         private static void Define_BillAccess(this DatasetClass ds)
         {
             // dataset into
-            if (ds.Definition.ReleaseChanged("2021.04.17b"))
+            if (ds.Definition.ReleaseChanged("2021.04.30b"))
             {
                 //
                 ds.Definition.Caption = "Account";
@@ -1632,6 +1631,26 @@ namespace Proc.AO.BuiltIn
                 c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.String;
                 c_Field.Label = "Ctc out cmp";
 
+                c_Field = ds.Definition["dispname"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Name;
+                c_Field.Label = "Full name";
+
+                c_Field = ds.Definition["address"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.Address;
+                c_Field.Label = "Address"; 
+
+                c_Field = ds.Definition["city"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.City;
+                c_Field.Label = "City";
+
+                c_Field = ds.Definition["state"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.State;
+                c_Field.Label = "State";
+
+                c_Field = ds.Definition["zip"];
+                c_Field.Type = Definitions.DatasetFieldClass.FieldTypes.ZIP;
+                c_Field.Label = "ZIP";
+
                 c_Field.SaveParent();
             }
 
@@ -1647,6 +1666,18 @@ namespace Proc.AO.BuiltIn
                 c_VInfo.Set("ro", true.ToDBBoolean(), "lastin", "subscribedon");
 
                 c_VInfo.Save();
+            }
+
+            Definitions.ViewClass c_VPers = ds.View("pers");
+            if (c_VPers.ReleaseChanged(ds.Definition.Release))
+            {
+                //
+                c_VPers.Caption = "Personal";
+
+                //
+                c_VPers.UseFields("dispname", "address", "city", "state", "zip");
+
+                c_VPers.Save();
             }
 
             Definitions.ViewClass c_VOut = ds.View("out");
@@ -1685,7 +1716,7 @@ namespace Proc.AO.BuiltIn
                 // Make the tabs
                 Definitions.ViewFieldClass c_Field = c_VDefault.AsTabs("tabs");
                 c_Field.Height = "11";
-                c_Field.Views = "info out in";
+                c_Field.Views = "info pers out in";
 
                 c_VDefault.Save();
             }
@@ -1698,7 +1729,7 @@ namespace Proc.AO.BuiltIn
                 c_VAcct.ClearFields();
 
                 // Only the password
-                c_VAcct.UseFields("pwd");
+                c_VAcct.UseFields("pwd", "dispname", "address", "city", "state", "zip");
 
                 c_VAcct.Save();
             }

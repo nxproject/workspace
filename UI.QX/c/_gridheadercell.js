@@ -56,6 +56,9 @@ qx.Class.define('c._gridheadercell', {
                     });
 
                     self._filter.addListener('keyup', function (e) {
+                        if (self._to) {
+                            clearTimeout(self._to);
+                        }
                         switch (e.getKeyIdentifier()) {
                             case 'Tab':
                             case 'Enter':
@@ -68,8 +71,8 @@ qx.Class.define('c._gridheadercell', {
                                 nx.util.insertAtCursor(filter, ' ');
                                 break;
                         }
+                        self._to = setTimeout(self.lookup.bind(self), 800);
                     });
-
                     self._filter.addListener('blur', function (e) {
                         // Hide filter
                         //self._filter.hide();

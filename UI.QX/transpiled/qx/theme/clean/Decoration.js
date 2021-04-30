@@ -1870,7 +1870,7 @@ window.nxTheme.Decoration =
         {
             style:
             {
-                width: 2,
+                width: 0,       // ECANDIDUS 2021-04-30 Was 2
                 color: "table-focus-indicator",
                 style: "solid"
             }

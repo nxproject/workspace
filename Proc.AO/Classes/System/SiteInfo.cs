@@ -279,17 +279,6 @@ namespace Proc.AO
 
         /// <summary>
         /// 
-        /// Are accounts enabled?
-        /// 
-        /// </summary>
-        public bool AccountsEnabled
-        {
-            get { return this.SynchObject["acctenabled"].FromDBBoolean(); }
-            set { this.SynchObject["acctenabled"] = value.ToDBBoolean(); }
-        }
-
-        /// <summary>
-        /// 
         /// The tax ID
         /// 
         /// </summary>
@@ -361,17 +350,6 @@ namespace Proc.AO
         {
             get { return this.SynchObject["themeoptions"]; }
             set { this.SynchObject["themeoptions"] = value; }
-        }
-
-        /// <summary>
-        /// 
-        /// Default allowed for accounts
-        /// 
-        /// </summary>
-        public string AccountDefaultAllowed
-        {
-            get { return this.SynchObject["acctdefallowed"].IfEmpty(); }
-            set { this.SynchObject["acctdefallowed"] = value; }
         }
         #endregion
 
@@ -630,6 +608,41 @@ namespace Proc.AO
         {
             get { return this.SynchObject["billdom"].IfEmpty().ToInteger(0); }
             set { this.SynchObject["billdom"] = value.ToString(); }
+        }
+        #endregion
+
+        #region Accounts
+        /// <summary>
+        /// 
+        /// Default allowed for accounts
+        /// 
+        /// </summary>
+        public string AccountDefaultAllowed
+        {
+            get { return this.SynchObject["acctdefallowed"].IfEmpty(); }
+            set { this.SynchObject["acctdefallowed"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// Dataset to be filled from account
+        /// 
+        /// </summary>
+        public string AccountMirrorDS
+        {
+            get { return this.SynchObject["acctmirrords"].IfEmpty(); }
+            set { this.SynchObject["acctmirrords"] = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// Mirror map
+        /// 
+        /// </summary>
+        public string AccountMirrorMap
+        {
+            get { return this.SynchObject["acctmirrormap"].IfEmpty(); }
+            set { this.SynchObject["acctmirrormap"] = value; }
         }
         #endregion
 

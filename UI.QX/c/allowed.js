@@ -27,7 +27,7 @@ qx.Class.define('c.allowed', {
         var self = this;
 
         // Call base
-        self.base(arguments, new c._textfield(), new t.allowed());
+        self.base(arguments, new t.allowed(), new c._textfield());
 
     },
 
