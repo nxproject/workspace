@@ -22,6 +22,18 @@ are also ***virtual users*** when you choose and carry the same dataset rules.
 
 ---
 
+![image](images/Acct4.png)
+
+|Field|Meaning|
+|-|-|
+|Full name|Full name of person of entity|
+|Address|Mailing address|
+|City|City|
+|State|State|
+|ZIP|ZIP code|
+
+---
+
 ![image](images/Acct2.png)
 
 |Field|Meaning|
@@ -42,16 +54,16 @@ are also ***virtual users*** when you choose and carry the same dataset rules.
 |Ctc in via|Method in which the account was contacted|
 |Ctc in cmp|Cmpaign in which the account was contacted|
 
-## Enabling accounts
+## Configuring accounts
 
-You enable telemetry ubsing the [Site Settings](README_SITE.md) tool.  In it you will find:
+Accounts are always enabled but you set configuration parameters in the [Site Settings](README_SITE.md) tool:
 
-![image](images/Site3.png)
+![image](images/Site20.png)
 
-Setting the ***Accounts*** entry to ***y*** enables the account options.
-
-Note that ypu can also enter the default allowed value int the ***Def.Alwd.Def*** field, which will be used
-for any account that does not have it's own definition.
+|Field|Meaning|
+|Acct.Def.Alwd|Default [allowed](README_USERS.md).  Note that ***?ACCT*** is automatically prepended|
+|Acct.Mirror|Dataset that mirros certain account feilds|
+|Mirror Map|List of target/source field paris from the ***Account*** dataset to the mirror dataset|
 
 ## Automatic account creation
 
