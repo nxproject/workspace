@@ -797,10 +797,12 @@ namespace Proc.Communication
                 }
             }
 
-            // Predined
+            // Subscriptions
+            this.Values.Set("_subscribe", this.Parent.Env.ReachableURL.CombineURL("zs").URLMake("id", to));
+            this.Values.Set("_unsubscribe", this.Parent.Env.ReachableURL.CombineURL("zu").URLMake("id", to));
+
+            // Predefined
             this.Values.Set("publicurl", this.Parent.Env.ReachableURL);
-            //this.Values.Set("sys", this.Parent.Database.SiteInfo.AsJObject);
-            //this.Values.Set("user", this.Parent.User.SynchObject);
             this.Values.Set("env", this.Parent.Env.AsParameters);
 
             // Data
