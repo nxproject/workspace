@@ -95,11 +95,19 @@ An account has multiple uses:
 
 ### As a login
 
-An account can be used to login into the system just like any user would.  For this case, the ***password*** and ***allowed*** fields are used.  The ***allowed*** field should have ***?ACCT*** to identify the account as an external account which limits access to certain functionality.
+An account can be used to login into the system just like any user would.  For this case, the ***password*** and ***allowed*** fields are used.  
+
+|If allowed contains|How the account behaves|
+|-|-|
+|?ACCT|Account has a limited access to ductionality.  This is the default|
+|?USER|Account behaves like a [user](RAEDME_USER.md)|
+
+As multiple extries of ?ACCT and ?USER can be entered, the last entry is used.
 
 ### As a billable entity
 
-An account can be used to create invoices.  You need to enable billing in the [Site Settings](README_SITE.md) tool, ***System*** tab.
+An account can be used to create invoices.  You need to enable billing in the [Site Settings](README_SITE.md) tool, ***System*** tab.  You must
+enter the ***mirror settings*** in order for this mode to work properly.
 
 ### As a contactable entity
 
