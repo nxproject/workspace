@@ -164,7 +164,8 @@ in the system.  The following are defined:
 
 And a special ones:
 
-* ```ACCT``` - Treat the user as an account
+* ```ACCT``` - Treat the login as an account (DEfault for [accounts](README_ACCOUNTS.md)
+* ```USER``` = Treat the login as a user (Default for users)
 * ```MGR``` - Treat the user as a manager (overrides privacy in datasets)
 * ```ALL``` - Allow all access
 
