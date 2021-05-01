@@ -66,9 +66,11 @@ Accounts are always enabled but you set configuration parameters in the [Site Se
 |Acct.Mirror|Dataset that mirrors certain account fields|
 |Mirror Map|List of target/source field paris from the ***Account*** dataset to the mirror dataset|
 
-```NOTE: If you are planning on using the system as a billing system and allow for dynamic creation of accounts, 
+```
+NOTE: If you are planning on using the system as a billing system and allow for dynamic creation of accounts, 
 you must set the ***mirror settings***, otherwise you will have to manually use the automatic account creation (below) 
-which will create duplicate account entries and a maintenance issue.```
+which will create duplicate account entries and a maintenance issue.
+```
 
 ## Automatic account creation
 
