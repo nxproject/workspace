@@ -221,11 +221,11 @@ namespace Proc.AO.Definitions
                                 this.DefaultSelectors.Add(c_Option.Value);
 
                                 // Loop thru all datasets
-                                foreach(string sWDS in this.DatasetsAvailable)
+                                foreach (string sWDS in this.DatasetsAvailable)
                                 {
                                     // Get
                                     Definitions.DatasetClass c_Def = this.AllowedDataset.Parent[sWDS].Definition;
-                                    if(c_Def.Selector.IsSameValue(c_Option.Value))
+                                    if (c_Def.Selector.IsSameValue(c_Option.Value))
                                     {
                                         this.Stack.Push(new ItemClass(sWDS + ":zzz"));
                                     }
@@ -360,6 +360,24 @@ namespace Proc.AO.Definitions
             // Build result 
             List<string> c_Values = new List<string>();
 
+            // Cleanup selectors
+            int iPAcct = this.DefaultSelectors.IndexOf("ACCT");
+            int iPUser = this.DefaultSelectors.IndexOf("USER");
+            while (iPAcct != -1 && iPUser != -1)
+            {
+                if (iPAcct < iPUser)
+                {
+                    this.DefaultSelectors.RemoveAt(iPAcct);
+                }
+                else
+                {
+                    this.DefaultSelectors.RemoveAt(iPUser);
+                }
+                iPAcct = this.DefaultSelectors.IndexOf("ACCT");
+                iPUser = this.DefaultSelectors.IndexOf("USER");
+            }
+
+
             // Add selectors
             if (this.DefaultSelectors != null)
             {
@@ -379,11 +397,11 @@ namespace Proc.AO.Definitions
             }
 
             // The datasets
-            foreach(string sDS in this.Buffer.Keys)
+            foreach (string sDS in this.Buffer.Keys)
             {
                 // Get
                 Definitions.DatasetClass c_Def = this.AllowedDataset.Parent[sDS].Definition;
-                if(!c_Def.Selector.HasValue() || this.DefaultSelectors == null || this.DefaultSelectors.Contains(c_Def.Selector))
+                if (!c_Def.Selector.HasValue() || this.DefaultSelectors == null || this.DefaultSelectors.Contains(c_Def.Selector))
                 {
                     c_Values.Add(this.Buffer[sDS]);
                 }
@@ -409,7 +427,7 @@ namespace Proc.AO.Definitions
             // Parse
             return new ItemsClass(value, new ItemDefinitionClass()
             {
-                ValueIsPriority=false,
+                ValueIsPriority = false,
                 ItemDelimiter = " ",
                 KeyValueDelimiter = ":",
                 OptionDelimiters = new List<string>() { "@", "#", "$", "%", "?" }

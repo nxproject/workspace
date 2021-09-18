@@ -211,6 +211,8 @@ namespace Proc.Access
                     c_Ans.Set("sio", c_Partial["sio"]);
                     c_Ans.Set("selectors", c_Partial["selectors"]);
 
+                    // TBD - Set __acct if ?ACCT is a selector
+
                     c_Ans.Set("sioid", sUser);
 
                     // Add list
