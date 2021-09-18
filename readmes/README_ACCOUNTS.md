@@ -66,6 +66,10 @@ Accounts are always enabled but you set configuration parameters in the [Site Se
 |Acct.Mirror|Dataset that mirrors certain account fields|
 |Mirror Map|List of target/source field paris from the ***Account*** dataset to the mirror dataset|
 
+NOTE: If you are planning on using the system as a billing system and allow for dynamic creation of accounts, 
+you must set the ***mirror settings***, otherwise you will have to manually use the automatic account creation (below) 
+which will create duplicate account entries and a maintenance issue.
+
 ## Automatic account creation
 
 Accounts are automatically created and maintained when an ***account*** field is included in a dataset.  
@@ -91,11 +95,19 @@ An account has multiple uses:
 
 ### As a login
 
-An account can be used to login into the system just like any user would.  For this case, the ***password*** and ***allowed*** fields are used.  The ***allowed*** field should have ***?ACCT*** to identify the account as an external account which limits access to certain functionality.
+An account can be used to login into the system just like any user would.  For this case, the ***password*** and ***allowed*** fields are used.  
+
+|If allowed contains|How the account behaves|
+|-|-|
+|?ACCT|Account has a limited access to ductionality.  This is the default|
+|?USER|Account behaves like a [user](RAEDME_USER.md)|
+
+As multiple extries of ?ACCT and ?USER can be entered, the last entry is used.
 
 ### As a billable entity
 
-An account can be used to create invoices.  You need to enable billing in the [Site Settings](README_SITE.md) tool, ***System*** tab.
+An account can be used to create invoices.  You need to enable billing in the [Site Settings](README_SITE.md) tool, ***System*** tab.  You must
+enter the ***mirror settings*** in order for this mode to work properly.
 
 ### As a contactable entity
 
