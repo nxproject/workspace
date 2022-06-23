@@ -8,7 +8,7 @@
   ],
   "Cmd": [
     "dotnet",
-    "NXLibreOffice.dll",
+    "NX.LibreOffice.dll",
     "--config",
     "config.json"
   ],

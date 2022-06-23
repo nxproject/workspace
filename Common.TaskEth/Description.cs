@@ -24,36 +24,50 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 
-using Newtonsoft.Json.Linq;
-
-using NX.Engine;
 using NX.Shared;
+using NX.Engine;
 
-namespace NX.LibreOffice
+namespace Common.TaskETH
 {
-    class Program
+    public class DescriptionClass : BaseDescriptionClass
     {
-        #region Entry point
-        static void Main(string[] args)
+        #region Constructor
+        public DescriptionClass(CategoriesClass cat,
+                                string desc,
+                                NamedListClass<ParamDefinitionClass> parameters,
+                                OutcomesClass exits = null)
+            : base(desc, parameters)
         {
-            // Create working environment
-            EnvironmentClass c_Env = new EnvironmentClass(args);
-
-            // Force the threads to be 2
-            c_Env.HTTPThreads = 2;
-
-            // Clear uses
-            c_Env.Set("uses", new JArray());
-
-            // Do
-            c_Env.Start(true, 
-                
-                "Docker.DotNet",
-                "SocketIOClient",
-                "Route.File", 
-                "Route.LibreOffice");
+            //
+            this.Category = cat;
+            this.Outcomes = exits;
+            if (this.Outcomes == null) this.Outcomes = OutcomesClass.WorkflowDefault();
         }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// 
+        /// Category
+        /// 
+        /// </summary>
+        public CategoriesClass Category { get; set; }
+
+        /// <summary>
+        /// 
+        /// Parameters
+        /// 
+        /// </summary>
+        //public new NamedListClass<Base  ParamDefinitionClass> Parameters { get; set; }
+
+        /// <summary>
+        /// 
+        /// Possible outcomes
+        /// 
+        /// </summary>
+        public OutcomesClass Outcomes { get; private set; }
         #endregion
     }
 }
